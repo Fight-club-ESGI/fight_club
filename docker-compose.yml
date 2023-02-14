@@ -66,11 +66,11 @@ services:
       context: ./front
       dockerfile: Dockerfile
     restart: always
+    env_file:
+      - ./front/.env
     user: "node"
     stdin_open: true
     tty: true
-    env_file:
-      - .env
     ports:
       - ${VITE_PORT}:${VITE_PORT}
     volumes:

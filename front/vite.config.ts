@@ -4,7 +4,12 @@ import path from 'path'
 import WindiCSS from 'vite-plugin-windicss'
 
 export default defineConfig({
-  plugins: [vue(),
+  server: {
+    host: import.meta.env.BASE_URL,
+    port: import.meta.env.BASE_URL,
+  },
+  plugins: [
+    vue(),
     WindiCSS(),
   ],
   resolve: {
