@@ -1,0 +1,67 @@
+[
+    {
+        "id": "1",
+        "name": "Street Fight",
+        "location": "Avenue de la pensée",
+        "description": "Soon, you'll see what hell is like",
+        "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+        "capacity": 24,
+        "category": "LightWeight",
+        "locationLink": "string",
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "VIP": false
+    },
+    {
+        "id": "2",
+        "name": "Street Fight",
+        "location": "Avenue de la pensée",
+        "description": "Soon, you'll see what hell is like",
+        "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+        "capacity": 24,
+        "category": "LightWeight",
+        "locationLink": "string",
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "VIP": false
+    },
+    {
+        "id": "3",
+        "name": "Street Fight",
+        "location": "Avenue de la pensée",
+        "description": "Soon, you'll see what hell is like",
+        "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+        "capacity": 24,
+        "category": "LightWeight",
+        "locationLink": "string",
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "VIP": false
+    },
+    {
+        "id": "4",
+        "name": "Street Fight",
+        "location": "Avenue de la pensée",
+        "description": "Soon, you'll see what hell is like",
+        "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+        "capacity": 24,
+        "category": "LightWeight",
+        "locationLink": "string",
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "VIP": false
+    },
+    {
+        "id": "5",
+        "name": "Street Fight",
+        "location": "Avenue de la pensée",
+        "description": "Soon, you'll see what hell is like",
+        "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+        "capacity": 24,
+        "category": "LightWeight",
+        "locationLink": "string",
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "VIP": true
+    }
+]

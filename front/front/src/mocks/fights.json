@@ -1,0 +1,46 @@
+[
+    {
+        "opponent": {
+            "id": "1ed9c2fa-2g30-6d52-b747-055ea6027fd3",
+            "firstname": "Benhir",
+            "lastname": "Jasmin"
+        },
+        "status": "loose",
+        "reason": "KO",
+        "round": "4",
+        "category": "Lightweight"
+    },
+    {
+        "opponent": {
+            "id": "1ed9c2fa-2g30-6d52-b747-055ea6027fd3",
+            "firstname": "Benhir",
+            "lastname": "Jasmin"
+        },
+        "status": "win",
+        "reason": "KO",
+        "round": "4",
+        "category": "Lightweight"
+    },    
+    {
+        "opponent": {
+            "id": "1ed9c2fa-2g30-6d52-b747-055ea6027fd3",
+            "firstname": "Benhir",
+            "lastname": "Jasmin"
+        },
+        "status": "loose",
+        "reason": "KO",
+        "round": "4",
+        "category": "Lightweight"
+    },
+    {
+        "opponent": {
+            "id": "1ed9c2fa-2g30-6d52-b747-055ea6027fd3",
+            "firstname": "Benhir",
+            "lastname": "Jasmin"
+        },
+        "status": "win",
+        "reason": "KO",
+        "round": "4",
+        "category": "Lightweight"
+    }
+]
