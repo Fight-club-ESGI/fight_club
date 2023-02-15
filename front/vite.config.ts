@@ -5,8 +5,8 @@ import WindiCSS from 'vite-plugin-windicss'
 
 export default defineConfig({
   server: {
-    host: import.meta.env.BASE_URL,
-    port: import.meta.env.BASE_URL,
+    host: process.env.BASE_URL,
+    port: parseInt(process.env.VITE_PORT),
   },
   plugins: [
     vue(),
