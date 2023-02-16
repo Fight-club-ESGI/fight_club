@@ -2,4 +2,14 @@ controllers:
     resource:
         path: ../src/Controller/
         namespace: App\Controller
-    type: attribute
+    type: annotation
+    prefix: /api
+    name_prefix: api_
+
+kernel:
+    resource: ../src/Kernel.php
+    type: annotation
+
+api_authentication_token:
+    path: /api/authentication_token
+    methods: ['POST']
