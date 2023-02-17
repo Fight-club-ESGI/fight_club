@@ -13,3 +13,6 @@ kernel:
 api_authentication_token:
     path: /api/authentication_token
     methods: ['POST']
+
+api_refresh_token:
+    path: /api/token/refresh

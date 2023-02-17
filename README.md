@@ -19,6 +19,10 @@ $ docker-compose exec front npm run install
 $ docker-compose exec php bin/console lexik:jwt:generate-keypair
 ```
 
+```
+$ docker-compose exec php bin/console doctrine:migrations:migrate
+```
+
 ### Run the project
 ```
 $ docker-compose exec front npm run dev
