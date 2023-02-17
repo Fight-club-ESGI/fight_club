@@ -16,6 +16,7 @@
         "nesbot/carbon": "^2.66",
         "phpdocumentor/reflection-docblock": "^5.3",
         "stof/doctrine-extensions-bundle": "^1.7",
+        "stripe/stripe-php": "^10.6",
         "symfony/asset": "6.2.*",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",
