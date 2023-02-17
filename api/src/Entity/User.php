@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use App\Entity\Trait\EntityIdTrait;
+use App\Entity\Trait\TimestampableTrait;
+use App\Entity\Trait\VichUploadTrait;
 use App\Repository\UserRepository;
 use App\State\UserPasswordHasher;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,10 +24,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use EntityIdTrait;
+    use TimestampableTrait;
+    use VichUploadTrait;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
@@ -32,16 +34,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getEmail(): ?string
     {
