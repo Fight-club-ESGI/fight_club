@@ -5,19 +5,21 @@ namespace App\Entity\Trait;
 use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+#use Vich\UploaderBundle\Entity\File;
+#use Symfony\Component\Mime\Part\File;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 trait VichUploadTrait
 {
     #[Vich\UploadableField(mapping: "images", fileNameProperty: "imageName", size: "imageSize")]
-    private ?File $imageFile;
+    private ?File $imageFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imageName;
+    private ?string $imageName = null;
 
     #[ORM\Column(type: TYPES::INTEGER, nullable: true)]
-    private ?int $imageSize;
+    private ?int $imageSize = null;
 
     /**
      * @param File|null $imageFile

@@ -9,6 +9,9 @@ log
 
 # Matches requests for HTML documents, for static files and for Next.js files,
 # except for known API paths and paths with extensions handled by API Platform
+@pwa expression `(
+        {header.Accept}.matches("\\btext/html\\b")
+        && !{path}.matches("(?i)(?:^/docs|^/graphql|^/bundles/|^/media/|^/_profiler|^/_wdt|\\.(?:json|html$|csv$|ya?ml$|xml$))")
 #@pwa expression `(
 #        header({'Accept': '*text/html*'})
 #        && !path(
