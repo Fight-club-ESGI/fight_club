@@ -4,6 +4,8 @@ namespace App\Entity\Trait;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Carbon\Doctrine\CarbonDoctrineType;
+use Carbon\Doctrine\CarbonImmutableType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

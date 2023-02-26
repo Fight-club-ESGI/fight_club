@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -12,21 +13,25 @@ use App\State\UserPasswordHasher;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
         new Post(
-            processor: UserPasswordHasher::class
-        )
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            processor: UserPasswordHasher::class,
+        ),
+        new Get()
     ]
 )]
+#[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use EntityIdTrait;
-    use TimestampableTrait;
     use VichUploadTrait;
+    use TimestampableTrait;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
