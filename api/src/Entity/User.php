@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -13,6 +15,7 @@ use App\State\UserPasswordHasher;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -20,10 +23,25 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         new Post(
-            inputFormats: ['multipart' => ['multipart/form-data']],
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
             processor: UserPasswordHasher::class,
         ),
-        new Get()
+        new Get(
+            normalizationContext: ['groups' => ['user:get']],
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['user:get_collection']],
+        ),
+        new Patch(
+            normalizationContext: ['groups' => ['user:get']],
+            denormalizationContext: ['groups' => ['user:post']],
+            security: 'is_granted("IS_AUTHENTICATED_FULLY")',
+            securityMessage: 'You need to be connected first.',
+            processor: UserPasswordHasher::class,
+        )
     ]
 )]
 #[Vich\Uploadable]
@@ -34,12 +52,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use TimestampableTrait;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user:get', 'user:post', 'user:get_collection'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['user:get', 'super_admin:user:post', 'user:get_collection'])]
     private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['super_admin:user:get'])]
     private ?string $password = null;
 
     public function getEmail(): ?string

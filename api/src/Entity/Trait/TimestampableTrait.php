@@ -13,14 +13,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait TimestampableTrait
 {
-    #[Groups("timestamp")]
     #[Gedmo\Timestampable(on: "create")]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups(['additional:get'])]
     private CarbonImmutable $createdAt;
 
-    #[Groups("timestamp")]
     #[Gedmo\Timestampable(on: "update")]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups("additional:get")]
     private Carbon $updatedAt;
 
     /**
