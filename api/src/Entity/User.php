@@ -3,7 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\User\Role\ChangeUserRole;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -12,29 +16,70 @@ use App\State\UserPasswordHasher;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
+        new Patch(
+            uriTemplate: '/users/{user}/role',
+            controller: ChangeUserRole::class,
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: 'You need to be an admin',
+            read: false,
+            name: 'users_change_role'
+        ),
         new Post(
-            processor: UserPasswordHasher::class
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
+            processor: UserPasswordHasher::class,
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['user:get']],
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['user:get_collection']],
+        ),
+        new Patch(
+            normalizationContext: ['groups' => ['user:get']],
+            denormalizationContext: ['groups' => ['user:patch']],
+            security: 'is_granted("ROLE_ADMIN") or object === user',
+            securityMessage: 'You are not allowed to update this user',
+            processor: UserPasswordHasher::class,
         )
     ]
 )]
+#[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use EntityIdTrait;
-    use TimestampableTrait;
     use VichUploadTrait;
+    use TimestampableTrait;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups([
+        'user:get',
+        'user:post',
+        'user:get_collection',
+        'user:patch'
+    ])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups([
+        'user:get',
+        'user:get_collection',
+        'admin:user:post',
+        'admin:user:patch'
+    ])]
     private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['super_admin:user:get'])]
     private ?string $password = null;
 
     public function getEmail(): ?string

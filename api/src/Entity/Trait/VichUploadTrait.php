@@ -6,18 +6,22 @@ use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 trait VichUploadTrait
 {
     #[Vich\UploadableField(mapping: "images", fileNameProperty: "imageName", size: "imageSize")]
-    private ?File $imageFile;
+    #[Groups(['additional:post'])]
+    private ?File $imageFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imageName;
+    #[Groups(['additional:get'])]
+    private ?string $imageName = null;
 
+    #[Groups(['additional:get'])]
     #[ORM\Column(type: TYPES::INTEGER, nullable: true)]
-    private ?int $imageSize;
+    private ?int $imageSize = null;
 
     /**
      * @param File|null $imageFile

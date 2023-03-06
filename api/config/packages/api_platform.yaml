@@ -8,3 +8,10 @@ api_platform:
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+    formats:
+        json: ['application/json']
+        jsonld: ['application/ld+json']
+        html: ['text/html']
+        multipart: ['multipart/form-data']
+        jsonapi: ['application/vnd.api+json']
+    
