@@ -27,7 +27,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             uriTemplate: '/users/{user}/role',
             controller: ChangeUserRole::class,
             security: "is_granted('ROLE_ADMIN')",
-            securityMessage: 'You need to be admin',
+            securityMessage: 'You need to be an admin',
             read: false,
             name: 'users_change_role'
         ),
