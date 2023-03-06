@@ -30,7 +30,8 @@ final class UserContextBuilder implements SerializerContextBuilderInterface
                     if ($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
                         $context['groups'][] = 'super_admin:user:get';
                     } else if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-
+                        $context['groups'][] = 'admin:user:post';
+                        $context['groups'][] = 'admin:user:patch';
                     } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
 
                     } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
