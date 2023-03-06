@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\User\Role\ChangeUserRole;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -22,6 +23,14 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
+        new Patch(
+            uriTemplate: '/users/{user}/role',
+            controller: ChangeUserRole::class,
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: 'You need to be admin',
+            read: false,
+            name: 'users_change_role'
+        ),
         new Post(
             inputFormats: [
                 'multipart' => ['multipart/form-data'],
@@ -37,9 +46,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Patch(
             normalizationContext: ['groups' => ['user:get']],
-            denormalizationContext: ['groups' => ['user:post']],
-            security: 'is_granted("IS_AUTHENTICATED_FULLY")',
-            securityMessage: 'You need to be connected first.',
+            denormalizationContext: ['groups' => ['user:patch']],
+            security: 'is_granted("ROLE_ADMIN") or object === user',
+            securityMessage: 'You are not allowed to update this user',
             processor: UserPasswordHasher::class,
         )
     ]
@@ -52,11 +61,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use TimestampableTrait;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user:get', 'user:post', 'user:get_collection'])]
+    #[Groups([
+        'user:get',
+        'user:post',
+        'user:get_collection',
+        'user:patch'
+    ])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['user:get', 'super_admin:user:post', 'user:get_collection'])]
+    #[Groups([
+        'user:get',
+        'user:get_collection',
+        'admin:user:post',
+        'admin:user:patch'
+    ])]
     private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
