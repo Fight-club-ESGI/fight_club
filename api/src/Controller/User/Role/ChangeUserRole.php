@@ -46,7 +46,7 @@ class ChangeUserRole
     private function checkRole(string $role): string
     {
         $admin_allowed_roles = ['ROLE_SUPER_VIP', 'ROLE_VIP', 'ROLE_USER'];
-        $super_admin_allowed_roles = ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
+        $super_admin_allowed_roles = [...$admin_allowed_roles ,'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
 
         return (in_array($role, $admin_allowed_roles) && $this->security->isGranted('ROLE_ADMIN')) || (in_array($role, $super_admin_allowed_roles) && $this->security->isGranted('ROLE_SUPER_ADMIN'));
     }
