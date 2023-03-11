@@ -82,6 +82,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['super_admin:user:get'])]
     private ?string $password = null;
 
+    #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
+    private ?Wallet $wallet = null;
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -145,5 +148,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getWallet(): ?Wallet
+    {
+        return $this->wallet;
+    }
+
+    public function setWallet(Wallet $wallet): self
+    {
+        // set the owning side of the relation if necessary
+        if ($wallet->getUsers() !== $this) {
+            $wallet->setUsers($this);
+        }
+
+        $this->wallet = $wallet;
+
+        return $this;
     }
 }
