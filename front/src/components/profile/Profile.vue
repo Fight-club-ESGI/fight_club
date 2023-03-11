@@ -1,45 +1,36 @@
 <template>
-    <v-container>
-        <v-tabs v-model="tab" color="primary" align-tabs="center">
-            <v-tab value="Informations"> Profile </v-tab>
-            <v-tab value="Bets"> Bets </v-tab>
-            <v-tab value="Tickets"> Tickets </v-tab>
-            <v-tab value="Security"> Security </v-tab>
-        </v-tabs>
-
-        <v-window v-model="tab">
-            <v-window-item value="Informations" class="pt-10">
-                <user-informations></user-informations>
-            </v-window-item>
-
-            <v-window-item value="Bets" class="pt-10">
-                <user-bet></user-bet>
-            </v-window-item>
-
-            <v-window-item value="Tickets" class="pt-10">
-                <user-tickets></user-tickets>
-            </v-window-item>
-
-            <v-window-item value="Security" class="pt-10">
-                <security></security>
-            </v-window-item>
-        </v-window>
-    </v-container>
+	<v-container>
+		<user-informations></user-informations>
+		<change-password></change-password>
+		<div class="text-center mt-6">
+			<v-btn @click="logoutUser()" variant="text">Logout</v-btn>
+		</div>
+	</v-container>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import UserBet from '@/components/profile/Bet.vue';
-import Security from '@/components/profile/ChangePassword.vue';
+import { defineComponent } from 'vue';
+import UserBets from '@/components/profile/Bets.vue';
+import ChangePassword from '@/components/profile/ChangePassword.vue';
 import UserTickets from '@/components/profile/Tickets.vue';
 import UserInformations from '@/components/profile/UserInformations.vue';
+import { useUserStore } from '@/stores/user';
 
 export default defineComponent({
-    components: { UserBet, Security, UserTickets, UserInformations },
-    setup() {
-        const tab = ref();
-
-        return { tab };
-    },
+	components: { UserBets, ChangePassword, UserTickets, UserInformations },
+	setup() {
+		const userStore = useUserStore();
+		const { logout } = userStore;
+		const logoutUser = () => {
+			logout();
+		};
+		return { logoutUser };
+	},
 });
 </script>
+
+<style scoped>
+.v-btn {
+	text-transform: none;
+}
+</style>

@@ -1,29 +1,21 @@
 import Home from "@/views/Home.vue"
-import Bet from "@/views/Bet.vue"
 import Fighters from "@/views/Fighters.vue"
 import FighterDetails from "@/views/FighterDetails.vue"
 import Event from "@/views/Event.vue"
 import EventDetails from "@/views/EventDetails.vue"
 import Login from "@/views/Login.vue"
 import Signup from "@/views/Signup.vue"
-import ResetPassword from "@/views/ResetPassword.vue"
 import Deposit from "@/views/Deposit.vue"
-
 import Sponsorship from "@/views/admin/Sponsorship.vue"
 import FightersAdmin from "@/views/admin/Fighters.vue"
 import AdminView from "@/views/admin/AdminView.vue"
-
 import ProfileView from "@/views/Profile.vue";
-import Profile from "@/components/profile/Profile.vue";
-import UserBet from "@/components/profile/Bet.vue";
-import ChangePassword from "@/components/profile/ChangePassword.vue";
+import UserBets from "@/components/profile/Bets.vue";
+import UserTickets from "@/components/profile/Tickets.vue";
 import Wallet from "@/components/profile/Wallet.vue";
-
 import Ticketing from '@/views/Ticketing.vue';
-
 import FailedPayment from '@/views/FailedPayment.vue';
 import SuccessfulPayment from '@/views/SuccessfulPayment.vue';
-
 import ActivateStatus from "@/views/ActivateStatus.vue";
 
 export default [
@@ -66,32 +58,26 @@ export default [
     {
         path: '/profile',
         component: ProfileView,
-        children: [
-            {
-                path: '',
-                component: Profile,
-                name: 'user-info',
-                meta: { requiresAuth: true, requiresAdmin: false }
-            },
-            {
-                path: '/bets',
-                component: UserBet,
-                name: 'user-bet',
-                meta: { requiresAuth: true, requiresAdmin: false }
-            },
-            {
-                path: '/security',
-                component: ChangePassword,
-                name: 'user-security',
-                meta: { requiresAuth: true, requiresAdmin: false }
-            },
-            {
-                path: '/wallet',
-                component: Wallet,
-                name: 'user-wallet',
-                meta: { requiresAuth: true, requiresAdmin: false }
-            },
-        ]
+        name: 'user-profile',
+        meta: { requiresAuth: false, requiresAdmin: false }
+    },
+    {
+        path: '/bets',
+        component: UserBets,
+        name: 'user-bet',
+        meta: { requiresAuth: false, requiresAdmin: false }
+    },
+    {
+        path: '/tickets',
+        component: UserTickets,
+        name: 'user-tickets',
+        meta: { requiresAuth: false, requiresAdmin: false }
+    },
+    {
+        path: '/wallet',
+        component: Wallet,
+        name: 'user-wallet',
+        meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
         path: '/fighters',
@@ -103,7 +89,7 @@ export default [
         path: '/fighters/:id',
         component: FighterDetails,
         name: 'fighter-details',
-        meta: { requiresAuth: true, requiresAdmin: false }
+        meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
         path: '/events',
@@ -118,12 +104,6 @@ export default [
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
-        path: '/bet',
-        component: Bet,
-        name: 'bet',
-        meta: { requiresAuth: true, requiresAdmin: false }
-    },
-    {
         path: '/login',
         component: Login,
         name: 'login',
@@ -136,16 +116,10 @@ export default [
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
-        path: '/resetpassword',
-        component: ResetPassword,
-        name: 'resetpassword',
-        meta: { requiresAuth: false, requiresAdmin: false }
-    },
-    {
         path: '/deposit',
         component: Deposit,
         name: 'deposit',
-        meta: { requiresAuth: true, requiresAdmin: false }
+        meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
         path: '/ticketing',
@@ -157,12 +131,12 @@ export default [
         path: '/failed-payment',
         component: FailedPayment,
         name: 'failed-payment',
-        meta: { requiresAuth: true, requiresAdmin: false }
+        meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
         path: '/successful-payment',
         component: SuccessfulPayment,
         name: 'successful-payment',
-        meta: { requiresAuth: true, requiresAdmin: false }
+        meta: { requiresAuth: false, requiresAdmin: false }
     },
 ]

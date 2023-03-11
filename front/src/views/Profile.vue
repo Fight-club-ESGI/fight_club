@@ -1,13 +1,14 @@
 <template>
-    <router-view />
- </template>
-   
- <script lang="ts">
- import { defineComponent } from 'vue';
+	<profile />
+</template>
 
- export default defineComponent({
-   setup() {
-       return { }
-    }
- });
-   </script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Profile from '@/components/profile/Profile.vue';
+export default defineComponent({
+	components: { Profile },
+	setup() {
+		return {};
+	},
+});
+</script>
