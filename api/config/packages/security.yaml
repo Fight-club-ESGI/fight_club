@@ -48,7 +48,6 @@ security:
         - { path: ^/api/(authentication_token|token/refresh), roles: PUBLIC_ACCESS }
 
     role_hierarchy:
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
         ROLE_ADMIN: ROLE_SUPER_VIP
         ROLE_SUPER_VIP: ROLE_VIP
         ROLE_VIP: ROLE_USER

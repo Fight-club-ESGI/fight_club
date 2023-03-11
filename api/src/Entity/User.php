@@ -40,6 +40,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Get(
             normalizationContext: ['groups' => ['user:get']],
+            security: "is_granted('ROLE_USER')"
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['user:get_collection']],
@@ -79,10 +80,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['super_admin:user:get'])]
+    #[Groups(['admin:user:get'])]
     private ?string $password = null;
 
     #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
+    #[Groups(['admin:get', 'user:self'])]
     private ?Wallet $wallet = null;
 
     public function getEmail(): ?string
