@@ -9,14 +9,14 @@
             <v-icon icon="mdi-flag"></v-icon>
             <p class="italic">{{ fighter.nationality }}</p>
         </div>
-        <fighter-matches class="pt-5"/>
+        <fighter-matches class="pt-5" />
     </div>
 </template>
-  
+
 <script lang="ts">
 import { storeToRefs } from 'pinia';
 import { defineComponent, computed, onMounted } from 'vue';
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router';
 import { useFighterStore } from '@/stores/fighter';
 import { createToast } from 'mosha-vue-toastify';
 import FighterMatches from '../Fighter/FighterMatches.vue';
@@ -26,22 +26,25 @@ export default defineComponent({
         const route = useRoute();
         const fighterStore = useFighterStore();
 
-        const { getFighter } =  fighterStore;
-        const { fighter } =  storeToRefs(fighterStore);
+        const { getFighter } = fighterStore;
+        const { fighter } = storeToRefs(fighterStore);
 
-        const  fighterId= computed(() => route.params.id);
+        const fighterId = computed(() => route.params.id);
 
         onMounted(async () => {
             try {
                 await getFighter(fighterId.value);
             } catch (error) {
-                createToast('Error while fetching fighter', { position: 'bottom-right', type: 'danger' })
+                createToast('Error while fetching fighter', {
+                    position: 'bottom-right',
+                    type: 'danger',
+                });
             }
         });
 
-        const fullName = computed(() => fighter.value?.firstname + ' ' + fighter.value?.lastname );
+        const fullName = computed(() => fighter.value?.firstname + ' ' + fighter.value?.lastname);
 
-        return { fighterId, fighter, fullName }
-    }
+        return { fighterId, fighter, fullName };
+    },
 });
 </script>

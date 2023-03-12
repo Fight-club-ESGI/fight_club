@@ -7,11 +7,13 @@
                     {{ tableHeader }}
                 </th>
                 <tbody>
-                    <tr v-for="(fight, i) of fights" :class="[ i % 2 !== 1 ? 'bg-white' : ''] + ' h-10'">
+                    <tr v-for="(fight, i) of fights" :class="[i % 2 !== 1 ? 'bg-white' : ''] + ' h-10'">
                         <td class="pl-2">{{ fight.opponent.firstname }}</td>
                         <td class="pl-2">{{ fight.reason }}</td>
                         <td class="pl-2">{{ fight.round }}</td>
-                        <td :class="[ fight.status === 'win' ? 'text-green' : 'text-red'] + ' pl-2'">{{ fight.status.toUpperCase() }}</td>
+                        <td :class="[fight.status === 'win' ? 'text-green' : 'text-red'] + ' pl-2'">
+                            {{ fight.status.toUpperCase() }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -20,14 +22,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import fights from "../../mocks/fights.json";
+import { defineComponent } from 'vue';
+import fights from '../../mocks/fights.json';
 
 export default defineComponent({
     setup() {
         const tableHeaders = ['Opponents', 'Reason', 'Round', 'Status'];
 
-        return { fights, tableHeaders }
-    }
-})
+        return { fights, tableHeaders };
+    },
+});
 </script>

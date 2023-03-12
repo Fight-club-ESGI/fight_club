@@ -1,11 +1,11 @@
 <template>
-	<v-container>
-		<user-informations></user-informations>
-		<change-password></change-password>
-		<div class="text-center mt-6">
-			<v-btn @click="logoutUser()" variant="text">Logout</v-btn>
-		</div>
-	</v-container>
+    <v-container>
+        <user-informations></user-informations>
+        <change-password></change-password>
+        <div class="text-center mt-6">
+            <v-btn @click="logoutUser()" variant="text">Logout</v-btn>
+        </div>
+    </v-container>
 </template>
 
 <script lang="ts">
@@ -17,20 +17,20 @@ import UserInformations from '@/components/profile/UserInformations.vue';
 import { useUserStore } from '@/stores/user';
 
 export default defineComponent({
-	components: { UserBets, ChangePassword, UserTickets, UserInformations },
-	setup() {
-		const userStore = useUserStore();
-		const { logout } = userStore;
-		const logoutUser = () => {
-			logout();
-		};
-		return { logoutUser };
-	},
+    components: { UserBets, ChangePassword, UserTickets, UserInformations },
+    setup() {
+        const userStore = useUserStore();
+        const { logout } = userStore;
+        const logoutUser = () => {
+            logout();
+        };
+        return { logoutUser };
+    },
 });
 </script>
 
 <style scoped>
 .v-btn {
-	text-transform: none;
+    text-transform: none;
 }
 </style>

@@ -2,49 +2,67 @@
     <div>
         <v-dialog v-model="dialog">
             <template v-slot:activator="{ props }">
-                <v-btn color="primary" v-bind="props">
-                    Register an event
-                </v-btn>
+                <v-btn color="primary" v-bind="props"> Register an event </v-btn>
             </template>
 
             <v-card>
-                <v-card-title>
-                    Register an event
-                </v-card-title>
+                <v-card-title> Register an event </v-card-title>
                 <v-container>
                     <v-form v-model="valid" ref="form">
                         <v-row justify="space-between" class="align-center">
                             <v-col>
-                                <v-text-field v-model="event.name" :rules="[rules.required]" placeholder="Name"
-                                    label="Name" />
+                                <v-text-field v-model="event.name" :rules="[rules.required]" placeholder="Name" label="Name" />
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="event.location" :rules="[rules.required]" placeholder="Location"
-                                    label="Location" />
+                                <v-text-field v-model="event.location" :rules="[rules.required]" placeholder="Location" label="Location" />
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="event.description" :rules="[rules.required]" type="text"
-                                    placeholder="Description" label="Description" />
-                            </v-col>
-                        </v-row>
-                        <v-row class="align-center">
-                            <v-col>
-                                <v-text-field v-model.number="event.capacity" :rules="[rules.required, rules.capacity]"
-                                    type="number" placeholder="Capacity" label="Capacity" />
-                            </v-col>
-                            <v-col>
-                                <v-text-field v-model="event.locationLink" placeholder="Location link"
-                                    label="Location link" hint="If no image is provided, a default template" />
-                            </v-col>
-                            <v-col>
-                                <v-text-field v-model="event.startTimestamp" :rules="[rules.required]" type="date"
-                                    placeholder="Start event" label="Start event" />
+                                <v-text-field
+                                    v-model="event.description"
+                                    :rules="[rules.required]"
+                                    type="text"
+                                    placeholder="Description"
+                                    label="Description"
+                                />
                             </v-col>
                         </v-row>
                         <v-row class="align-center">
                             <v-col>
-                                <v-text-field v-model="event.endTimestamp" :rules="[rules.required]" type="date"
-                                    placeholder="End event" label="End event" />
+                                <v-text-field
+                                    v-model.number="event.capacity"
+                                    :rules="[rules.required, rules.capacity]"
+                                    type="number"
+                                    placeholder="Capacity"
+                                    label="Capacity"
+                                />
+                            </v-col>
+                            <v-col>
+                                <v-text-field
+                                    v-model="event.locationLink"
+                                    placeholder="Location link"
+                                    label="Location link"
+                                    hint="If no image is provided, a default template"
+                                />
+                            </v-col>
+                            <v-col>
+                                <v-text-field
+                                    v-model="event.startTimestamp"
+                                    :rules="[rules.required]"
+                                    type="date"
+                                    placeholder="Start event"
+                                    label="Start event"
+                                />
+                            </v-col>
+                        </v-row>
+                        <v-row class="align-center">
+                            <v-col>
+                                <v-text-field
+                                    v-model="event.endTimestamp"
+                                    :rules="[rules.required]"
+                                    type="date"
+                                    placeholder="End event"
+                                    label="End event"
+                                />
                             </v-col>
                             <v-col>
                                 <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
@@ -65,7 +83,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from 'vue';
-import { createToast } from 'mosha-vue-toastify'
+import { createToast } from 'mosha-vue-toastify';
 import { EventI } from '@/interfaces/payload';
 import { useEventStore } from '@/stores/event';
 
@@ -89,28 +107,27 @@ export default defineComponent({
             startTimestamp: '',
             endTimestamp: '',
             fight: [],
-            vip: false
+            vip: false,
         });
 
         const rules = {
             required: (value: any) => !!value || 'Required.',
-            capacity: (value: any) => value > 0 || 'Capacity must be 1 or higher'
-        }
+            capacity: (value: any) => value > 0 || 'Capacity must be 1 or higher',
+        };
 
         const submit = async () => {
             try {
-                const { valid } = await form.value.validate()
+                const { valid } = await form.value.validate();
                 if (valid) {
                     await createEvent(event);
                     dialog.value = false;
                 }
-
             } catch (error: any) {
-                createToast(error, { position: "bottom-right", type: 'danger' });
+                createToast(error, { position: 'bottom-right', type: 'danger' });
             }
-        }
+        };
 
-        return { dialog, valid, rules, submit, form, event }
-    }
+        return { dialog, valid, rules, submit, form, event };
+    },
 });
 </script>
