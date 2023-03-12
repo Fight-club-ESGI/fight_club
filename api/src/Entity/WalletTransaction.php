@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
+use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
+use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\WalletTransactionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -21,11 +23,11 @@ class WalletTransaction
     #[ORM\Column]
     private ?float $amount = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    #[ORM\Column(length: 255, enumType: WalletTransactionStatusEnum::class)]
+    private ?WalletTransactionStatusEnum $status = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    #[ORM\Column(length: 255, enumType: WalletTransactionTypeEnum::class)]
+    private ?WalletTransactionTypeEnum $type = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $transaction = null;
@@ -62,24 +64,24 @@ class WalletTransaction
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?WalletTransactionStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(WalletTransactionStatusEnum $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): ?WalletTransactionTypeEnum
     {
         return $this->type;
     }
 
-    public function setType(string $type): self
+    public function setType(WalletTransactionTypeEnum $type): self
     {
         $this->type = $type;
 
