@@ -5,5 +5,6 @@ import eventService from "./event";
 import sponsorshipService from "./sponsorship";
 import walletService from "./wallet";
 import fightService from "./fight";
+import weightCategoryService from "./weightCategory";
 
-export { userService, fightService, fighterService, betService, eventService, sponsorshipService, walletService }
+export { userService, fightService, fighterService, betService, eventService, sponsorshipService, walletService, weightCategoryService }

@@ -12,10 +12,10 @@ export const useUserStore = defineStore('user', () => {
     const { _signin, _signup, _getSelfUser, _getUsers, _signinWithToken, _changePassword, _updateUser } = userService;
 
     const user = ref<userInterface>({
-        id: '',
-        username: '',
-        roles: [''],
-        email: '',
+        id: '6162',
+        username: 'admin',
+        roles: ['ROLE_ADMIN'],
+        email: 'admin@gmail.com',
     });
 
     const users = ref<userInterface[]>([]);

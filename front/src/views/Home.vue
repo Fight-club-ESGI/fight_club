@@ -19,14 +19,14 @@ export default defineComponent({
 <template>
     <v-container fluid class="pa-0">
         <v-card :rounded="false">
-            <v-img max-height="100vh" class="align-center text-center" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" cover :src="imageUrl">
+            <!-- <v-img max-height="100vh" class="align-center text-center" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" cover :src="imageUrl">
                 <h1 class="custom-h1">Thunderous Knockout Fighting</h1>
                 <h2 class="custom-h2">Watch, bet or book your tickets online.</h2>
                 <v-card-action>
                     <router-link to="/events"><v-btn class="text-white mx-3">Upcoming events</v-btn></router-link>
                     <router-link to="/fighters"><v-btn class="text-white mx-3">Our fighters</v-btn></router-link>
                 </v-card-action>
-            </v-img>
+            </v-img> -->
         </v-card>
         <admin-view v-if="isAdmin"></admin-view>
     </v-container>

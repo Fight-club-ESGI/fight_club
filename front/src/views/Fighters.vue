@@ -16,6 +16,7 @@ import Fighter from '@/components/Fighter/Fighter.vue';
 import { defineComponent, onMounted, ref, computed } from 'vue';
 import { useFighterStore } from '@/stores/fighter';
 import { storeToRefs } from 'pinia';
+
 export default defineComponent({
     components: { Fighter, FighterFilter },
     setup() {

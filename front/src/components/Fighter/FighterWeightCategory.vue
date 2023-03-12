@@ -1,13 +1,11 @@
 <template>
-    <!-- <profile /> -->
-    <router-view />
+    <v-list> </v-list>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue';
-import Profile from '@/components/profile/Profile.vue';
+
 export default defineComponent({
-    components: { Profile },
     setup() {
         return {};
     },
