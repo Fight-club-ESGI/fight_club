@@ -13,7 +13,7 @@
 <script>
 import { defineComponent } from 'vue';
 import { useSponsorshipStore } from '../stores/sponsorship';
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router';
 export default defineComponent({
     setup() {
         const router = useRouter();
@@ -26,12 +26,10 @@ export default defineComponent({
             try {
                 await validateEmail(route.params.id);
                 await router.push({ name: 'home' });
-            } catch(e) {
+            } catch (e) {}
+        };
 
-            }
-        }
-
-        return { activateVIPStatus }
-    }
-})
+        return { activateVIPStatus };
+    },
+});
 </script>

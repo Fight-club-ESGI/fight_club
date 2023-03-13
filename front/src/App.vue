@@ -37,8 +37,9 @@ export default defineComponent({
             @toggleNavigationDrawer="display = !display"
         ></Header>
         <NavigationDrawer v-if="isAdmin" :display="display"></NavigationDrawer>
-        <v-main class="pa-0">
-            <router-view></router-view>
+        <!-- Do not put padding on the v-main because it will break the website -->
+        <v-main>
+            <router-view />
         </v-main>
     </v-app>
 </template>

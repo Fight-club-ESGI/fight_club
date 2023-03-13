@@ -7,7 +7,7 @@
                     {{ tableHeader }}
                 </th>
                 <tbody>
-                    <tr v-for="(request, i) of pendingSponsorships.sponsorship" :class="[ i % 2 !== 1 ? 'bg-white' : ''] + ' h-10'">
+                    <tr v-for="(request, i) of pendingSponsorships.sponsorship" :class="[i % 2 !== 1 ? 'bg-white' : ''] + ' h-10'">
                         <td class="pl-2">{{ request.sponsored.username }}</td>
                         <td class="pl-2">{{ request.sponsored.email }}</td>
                         <td class="pl-2 font-bold">PENDING</td>
@@ -18,16 +18,14 @@
                 </tbody>
             </table>
         </v-card-text>
-        <v-card-text v-else>
-            No pending requests
-        </v-card-text>
+        <v-card-text v-else> No pending requests </v-card-text>
     </v-card>
 </template>
 
 <script>
 import { storeToRefs } from 'pinia';
 import { useSponsorshipStore } from '../stores/sponsorship';
-import { onMounted } from 'vue'
+import { onMounted } from 'vue';
 export default {
     setup() {
         const tableHeaders = ['Username', 'Email', 'Status'];
@@ -41,20 +39,16 @@ export default {
                 await acceptRequest(id);
                 await getPendingSponsorships();
                 await getAcceptedSponsorships();
-            } catch (e) {
-
-            }
-        }
+            } catch (e) {}
+        };
 
         onMounted(async () => {
             try {
                 await getPendingSponsorships();
-            } catch (e) {
-
-            }
+            } catch (e) {}
         });
 
-        return { pendingSponsorships, tableHeaders, setVIP }
-    }
-}
+        return { pendingSponsorships, tableHeaders, setVIP };
+    },
+};
 </script>

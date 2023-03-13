@@ -5,10 +5,10 @@
                 <v-row justify="center" class="pt-4">
                     <v-col cols="10">
                         <v-form v-model="valid" ref="form">
-                            <v-text-field 
+                            <v-text-field
                                 autofocus
-                                v-model="email" 
-                                @keydown.enter.prevent="submit" 
+                                v-model="email"
+                                @keydown.enter.prevent="submit"
                                 hint="Press enter to send the invitation"
                                 placeholder="Enter the mail that you want to be sponsored"
                                 type="email"
@@ -55,16 +55,14 @@ export default defineComponent({
         const form = ref();
 
         const rules = {
-            email: [(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid']
-        }
+            email: [(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid'],
+        };
 
         onMounted(async () => {
             try {
                 await getUsers();
-            } catch (error) {
-                
-            }
-        })
+            } catch (error) {}
+        });
 
         const submit = async (event: any) => {
             const { valid } = await form.value.validate();
@@ -72,19 +70,19 @@ export default defineComponent({
                 try {
                     const payload = {
                         sponsorId: user.value.id,
-                        sponsored: email.value
-                    }
+                        sponsored: email.value,
+                    };
                     await sendSponsoLink(payload);
                 } catch {
                     createToast('Error while sending sponsorship link', { type: 'danger', position: 'bottom-right' });
                 }
-                email.value = "";
+                email.value = '';
                 event.target.blur();
                 form.value.reset();
             }
-        }
+        };
 
-        return { email, submit, valid, rules, form, users }
-    }
+        return { email, submit, valid, rules, form, users };
+    },
 });
 </script>

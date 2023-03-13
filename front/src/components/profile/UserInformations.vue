@@ -5,9 +5,9 @@
                 <h1 class="text-2xl font-bold pb-5">Personnal informations</h1>
 
                 <v-form v-model="valid" ref="form">
-                    <v-text-field v-model="user.username" :rules="[rules.required]" placeholder="username" label="username"></v-text-field>
-                    <v-text-field v-model="user.email" disabled label="email"></v-text-field>
-                    <v-btn block color="primary" @click="validate()">Confirm</v-btn>
+                    <v-text-field v-model="user.username" :rules="[rules.required]" placeholder="username" label="username" />
+                    <v-text-field v-model="user.email" disabled label="email" />
+                    <v-btn block color="primary" @click="validate()">Confirm </v-btn>
                 </v-form>
             </v-card>
         </v-col>

@@ -11,7 +11,7 @@ import { defineComponent, onMounted, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '../stores/event';
 import { useRouter } from 'vue-router';
-import Event from "../components/Event.vue";
+import Event from '../components/Event.vue';
 import { useUserStore } from '@/stores/user';
 import CreateEvent from '@/components/dialogs/CreateEvent.vue';
 
@@ -28,18 +28,16 @@ export default defineComponent({
         onMounted(async () => {
             try {
                 await getEvents();
-            } catch (error) {
-
-            }
+            } catch (error) {}
         });
 
         const VIPevents = computed(() => {
-            return events.value.filter(event => event.vip === true);
+            return events.value.filter((event) => event.vip === true);
         });
 
-        const filteredEvents = computed(() => events.value.filter(event => event.vip === false));
+        const filteredEvents = computed(() => events.value.filter((event) => event.vip === false));
 
-        return { events, router, VIPevents, filteredEvents, isVIP, isAdmin }
-    }
+        return { events, router, VIPevents, filteredEvents, isVIP, isAdmin };
+    },
 });
 </script>
