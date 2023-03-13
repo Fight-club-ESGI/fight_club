@@ -7,7 +7,14 @@
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-text-field v-model="email" :rules="emailRules" autocomplete="email" label="E-mail" required class="my-4"></v-text-field>
 
-                    <v-text-field v-model="password" label="Password" autocomplete="current-password" type="password" required class="mt-4"></v-text-field>
+                    <v-text-field
+                        v-model="password"
+                        label="Password"
+                        autocomplete="current-password"
+                        type="password"
+                        required
+                        class="mt-4"
+                    ></v-text-field>
                     <div class="text-caption mb-4"><router-link to="/resetpassword" class="custom-link">Forgot your password?</router-link></div>
 
                     <v-btn block color="primary" @click="validate"> Login </v-btn>
@@ -40,12 +47,12 @@ async function validate() {
         try {
             const payload = {
                 email: email.value,
-                password: password.value
-            }
+                password: password.value,
+            };
             await signin(payload);
             router.push({ name: 'home' });
         } catch (error: any) {
-            createToast(error, { type: 'danger'})
+            createToast(error, { type: 'danger' });
         }
     }
 }

@@ -28,24 +28,23 @@ export default defineComponent({
             let filteredFighter = fighters.value;
             if (filter.value) {
                 if (filter.value.search !== '') {
-                    filteredFighter = filteredFighter.filter(fighter => {
-                        return fighter.firstname.indexOf(filter.value.search) != -1 ||
-                            fighter.lastname.indexOf(filter.value.search) != -1
+                    filteredFighter = filteredFighter.filter((fighter) => {
+                        return fighter.firstname.indexOf(filter.value.search) != -1 || fighter.lastname.indexOf(filter.value.search) != -1;
                     });
                 }
                 if (filter.value.nationality) {
-                    filteredFighter = filteredFighter.filter(fighter => {
+                    filteredFighter = filteredFighter.filter((fighter) => {
                         return fighter.nationality.indexOf(filter.value.nationality) != -1;
                     });
                 }
                 if (filter.value.divisionClass) {
-                    filteredFighter = filteredFighter.filter(fighter => {
+                    filteredFighter = filteredFighter.filter((fighter) => {
                         return fighter.weight;
-                    })
-                    console.log(filter.value)
+                    });
+                    console.log(filter.value);
                 }
                 if (filter.value.gender) {
-                    filteredFighter = filteredFighter.filter(fighter => fighter.gender);
+                    filteredFighter = filteredFighter.filter((fighter) => fighter.gender);
                 }
                 return filteredFighter;
             }
@@ -53,18 +52,13 @@ export default defineComponent({
         });
 
         onMounted(async () => {
-        try {
-            await getFighters();
-        } catch (error) {
-            
-        }
+            try {
+                await getFighters();
+            } catch (error) {}
         });
 
-        return { fighters, fighterFiltered, filter }
-    }
+        return { fighters, fighterFiltered, filter };
+    },
 });
-
 </script>
-<style lang="">
-    
-</style>
+<style lang=""></style>
