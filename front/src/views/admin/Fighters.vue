@@ -20,7 +20,7 @@
                 </div>
             </v-window-item>
 
-            <v-window-item value="category"> Category </v-window-item>
+            <v-window-item value="category"> <fighter-weight-category></fighter-weight-category> </v-window-item>
         </v-window>
     </v-container>
 </template>
@@ -31,9 +31,10 @@ import CreateFighter from '@/components/dialogs/CreateFighter.vue';
 import { useFighterStore } from '@/stores/fighter';
 import { storeToRefs } from 'pinia';
 import FighterFilter from '@/components/Fighter/FighterFilter.vue';
+import FighterWeightCategory from '@/components/Fighter/FighterWeightCategory.vue';
 
 export default defineComponent({
-    components: { Fighter, CreateFighter, FighterFilter },
+    components: { Fighter, CreateFighter, FighterFilter, FighterWeightCategory },
     setup() {
         const fighterStore = useFighterStore();
         const { getFighters } = fighterStore;

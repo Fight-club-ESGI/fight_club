@@ -33,6 +33,16 @@ class WeightCategory {
             throw error;
         }
     }
+
+    _deleteCategory = async (category: any) => {
+        try {
+            const uri = `${namespace}/${category.id}`;
+            const res = await client.delete(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const weightCategoryService = new WeightCategory();
