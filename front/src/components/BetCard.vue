@@ -38,11 +38,16 @@
                 </v-col>
             </v-row>
         </div>
-        <div v-if="bet.status === 'finished'">
+        <div v-else>
             <v-row no-gutters justify="space-between" align="center" class="custom-result mt-4 mb-2 py-3 px-4">
                 <v-col cols="auto">
                     <div class="text-sm">Winner of the fight</div>
-                    <div class="custom-bg-primary my-1 py-1 px-3 text-white font-weight-bold text-xl">{{ bet.winner }}</div>
+                    <div v-if="bet.status === 'finished'" class="custom-bg-primary my-1 py-1 px-3 text-white font-weight-bold text-xl">
+                        {{ bet.winner }}
+                    </div>
+                    <div v-if="bet.status === 'won'" class="custom-bg-success my-1 py-1 px-3 text-white font-weight-bold text-xl">
+                        {{ bet.winner }}
+                    </div>
                 </v-col>
                 <v-col cols="2">
                     <p class="text-center font-weight-bold text-md">{{ bet.rating }}</p>
@@ -51,38 +56,17 @@
             <v-row no-gutters justify="space-between" align="center">
                 <v-col cols="auto">
                     <p class="my-2">Bet</p>
-                    <p class="my-2">Possible gains</p>
+                    <p v-if="bet.status === 'finished'" class="my-2">Possible gains</p>
+                    <p v-if="bet.status === 'won'" class="my-2">Gains</p>
                 </v-col>
                 <v-col cols="2">
                     <p class="my-2 text-center">{{ bet.betAmount }} €</p>
-                    <p class="my-2 text-center font-weight-bold text-xl">{{ bet.possibleGain }} €</p>
+                    <p v-if="bet.status === 'finished'" class="my-2 text-center font-weight-bold text-xl">{{ bet.possibleGain }} €</p>
+                    <p v-if="bet.status === 'won'" class="my-2 text-center font-weight-bold text-xl">{{ bet.betAmount + bet.possibleGain }} €</p>
                 </v-col>
                 <v-col cols="2 offset-10">
-                    <div class="custom-lost text-center my-1 pa-1 text-white font-weight-bold text-xl">LOST</div>
-                </v-col>
-            </v-row>
-        </div>
-        <div v-if="bet.status === 'won'">
-            <v-row no-gutters justify="space-between" align="center" class="custom-result mt-4 mb-2 py-3 px-4">
-                <v-col cols="auto">
-                    <div class="text-sm">Winner of the fight</div>
-                    <div class="custom-bg-success my-1 py-1 px-3 text-white font-weight-bold text-xl">{{ bet.winner }}</div>
-                </v-col>
-                <v-col cols="2">
-                    <p class="text-center font-weight-bold text-md">{{ bet.rating }}</p>
-                </v-col>
-            </v-row>
-            <v-row no-gutters justify="space-between" align="center">
-                <v-col cols="auto">
-                    <p class="my-2">Bet</p>
-                    <p class="my-2">Gains</p>
-                </v-col>
-                <v-col cols="2">
-                    <p class="my-2 text-center">{{ bet.betAmount }} €</p>
-                    <p class="my-2 text-center font-weight-bold text-xl">{{ bet.betAmount + bet.possibleGain }} €</p>
-                </v-col>
-                <v-col cols="2 offset-10">
-                    <div class="custom-won text-center my-1 pa-1 text-white font-weight-bold text-xl">WON</div>
+                    <div v-if="bet.status === 'finished'" class="custom-lost text-center my-1 pa-1 text-white font-weight-bold text-xl">LOST</div>
+                    <div v-if="bet.status === 'won'" class="custom-won text-center my-1 pa-1 text-white font-weight-bold text-xl">WON</div>
                 </v-col>
             </v-row>
         </div>
@@ -115,12 +99,6 @@ defineProps({
 .custom-result {
     background: rgb(var(--v-theme-lightgray));
     border-radius: 5px;
-}
-.custom-bg-success {
-    background: rgb(var(--v-theme-success));
-}
-.custom-bg-primary {
-    background: rgb(var(--v-theme-primary));
 }
 .custom-won {
     background: rgb(var(--v-theme-success));

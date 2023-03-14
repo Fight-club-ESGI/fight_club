@@ -54,5 +54,33 @@
         "betDate": "2023-02-02T20:48:58.103Z",
         "ref": "112E75872ZE1571",
         "winner": "Tom Hanks"
+    },
+    {
+        "id": "5",
+        "status": "finished",
+        "figher1": "Tom Hanks",
+        "figher2": "Elton John",
+        "selectedWinner": "Elton John",
+        "betAmount": 10,
+        "rating": 1.31,
+        "possibleGain": 3.10,
+        "eventDate": "2023-02-02T20:48:58.103Z",
+        "betDate": "2023-02-02T20:48:58.103Z",
+        "ref": "112E75872ZE1571",
+        "winner": "Tom Hanks"
+    },
+    {
+        "id": "6",
+        "status": "finished",
+        "figher1": "Tom Hanks",
+        "figher2": "Elton John",
+        "selectedWinner": "Elton John",
+        "betAmount": 10,
+        "rating": 1.31,
+        "possibleGain": 3.10,
+        "eventDate": "2023-02-02T20:48:58.103Z",
+        "betDate": "2023-02-02T20:48:58.103Z",
+        "ref": "112E75872ZE1571",
+        "winner": "Tom Hanks"
     }
 ]
