@@ -11,7 +11,7 @@
             </v-col>
             <v-col cols="4">
                 <p class="text-right text-grey-darken-1">
-                    {{ bet.eventDate }}
+                    {{ DateTime.fromISO(bet.eventDate).toFormat('ff') }}
                 </p>
             </v-col>
         </v-row>
@@ -87,11 +87,12 @@
             </v-row>
         </div>
         <v-divider class="my-2"></v-divider>
-        <p class="mb-1 text-grey-darken-1">Ref {{ bet.ref }} - {{ bet.betDate }}</p>
+        <p class="mb-1 text-grey-darken-1">Ref {{ bet.ref }} - {{ DateTime.fromISO(bet.betDate).toFormat('ff') }}</p>
     </v-card>
 </template>
 
 <script setup lang="ts">
+import { DateTime } from 'luxon';
 defineProps({
     bet: {
         type: Object,
