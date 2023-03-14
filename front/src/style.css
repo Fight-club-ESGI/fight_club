@@ -26,3 +26,10 @@ body {
 img {
   object-fit: fill !important;
 }
+
+.custom-bg-success {
+  background: rgb(var(--v-theme-success));
+}
+.custom-bg-primary {
+  background: rgb(var(--v-theme-primary));
+}
