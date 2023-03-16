@@ -9,7 +9,7 @@
             <v-window-item value="pending" class="pt-10">
                 <v-row v-if="pendingBets.length !== 0" align="center" justify="center">
                     <v-col cols="12" lg="5">
-                        <BetCard class="my-4" v-for="bet in pendingBets" :bet="bet" />
+                        <BetCardHistory class="my-4" v-for="bet in pendingBets" :bet="bet" />
                     </v-col>
                 </v-row>
                 <v-row v-if="pendingBets.length === 0" style="height: 600px" align="center">
@@ -26,7 +26,7 @@
             <v-window-item value="finished" class="pt-10">
                 <v-row v-if="pendingBets.length !== 0" align="center" justify="center">
                     <v-col cols="12" lg="5">
-                        <BetCard class="my-4" v-for="bet in finishedBets" :bet="bet" />
+                        <BetCardHistory class="my-4" v-for="bet in finishedBets" :bet="bet" />
                     </v-col>
                 </v-row>
                 <v-row v-if="finishedBets.length === 0" style="height: 600px" align="center">
@@ -43,7 +43,7 @@
             <v-window-item value="won" class="pt-10">
                 <v-row v-if="pendingBets.length !== 0" align="center" justify="center">
                     <v-col cols="12" lg="5">
-                        <BetCard class="my-4" v-for="bet in wonBets" :bet="bet" />
+                        <BetCardHistory class="my-4" v-for="bet in wonBets" :bet="bet" />
                     </v-col>
                 </v-row>
                 <v-row v-if="wonBets.length === 0" style="height: 600px" align="center">
@@ -63,7 +63,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import BetCard from '@/components/BetCard.vue';
+import BetCardHistory from '@/components/bets/BetHistoryCard.vue';
 import bets from '@/mocks/bets.json';
 const tab = ref();
 const pendingBets = computed(() => {

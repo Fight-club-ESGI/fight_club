@@ -10,14 +10,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import UserBets from '@/components/profile/Bets.vue';
 import ChangePassword from '@/components/profile/ChangePassword.vue';
-import UserTickets from '@/components/profile/Tickets.vue';
 import UserInformations from '@/components/profile/UserInformations.vue';
 import { useUserStore } from '@/stores/user';
 
 export default defineComponent({
-    components: { UserBets, ChangePassword, UserTickets, UserInformations },
+    components: { ChangePassword, UserInformations },
     setup() {
         const userStore = useUserStore();
         const { logout } = userStore;

@@ -71,7 +71,7 @@ export default defineComponent({
             {
                 value: 'Tickets',
                 icon: 'mdi-ticket',
-                to: 'user-tickets',
+                to: 'user-tickets-history',
             },
         ];
 
