@@ -6,28 +6,37 @@
             <v-tab value="passed"> Passed </v-tab>
         </v-tabs>
         <v-window v-model="tab">
-            <v-window-item value="upcoming" class="pt-10"> </v-window-item>
-            <v-window-item value="passed" class="pt-10"> </v-window-item>
+            <v-window-item value="upcoming" class="pt-10">
+                <v-row align="center" justify="center">
+                    <v-col cols="12" lg="5">
+                        <TicketCard class="my-4" v-for="ticket in upcomingEvents" :ticket="ticket" />
+                    </v-col>
+                </v-row>
+            </v-window-item>
+            <v-window-item value="passed" class="pt-10">
+                <v-row align="center" justify="center">
+                    <v-col cols="12" lg="5">
+                        <TicketCard class="my-4" v-for="ticket in passedEvents" :ticket="ticket" />
+                    </v-col>
+                </v-row>
+            </v-window-item>
         </v-window>
     </v-container>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue';
+import { ref, computed } from 'vue';
+import tickets from '../../mocks/tickets.json';
+import TicketCard from '@/components/TicketCard.vue';
 
-const tickets = reactive([
-    {
-        id: 'ticket 1',
-        status: 'upcoming',
-    },
-    {
-        id: 'bet2',
-        status: 'passed',
-    },
-]);
 const tab = ref();
 
 const upcomingEvents = computed(() => {
-    return tickets.filter((e) => e.status === 'upcoming');
+    const filteredTickets = tickets.filter((e) => e.status === 'upcoming');
+    return filteredTickets.sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
+});
+const passedEvents = computed(() => {
+    const filteredTickets = tickets.filter((e) => e.status === 'passed');
+    return filteredTickets.sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
 });
 </script>

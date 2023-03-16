@@ -11,7 +11,7 @@
             </v-col>
             <v-col cols="4">
                 <p class="text-right text-grey-darken-1">
-                    {{ DateTime.fromISO(bet.eventDate).toFormat('ff') }}
+                    {{ DateTime.fromISO(bet.eventDate, { locale: 'en' }).toFormat('ff') }}
                 </p>
             </v-col>
         </v-row>
@@ -33,8 +33,8 @@
                     <p class="my-2">Possible gains</p>
                 </v-col>
                 <v-col cols="2">
-                    <p class="my-2 text-center">{{ bet.betAmount }} €</p>
-                    <p class="my-2 text-center font-weight-bold text-xl">{{ bet.possibleGain }} €</p>
+                    <p class="my-2 text-center">{{ formatMoney(bet.betAmount) }} €</p>
+                    <p class="my-2 text-center font-weight-bold text-xl">{{ formatMoney(bet.possibleGain) }} €</p>
                 </v-col>
             </v-row>
         </div>
@@ -60,9 +60,11 @@
                     <p v-if="bet.status === 'won'" class="my-2">Gains</p>
                 </v-col>
                 <v-col cols="2">
-                    <p class="my-2 text-center">{{ bet.betAmount }} €</p>
-                    <p v-if="bet.status === 'finished'" class="my-2 text-center font-weight-bold text-xl">{{ bet.possibleGain }} €</p>
-                    <p v-if="bet.status === 'won'" class="my-2 text-center font-weight-bold text-xl">{{ bet.betAmount + bet.possibleGain }} €</p>
+                    <p class="my-2 text-center">{{ formatMoney(bet.betAmount) }} €</p>
+                    <p v-if="bet.status === 'finished'" class="my-2 text-center font-weight-bold text-xl">{{ formatMoney(bet.possibleGain) }} €</p>
+                    <p v-if="bet.status === 'won'" class="my-2 text-center font-weight-bold text-xl">
+                        {{ formatMoney(bet.betAmount + bet.possibleGain) }} €
+                    </p>
                 </v-col>
                 <v-col cols="2 offset-10">
                     <div v-if="bet.status === 'finished'" class="custom-lost text-center my-1 pa-1 text-white font-weight-bold text-xl">LOST</div>
@@ -71,12 +73,13 @@
             </v-row>
         </div>
         <v-divider class="my-2"></v-divider>
-        <p class="mb-1 text-grey-darken-1">Ref {{ bet.ref }} - {{ DateTime.fromISO(bet.betDate).toFormat('ff') }}</p>
+        <p class="mb-1 text-grey-darken-1">Ref {{ bet.ref }} - {{ DateTime.fromISO(bet.betDate, { locale: 'en' }).toFormat('ff') }}</p>
     </v-card>
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
+import { formatMoney } from '@/service/helpers';
 defineProps({
     bet: {
         type: Object,
