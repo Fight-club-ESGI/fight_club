@@ -43,6 +43,7 @@ services:
         decorates: 'api_platform.serializer.context_builder'
         arguments: [ '@App\Serializer\AdditionalContextBuilder.inner' ]
         autoconfigure: false
-    #App\EventSubscriber\UserSignupSubscriber:
-    #    tags:
-     #       - { name: kernel.event_subscriber }
+        
+    App\EventSubscriber\User\UserRegisterSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
