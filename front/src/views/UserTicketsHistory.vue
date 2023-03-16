@@ -9,14 +9,14 @@
             <v-window-item value="upcoming" class="pt-10">
                 <v-row align="center" justify="center">
                     <v-col cols="12" lg="5">
-                        <TicketCard class="my-4" v-for="ticket in upcomingEvents" :ticket="ticket" />
+                        <TicketHistoryCard class="my-4" v-for="ticket in upcomingEvents" :ticket="ticket" />
                     </v-col>
                 </v-row>
             </v-window-item>
             <v-window-item value="passed" class="pt-10">
                 <v-row align="center" justify="center">
                     <v-col cols="12" lg="5">
-                        <TicketCard class="my-4" v-for="ticket in passedEvents" :ticket="ticket" />
+                        <TicketHistoryCard class="my-4" v-for="ticket in passedEvents" :ticket="ticket" />
                     </v-col>
                 </v-row>
             </v-window-item>
@@ -26,8 +26,8 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import tickets from '../../mocks/tickets.json';
-import TicketCard from '@/components/TicketCard.vue';
+import tickets from '../mocks/tickets.json';
+import TicketHistoryCard from '@/components/TicketHistoryCard.vue';
 
 const tab = ref();
 

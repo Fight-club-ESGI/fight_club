@@ -10,8 +10,8 @@ import Sponsorship from "@/views/admin/Sponsorship.vue"
 import FightersAdmin from "@/views/admin/Fighters.vue"
 import AdminView from "@/views/admin/AdminView.vue"
 import ProfileView from "@/views/Profile.vue";
-import UserBets from "@/components/profile/Bets.vue";
-import UserTickets from "@/components/profile/Tickets.vue";
+import UserBetsHistory from "@/views/UserBetsHistory.vue";
+import UserTicketsHistory from "@/views/UserTicketsHistory.vue";
 import Wallet from "@/components/profile/Wallet.vue";
 import Ticketing from '@/views/Ticketing.vue';
 import FailedPayment from '@/views/FailedPayment.vue';
@@ -63,14 +63,14 @@ export default [
     },
     {
         path: '/bets',
-        component: UserBets,
-        name: 'user-bet',
+        component: UserBetsHistory,
+        name: 'user-bets-history',
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
         path: '/tickets',
-        component: UserTickets,
-        name: 'user-tickets',
+        component: UserTicketsHistory,
+        name: 'user-tickets-history',
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
