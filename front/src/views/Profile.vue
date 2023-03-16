@@ -1,6 +1,6 @@
 <template>
-    <!-- <profile /> -->
-    <router-view />
+    <profile />
+    <!-- <router-view /> -->
 </template>
 
 <script lang="ts">

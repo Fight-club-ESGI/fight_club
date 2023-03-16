@@ -8,13 +8,13 @@
 
         <v-spacer></v-spacer>
 
-        <template v-if="!isConnected">
+        <template v-if="isConnected">
             <router-link to="/bets">
                 <v-btn color="white"><v-icon class="mr-2">mdi-checkbox-marked</v-icon>My bets</v-btn>
             </router-link>
             <v-menu>
                 <template v-slot:activator="{ props }">
-                    <v-btn v-bind="props" color="white" class="mr-3"><v-icon size="30" class="mr-2">mdi-account</v-icon>Simon</v-btn>
+                    <v-btn v-bind="props" color="white" class="mr-3"><v-icon size="30" class="mr-2">mdi-account</v-icon>{{ user.email }}</v-btn>
                 </template>
 
                 <v-list>
@@ -31,6 +31,9 @@
 
                         <v-list-item-title>{{ item.value }}</v-list-item-title>
                     </v-list-item>
+                    <v-list-item @click="logoutUser()">
+                        <template v-slot:prepend> <v-icon icon="mdi-logout"></v-icon> </template>Logout</v-list-item
+                    >
                 </v-list>
             </v-menu>
         </template>
@@ -79,7 +82,7 @@ export default defineComponent({
             {
                 value: 'Account',
                 icon: 'mdi-account',
-                to: 'user-info',
+                to: 'user-profile',
             },
         ];
 

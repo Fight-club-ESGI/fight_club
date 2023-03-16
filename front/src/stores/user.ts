@@ -82,7 +82,12 @@ export const useUserStore = defineStore('user', () => {
 
     async function logout() {
         try {
-            user.value = undefined;
+            user.value = {
+                id: '',
+                username: '',
+                roles: [''],
+                email: '',
+            };
             router.push({ name: 'login' });
         } catch (error) {
             throw error;
