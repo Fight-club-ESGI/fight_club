@@ -98,9 +98,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
     private ?Order $orders = null;
 
+    #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
+    private Collection $fights;
+
     public function __construct()
     {
         $this->sponsorshipsAsSponsor = new ArrayCollection();
+        $this->fights = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -258,6 +262,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->orders = $orders;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fight>
+     */
+    public function getFights(): Collection
+    {
+        return $this->fights;
+    }
+
+    public function addFight(Fight $fight): self
+    {
+        if (!$this->fights->contains($fight)) {
+            $this->fights->add($fight);
+            $fight->setFighterA($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFight(Fight $fight): self
+    {
+        if ($this->fights->removeElement($fight)) {
+            // set the owning side to null (unless already changed)
+            if ($fight->getFighterA() === $this) {
+                $fight->setFighterA(null);
+            }
+        }
 
         return $this;
     }

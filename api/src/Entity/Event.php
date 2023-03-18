@@ -50,9 +50,13 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
     private Collection $tickets;
 
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
+    private Collection $fights;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->fights = new ArrayCollection();
     }
 
     public function getFightCategory(): ?FightCategory
@@ -187,6 +191,36 @@ class Event
             // set the owning side to null (unless already changed)
             if ($ticket->getEvent() === $this) {
                 $ticket->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fight>
+     */
+    public function getFights(): Collection
+    {
+        return $this->fights;
+    }
+
+    public function addFight(Fight $fight): self
+    {
+        if (!$this->fights->contains($fight)) {
+            $this->fights->add($fight);
+            $fight->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFight(Fight $fight): self
+    {
+        if ($this->fights->removeElement($fight)) {
+            // set the owning side to null (unless already changed)
+            if ($fight->getEvent() === $this) {
+                $fight->setEvent(null);
             }
         }
 
