@@ -41,6 +41,9 @@ class Fighter
     #[ORM\Column(length: 255)]
     private ?string $gender = null;
 
+    #[ORM\ManyToOne(inversedBy: 'fighters')]
+    private ?FightCategory $fightCategory = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -126,6 +129,18 @@ class Fighter
     public function setGender(string $gender): self
     {
         $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getFightCategory(): ?FightCategory
+    {
+        return $this->fightCategory;
+    }
+
+    public function setFightCategory(?FightCategory $fightCategory): self
+    {
+        $this->fightCategory = $fightCategory;
 
         return $this;
     }

@@ -23,9 +23,13 @@ class FightCategory
     #[ORM\OneToMany(mappedBy: 'fightCategory', targetEntity: WeightCategory::class, orphanRemoval: true)]
     private Collection $weightCategories;
 
+    #[ORM\OneToMany(mappedBy: 'fightCategory', targetEntity: Fighter::class)]
+    private Collection $fighters;
+
     public function __construct()
     {
         $this->weightCategories = new ArrayCollection();
+        $this->fighters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,6 +73,36 @@ class FightCategory
             // set the owning side to null (unless already changed)
             if ($weightCategory->getFightCategory() === $this) {
                 $weightCategory->setFightCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fighter>
+     */
+    public function getFighters(): Collection
+    {
+        return $this->fighters;
+    }
+
+    public function addFighter(Fighter $fighter): self
+    {
+        if (!$this->fighters->contains($fighter)) {
+            $this->fighters->add($fighter);
+            $fighter->setFightCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFighter(Fighter $fighter): self
+    {
+        if ($this->fighters->removeElement($fighter)) {
+            // set the owning side to null (unless already changed)
+            if ($fighter->getFightCategory() === $this) {
+                $fighter->setFightCategory(null);
             }
         }
 
