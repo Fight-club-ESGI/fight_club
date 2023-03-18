@@ -24,10 +24,10 @@ class Sponsorship
     private ?User $sponsored = null;
 
     #[ORM\Column]
-    private ?bool $email_validation = null;
+    private ?bool $emailValidation = null;
 
     #[ORM\Column]
-    private ?bool $sponsor_validation = null;
+    private ?bool $sponsorValidation = null;
 
     public function getSponsor(): ?User
     {
@@ -55,24 +55,24 @@ class Sponsorship
 
     public function isEmailValidation(): ?bool
     {
-        return $this->email_validation;
+        return $this->emailValidation;
     }
 
-    public function setEmailValidation(bool $email_validation): self
+    public function setEmailValidation(bool $emailValidation): self
     {
-        $this->email_validation = $email_validation;
+        $this->emailValidation = $emailValidation;
 
         return $this;
     }
 
     public function isSponsorValidation(): ?bool
     {
-        return $this->sponsor_validation;
+        return $this->sponsorValidation;
     }
 
-    public function setSponsorValidation(bool $sponsor_validation): self
+    public function setSponsorValidation(bool $sponsorValidation): self
     {
-        $this->sponsor_validation = $sponsor_validation;
+        $this->sponsorValidation = $sponsorValidation;
 
         return $this;
     }
