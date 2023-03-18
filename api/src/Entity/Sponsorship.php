@@ -19,7 +19,7 @@ class Sponsorship
     #[ORM\JoinColumn(nullable: false)]
     private ?User $sponsor = null;
 
-    #[ORM\OneToOne(inversedBy: 'sponsorshipsAsSponsored', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'sponsorshipsAsSponsored')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $sponsored = null;
 

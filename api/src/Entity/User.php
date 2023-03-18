@@ -92,16 +92,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'sponsor', targetEntity: Sponsorship::class)]
     private Collection $sponsorshipsAsSponsor;
 
-    #[ORM\OneToMany(mappedBy: 'sponsored', targetEntity: Sponsorship::class)]
-    private Collection $sponsorshipsAsSponsored;
+    #[ORM\OneToOne(mappedBy: 'sponsored', targetEntity: Sponsorship::class)]
+    private ?Sponsorship $sponsorshipsAsSponsored;
 
-    #[ORM\OneToOne(mappedBy: 'test', cascade: ['persist', 'remove'])]
-    private ?Sponsorship $test = null;
+    #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
+    private ?Order $orders = null;
 
     public function __construct()
     {
         $this->sponsorshipsAsSponsor = new ArrayCollection();
-        $this->sponsorshipsAsSponsored = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -242,6 +241,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $sponsorshipsAsSponsored->setSponsor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOrders(): ?Order
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(Order $orders): self
+    {
+        // set the owning side of the relation if necessary
+        if ($orders->getCustomer() !== $this) {
+            $orders->setCustomer($this);
+        }
+
+        $this->orders = $orders;
 
         return $this;
     }
