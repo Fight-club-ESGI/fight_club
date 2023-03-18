@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Trait\EntityIdTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,10 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Fight
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use EntityIdTrait;
+    use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'fights')]
     #[ORM\JoinColumn(nullable: false)]
@@ -50,11 +50,6 @@ class Fight
     public function __construct()
     {
         $this->bets = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getEvent(): ?Event

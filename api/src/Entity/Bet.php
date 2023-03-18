@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Trait\EntityIdTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\BetRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,10 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Bet
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use EntityIdTrait;
+    use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'bets')]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,11 +32,6 @@ class Bet
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getFight(): ?Fight
     {

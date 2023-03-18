@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Trait\EntityIdTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,10 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Order
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use EntityIdTrait;
+    use TimestampableTrait;
 
     #[ORM\OneToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -41,11 +41,6 @@ class Order
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getCustomer(): ?User
