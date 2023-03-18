@@ -13,6 +13,8 @@ use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
 use App\Repository\UserRepository;
 use App\State\UserPasswordHasher;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -86,6 +88,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
     #[Groups(['admin:get', 'user:self'])]
     private ?Wallet $wallet = null;
+
+    #[ORM\OneToMany(mappedBy: 'sponsor', targetEntity: Sponsorship::class)]
+    private Collection $sponsorshipsAsSponsor;
+
+    #[ORM\OneToMany(mappedBy: 'sponsored', targetEntity: Sponsorship::class)]
+    private Collection $sponsorshipsAsSponsored;
+
+    #[ORM\OneToOne(mappedBy: 'test', cascade: ['persist', 'remove'])]
+    private ?Sponsorship $test = null;
+
+    public function __construct()
+    {
+        $this->sponsorshipsAsSponsor = new ArrayCollection();
+        $this->sponsorshipsAsSponsored = new ArrayCollection();
+    }
 
     public function getEmail(): ?string
     {
@@ -165,6 +182,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->wallet = $wallet;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sponsorship>
+     */
+    public function getSponsorshipsAsSponsor(): Collection
+    {
+        return $this->sponsorshipsAsSponsor;
+    }
+
+    public function addSponsorshipsAsSponsor(Sponsorship $sponsorshipsAsSponsor): self
+    {
+        if (!$this->sponsorshipsAsSponsor->contains($sponsorshipsAsSponsor)) {
+            $this->sponsorshipsAsSponsor->add($sponsorshipsAsSponsor);
+            $sponsorshipsAsSponsor->setSponsor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSponsorshipsAsSponsor(Sponsorship $sponsorshipsAsSponsor): self
+    {
+        if ($this->sponsorshipsAsSponsor->removeElement($sponsorshipsAsSponsor)) {
+            // set the owning side to null (unless already changed)
+            if ($sponsorshipsAsSponsor->getSponsor() === $this) {
+                $sponsorshipsAsSponsor->setSponsor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sponsorship>
+     */
+    public function getSponsorshipsAsSponsored(): Collection
+    {
+        return $this->sponsorshipsAsSponsored;
+    }
+
+    public function addSponsorshipsAsSponsored(Sponsorship $sponsorshipsAsSponsored): self
+    {
+        if (!$this->sponsorshipsAsSponsored->contains($sponsorshipsAsSponsored)) {
+            $this->sponsorshipsAsSponsored->add($sponsorshipsAsSponsored);
+            $sponsorshipsAsSponsored->setSponsor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSponsorshipsAsSponsored(Sponsorship $sponsorshipsAsSponsored): self
+    {
+        if ($this->sponsorshipsAsSponsored->removeElement($sponsorshipsAsSponsored)) {
+            // set the owning side to null (unless already changed)
+            if ($sponsorshipsAsSponsored->getSponsor() === $this) {
+                $sponsorshipsAsSponsored->setSponsor(null);
+            }
+        }
 
         return $this;
     }
