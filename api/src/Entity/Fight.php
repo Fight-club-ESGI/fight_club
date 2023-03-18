@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\FightRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FightRepository::class)]
@@ -41,6 +43,14 @@ class Fight
 
     #[ORM\ManyToOne]
     private ?User $adminValidatorB = null;
+
+    #[ORM\OneToMany(mappedBy: 'fight', targetEntity: Bet::class)]
+    private Collection $bets;
+
+    public function __construct()
+    {
+        $this->bets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -139,6 +149,36 @@ class Fight
     public function setAdminValidatorB(?User $adminValidatorB): self
     {
         $this->adminValidatorB = $adminValidatorB;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bet>
+     */
+    public function getBets(): Collection
+    {
+        return $this->bets;
+    }
+
+    public function addBet(Bet $bet): self
+    {
+        if (!$this->bets->contains($bet)) {
+            $this->bets->add($bet);
+            $bet->setFight($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBet(Bet $bet): self
+    {
+        if ($this->bets->removeElement($bet)) {
+            // set the owning side to null (unless already changed)
+            if ($bet->getFight() === $this) {
+                $bet->setFight(null);
+            }
+        }
 
         return $this;
     }
