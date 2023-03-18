@@ -35,11 +35,6 @@ class WalletTransaction
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripe_ref = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getWallet(): ?Wallet
     {
         return $this->wallet;

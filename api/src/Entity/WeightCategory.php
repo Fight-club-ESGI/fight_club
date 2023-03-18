@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Trait\EntityIdTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\WeightCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,10 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class WeightCategory
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use EntityIdTrait;
+    use TimestampableTrait;
 
     #[ORM\Column]
     private ?int $min_weight = null;
@@ -27,11 +27,6 @@ class WeightCategory
     #[ORM\ManyToOne(inversedBy: 'weightCategories')]
     #[ORM\JoinColumn(nullable: false)]
     private ?FightCategory $fightCategory = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getMinWeight(): ?int
     {

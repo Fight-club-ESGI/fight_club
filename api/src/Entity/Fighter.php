@@ -44,11 +44,6 @@ class Fighter
     #[ORM\ManyToOne(inversedBy: 'fighters')]
     private ?FightCategory $fightCategory = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getFirstname(): ?string
     {
         return $this->firstname;
