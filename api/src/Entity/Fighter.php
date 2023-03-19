@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -15,14 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: FighterRepository::class)]
-#[ApiResource(
-    operations: [
-        new Post(
-            read: false
-        ),
-        new GetCollection()
-    ]
-)]
+#[ApiResource]
 #[Vich\Uploadable]
 class Fighter
 {
