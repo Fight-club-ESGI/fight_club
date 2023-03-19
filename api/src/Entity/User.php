@@ -220,9 +220,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Sponsorship>
+     * @return Sponsorship
      */
-    public function getSponsorshipsAsSponsored(): Collection
+    public function getSponsorshipsAsSponsored(): ?Sponsorship
     {
         return $this->sponsorshipsAsSponsored;
     }
