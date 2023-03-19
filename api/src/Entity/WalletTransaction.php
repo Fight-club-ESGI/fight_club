@@ -24,7 +24,7 @@ class WalletTransaction
     private ?float $amount = null;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionStatusEnum::class)]
-    private ?WalletTransactionStatusEnum $status = null;
+    private ?WalletTransactionStatusEnum $status = WalletTransactionStatusEnum::PENDING;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionTypeEnum::class)]
     private ?WalletTransactionTypeEnum $type = null;
@@ -34,11 +34,6 @@ class WalletTransaction
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripe_ref = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getWallet(): ?Wallet
     {

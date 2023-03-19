@@ -28,7 +28,7 @@ class Wallet
 
     #[ORM\Column]
     #[Groups(['admin:get', 'user:self'])]
-    private ?float $amount = null;
+    private ?float $amount = 0.00;
 
     #[ORM\OneToOne(inversedBy: 'wallet', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
