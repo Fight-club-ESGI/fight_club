@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
+use App\Enum\Bet\BetStatusEnum;
 use App\Repository\BetRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,10 +29,10 @@ class Bet
     private ?User $bettor = null;
 
     #[ORM\Column]
-    private ?float $amount = null;
+    private ?float $amount = 0.00;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?BetStatusEnum $status = BetStatusEnum::PENDING;
 
     public function getFight(): ?Fight
     {
@@ -81,12 +82,12 @@ class Bet
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?BetStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(BetStatusEnum $status): self
     {
         $this->status = $status;
 

@@ -24,10 +24,10 @@ class Sponsorship
     private ?User $sponsored = null;
 
     #[ORM\Column]
-    private ?bool $emailValidation = null;
+    private ?bool $emailValidation = false;
 
     #[ORM\Column]
-    private ?bool $sponsorValidation = null;
+    private ?bool $sponsorValidation = false;
 
     public function getSponsor(): ?User
     {

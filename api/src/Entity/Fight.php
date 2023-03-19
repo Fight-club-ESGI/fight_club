@@ -36,7 +36,7 @@ class Fight
     private ?User $loser = null;
 
     #[ORM\Column]
-    private ?bool $winnerValidation = null;
+    private ?bool $winnerValidation = false;
 
     #[ORM\ManyToOne]
     private ?User $adminValidatorA = null;

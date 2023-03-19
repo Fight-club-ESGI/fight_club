@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
+use App\Enum\Fight\FighterGenderEnum;
 use App\Repository\FighterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -39,7 +40,7 @@ class Fighter
     private ?string $nationality = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $gender = null;
+    private ?FighterGenderEnum $gender = null;
 
     #[ORM\ManyToOne(inversedBy: 'fighters')]
     private ?FightCategory $fightCategory = null;

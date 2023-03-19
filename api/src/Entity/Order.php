@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
+use App\Enum\Order\OrderPaymentTypeEnum;
+use App\Enum\Order\OrderStatusEnum;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,10 +26,10 @@ class Order
     private ?User $customer = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?OrderStatusEnum $status = OrderStatusEnum::PENDING;
 
-    #[ORM\Column(length: 255)]
-    private ?string $paymentType = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?OrderPaymentTypeEnum $paymentType = null;
 
     #[ORM\Column]
     private ?int $quantity = null;
@@ -55,24 +57,24 @@ class Order
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?OrderStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(OrderStatusEnum $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getPaymentType(): ?string
+    public function getPaymentType(): ?OrderPaymentTypeEnum
     {
         return $this->paymentType;
     }
 
-    public function setPaymentType(string $paymentType): self
+    public function setPaymentType(OrderPaymentTypeEnum $paymentType): self
     {
         $this->paymentType = $paymentType;
 
