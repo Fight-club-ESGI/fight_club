@@ -1,7 +1,7 @@
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
-        App\Entity\User: 'auto'
+        App\Entity\User: "auto"
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
@@ -10,29 +10,29 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
-        
+
     # https://symfony.com/doc/current/security/authenticator_manager.html
     enable_authenticator_manager: true
-        
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        
+
         main:
-            pattern: ^/api
+            pattern: ^/
             stateless: true
             entry_point: jwt
             provider: app_user_provider
             json_login:
-                check_path: /api/authentication_token
+                check_path: /authentication_token
                 username_path: email
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
             refresh_jwt:
-                check_path: /api/token/refresh
+                check_path: /token/refresh
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -45,7 +45,7 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         # - { path: ^/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI
-        - { path: ^/api/(authentication_token|token/refresh), roles: PUBLIC_ACCESS }
+        - { path: ^/(authentication_token|token/refresh), roles: PUBLIC_ACCESS }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_SUPER_VIP
