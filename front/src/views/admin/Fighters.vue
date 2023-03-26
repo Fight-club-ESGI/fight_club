@@ -13,7 +13,7 @@
                         <fighter-filter @filterUpdated="filterFighter($event)" class="sticky top-[64px]" />
                     </div>
                     <div v-if="fighters" class="col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" no-gutters>
-                        <div v-for="fighter in fighters" :key="fighter.id">
+                        <div v-for="fighter in fightersFiltered" :key="fighter.id">
                             <fighter :fighter="fighter" />
                         </div>
                     </div>
@@ -41,6 +41,7 @@ export default defineComponent({
         const { fighters } = storeToRefs(fighterStore);
 
         const tab = ref();
+        const fightersFiltered = ref([]);
 
         onMounted(async () => {
             try {
@@ -48,9 +49,40 @@ export default defineComponent({
             } catch (error) {}
         });
 
-        const filterFighter = (filter: any) => {};
+        const filterFighter = (filter: any) => {
+            fightersFiltered.value = fighters.value;
+            fightersFiltered.value = fightersFiltered.value.filter((fighter) => {
+                if (filter.gender.includes(fighter.gender) || filter.gender.length === 0) {
+                    return fighter;
+                }
+            });
 
-        return { tab, fighters, filterFighter };
+            if (filter.search.length !== 0) {
+                fightersFiltered.value = fightersFiltered.value.filter((fighter) => {
+                    if (
+                        fighter.firstname.toLowerCase().indexOf(filter.search.toLowerCase()) !== -1 ||
+                        fighter.lastname.toLowerCase().indexOf(filter.search.toLowerCase()) !== -1
+                    )
+                        return fighter;
+                });
+            }
+
+            if (filter.nationality) {
+                fightersFiltered.value = fightersFiltered.value.filter((fighter) => {
+                    return fighter.nationality === filter.nationality;
+                });
+            }
+
+            if (filter.divisionClass) {
+                fightersFiltered.value = fightersFiltered.value.filter((fighter) => {
+                    return fighter;
+                });
+            }
+
+            return fightersFiltered.value;
+        };
+
+        return { tab, fighters, filterFighter, fightersFiltered };
     },
 });
 </script>

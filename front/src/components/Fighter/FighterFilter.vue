@@ -67,7 +67,7 @@ import nationalityJson from '@/data/nationality.json';
 
 export default defineComponent({
     setup(props, { emit }) {
-        const filters = reactive({
+        let filters = reactive({
             divisionClass: [
                 {
                     name: 'Strawweight',
@@ -158,11 +158,11 @@ export default defineComponent({
             search: '',
             gender: [
                 {
-                    name: 'Male',
+                    name: 'male',
                     value: false,
                 },
                 {
-                    name: 'Female',
+                    name: 'female',
                     value: false,
                 },
             ],
@@ -176,7 +176,18 @@ export default defineComponent({
         };
 
         watch(filters, () => {
-            emit('filterUpdated', filters);
+            let filter = { ...filters };
+            filter.gender = filters.gender
+                .filter((g) => g.value)
+                .map((g) => {
+                    if (g.value) return g.name;
+                });
+            filter.divisionClass = filters.divisionClass
+                .filter((d) => d.value)
+                .map((division) => {
+                    if (division.value) return division.name;
+                });
+            emit('filterUpdated', filter);
         });
 
         return { divisionByWeight, nationalityJson, filters, clearAll };
