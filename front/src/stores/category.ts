@@ -1,12 +1,13 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, Ref } from "vue";
 import { weightCategoryService } from "../service/api";
+import { WeightInterface, WeightInterfaceI } from "../../interfaces/payload";
 
 export const useCategoryStore = defineStore('category', () => {
 
-    const categories = ref([]);
+    const categories: Ref<WeightInterface[]> = ref<WeightInterface[]>([]);
 
-    async function getCategories() {
+    async function getCategories(): Promise<WeightInterface[]> {
         try {
             const res = await weightCategoryService._getCategories();
             categories.value = res;
@@ -16,7 +17,7 @@ export const useCategoryStore = defineStore('category', () => {
         }
     }
 
-    async function postCategory(category: any) {
+    async function postCategory(category: WeightInterfaceI): Promise<WeightInterface> {
         try {
             const res = await weightCategoryService._postCategory(category);
             categories.value.push(res);
@@ -26,7 +27,7 @@ export const useCategoryStore = defineStore('category', () => {
         }
     }
 
-    async function updateCategory(category: any) {
+    async function updateCategory(category: Partial<WeightInterface>): Promise<WeightInterface> {
         try {
             const res = await weightCategoryService._updateCategory(category);
             const categoryToUpdate = categories.value.findIndex(category => category.id === res.id);
@@ -40,7 +41,7 @@ export const useCategoryStore = defineStore('category', () => {
     async function deleteCategory(categoryId: string) {
         try {
             const res = await weightCategoryService._deleteCategory(categoryId);
-            const categoryToRemove = categories.value.findIndex(category => category.id === res.id);
+            const categoryToRemove = categories.value.findIndex(category => category.id === categoryId);
             categories.value.splice(categoryToRemove, 1);
             return res.data;
         } catch (error) {
@@ -48,5 +49,5 @@ export const useCategoryStore = defineStore('category', () => {
         }
     }
 
-    return { categories, getCategories, postCategory, updateCategory }
+    return { categories, getCategories, postCategory, updateCategory, deleteCategory }
 });

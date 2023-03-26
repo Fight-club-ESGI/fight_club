@@ -5,6 +5,7 @@ import type { SigninI, SignupI } from '../interfaces/payload';
 import type { userInterface } from '../interfaces/responseAPI';
 import { token } from '../service';
 import { useRouter } from "vue-router"
+import jwt_decode from 'jwt-decode';
 
 export const useUserStore = defineStore('user', () => {
     const router = useRouter();
@@ -21,6 +22,7 @@ export const useUserStore = defineStore('user', () => {
     const users = ref<userInterface[]>([]);
 
     const isAdmin = computed(() => {
+        console.log(user.value)
         return user.value?.roles.includes('ROLE_ADMIN');
     });
 
@@ -46,8 +48,12 @@ export const useUserStore = defineStore('user', () => {
         try {
             const res = await _signin(payload);
             token.value = res.token;
-            const self = await _getSelfUser();
-            user.value = self;
+            const tokenValue = jwt_decode(res.token);
+            user.value.username = tokenValue.username;
+            user.value.email = tokenValue.username;
+            user.value.roles = tokenValue.roles;
+            // const self = await _getSelfUser();
+            // user.value = self;
         } catch (error) {
             throw error;
         }

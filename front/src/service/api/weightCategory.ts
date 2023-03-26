@@ -1,10 +1,10 @@
 import { client } from "../index";
-
-const namespace = "/fight_categories";
+import { WeightCategoryP, WeightInterface } from "../../interfaces/payload";
+const namespace = "/weight_categories";
 
 class WeightCategory {
 
-    _getCategories = async () => {
+    _getCategories = async (): Promise<WeightCategory[]> => {
         try {
             const uri = namespace;
             const res = await client.get(uri);
@@ -14,7 +14,7 @@ class WeightCategory {
         }
     }
 
-    _postCategory = async (payload: any) => {
+    _postCategory = async (payload: WeightCategoryP): Promise<WeightCategory> => {
         try {
             const uri = namespace;
             const res = await client.post(uri, payload);
@@ -24,19 +24,19 @@ class WeightCategory {
         }
     }
 
-    _updateCategory = async (category: any) => {
+    _updateCategory = async (category: WeightInterface): Promise<WeightCategory> => {
         try {
             const uri = `${namespace}/${category.id}`;
-            const res = await client.post(uri, category);
+            const res = await client.put(uri, category);
             return res.data;
         } catch (error) {
             throw error;
         }
     }
 
-    _deleteCategory = async (category: any) => {
+    _deleteCategory = async (categoryId: string) => {
         try {
-            const uri = `${namespace}/${category.id}`;
+            const uri = `${namespace}/${categoryId}`;
             const res = await client.delete(uri);
             return res.data;
         } catch (error) {
