@@ -14,7 +14,11 @@
             </router-link>
             <v-menu>
                 <template v-slot:activator="{ props }">
+<<<<<<< Updated upstream
                     <v-btn v-bind="props" color="white" class="mr-3"><v-icon size="30" class="mr-2">mdi-account</v-icon>{{ user.email }}</v-btn>
+=======
+                    <v-btn v-bind="props" color="white" class="mr-3"><v-icon size="30" class="mr-2">mdi-account</v-icon>{{ user.username }}</v-btn>
+>>>>>>> Stashed changes
                 </template>
 
                 <v-list>
