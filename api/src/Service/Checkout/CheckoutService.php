@@ -3,6 +3,11 @@
 namespace App\Service\Checkout;
 
 use App\Entity\User;
+use App\Entity\Wallet;
+use App\Entity\WalletTransaction;
+use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
+use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
+use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 
@@ -10,12 +15,14 @@ class CheckoutService
 {
     private StripeClient $stripe;
 
-    public function __construct() {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
         $this->stripe = new StripeClient($_ENV['STRIPE_KEY']);
     }
 
-    public function checkout(float $amount, array $params = [], int $quantity = 1, bool $default_confirmation_url = true): Session
+    public function checkout(User $user, float $amount, WalletTransactionTypeEnum $type, array $params = [], int $quantity = 1, bool $default_confirmation_url = true): Session
     {
+        $walletTransaction = $this->recordWalletTransaction($user->getWallet(), $amount, WalletTransactionStatusEnum::PENDING, $type);
 
         $amount = number_format($amount, 2, '.', '');
 
@@ -36,7 +43,28 @@ class CheckoutService
         $params['expires_at'] = time() + 1800; # 30 min
         $params['payment_method_types'][] = "card";
 
+        $checkout_session = $this->stripe->checkout->sessions->create($params);
+
+        $walletTransaction->setTransaction($checkout_session->id);
+        $this->entityManager->persist($walletTransaction);
+        $this->entityManager->flush();
+
         return $this->stripe->checkout->sessions->create($params);
+    }
+
+    public function recordWalletTransaction(Wallet $wallet, float $amount, WalletTransactionStatusEnum $status, WalletTransactionTypeEnum $type): WalletTransaction
+    {
+        $walletTransaction = new WalletTransaction();
+
+        $walletTransaction->setWallet($wallet);
+        $walletTransaction->setAmount($amount);
+        $walletTransaction->setStatus($status);
+        $walletTransaction->setType($type);
+
+        $this->entityManager->persist($walletTransaction);
+        $this->entityManager->flush();
+
+        return $walletTransaction;
     }
 
     public function getStripe(): StripeClient

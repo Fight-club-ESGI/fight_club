@@ -28,7 +28,7 @@ class Wallet
 
     #[ORM\Column]
     #[Groups(['admin:get', 'user:self'])]
-    private ?float $amount = 0.00;
+    private ?int $amount = 0;
 
     #[ORM\OneToOne(inversedBy: 'wallet', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -42,12 +42,12 @@ class Wallet
         $this->walletTransactions = new ArrayCollection();
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(float $amount): self
+    public function setAmount(int $amount): self
     {
         $this->amount = $amount;
 

@@ -8,6 +8,7 @@ use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
 use App\Enum\Fight\FighterGenderEnum;
 use App\Repository\FighterRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -44,6 +45,9 @@ class Fighter
 
     #[ORM\ManyToOne(inversedBy: 'fighters')]
     private ?FightCategory $fightCategory = null;
+
+    #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
+    private Collection $fights;
 
     public function getFirstname(): ?string
     {
@@ -137,6 +141,29 @@ class Fighter
     public function setFightCategory(?FightCategory $fightCategory): self
     {
         $this->fightCategory = $fightCategory;
+
+        return $this;
+    }
+
+
+    public function addFight(Fight $fight): self
+    {
+        if (!$this->fights->contains($fight)) {
+            $this->fights->add($fight);
+            $fight->setFighterA($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFight(Fight $fight): self
+    {
+        if ($this->fights->removeElement($fight)) {
+            // set the owning side to null (unless already changed)
+            if ($fight->getFighterA() === $this) {
+                $fight->setFighterA(null);
+            }
+        }
 
         return $this;
     }

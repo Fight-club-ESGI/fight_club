@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\User\Role\ChangeUserRole;
+use App\Controller\User\UserMe;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -44,6 +45,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             normalizationContext: ['groups' => ['user:get']],
             security: "is_granted('ROLE_USER')"
         ),
+        new Get(
+            uriTemplate: '/me',
+            controller: UserMe::class,
+            normalizationContext: ['groups' => ['user:self']],
+            security: "object === user",
+            securityMessage: 'You need to be connected',
+            read: false,
+            name: 'me'
+        ),
         new GetCollection(
             normalizationContext: ['groups' => ['user:get_collection']],
         ),
@@ -68,7 +78,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:get',
         'user:post',
         'user:get_collection',
-        'user:patch'
+        'user:patch',
+        'user:self',
     ])]
     private ?string $email = null;
 
@@ -77,7 +88,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:get',
         'user:get_collection',
         'admin:user:post',
-        'admin:user:patch'
+        'admin:user:patch',
+        'user:self'
     ])]
     private array $roles = [];
 
@@ -85,21 +97,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['admin:user:get'])]
     private ?string $password = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
     #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
     #[Groups(['admin:get', 'user:self'])]
     private ?Wallet $wallet = null;
 
     #[ORM\OneToMany(mappedBy: 'sponsor', targetEntity: Sponsorship::class)]
+    #[Groups(['admin:get', 'user:self'])]
     private Collection $sponsorshipsAsSponsor;
 
     #[ORM\OneToOne(mappedBy: 'sponsored', targetEntity: Sponsorship::class)]
+    #[Groups(['admin:get', 'user:self'])]
     private ?Sponsorship $sponsorshipsAsSponsored;
 
     #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
+    #[Groups(['admin:get', 'user:self'])]
     private ?Order $orders = null;
-
-    #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
-    private Collection $fights;
 
     public function __construct()
     {
@@ -159,6 +174,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }
@@ -272,27 +299,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getFights(): Collection
     {
         return $this->fights;
-    }
-
-    public function addFight(Fight $fight): self
-    {
-        if (!$this->fights->contains($fight)) {
-            $this->fights->add($fight);
-            $fight->setFighterA($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFight(Fight $fight): self
-    {
-        if ($this->fights->removeElement($fight)) {
-            // set the owning side to null (unless already changed)
-            if ($fight->getFighterA() === $this) {
-                $fight->setFighterA(null);
-            }
-        }
-
-        return $this;
     }
 }

@@ -21,7 +21,7 @@ class WalletTransaction
     private ?Wallet $wallet = null;
 
     #[ORM\Column]
-    private ?float $amount = null;
+    private ?int $amount = null;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionStatusEnum::class)]
     private ?WalletTransactionStatusEnum $status = WalletTransactionStatusEnum::PENDING;
@@ -47,12 +47,12 @@ class WalletTransaction
         return $this;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(float $amount): self
+    public function setAmount(int $amount): self
     {
         $this->amount = $amount;
 

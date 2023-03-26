@@ -21,21 +21,21 @@ class Fight
     #[ORM\JoinColumn(nullable: false)]
     private ?Event $event = null;
 
-    #[ORM\ManyToOne(inversedBy: 'fights')]
+    #[ORM\ManyToOne(inversedBy: 'fighterA')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $fighterA = null;
+    private ?Fighter $fighterA = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'fighterB')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $fighterB = null;
+    private ?Fighter $fighterB = null;
 
-    #[ORM\ManyToOne]
-    private ?User $winner = null;
+    #[ORM\ManyToOne(inversedBy: 'winners')]
+    private ?Fighter $winner = null;
 
-    #[ORM\ManyToOne]
-    private ?User $loser = null;
+    #[ORM\ManyToOne(inversedBy: 'losers')]
+    private ?Fighter $loser = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => false])]
     private ?bool $winnerValidation = false;
 
     #[ORM\ManyToOne]
@@ -64,48 +64,48 @@ class Fight
         return $this;
     }
 
-    public function getFighterA(): ?User
+    public function getFighterA(): ?Fighter
     {
         return $this->fighterA;
     }
 
-    public function setFighterA(?User $fighterA): self
+    public function setFighterA(?Fighter $fighterA): self
     {
         $this->fighterA = $fighterA;
 
         return $this;
     }
 
-    public function getFighterB(): ?User
+    public function getFighterB(): ?Fighter
     {
         return $this->fighterB;
     }
 
-    public function setFighterB(?User $fighterB): self
+    public function setFighterB(?Fighter $fighterB): self
     {
         $this->fighterB = $fighterB;
 
         return $this;
     }
 
-    public function getWinner(): ?User
+    public function getWinner(): ?Fighter
     {
         return $this->winner;
     }
 
-    public function setWinner(?User $winner): self
+    public function setWinner(?Fighter $winner): self
     {
         $this->winner = $winner;
 
         return $this;
     }
 
-    public function getLoser(): ?User
+    public function getLoser(): ?Fighter
     {
         return $this->loser;
     }
 
-    public function setLoser(?User $loser): self
+    public function setLoser(?Fighter $loser): self
     {
         $this->loser = $loser;
 
