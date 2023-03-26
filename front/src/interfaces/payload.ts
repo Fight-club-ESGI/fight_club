@@ -68,3 +68,18 @@ export interface SponsorshipI {
 	emailValidation: boolean
 	sponsorValidation: boolean
 }
+
+export interface WeightCategoryP {
+	minWeight: number
+	maxWeight: number
+	name: string
+}
+
+export interface WeightCategory {
+	minWeight: number
+	maxWeight: number
+	name: string
+	id: string
+	updatedAt: string
+	createdAt: string
+}

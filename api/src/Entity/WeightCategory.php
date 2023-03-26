@@ -25,7 +25,7 @@ class WeightCategory
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'weightCategories')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?FightCategory $fightCategory = null;
 
     public function getMinWeight(): ?int

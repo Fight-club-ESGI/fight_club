@@ -4,13 +4,13 @@
             <p class="font-medium text-lg">An admin invited you to become VIP !</p>
             <p class="text-sm py-4">Click the button below to activate your new status</p>
             <div class="flex justify-center">
-                <v-btn @click="activateVIPStatus()" variant="secondary">Activate</v-btn>
+                <v-btn @click="activateVIPStatus()" color="secondary">Activate</v-btn>
             </div>
         </div>
     </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 import { useSponsorshipStore } from '../stores/sponsorship';
 import { useRouter, useRoute } from 'vue-router';

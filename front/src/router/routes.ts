@@ -59,7 +59,7 @@ export default [
         path: '/profile',
         component: ProfileView,
         name: 'user-profile',
-        meta: { requiresAuth: false, requiresAdmin: false }
+        meta: { requiresAuth: true, requiresAdmin: false }
     },
     {
         path: '/bets',

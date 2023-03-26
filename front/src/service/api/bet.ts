@@ -1,10 +1,10 @@
-import { client } from "..";
+import { client } from "../index";
 import type { FightBetI } from "../../interfaces/payload";
 
 const namespace = '/fightbets';
 
 class Bet {
-    
+
     async _betWallet(payload: { fight: string, betOn: string, amount: number }) {
         try {
             const uri = `${namespace}/wallet`;

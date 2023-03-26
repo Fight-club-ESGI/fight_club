@@ -5,7 +5,7 @@ class User {
 
     async _signin(payload: SigninI): Promise<TokenI> {
         try {
-            
+
             const uri = '/authentication_token'
             const res = await clientWithoutAuth.post(uri, payload);
             token.value = res.data.token;
@@ -13,7 +13,7 @@ class User {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 
     async _signinWithToken(token: string): Promise<TokenI> {
         try {
@@ -23,7 +23,7 @@ class User {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 
     async _changePassword(payload: { password: string, newPassword: string }): Promise<void> {
         try {
@@ -32,7 +32,7 @@ class User {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 
     async _signup(payload: SignupI): Promise<void> {
         try {
@@ -42,7 +42,7 @@ class User {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 
     async _getSelfUser(): Promise<userInterface> {
         try {
@@ -52,7 +52,7 @@ class User {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 
     async _getUsers(): Promise<userInterface[]> {
         try {
@@ -62,10 +62,10 @@ class User {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 
-    
-    async _updateUser(payload: {id: string }): Promise<userInterface> {
+
+    async _updateUser(payload: { id: string }): Promise<userInterface> {
         try {
             const uri = `/users/${payload.id}`;
             const res = await client.put(uri, payload);
@@ -73,7 +73,7 @@ class User {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 }
 
 const userService = new User();

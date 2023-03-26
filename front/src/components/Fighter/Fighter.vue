@@ -1,6 +1,11 @@
 <template>
     <div @click="goToFighterDetails()" class="border rounded-md cursor-pointer">
-        <v-img :src="`https://picsum.photos/id/${Math.round(Math.random() * 300)}/200/150`" height="200" :contain="false" class="rounded-t-md" />
+        <v-img
+            :src="`https://xsgames.co/randomusers/avatar.php?g=${fighter.gender === '' ? 'male' : 'female'}`"
+            height="200"
+            :contain="false"
+            class="rounded-t-md"
+        />
         <div class="pa-3">
             <h3>Name: {{ fighterName }}</h3>
             <div>Nationality: {{ fighter.nationality }}</div>

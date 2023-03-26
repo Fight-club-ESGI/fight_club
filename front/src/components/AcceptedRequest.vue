@@ -22,10 +22,10 @@
     </v-card>
 </template>
 
-<script>
+<script lang="ts">
 import { storeToRefs } from 'pinia';
 import { useSponsorshipStore } from '../stores/sponsorship';
-import { onMounted, nextTick } from 'vue';
+import { onMounted } from 'vue';
 export default {
     setup() {
         const tableHeaders = ['Username', 'Email', 'Status'];
@@ -34,7 +34,7 @@ export default {
         const { getAcceptedSponsorships, acceptRequest, removeSponsorship, getPendingSponsorships } = sponsorshipStore;
         const { acceptedSponsorships } = storeToRefs(sponsorshipStore);
 
-        const removeVIP = async (id) => {
+        const removeVIP = async (id: string) => {
             try {
                 await removeSponsorship(id);
                 await getPendingSponsorships();

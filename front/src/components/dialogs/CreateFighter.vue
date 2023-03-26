@@ -57,7 +57,7 @@
                                     :rules="[rules.required]"
                                     label="Gender"
                                     placeholder="Gender"
-                                    :items="['Male', 'Female']"
+                                    :items="['male', 'female']"
                                     color="secondary"
                                 />
                             </v-col>
