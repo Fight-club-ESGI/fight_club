@@ -1,6 +1,6 @@
 import { client } from "../index";
 
-const namespace = "/categories";
+const namespace = "/fight_categories";
 
 class WeightCategory {
 

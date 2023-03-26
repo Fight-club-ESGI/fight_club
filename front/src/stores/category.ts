@@ -5,7 +5,7 @@ import { weightCategoryService } from "../service/api";
 export const useCategoryStore = defineStore('category', () => {
 
     const categories = ref([]);
-    
+
     async function getCategories() {
         try {
             const res = await weightCategoryService._getCategories();
