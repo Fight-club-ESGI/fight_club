@@ -1,33 +1,31 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Bet;
 
-use App\Entity\FightBet;
+use App\Entity\Bet;
 use App\Entity\WalletTransaction;
-use App\Enum\FightBetStatusType;
-use App\Enum\WalletTransactionStatusType;
-use App\Enum\WalletTransactionTypeType;
+use App\Enum\Bet\BetStatusEnum;
+use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
+use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\FightRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
+
 
 class BetCreateWalletPayment  extends AbstractController
 {
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->entityManager = $entityManager;
+    public function __construct(private readonly EntityManagerInterface $entityManager) {
     }
 
-    public function __invoke(Request $request, Security $security, UserRepository $userRepository, FightRepository $fightRepository, FightBet $fightBet ): Response
+    public function __invoke(Request $request, Security $security, UserRepository $userRepository, FightRepository $fightRepository, Bet $fightBet ): Response
     {
-        if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getStartTimestamp()->getTimestamp()) {
+        if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getTimeStart()->getTimestamp()) {
             return new Response('the event already started, you cannot bet anymore', 400);
-        } else if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getEndTimestamp()->getTimestamp()) {
+        } else if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getTimeEnd()->getTimestamp()) {
             return new Response('the event already finished, you cannot bet anymore', 400);
         }
 
@@ -36,7 +34,7 @@ class BetCreateWalletPayment  extends AbstractController
         }
 
         $user = $userRepository->find($security->getUser()->getId());
-        $fightBet->setBetUser($user);
+        $fightBet->setBettor($user);
 
         if ($fightBet->getAmount() > $user->getWallet()->getAmount()) {
             return new Response('fund insufficient.', 400);
@@ -49,14 +47,14 @@ class BetCreateWalletPayment  extends AbstractController
             $walletTransaction = new WalletTransaction();
             $walletTransaction->setAmount($fightBet->getAmount());
             $walletTransaction->setWallet($wallet);
-            $walletTransaction->setStatus(WalletTransactionStatusType::ACCEPTED);
-            $walletTransaction->setType(WalletTransactionTypeType::BET);
+            $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+            $walletTransaction->setType(WalletTransactionTypeEnum::BET);
             $walletTransaction->setTransaction("wallet");
             $this->entityManager->persist($walletTransaction);
             $this->entityManager->flush();
         }
 
-        $fightBet->setStatus(FightBetStatusType::PENDING);
+        $fightBet->setStatus(BetStatusEnum::PENDING);
 
         $this->entityManager->persist($fightBet);
         $this->entityManager->flush();

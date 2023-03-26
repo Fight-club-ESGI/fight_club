@@ -1,26 +1,23 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Wallet;
 
 use App\Entity\WalletTransaction;
-use App\Enum\WalletTransactionStatusType;
-use App\Enum\WalletTransactionTypeType;
+use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
+use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\UserRepository;
-use App\Service\CheckoutService;
+use App\Service\Checkout\CheckoutService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Security\Core\Security;
 
 #[AsController]
 class WalletWithdraw extends AbstractController
 {
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->entityManager = $entityManager;
+    public function __construct(private readonly EntityManagerInterface $entityManager) {
     }
 
     public function __invoke(Request $request, Security $security, UserRepository $userRepository): Response
@@ -39,8 +36,8 @@ class WalletWithdraw extends AbstractController
             $transaction = new WalletTransaction();
             $transaction->setAmount($amount);
             $transaction->setWallet($wallet);
-            $transaction->setType(WalletTransactionTypeType::WITHDRAWAL);
-            $transaction->setStatus(WalletTransactionStatusType::ACCEPTED);
+            $transaction->setType(WalletTransactionTypeEnum::WITHDRAWAL);
+            $transaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
             $transaction->setTransaction("withdraw");
             $this->entityManager->persist($transaction);
             $this->entityManager->flush();
@@ -50,8 +47,8 @@ class WalletWithdraw extends AbstractController
             $transaction = new WalletTransaction();
             $transaction->setAmount($amount);
             $transaction->setWallet($wallet);
-            $transaction->setType(WalletTransactionTypeType::WITHDRAWAL);
-            $transaction->setStatus(WalletTransactionStatusType::REJECTED);
+            $transaction->setType(WalletTransactionTypeEnum::WITHDRAWAL);
+            $transaction->setStatus(WalletTransactionStatusEnum::REJECTED);
             $transaction->setTransaction("insufficient fund");
             $this->entityManager->persist($transaction);
             $this->entityManager->flush();

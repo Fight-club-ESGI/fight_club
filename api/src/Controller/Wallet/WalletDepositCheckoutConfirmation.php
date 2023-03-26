@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Wallet;
 
 use App\Entity\WalletTransaction;
-use App\Enum\WalletTransactionStatusType;
-use App\Enum\WalletTransactionTypeType;
+use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
+use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\UserRepository;
 use App\Repository\WalletTransactionRepository;
-use App\Service\CheckoutService;
+use App\Service\Checkout\CheckoutService;
 use Stripe\StripeClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 
 class WalletDepositCheckoutConfirmation extends AbstractController
 {
@@ -26,6 +26,7 @@ class WalletDepositCheckoutConfirmation extends AbstractController
     {
         $walletTransaction = $walletTransactionRepository->find($wallet_transaction_id);
 
-        $this->checkout->confirmation($walletTransaction);
+        //todo add confirmation
+        //$this->checkout->confirmation($walletTransaction);
     }
 }

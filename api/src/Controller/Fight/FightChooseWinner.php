@@ -10,18 +10,16 @@ use App\Repository\UserRepository;
 use App\Service\Checkout\CheckoutService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Security\Core\Security;
 
 #[AsController]
 class FightChooseWinner extends AbstractController
 {
-    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->entityManager = $entityManager;
+    public function __construct(private readonly EntityManagerInterface $entityManager) {
     }
 
     public function __invoke(Request $request, Security $security, string $fight_id, FightRepository $fightRepository, FighterRepository $fighterRepository): Response

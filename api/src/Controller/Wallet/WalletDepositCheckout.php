@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Wallet;
 
-use App\Enum\WalletTransactionTypeType;
+use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\UserRepository;
-use App\Service\CheckoutService;
+use App\Service\Checkout\CheckoutService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Security\Core\Security;
 
 #[AsController]
 class WalletDepositCheckout extends AbstractController
@@ -28,7 +28,7 @@ class WalletDepositCheckout extends AbstractController
         $checkout_session = $this->checkout->checkout(
             $userRepository->find($security->getUser()->getId()),
             $amount,
-            WalletTransactionTypeType::DEPOSIT,
+            WalletTransactionTypeEnum::DEPOSIT,
         );
 
         return new Response(

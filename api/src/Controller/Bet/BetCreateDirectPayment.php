@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Bet;
 
 use App\Entity\Fight;
-use App\Entity\FightBet;
+use App\Entity\Bet;
 use App\Entity\WalletTransaction;
-use App\Enum\FightBetStatusType;
-use App\Enum\WalletTransactionStatusType;
-use App\Enum\WalletTransactionTypeType;
+use App\Enum\Bet\BetStatusEnum;
+use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
+use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\FightRepository;
 use App\Repository\UserRepository;
-use App\Service\CheckoutService;
+use App\Service\Checkout\CheckoutService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 
 class BetCreateDirectPayment  extends AbstractController
 {
@@ -27,7 +27,7 @@ class BetCreateDirectPayment  extends AbstractController
         $this->checkout = $checkoutService;
     }
 
-    public function __invoke(Request $request, Security $security, UserRepository $userRepository, FightRepository $fightRepository, FightBet $fightBet): Response
+    public function __invoke(Request $request, Security $security, UserRepository $userRepository, FightRepository $fightRepository, Bet $bet): Response
     {
         /*if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getStartTimestamp()->getTimestamp()) {
             if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getEndTimestamp()->getTimestamp()) {
@@ -37,22 +37,22 @@ class BetCreateDirectPayment  extends AbstractController
             }
         }*/
 
-        if (!($fightBet->getBetOn()->getId() === $fightBet->getFight()->getFighterB()->getId()) && !($fightBet->getBetOn()->getId() === $fightBet->getFight()->getFighterA()->getId())) {
+        if (!($bet->getBetOn()->getId() === $bet->getFight()->getFighterB()->getId()) && !($bet->getBetOn()->getId() === $bet->getFight()->getFighterA()->getId())) {
             return new Response('user don\'t belong to this fight', 200);
         }
 
         $user = $userRepository->find($security->getUser()->getId());
-        $fightBet->setBetUser($user);
+        $bet->setBetUser($user);
 
         $checkout_session = $this->checkout->checkout(
             $user,
-            $fightBet->getAmount(),
-            WalletTransactionTypeType::BET,
+            $bet->getAmount(),
+            WalletTransactionTypeEnum::BET,
         );
 
-        $fightBet->setStatus(FightBetStatusType::PENDING);
+        $bet->setStatus(BetStatusEnum::PENDING);
 
-        $this->entityManager->persist($fightBet);
+        $this->entityManager->persist($bet);
         $this->entityManager->flush();
 
         return new Response($checkout_session->url, 200, ["Content-Type" => "application/json"]);
