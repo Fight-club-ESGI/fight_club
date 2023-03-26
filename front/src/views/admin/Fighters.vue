@@ -46,6 +46,7 @@ export default defineComponent({
         onMounted(async () => {
             try {
                 await getFighters();
+                fightersFiltered.value = fighters.value;
             } catch (error) {}
         });
 
@@ -75,6 +76,7 @@ export default defineComponent({
 
             if (filter.divisionClass) {
                 fightersFiltered.value = fightersFiltered.value.filter((fighter) => {
+                    // Still stuff to do here, need to bind a category to a user
                     return fighter;
                 });
             }
