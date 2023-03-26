@@ -21,21 +21,21 @@ class Fight
     #[ORM\JoinColumn(nullable: false)]
     private ?Event $event = null;
 
-    #[ORM\ManyToOne(inversedBy: 'fights')]
+    #[ORM\ManyToOne(inversedBy: 'fighterA')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Fighter $fighterA = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'fighterB')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Fighter $fighterB = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'winners')]
     private ?Fighter $winner = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'losers')]
     private ?Fighter $loser = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => false])]
     private ?bool $winnerValidation = false;
 
     #[ORM\ManyToOne]
