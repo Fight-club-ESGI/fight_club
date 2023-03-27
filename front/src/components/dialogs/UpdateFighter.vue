@@ -2,11 +2,11 @@
     <div>
         <v-dialog v-model="dialog" max-width="50%">
             <template v-slot:activator="{ props }">
-                <v-btn color="primary" v-bind="props"> Register a fighter </v-btn>
+                <span color="primary" v-bind="props"> Update </span>
             </template>
 
             <v-card>
-                <v-card-title> Register a fighter </v-card-title>
+                <v-card-title> Register fighter </v-card-title>
                 <v-container>
                     <v-form v-model="valid" ref="form">
                         <v-row justify="space-between" class="align-center">
@@ -79,7 +79,7 @@
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
                         <v-btn color="primary" @click="dialog = false">Cancel</v-btn>
-                        <v-btn color="secondary" @click="submitFighter()">Create</v-btn>
+                        <v-btn color="secondary" @click="update()">Update</v-btn>
                     </v-row>
                 </v-card-actions>
             </v-card>
@@ -87,30 +87,27 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from 'vue';
+import { defineComponent, ref, computed, reactive, PropType } from 'vue';
 import nationalityJson from '@/data/nationality.json';
 import { createToast } from 'mosha-vue-toastify';
 import { FighterI } from '@/interfaces/payload';
 import { useFighterStore } from '@/stores/fighter';
 
 export default defineComponent({
-    setup() {
+    props: {
+        fighter: {
+            type: Object as PropType<FighterI>,
+        },
+    },
+    setup(props) {
+        let fighter = ref({ ...props.fighter });
+        fighter.value.birthdate = fighter.value.birthdate.substring(0, 10);
         const fighterStore = useFighterStore();
-        const { createFighter } = fighterStore;
+        const { updateFighter } = fighterStore;
 
         const form = ref();
         const dialog = ref<boolean>(false);
         const valid = ref<boolean>(false);
-
-        const fighter = reactive<FighterI>({
-            gender: '',
-            firstname: '',
-            lastname: '',
-            birthdate: '',
-            height: 70,
-            weight: 70,
-            nationality: '',
-        });
 
         const divisionByWeight = [
             {
@@ -189,7 +186,7 @@ export default defineComponent({
             const closest = divisionByWeight
                 .map((division) => division.weight)
                 .reduce(function (prev, curr) {
-                    return Math.abs(curr - fighter.weight) < Math.abs(prev - fighter.weight) ? curr : prev;
+                    return Math.abs(curr - fighter.value.weight) < Math.abs(prev - fighter.value.weight) ? curr : prev;
                 });
             return divisionByWeight.find((division) => division.weight === closest);
         });
@@ -199,11 +196,12 @@ export default defineComponent({
             weight: (value: number) => (value >= 52 && value <= 400) || 'Weight must be between 52kg and 400kg',
         };
 
-        const submitFighter = async () => {
+        const update = async () => {
             try {
+                const { createdAt, updatedAt, ...fighterObj } = fighter.value;
                 const { valid } = await form.value.validate();
                 if (valid) {
-                    await createFighter(fighter);
+                    await updateFighter(fighterObj);
                 }
             } catch (error: any) {
                 createToast(error, { position: 'bottom-right', type: 'danger' });
@@ -211,7 +209,7 @@ export default defineComponent({
             dialog.value = false;
         };
 
-        return { dialog, valid, fighter, division, nationalityJson, rules, submitFighter, form };
+        return { dialog, valid, fighter, division, nationalityJson, rules, update, form };
     },
 });
 </script>

@@ -4,7 +4,7 @@ import { FighterI } from "../../interfaces/payload";
 const namespace = '/fighters';
 
 class Fighter {
-    
+
     async _getFighters(): Promise<FighterI[]> {
         try {
             const res = await client.get(namespace);
@@ -35,7 +35,8 @@ class Fighter {
 
     async _upadateFighter(payload: FighterI): Promise<FighterI> {
         try {
-            const res = await client.put(namespace, payload);
+            const uri = `${namespace}/${payload.id}`;
+            const res = await client.put(uri, payload);
             return res.data;
         } catch (error) {
             throw error;

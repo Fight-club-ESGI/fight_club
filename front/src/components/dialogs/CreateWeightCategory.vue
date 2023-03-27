@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="dialog">
+        <v-dialog v-model="dialog" max-width="50%">
             <template v-slot:activator="{ props }">
                 <v-btn color="primary" v-bind="props"> Create a category </v-btn>
             </template>
