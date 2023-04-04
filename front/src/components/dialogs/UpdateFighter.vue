@@ -6,7 +6,7 @@
             </template>
 
             <v-card>
-                <v-card-title> Register fighter </v-card-title>
+                <v-card-title> Update fighter '{{ fighter.firstname }} {{ fighter.lastname }}'</v-card-title>
                 <v-container>
                     <v-form v-model="valid" ref="form">
                         <v-row justify="space-between" class="align-center">

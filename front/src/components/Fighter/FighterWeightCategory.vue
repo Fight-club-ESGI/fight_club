@@ -19,18 +19,8 @@
                         </template>
 
                         <v-list>
-                            <v-list-item value="update-category"
-                                ><update-category :category="category" />
-                                <template #append>
-                                    <v-icon icon="mdi-update"></v-icon>
-                                </template>
-                            </v-list-item>
-                            <v-list-item @click="remove(category)" value="delete-category" color="red-darken-1">
-                                Delete
-                                <template #append>
-                                    <v-icon icon="mdi-close"></v-icon>
-                                </template>
-                            </v-list-item>
+                            <v-list-item value="update-category"><update-category :category="category" /> </v-list-item>
+                            <v-list-item @click="remove(category)" value="delete-category" color="red-darken-1"> Delete </v-list-item>
                         </v-list>
                     </v-menu>
                 </template>

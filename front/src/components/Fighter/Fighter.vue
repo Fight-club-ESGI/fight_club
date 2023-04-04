@@ -1,7 +1,7 @@
 <template>
     <div @click="goToFighterDetails()" class="border rounded-md cursor-pointer">
         <v-img
-            :src="`https://xsgames.co/randomusers/avatar.php?g=${fighter.gender === '' ? 'male' : 'female'}`"
+            :src="`https://xsgames.co/randomusers/avatar.php?g=${fighter.gender === 'male' ? 'male' : 'female'}`"
             height="200"
             :contain="false"
             class="rounded-t-md"
