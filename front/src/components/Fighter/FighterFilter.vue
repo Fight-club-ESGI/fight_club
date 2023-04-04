@@ -61,18 +61,20 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, watch, onMounted } from 'vue';
+import { defineComponent, reactive, watch, onMounted, toRefs } from 'vue';
 import divisionByWeight from '@/utilities/divisionByWeight';
 import nationalityJson from '@/data/nationality.json';
 import { storeToRefs } from 'pinia';
 import { useCategoryStore } from '@/stores/category';
-import { getEnabledCategories } from 'trace_events';
-
+import { useFighterStore } from '@/stores/fighter';
 export default defineComponent({
     setup(props, { emit }) {
         const categoyStore = useCategoryStore();
         const { categories } = storeToRefs(categoyStore);
         const { getCategories } = categoyStore;
+        const fighterStore = useFighterStore();
+        const { updateFilter } = fighterStore;
+
         let filters = reactive({
             divisionClass: categories.value,
             nationality: null,
@@ -103,18 +105,19 @@ export default defineComponent({
         };
 
         watch(filters, () => {
-            let filter = { ...filters };
-            filter.gender = filters.gender
+            let f = { ...filters };
+            f.gender = filters.gender
                 .filter((g) => g.value)
                 .map((g) => {
                     if (g.value) return g.name;
                 });
-            filter.divisionClass = filters.divisionClass
+            f.divisionClass = filters.divisionClass
                 .filter((d) => d.value)
                 .map((division) => {
                     if (division.value) return division.id;
                 });
-            emit('filterUpdated', filter);
+            emit('filterUpdated', f);
+            updateFilter(f);
         });
 
         return { divisionByWeight, nationalityJson, filters, clearAll };

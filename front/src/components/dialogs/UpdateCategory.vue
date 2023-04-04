@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="dialog">
+        <v-dialog v-model="dialog" max-width="50%">
             <template v-slot:activator="{ props }">
                 <span v-bind="props"> Update </span>
             </template>
@@ -46,9 +46,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, reactive } from 'vue';
+import { defineComponent, ref, PropType } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
-import { WeightCategory, WeightCategoryI } from '@/interfaces/payload';
+import { WeightCategory } from '@/interfaces/payload';
 import { useCategoryStore } from '@/stores/category';
 
 export default defineComponent({
