@@ -7,6 +7,7 @@ use App\Entity\Wallet;
 use App\Entity\WalletTransaction;
 use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
 use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
+use App\Enum\WalletTransactionStatusType;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
@@ -65,6 +66,29 @@ class CheckoutService
         $this->entityManager->flush();
 
         return $walletTransaction;
+    }
+
+    public function confirmation(WalletTransaction $walletTransaction): void
+    {
+        $transaction = $this->stripe->checkout->sessions->retrieve($walletTransaction->getTransaction(), []);
+
+        switch($walletTransaction->getStatus()) {
+            case WalletTransactionStatusEnum::PENDING :
+                if ($transaction->payment_status === 'paid') {
+                    $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+                    $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + floatval($transaction->amount_total / 100));
+                } else {
+                    $walletTransaction->setStatus(WalletTransactionStatusEnum::REJECTED);
+                }
+
+                $this->entityManager->persist($walletTransaction);
+                $this->entityManager->flush();
+                break;
+            case WalletTransactionStatusEnum::REJECTED:
+            case WalletTransactionStatusEnum::ACCEPTED:
+            case WalletTransactionStatusEnum::CANCELLED:
+                break;
+        }
     }
 
     public function getStripe(): StripeClient

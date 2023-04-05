@@ -46,10 +46,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             security: "is_granted('ROLE_USER')"
         ),
         new Get(
-            uriTemplate: '/me',
+            uriTemplate: 'me',
             controller: UserMe::class,
             normalizationContext: ['groups' => ['user:self']],
-            security: "object === user",
+            security: "is_granted('ROLE_USER')",
             securityMessage: 'You need to be connected',
             read: false,
             name: 'me'
@@ -87,14 +87,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([
         'user:get',
         'user:get_collection',
-        'admin:user:post',
-        'admin:user:patch',
+        'admin:post',
+        'admin:patch',
         'user:self'
     ])]
     private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['admin:user:get'])]
+    #[Groups(['admin:get'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -119,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->sponsorshipsAsSponsor = new ArrayCollection();
-        $this->fights = new ArrayCollection();
+        //$this->fights = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -296,8 +296,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Fight>
      */
+    /*
     public function getFights(): Collection
     {
         return $this->fights;
-    }
+    }*/
 }

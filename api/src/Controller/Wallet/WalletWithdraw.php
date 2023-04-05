@@ -17,15 +17,18 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 #[AsController]
 class WalletWithdraw extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager) {
-    }
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly Security $security,
+        private readonly UserRepository $userRepository,
+    ) {}
 
-    public function __invoke(Request $request, Security $security, UserRepository $userRepository): Response
+    public function __invoke(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
         $amount = $data['amount'];
 
-        $user = $userRepository->find($security->getUser()->getId());
+        $user = $this->security->getUser();
         $wallet = $user->getWallet();
 
         if($user->getWallet()->getAmount() > $amount){
@@ -53,7 +56,7 @@ class WalletWithdraw extends AbstractController
             $this->entityManager->persist($transaction);
             $this->entityManager->flush();
 
-            return new Response('failed', 200, ["Content-Type" => "application/json"]);
+            return new Response("insufficient fund", 200, ["Content-Type" => "application/json"]);
         }
     }
 }

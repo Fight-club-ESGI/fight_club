@@ -9,6 +9,7 @@ use App\Repository\WeightCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: WeightCategoryRepository::class)]
+#[ORM\Table(name: '`weight_category`')]
 #[ApiResource]
 class WeightCategory
 {
