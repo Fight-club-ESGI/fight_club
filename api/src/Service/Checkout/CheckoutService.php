@@ -7,7 +7,6 @@ use App\Entity\Wallet;
 use App\Entity\WalletTransaction;
 use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
 use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
-use App\Enum\WalletTransactionStatusType;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
@@ -25,18 +24,16 @@ class CheckoutService
     {
         $walletTransaction = $this->recordWalletTransaction($user->getWallet(), $amount, WalletTransactionStatusEnum::PENDING, $type);
 
-        $amount = number_format($amount, 2, '.', '');
-
         #todo change url
         $params['line_items'] = [];
         $params['line_items'][0]['price_data']['currency'] = 'eur';
         $params['line_items'][0]['price_data']['product_data']['name'] = 'transaction name';
-        $params['line_items'][0]['price_data']['unit_amount'] = intval($amount * 100);
+        $params['line_items'][0]['price_data']['unit_amount'] = intval($amount);
         $params['line_items'][0]['quantity'] = $quantity;
         $params['mode'] = 'payment';
 
         if ($default_confirmation_url) {
-            $confirmationUrl = 'https://localhost';
+            $confirmationUrl = $_ENV['FRONT_URL'] . "/checkout/confirmation?transaction_id=". $walletTransaction->getId();;
             $params['success_url'] = $confirmationUrl;
             $params['cancel_url'] = $confirmationUrl;
         }
