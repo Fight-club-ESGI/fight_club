@@ -3,15 +3,29 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use App\Controller\Wallet\WalletDepositCheckoutConfirmation;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
 use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\WalletTransactionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WalletTransactionRepository::class)]
-#[ApiResource]
+#[ORM\Table(name: '`wallet_transaction`')]
+#[ApiResource(
+    operations: [
+        new Get(
+            uriTemplate: "/wallet_transaction/{id}/confirmation",
+            controller: WalletDepositCheckoutConfirmation::class,
+            normalizationContext: ['groups' => ['wallet_transaction:get']],
+            security: "is_granted('ROLE_USER')",
+            name: 'wallet_transaction_confirmation'
+        ),
+    ]
+)]
 class WalletTransaction
 {
     use EntityIdTrait;
@@ -21,9 +35,11 @@ class WalletTransaction
     private ?Wallet $wallet = null;
 
     #[ORM\Column]
+    #[Groups(['user:self', 'admin:get', 'wallet_transaction:get'])]
     private ?int $amount = null;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionStatusEnum::class)]
+    #[Groups(['user:self', 'admin:get', 'wallet_transaction:get'])]
     private ?WalletTransactionStatusEnum $status = WalletTransactionStatusEnum::PENDING;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionTypeEnum::class)]

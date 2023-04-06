@@ -8,25 +8,24 @@ use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\UserRepository;
 use App\Repository\WalletTransactionRepository;
 use App\Service\Checkout\CheckoutService;
+use Nette\Utils\Json;
 use Stripe\StripeClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class WalletDepositCheckoutConfirmation extends AbstractController
 {
-    private CheckoutService $checkout;
-
-    public function __construct(CheckoutService $checkoutService) {
-        $this->checkout = $checkoutService;
+    public function __construct(
+        private readonly CheckoutService $checkout,
+    ) {
     }
 
-    public function __invoke(Request $request, Security $security, string $wallet_transaction_id, WalletTransactionRepository $walletTransactionRepository): void
+    public function __invoke(Request $request, WalletTransaction $wallet_transaction): WalletTransaction
     {
-        $walletTransaction = $walletTransactionRepository->find($wallet_transaction_id);
-
-        //todo add confirmation
-        //$this->checkout->confirmation($walletTransaction);
+        $this->checkout->confirmation($wallet_transaction);
+        return $wallet_transaction;
     }
 }

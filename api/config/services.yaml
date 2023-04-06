@@ -34,14 +34,9 @@ services:
         bind:
             $processor: '@ApiPlatform\Doctrine\Common\State\PersistProcessor'
 
-    App\Serializer\UserContextBuilder:
+    App\Serializer\RoleContextBuilder:
         decorates: 'api_platform.serializer.context_builder'
-        arguments: [ '@App\Serializer\UserContextBuilder.inner' ]
-        autoconfigure: false
-    
-    App\Serializer\AdditionalContextBuilder:
-        decorates: 'api_platform.serializer.context_builder'
-        arguments: [ '@App\Serializer\AdditionalContextBuilder.inner' ]
+        arguments: [ '@App\Serializer\RoleContextBuilder.inner' ]
         autoconfigure: false
         
     App\EventSubscriber\User\UserRegisterSubscriber:

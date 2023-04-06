@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TicketCategoryRepository::class)]
+#[ORM\Table(name: '`ticket_category`')]
 #[ApiResource]
 class TicketCategory
 {

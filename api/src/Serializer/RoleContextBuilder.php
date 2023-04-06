@@ -2,6 +2,7 @@
 namespace App\Serializer;
 
 use ApiPlatform\Serializer\SerializerContextBuilderInterface;
+use App\Entity\WalletTransaction;
 use App\Repository\UserRepository;
 use PhpParser\Error;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -9,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use App\Entity\User;
 
-final class UserContextBuilder implements SerializerContextBuilderInterface
+final class RoleContextBuilder implements SerializerContextBuilderInterface
 {
     public function __construct(
         private readonly SerializerContextBuilderInterface $decorated,
@@ -26,40 +27,44 @@ final class UserContextBuilder implements SerializerContextBuilderInterface
 
         $resourceClass = $context['resource_class'] ?? null;
 
-        if ($resourceClass === User::class) {
+        if ($resourceClass) {
+            switch($resourceClass) {
+                case WalletTransaction::class:
+                case User::class:
+                    break;
+            }
+
             if (isset($context['groups'])) {
                 if ($normalization) {
                     # Normalization part
                     if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                        $context['groups'][] = 'admin:user:get';
-                        $context['groups'][] = 'admin:user:post';
-                        $context['groups'][] = 'admin:user:patch';
+                        $context['groups'][] = 'admin:get';
+                        $context['groups'][] = 'admin:post';
+                        $context['groups'][] = 'admin:patch';
                     } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
 
                     } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
 
                     } else if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-                        if ($request->attributes->get('id')) {
-                            $user = $this->userRepository->find($request->attributes->get('id'));
 
-                            if($this->security->getUser() === $user) {
-                                $context['groups'][] = 'user:self';
-                            }
-                        }
                     } else {
 
                     }
+                    $context['groups'][] = 'additional:get';
                 } else {
                     # Denormalization part
                     if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                        $context['groups'][] = 'admin:user:post';
+                        $context['groups'][] = 'admin:post';
                     } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
 
                     } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
 
+                    } else if ($this->authorizationChecker->isGranted('ROLE_USER')) {
+
                     } else {
 
                     }
+                    $context['groups'][] = 'additional:post';
                 }
             }
         }

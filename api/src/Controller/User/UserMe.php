@@ -12,8 +12,13 @@ use Symfony\Bundle\SecurityBundle\Security;
 #[AsController]
 class UserMe extends AbstractController
 {
-    public function __invoke(Security $security, UserRepository $userRepository): User
+    public function __construct(
+        private readonly Security $security,
+        private readonly UserRepository $userRepository
+    ){}
+
+    public function __invoke(): User
     {
-        return $userRepository->find($security->getUser()->getId());
+        return $this->userRepository->find($this->security->getUser()->getId());
     }
 }

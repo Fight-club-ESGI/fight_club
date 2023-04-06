@@ -24,18 +24,16 @@ class CheckoutService
     {
         $walletTransaction = $this->recordWalletTransaction($user->getWallet(), $amount, WalletTransactionStatusEnum::PENDING, $type);
 
-        $amount = number_format($amount, 2, '.', '');
-
         #todo change url
         $params['line_items'] = [];
         $params['line_items'][0]['price_data']['currency'] = 'eur';
         $params['line_items'][0]['price_data']['product_data']['name'] = 'transaction name';
-        $params['line_items'][0]['price_data']['unit_amount'] = intval($amount * 100);
+        $params['line_items'][0]['price_data']['unit_amount'] = intval($amount);
         $params['line_items'][0]['quantity'] = $quantity;
         $params['mode'] = 'payment';
 
         if ($default_confirmation_url) {
-            $confirmationUrl = 'https://localhost';
+            $confirmationUrl = $_ENV['FRONT_URL'] . "/checkout/confirmation?transaction_id=". $walletTransaction->getId();;
             $params['success_url'] = $confirmationUrl;
             $params['cancel_url'] = $confirmationUrl;
         }
@@ -65,6 +63,29 @@ class CheckoutService
         $this->entityManager->flush();
 
         return $walletTransaction;
+    }
+
+    public function confirmation(WalletTransaction $walletTransaction): void
+    {
+        $transaction = $this->stripe->checkout->sessions->retrieve($walletTransaction->getTransaction(), []);
+
+        switch($walletTransaction->getStatus()) {
+            case WalletTransactionStatusEnum::PENDING :
+                if ($transaction->payment_status === 'paid') {
+                    $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+                    $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + floatval($transaction->amount_total / 100));
+                } else {
+                    $walletTransaction->setStatus(WalletTransactionStatusEnum::REJECTED);
+                }
+
+                $this->entityManager->persist($walletTransaction);
+                $this->entityManager->flush();
+                break;
+            case WalletTransactionStatusEnum::REJECTED:
+            case WalletTransactionStatusEnum::ACCEPTED:
+            case WalletTransactionStatusEnum::CANCELLED:
+                break;
+        }
     }
 
     public function getStripe(): StripeClient

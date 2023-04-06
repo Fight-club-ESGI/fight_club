@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use App\Controller\Wallet\WalletDepositCheckout;
+use App\Controller\Wallet\WalletWithdraw;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\WalletRepository;
@@ -13,11 +16,26 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WalletRepository::class)]
+#[ORM\Table(name: '`wallet`')]
 #[ApiResource(
     operations: [
         new Get(
             normalizationContext: ['groups' => ['user:get']],
             security: "is_granted('ROLE_ADMIN')",
+        ),
+        new Post(
+            uriTemplate: "/wallet/deposit",
+            controller: WalletDepositCheckout::class,
+            security: "is_granted('ROLE_USER')",
+            read: false,
+            name: 'wallet_deposit_checkout'
+        ),
+        new Post(
+            uriTemplate: "/wallet/withdraw",
+            controller: WalletWithdraw::class,
+            normalizationContext: ['groups' => ['wallet:get']],
+            security: "is_granted('ROLE_USER')",
+            name: 'wallet_withdraw_checkout'
         )
     ]
 )]
