@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import EventDetails from '../components/EventDetails.vue';
+import EventDetails from '@/components/EventDetails.vue';
 export default defineComponent({
     components: { EventDetails },
 });

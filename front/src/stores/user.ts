@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { userService } from '../service/api';
-import type { SigninI, SignupI } from '../interfaces/payload';
-import type { userInterface } from '../interfaces/responseAPI';
-import { token } from '../service';
+import type { SigninI, SignupI } from '@/interfaces/payload';
+import type { userInterface } from '@/interfaces/responseAPI';
+import { token } from '@/service';
 import { useRouter } from "vue-router"
 import jwt_decode from 'jwt-decode';
 

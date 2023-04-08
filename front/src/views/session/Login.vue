@@ -29,8 +29,8 @@
 <script lang="ts" setup>
 import { createToast } from 'mosha-vue-toastify';
 import { ref } from 'vue';
-import router from '../router';
-import { useUserStore } from '../stores/user';
+import router from '@/router';
+import { useUserStore } from '@/stores/user';
 const userStore = useUserStore();
 const { signin } = userStore;
 

@@ -9,9 +9,9 @@
 <script lang="ts">
 import { defineComponent, onMounted, computed } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useEventStore } from '../stores/event';
+import { useEventStore } from '@/stores/event';
 import { useRouter } from 'vue-router';
-import Event from '../components/Event.vue';
+import Event from '@/components/Event.vue';
 import { useUserStore } from '@/stores/user';
 import CreateEvent from '@/components/dialogs/CreateEvent.vue';
 

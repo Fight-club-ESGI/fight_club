@@ -33,7 +33,7 @@ export default defineComponent({
 <template>
     <v-app app>
         <Header
-            v-if="route.name != 'activate-status' && route.name != 'login' && route.name != 'signup'"
+            v-if="route.name !== 'activate-status' && route.name !== 'login' && route.name !== 'signup'"
             @toggleNavigationDrawer="display = !display"
         ></Header>
         <NavigationDrawer v-if="isAdmin" :display="display"></NavigationDrawer>

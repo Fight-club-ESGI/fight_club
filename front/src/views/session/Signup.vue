@@ -46,9 +46,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { SignupI } from '../interfaces/payload';
+import { SignupI } from '@/interfaces/payload';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '../stores/user';
+import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
 const { signup } = userStore;
