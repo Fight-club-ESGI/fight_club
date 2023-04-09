@@ -1,16 +1,16 @@
 export interface userInterface {
-  id: string
-  username: string
-  roles: Array<string>
-  email: string
+  id: string | null
+  username: string | null
+  roles: Array<string> | null
+  email: string | null
 }
 
 export interface SponsorshipResponseI {
-  sponsor: string
-  sponsored: string
+  sponsor: string | null
+  sponsored: string | null
   email_validation: boolean
   sponsor_validation: boolean
-  id: string
+  id: string | null
   emailValidation: boolean
   sponsorValidation: boolean
 }

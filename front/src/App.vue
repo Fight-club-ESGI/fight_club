@@ -14,18 +14,18 @@ export default defineComponent({
 
         const userStore = useUserStore();
         const { signinWithToken } = userStore;
-        const { isAdmin } = storeToRefs(userStore);
+        const { isConnected } = storeToRefs(userStore);
 
         onMounted(async () => {
             if (token.value) {
                 try {
                     // TODO: Uncomment when the back function is ready
-                    // await signinWithToken(token.value);
+                    await signinWithToken(token.value);
                 } catch (error) {}
             }
         });
 
-        return { display, isAdmin, route };
+        return { display, isConnected, route };
     },
 });
 </script>
@@ -36,7 +36,7 @@ export default defineComponent({
             v-if="route.name !== 'activate-status' && route.name !== 'login' && route.name !== 'signup'"
             @toggleNavigationDrawer="display = !display"
         ></Header>
-        <NavigationDrawer v-if="isAdmin" :display="display"></NavigationDrawer>
+        <NavigationDrawer v-if="isConnected" :display="display"></NavigationDrawer>
         <!-- Do not put padding on the v-main because it will break the website -->
         <v-main>
             <router-view />
