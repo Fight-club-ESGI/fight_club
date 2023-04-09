@@ -1,17 +1,13 @@
 <template>
-    <v-row no-gutters justify="center">
-        <v-col cols="10" md="6" lg="5">
-            <v-card class="pa-5 mt-12">
-                <h1 class="text-2xl font-bold pb-5">Personnal informations</h1>
-
-                <v-form v-model="valid" ref="form">
-                    <v-text-field v-model="user.username" :rules="[rules.required]" placeholder="username" label="username" />
-                    <v-text-field v-model="user.email" disabled label="email" />
-                    <v-btn block color="primary" @click="validate()">Confirm </v-btn>
-                </v-form>
-            </v-card>
-        </v-col>
-    </v-row>
+    <div class="p-5">
+        <v-form v-model="valid" ref="form">
+            <v-text-field v-model="user.username" :rules="[rules.required]" placeholder="username" label="username" />
+            <v-text-field v-model="user.email" disabled label="email" />
+            <div class="w-full">
+                <v-btn class="w-1/3 mx-auto" color="primary" @click="validate()">Confirm</v-btn>
+            </div>
+        </v-form>
+    </div>
 </template>
 
 <script lang="ts">

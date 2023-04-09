@@ -3,6 +3,7 @@
         <v-list class="flex-column relative h-full" density="compact" nav>
             <v-list-item
                 :prepend-avatar="`https://xsgames.co/randomusers/assets/avatars/pixel/43.jpg`"
+                append-icon="mdi-gear"
                 :title="user.username"
                 :subtitle="user.email"
                 :to="{ name: 'user-profile' }"
@@ -10,9 +11,9 @@
                 class="py-2"
             />
             <v-divider></v-divider>
-            <v-list-item :to="{ name: 'user-wallet' }" exact prepend-icon="mdi-piggy-bank" title="Events" value="events"></v-list-item>
-            <v-list-item :to="{ name: 'user-tickets-history' }" exact prepend-icon="mdi-ticket" title="Fighters" value="fighters"></v-list-item>
-            <v-list-item :to="{ name: 'user-bets-history' }" exact prepend-icon="mdi-checkbox-marked" title="My bets" value="fighters"></v-list-item>
+            <v-list-item :to="{ name: 'user-wallet' }" exact prepend-icon="mdi-piggy-bank" title="My wallet" value="wallet"></v-list-item>
+            <v-list-item :to="{ name: 'user-tickets-history' }" exact prepend-icon="mdi-ticket" title="Tickets" value="tickets"></v-list-item>
+            <v-list-item :to="{ name: 'user-bets-history' }" exact prepend-icon="mdi-checkbox-marked" title="My bets" value="bets"></v-list-item>
             <div>
                 <div class="px-4 py-2">Admin</div>
                 <v-divider />
