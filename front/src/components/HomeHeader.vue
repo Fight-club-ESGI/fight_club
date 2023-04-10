@@ -1,10 +1,10 @@
 <template>
     <v-app-bar color="primary-darken-1">
-        <v-app-bar-nav-icon color="white" @click="emit('toggleNavigationDrawer')"></v-app-bar-nav-icon>
-
-        <v-app-bar-title @click="router.push({ name: 'home' })" style="cursor: pointer">Thunderous Knockout Fighting</v-app-bar-title>
-
-        <v-spacer></v-spacer>
+        <v-app-bar-title
+            @click="router.push({ name: 'home' })" style="cursor: pointer"
+        >
+            Thunderous Knockout Fighting
+        </v-app-bar-title>
 
         <template v-if="isConnected">
             <router-link to="/bets">

@@ -6,8 +6,9 @@ import NavigationDrawer from './components/NavigationDrawer.vue';
 import { useUserStore } from './stores/user';
 import { token } from './service';
 import { useRoute } from 'vue-router';
+import HomeHeader from "@/components/HomeHeader.vue";
 export default defineComponent({
-    components: { Header, NavigationDrawer },
+    components: {HomeHeader, Header, NavigationDrawer },
     setup() {
         const display = ref<boolean>(false);
         const route = useRoute();
@@ -33,10 +34,16 @@ export default defineComponent({
 <template>
     <v-app app>
         <Header
-            v-if="route.name !== 'activate-status' && route.name !== 'login' && route.name !== 'signup'"
+            v-if="isConnected && route.name !== 'activate-status' && route.name !== 'home'"
             @toggleNavigationDrawer="display = !display"
         ></Header>
-        <NavigationDrawer v-if="isConnected" :display="display"></NavigationDrawer>
+        <HomeHeader
+            v-else-if="route.name !== 'login' && route.name !== 'signup'"
+        ></HomeHeader>
+
+        <NavigationDrawer
+            v-if="isConnected && route.name !== 'activate-status' && route.name !== 'login' && route.name !== 'signup' && route.name !== 'home'"
+            :display="display" />
         <!-- Do not put padding on the v-main because it will break the website -->
         <v-main>
             <router-view />
