@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import tickets from '../mocks/tickets.json';
+import tickets from '@/mocks/tickets.json';
 import TicketHistoryCard from '@/components/TicketHistoryCard.vue';
 
 const tab = ref();

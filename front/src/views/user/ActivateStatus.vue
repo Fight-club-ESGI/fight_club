@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useSponsorshipStore } from '../stores/sponsorship';
+import { useSponsorshipStore } from '@/stores/sponsorship';
 import { useRouter, useRoute } from 'vue-router';
 export default defineComponent({
     setup() {

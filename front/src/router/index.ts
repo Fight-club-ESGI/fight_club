@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
 import routes from './routes';
-import { useUserStore } from "../stores/user";
+import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 
 const router = createRouter({
@@ -13,7 +13,7 @@ router.beforeResolve((to, from, next) => {
     const { isAdmin, isConnected } = storeToRefs(userStore);
 
     if (to?.meta?.requiresAuth) {
-        if (!isConnected.value) next({ name: 'login' }) 
+        if (!isConnected.value) next({ name: 'login' })
         else if (to?.meta?.requiresAdmin) {
             if (!isAdmin.value) next({ name: 'login' });
             else next();

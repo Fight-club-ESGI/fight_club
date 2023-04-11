@@ -1,38 +1,32 @@
 <template>
-    <v-row no-gutters justify="center">
-        <v-col cols="10" md="6" lg="5">
-            <v-card class="pa-5 mt-12">
-                <h1 class="text-2xl font-bold pb-5">Change Password</h1>
-                <v-form v-model="valid" ref="form">
-                    <v-text-field
-                        v-model="oldPassword"
-                        :rules="[rules.required]"
-                        prepend-icon="mdi-lock-outline"
-                        type="password"
-                        placeholder="Old Password"
-                        label="Old Password"
-                    />
-                    <v-text-field
-                        v-model="newPassword"
-                        :rules="[rules.required, rules.minLength]"
-                        prepend-icon="mdi-lock-outline"
-                        type="password"
-                        placeholder="New Password"
-                        label="New Password"
-                    />
-                    <v-text-field
-                        v-model="confirmPassword"
-                        :rules="[rules.required, rules.minLength, rules.samePassword]"
-                        prepend-icon="mdi-lock-outline"
-                        type="password"
-                        placeholder="Confirm Password"
-                        label="Confirm Password"
-                    />
-                    <v-btn block color="primary" @click="validate">Confirm</v-btn>
-                </v-form>
-            </v-card>
-        </v-col>
-    </v-row>
+    <div class="p-5">
+        <v-form v-model="valid" ref="form">
+            <v-text-field
+                v-model="oldPassword"
+                :rules="[rules.required]"
+                type="password"
+                placeholder="Old Password"
+                label="Old Password"
+            />
+            <v-text-field
+                v-model="newPassword"
+                :rules="[rules.required, rules.minLength]"
+                type="password"
+                placeholder="New Password"
+                label="New Password"
+            />
+            <v-text-field
+                v-model="confirmPassword"
+                :rules="[rules.required, rules.minLength, rules.samePassword]"
+                type="password"
+                placeholder="Confirm Password"
+                label="Confirm Password"
+            />
+        </v-form>
+        <div class="w-full">
+            <v-btn class="w-1/3 mx-3 bg-red-100" color="primary" @click="validate()">Confirm</v-btn>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">

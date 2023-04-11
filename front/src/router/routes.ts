@@ -1,22 +1,22 @@
 import Home from "@/views/Home.vue"
-import Fighters from "@/views/Fighters.vue"
-import FighterDetails from "@/views/FighterDetails.vue"
-import Event from "@/views/Event.vue"
-import EventDetails from "@/views/EventDetails.vue"
-import Login from "@/views/Login.vue"
-import Signup from "@/views/Signup.vue"
-import Deposit from "@/views/Deposit.vue"
+import Fighters from "@/views/fight/Fighters.vue"
+import FighterDetails from "@/views/fight/FighterDetails.vue"
+import Event from "@/views/event/Event.vue"
+import EventDetails from "@/views/event/EventDetails.vue"
+import Login from "@/views/session/Login.vue"
+import Signup from "@/views/session/Signup.vue"
+import Deposit from "@/views/user/Deposit.vue"
 import Sponsorship from "@/views/admin/Sponsorship.vue"
 import FightersAdmin from "@/views/admin/Fighters.vue"
 import AdminView from "@/views/admin/AdminView.vue"
-import ProfileView from "@/views/Profile.vue";
-import UserBetsHistory from "@/views/UserBetsHistory.vue";
-import UserTicketsHistory from "@/views/UserTicketsHistory.vue";
+import ProfileView from "@/views/user/Profile.vue";
+import UserBetsHistory from "@/views/bet/UserBetsHistory.vue";
+import UserTicketsHistory from "@/views/ticketing/UserTicketsHistory.vue";
 import Wallet from "@/components/profile/Wallet.vue";
-import Ticketing from '@/views/Ticketing.vue';
-import FailedPayment from '@/views/FailedPayment.vue';
-import SuccessfulPayment from '@/views/SuccessfulPayment.vue';
-import ActivateStatus from "@/views/ActivateStatus.vue";
+import Ticketing from '@/views/ticketing/Ticketing.vue';
+import FailedPayment from '@/views/checkout/FailedPayment.vue';
+import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
+import ActivateStatus from "@/views/user/ActivateStatus.vue";
 
 export default [
     {

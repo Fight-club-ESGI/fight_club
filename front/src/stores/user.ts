@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { userService } from '../service/api';
-import type { SigninI, SignupI } from '../interfaces/payload';
-import type { userInterface } from '../interfaces/responseAPI';
-import { token } from '../service';
+import type { SigninI, SignupI } from '@/interfaces/payload';
+import type { userInterface } from '@/interfaces/responseAPI';
+import { token } from '@/service';
 import { useRouter } from "vue-router"
 import jwt_decode from 'jwt-decode';
 
@@ -13,21 +13,21 @@ export const useUserStore = defineStore('user', () => {
     const { _signin, _signup, _getSelfUser, _getUsers, _signinWithToken, _changePassword, _updateUser } = userService;
 
     const user = ref<userInterface>({
-        id: '6162',
-        username: 'admin',
-        roles: ['ROLE_ADMIN'],
-        email: 'admin@gmail.com',
+        id: null,
+        username: null,
+        roles: null,
+        email: null,
     });
 
     const users = ref<userInterface[]>([]);
 
     const isAdmin = computed(() => {
         console.log(user.value)
-        return user.value?.roles.includes('ROLE_ADMIN');
+        return user.value?.roles?.includes('ROLE_ADMIN');
     });
 
     const isVIP = computed(() => {
-        return user.value?.roles.includes('ROLE_VIP') || user.value?.roles.includes('ROLE_VVIP') || user.value?.roles.includes('ROLE_ADMIN');
+        return user.value?.roles?.includes('ROLE_VIP') || user.value?.roles?.includes('ROLE_VVIP') || user.value?.roles?.includes('ROLE_ADMIN');
     });
 
     const isConnected = computed(() => {
@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', () => {
 
     async function toggleAdmin() {
         if (user.value) {
-            if (user.value.roles.includes('ROLE_ADMIN')) {
+            if (user.value.roles?.includes('ROLE_ADMIN')) {
                 user.value.roles = ['ROLE_USER']
             } else {
                 user.value.roles = ['ROLE_ADMIN']
@@ -49,9 +49,9 @@ export const useUserStore = defineStore('user', () => {
             const res = await _signin(payload);
             token.value = res.token;
             const tokenValue = jwt_decode(res.token);
-            user.value.username = tokenValue.username;
-            user.value.email = tokenValue.username;
-            user.value.roles = tokenValue.roles;
+            user.value.username = tokenValue?.username;
+            user.value.email = tokenValue?.username;
+            user.value.roles = tokenValue?.roles;
             // const self = await _getSelfUser();
             // user.value = self;
         } catch (error) {
