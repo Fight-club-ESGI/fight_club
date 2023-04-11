@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\User\Role\ChangeUserRole;
 use App\Controller\User\UserMe;
+use App\Controller\User\ResetPasswordController;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -63,6 +64,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             security: 'is_granted("ROLE_ADMIN") or object === user',
             securityMessage: 'You are not allowed to update this user',
             processor: UserPasswordHasher::class,
+        ),
+        new Post(
+            uriTemplate: '/reset_password',
+            name: 'reset-password',
+            controller: ResetPasswordController::class
         )
     ]
 )]

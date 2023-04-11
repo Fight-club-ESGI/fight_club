@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode';
 export const useUserStore = defineStore('user', () => {
     const router = useRouter();
 
-    const { _signin, _signup, _getSelfUser, _getUsers, _signinWithToken, _changePassword, _updateUser } = userService;
+    const { _signin, _signup, _getSelfUser, _getUsers, _signinWithToken, _changePassword, _resetPassword, _validateResetPassword, _updateUser } = userService;
 
     const user = ref<userInterface>({
         id: null,
@@ -87,6 +87,23 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    async function resetPassword(payload: { email: string }): Promise<void> {
+        try {
+            await _resetPassword(payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function validateResetPassword(payload: { token: string, password: string }): Promise<void> {
+        try {
+            await _validateResetPassword(payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
     async function logout() {
         try {
             user.value = {
@@ -118,5 +135,5 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    return { signin, signup, isAdmin, isConnected, user, toggleAdmin, logout, getUsers, users, signinWithToken, changePassword, updateUser, isVIP }
+    return { signin, signup, isAdmin, isConnected, user, toggleAdmin, logout, getUsers, users, signinWithToken, changePassword, resetPassword, updateUser, isVIP }
 });

@@ -36,17 +36,17 @@ class ResetPasswordController extends AbstractController
         $this->managerRegistry->getManager()->flush();
 
         // TODO : send email
-        $email = (new Email())
+        $mail = (new Email())
             ->from($_ENV['MAILER_FROM'])
             ->to($user->getEmail())
             ->subject('Password reset')
             ->html('<p>Hi ' . $user->getEmail() . ',</p>
             <p>Click on the link below to reset your password.</p>
-            <p><a href="http://localhost:8080/users/validate/password' . $token . '">Reset password</a></p>
+            <p><a href="http://localhost:5173/users/validate/password?token=' . $token . '">Reset password</a></p>
             <p>Thanks,</p>
             <p>Thunderous Knockout Fighting</p>');
 
-        $this->mailer->send($email);
+        $this->mailer->send($mail);
 
         return $this->json('Success');
     }

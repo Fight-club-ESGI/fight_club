@@ -17,6 +17,8 @@ import Ticketing from '@/views/ticketing/Ticketing.vue';
 import FailedPayment from '@/views/checkout/FailedPayment.vue';
 import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
 import ActivateStatus from "@/views/user/ActivateStatus.vue";
+import ResetPassword from "@/views/ResetPassword.vue";
+import ValidateResetPassword from "@/views/ValidateResetPassword.vue";
 
 export default [
     {
@@ -29,6 +31,18 @@ export default [
         path: '/activate-status/:id',
         component: ActivateStatus,
         name: 'activate-status',
+        meta: { requiresAuth: false, requiresAdmin: false }
+    },
+    {
+        path: '/resetpassword',
+        component: ResetPassword,
+        name: 'reset-password',
+        meta: { requiresAuth: true, requiresAdmin: false }
+    },
+    {
+        path: '/users/validate/password',
+        component: ValidateResetPassword,
+        name: 'validate-password',
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
