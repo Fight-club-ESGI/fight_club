@@ -15,16 +15,24 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { useUserStore } from '@/stores/user';
 
 const form = ref();
 const valid = ref(true);
 const email = ref<string>('');
 const emailRules = [(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid'];
 
+const userStore = useUserStore();
+const { resetPassword } = userStore;
+
 async function validate() {
     const { valid } = await form.value.validate();
 
-    if (valid) alert('Form is valid');
+    if (valid) {
+        try {
+            resetPassword({ email: email.value });
+        } catch (err) {}
+    }
 }
 </script>
 

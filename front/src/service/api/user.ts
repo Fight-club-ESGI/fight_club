@@ -34,6 +34,24 @@ class User {
         }
     }
 
+    async _resetPassword(payload: { email: string }): Promise<void> {
+        try {
+            const uri = '/reset_password'
+            await client.post(uri, payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _validateResetPassword(payload: { token: string, password: string }) {
+        try {
+            const uri = '/validate_reset_password'
+            await client.post(uri, payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async _signup(payload: SignupI): Promise<void> {
         try {
             const uri = '/users'
