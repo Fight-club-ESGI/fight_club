@@ -52,6 +52,15 @@ class User {
         }
     }
 
+    async _checkTokenValidity(payload: { token: string }) {
+        try {
+            const uri = `/check_token_validity/${payload.token}`
+            await client.get(uri);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async _signup(payload: SignupI): Promise<void> {
         try {
             const uri = '/users'

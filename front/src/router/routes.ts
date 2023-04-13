@@ -17,8 +17,8 @@ import Ticketing from '@/views/ticketing/Ticketing.vue';
 import FailedPayment from '@/views/checkout/FailedPayment.vue';
 import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
 import ActivateStatus from "@/views/user/ActivateStatus.vue";
-import ResetPassword from "@/views/ResetPassword.vue";
-import ValidateResetPassword from "@/views/ValidateResetPassword.vue";
+import ResetPassword from "@/views/session/ResetPassword.vue";
+import ValidateResetPassword from "@/views/session/ValidateResetPassword.vue";
 
 export default [
     {

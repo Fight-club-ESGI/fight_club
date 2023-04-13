@@ -28,22 +28,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { createToast } from 'mosha-vue-toastify';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 export default defineComponent({
     setup() {
         const route = useRoute();
+        const router = useRouter();
         const userToken = route.query.token;
         const userStore = useUserStore();
-        const { validateResetPassword } = userStore;
+        const { validateResetPassword, checkTokenValidity } = userStore;
 
         const form = ref();
         const valid = ref<boolean>(false);
 
         const newPassword = ref<string>('');
         const confirmPassword = ref<string>('');
+
+        onMounted(async () => {
+            try {
+                await checkTokenValidity({ token: userToken });
+            } catch (err) {
+                console.error(err);
+            }
+        });
 
         const rules = {
             required: (v: string) => !!v || 'Value required',
@@ -52,14 +61,15 @@ export default defineComponent({
         };
 
         const validate = async () => {
-            try {
-                const { valid } = await form.value.validate();
-                if (valid) {
+            const { valid } = await form.value.validate();
+            if (valid) {
+                try {
                     await validateResetPassword({ token: userToken, password: newPassword.value });
                     createToast('Password changed', { type: 'success', position: 'bottom-right' });
+                    return router.push({ name: 'login' });
+                } catch (error) {
+                    createToast('Passwords incorrect', { type: 'danger', position: 'bottom-right' });
                 }
-            } catch (error) {
-                createToast('Passwords incorrect', { type: 'danger', position: 'bottom-right' });
             }
         };
 

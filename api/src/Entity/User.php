@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Controller\User\CheckTokenValidityController;
+use Carbon\Carbon;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -10,6 +12,7 @@ use ApiPlatform\Metadata\Post;
 use App\Controller\User\Role\ChangeUserRole;
 use App\Controller\User\UserMe;
 use App\Controller\User\ResetPasswordController;
+use App\Controller\User\ValidateResetPasswordController;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -17,6 +20,7 @@ use App\Repository\UserRepository;
 use App\State\UserPasswordHasher;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -67,8 +71,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Post(
             uriTemplate: '/reset_password',
-            name: 'reset-password',
-            controller: ResetPasswordController::class
+            controller: ResetPasswordController::class,
+            name: 'reset-password'
+        ),
+        new Post(
+            uriTemplate: '/validate_reset_password',
+            controller: ValidateResetPasswordController::class,
+            name: 'validate-reset-password'
+        ),
+        new Get(
+            uriTemplate: '/check_token_validity/{token}',
+            controller: CheckTokenValidityController::class,
+            name: 'check-token-validity'
         )
     ]
 )]
@@ -105,6 +119,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $token = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?Carbon $tokenDate = null;
 
     #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
     #[Groups(['admin:get', 'user:self'])]
@@ -307,4 +324,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->fights;
     }*/
+
+    /**
+     * @return Carbon | null
+     */
+    public function getTokenDate(): ?Carbon
+    {
+        return $this->tokenDate;
+    }
+
+    /**
+     * @param Carbon $tokenDate
+     * @return self
+     */
+    public function setTokenDate(Carbon $tokenDate): self
+    {
+        $this->tokenDate = $tokenDate;
+        return $this;
+    }
 }
