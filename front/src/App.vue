@@ -37,14 +37,14 @@ export default defineComponent({
             v-if="
                 isConnected &&
                 route.name != 'activate-status' &&
-                route.name != 'login' &&
-                route.name != 'signup' &&
-                route.name != 'reset-password' &&
+                route.name != 'home' &&
+                !route.path.includes('session') &&
                 route.name != 'validate-password'
             "
             @toggleNavigationDrawer="display = !display"
         ></Header>
-        <HomeHeader v-else-if="route.name !== 'login' && route.name !== 'signup'"></HomeHeader>
+        
+        <HomeHeader v-else-if="!route.path.includes('session')"></HomeHeader>
 
         <NavigationDrawer
             v-if="isConnected && route.name !== 'activate-status' && route.name !== 'login' && route.name !== 'signup' && route.name !== 'home'"
