@@ -102,6 +102,9 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    async function checkTokenValidity(payload: { token: string }) {
+
+    }
 
     async function logout() {
         try {
@@ -134,5 +137,5 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    return { signin, signup, isAdmin, isConnected, user, toggleAdmin, logout, getUsers, users, signinWithToken, changePassword, resetPassword, updateUser, isVIP }
+    return { signin, signup, isAdmin, isConnected, user, toggleAdmin, logout, getUsers, users, signinWithToken, changePassword, checkTokenValidity, resetPassword, updateUser, validateResetPassword, isVIP }
 });

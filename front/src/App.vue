@@ -34,7 +34,8 @@ export default defineComponent({
 <template>
     <v-app app>
         <Header
-            v-if="isConnected 
+            v-if="
+                isConnected &&
                 route.name != 'activate-status' &&
                 route.name != 'login' &&
                 route.name != 'signup' &&
