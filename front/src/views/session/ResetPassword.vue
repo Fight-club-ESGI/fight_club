@@ -1,16 +1,20 @@
 <template>
-    <v-row no-gutters justify="center">
-        <v-col cols="12" md="6" lg="3">
-            <v-card class="pa-3 mt-12">
-                <div class="text-center"><v-icon size="40">mdi-lock</v-icon></div>
-                <p class="text-center font-weight-bold">Enter your email address</p>
-                <v-form ref="form" v-model="valid" lazy-validation>
-                    <v-text-field v-model="email" :rules="emailRules" label="E-mail" required class="my-4"></v-text-field>
-                    <v-btn block color="primary" @click="validate"> Change your password </v-btn>
-                </v-form>
-            </v-card>
-        </v-col>
-    </v-row>
+    <v-form
+        class="w-full px-12 xl:w-2/3 mx-auto"
+        ref="form" v-model="valid"
+        lazy-validation
+    >
+        <p class="text-center font-weight-bold">Reset password</p>
+        <v-text-field v-model="email" :rules="emailRules" label="E-mail" required class="my-4"></v-text-field>
+        <v-btn block color="primary" @click="validate"> Change your password </v-btn>
+        <v-divider class="my-3"></v-divider>
+        <div class="flex text-caption mb-4">
+            <div class=""><router-link :to="{ name: 'login' }" >Already got an account?</router-link></div>
+            <v-spacer/>
+            <div class="text-center"><router-link :to="{ name: 'register' }" >Not registered yet?</router-link></div>
+        </div>    
+    </v-form>
+
 </template>
 
 <script lang="ts" setup>

@@ -19,6 +19,7 @@ import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
 import ActivateStatus from "@/views/user/ActivateStatus.vue";
 import ResetPassword from "@/views/session/ResetPassword.vue";
 import ValidateResetPassword from "@/views/session/ValidateResetPassword.vue";
+import Session from "@/views/session/Session.vue";
 
 export default [
     {
@@ -118,10 +119,30 @@ export default [
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
-        path: '/login',
-        component: Login,
-        name: 'login',
-        meta: { requiresAuth: false, requiresAdmin: false }
+        path: '/session',
+        component: Session,
+        name: 'session',
+        redirect: '/session/login',
+        children: [
+            {
+                path: 'login',
+                component: Login,
+                name: 'login',
+                meta: { requiresAuth: false, requiresAdmin: false }
+            },
+            {
+                path: 'register',
+                component: Signup,
+                name: 'register',
+                meta: { requiresAuth: false, requiresAdmin: false }
+            },
+            {
+                path: 'forgot-password',
+                component: ResetPassword,
+                name: 'forgot-password',
+                meta: { requiresAuth: false, requiresAdmin: false }
+            }
+        ]
     },
     {
         path: '/signup',

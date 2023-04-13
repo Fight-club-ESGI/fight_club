@@ -1,46 +1,34 @@
 <template>
-    <div class="h-full w-full flex">
-        <div
-            class="h-full w-full hidden md:flex flex items-center bg-no-repeat bg-cover bg-right opacity-75"
-            style="background-image: url('src/assets/johann-walter-bantz-Clv9DfJLwac-unsplash.jpg');"
-        >
-            <div class="text-center w-full font-bold text-6xl px-20 text-white">
-                Welcome to Thunderous Knockout
-            </div>
+    <v-form
+        class="w-full px-12 xl:w-2/3 mx-auto"
+        ref="form" v-model="valid"
+        lazy-validation
+    >
+        <p class="text-center font-weight-bold">Login</p>
+        <v-text-field
+            v-model="email"
+            :rules="emailRules"
+            autocomplete="email"
+            label="E-mail"
+            required
+            class="my-4"
+        />
+        <v-text-field
+            v-model="password"
+            label="Password"
+            autocomplete="current-password"
+            type="password"
+            required
+            class="mt-4"
+        ></v-text-field>
+        <v-btn block color="primary" @click="validate">Login</v-btn>
+        <v-divider class="my-3"></v-divider>
+        <div class="flex text-caption mb-4">
+            <div class=""><router-link :to="{ name: 'forgot-password' }" class="custom-link">Forgot your password?</router-link></div>
+            <v-spacer/>
+            <div class="text-center"><router-link :to="{ name: 'register' }" class="custom-link">Not registered yet?</router-link></div>
         </div>
-        <div class="h-full w-full flex items-center text-center bg-neutral-800 text-white">
-            <v-form
-                class="w-full px-12 xl:w-2/3 mx-auto"
-                ref="form" v-model="valid"
-                lazy-validation
-            >
-                <p class="text-center font-weight-bold">Login</p>
-                <v-text-field
-                    v-model="email"
-                    :rules="emailRules"
-                    autocomplete="email"
-                    label="E-mail"
-                    required
-                    class="my-4"
-                />
-                <v-text-field
-                    v-model="password"
-                    label="Password"
-                    autocomplete="current-password"
-                    type="password"
-                    required
-                    class="mt-4"
-                ></v-text-field>
-                <v-btn block color="primary" @click="validate">Login</v-btn>
-                <v-divider class="my-3"></v-divider>
-                <div class="flex text-caption mb-4">
-                    <div class=""><router-link to="/resetpassword" class="custom-link">Forgot your password?</router-link></div>
-                    <v-spacer/>
-                    <div class="text-center"><router-link to="/signup" class="custom-link">Not registered yet?</router-link></div>
-                </div>
-            </v-form>
-        </div>
-    </div>
+    </v-form>
 </template>
 
 <script lang="ts" setup>
@@ -48,7 +36,6 @@ import { createToast } from 'mosha-vue-toastify';
 import { ref } from 'vue';
 import router from '@/router';
 import { useUserStore } from '@/stores/user';
-import imageUrl from '@/assets/johann-walter-bantz-Clv9DfJLwac-unsplash.jpg';
 
 const userStore = useUserStore();
 const { signin } = userStore;
