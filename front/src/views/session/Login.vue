@@ -1,11 +1,14 @@
 <template>
     <div class="h-full w-full flex">
-        <div class="h-full w-full hidden md:flex flex items-center">
-            <div class="text-center w-full font-bold text-6xl px-20">
-                Welcome to the Fight Club
+        <div
+            class="h-full w-full hidden md:flex flex items-center bg-no-repeat bg-cover bg-right opacity-75"
+            style="background-image: url('src/assets/johann-walter-bantz-Clv9DfJLwac-unsplash.jpg');"
+        >
+            <div class="text-center w-full font-bold text-6xl px-20 text-white">
+                Welcome to Thunderous Knockout
             </div>
         </div>
-        <div class="h-full w-full flex bg-neutral-300 items-center text-center">
+        <div class="h-full w-full flex items-center text-center bg-neutral-800 text-white">
             <v-form
                 class="w-full px-12 xl:w-2/3 mx-auto"
                 ref="form" v-model="valid"
@@ -45,6 +48,8 @@ import { createToast } from 'mosha-vue-toastify';
 import { ref } from 'vue';
 import router from '@/router';
 import { useUserStore } from '@/stores/user';
+import imageUrl from '@/assets/johann-walter-bantz-Clv9DfJLwac-unsplash.jpg';
+
 const userStore = useUserStore();
 const { signin } = userStore;
 
@@ -76,7 +81,6 @@ async function validate() {
 <style scoped>
 .custom-link:link,
 .custom-link:visited {
-    color: #424242;
     text-decoration: none;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar color="primary-darken-1">
+    <!--<v-app-bar color="primary-darken-1">
         <v-app-bar-title
             @click="router.push({ name: 'home' })" style="cursor: pointer"
         >
@@ -43,12 +43,37 @@
             </div>
         </template>
     </v-app-bar>
+-->
+
+    <div class="flex items-center align-middle bg-black/20 h-24 fixed w-full text-white px-20">
+        <div
+            class="h-full w-1/4 bg-cover bg-center"
+            style="background-image: url('src/assets/Thunderous_knockout__2_-removebg-preview.png');"
+        >
+        </div>
+        <div class="flex w-full">
+            <v-list class="flex bg-transparent text-white">
+                <v-list-item>Home</v-list-item>
+                <v-list-item>Bets</v-list-item>
+                <v-list-item>Booking</v-list-item>
+                <v-list-item>About Us</v-list-item>
+            </v-list>
+            <v-spacer />
+            <v-list v-if="isConnected" class="flex bg-transparent text-white">
+                <v-list-item @click="router.push({ name: 'login' })">Sign In</v-list-item>
+                <v-list-item @click="router.push({ name: 'signup' })">Register</v-list-item>
+            </v-list>
+            <v-list v-else class="flex bg-transparent text-white">
+                <v-list-item @click="router.push({ name: 'login' })">Access to my Platform</v-list-item>
+            </v-list>
+        </div>
+    </div>
 </template>
 <script lang="ts">
 import { storeToRefs } from 'pinia';
 import { defineComponent, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '../stores/user';
+import { useUserStore } from '@/stores/user';
 
 export default defineComponent({
     setup(props, { emit }) {
