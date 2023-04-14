@@ -15,10 +15,10 @@ class User {
         }
     }
 
-    async _signinWithToken(token: string): Promise<TokenI> {
+    async _signinWithToken(refreshToken: string): Promise<TokenI> {
         try {
-            const uri = '/tokenSignin'
-            const res = await clientWithoutAuth.post(uri, { token: token });
+            const uri = '/token/refresh'
+            const res = await clientWithoutAuth.post(uri, { refresh_token: refreshToken });
             return res.data;
         } catch (error) {
             throw error;

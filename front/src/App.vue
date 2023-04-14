@@ -4,7 +4,7 @@ import { defineComponent, ref, onMounted } from 'vue';
 import Header from './components/AuthHeader.vue';
 import NavigationDrawer from './components/NavigationDrawer.vue';
 import { useUserStore } from './stores/user';
-import { token } from './service';
+import { refreshToken } from './service';
 import { useRoute } from 'vue-router';
 import HomeHeader from '@/components/LandingPageHeader.vue';
 export default defineComponent({
@@ -18,10 +18,10 @@ export default defineComponent({
         const { isConnected } = storeToRefs(userStore);
 
         onMounted(async () => {
-            if (token.value) {
+            if (refreshToken.value) {
                 try {
                     // TODO: Uncomment when the back function is ready
-                    await signinWithToken(token.value);
+                    await signinWithToken(refreshToken.value);
                 } catch (error) {}
             }
         });
