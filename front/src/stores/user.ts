@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { userService } from '../service/api';
 import type { SigninI, SignupI } from '@/interfaces/payload';
 import type { userInterface } from '@/interfaces/responseAPI';
-import { token } from '@/service';
+import { token, refreshToken } from '@/service';
 import { useRouter } from "vue-router"
 import jwt_decode from 'jwt-decode';
 
@@ -48,6 +48,7 @@ export const useUserStore = defineStore('user', () => {
         try {
             const res = await _signin(payload);
             token.value = res.token;
+            refreshToken.value = res.refresh_token;
             const tokenValue = jwt_decode(res.token);
             user.value.username = tokenValue?.username;
             user.value.email = tokenValue?.username;
@@ -67,9 +68,9 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    async function signinWithToken(LStoken: string) {
+    async function signinWithToken(refreshToken: string) {
         try {
-            const res = await _signinWithToken(LStoken);
+            const res = await _signinWithToken(refreshToken);
             token.value = res.token;
             const self = await _getSelfUser();
             user.value = self;
