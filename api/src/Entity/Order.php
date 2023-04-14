@@ -3,6 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Enum\Order\OrderPaymentTypeEnum;
@@ -15,7 +20,38 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['order:get']],
+            security: "is_granted('ROLE_ADMIN') or object.getCustomer() === user",
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['order:get_collection']],
+            security: "is_granted('ROLE_ADMIN') or object.getCustomer() === user",
+        ),
+        new Post(
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
+            normalizationContext: ['groups' => ['order:post']],
+            security: "is_granted('ROLE_ADMIN') or object.getCustomer() === user",
+        ),
+        new Put(
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
+            normalizationContext: ['groups' => ['order:put']],
+            security: "is_granted('ROLE_ADMIN') or object.getCustomer() === user",
+        ),
+        new Delete(
+            normalizationContext: ['groups' => ['order:delete']],
+            security: "is_granted('ROLE_ADMIN')",
+        ),
+    ]
+)]
 class Order
 {
     use EntityIdTrait;
