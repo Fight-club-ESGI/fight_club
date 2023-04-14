@@ -1,5 +1,5 @@
 <template>
-    <div class="px-20 py-6">
+    <div class="p-6">
         <div>
             <div>
                 <h1 class="font-bold text-3xl">Profile Settings</h1>
@@ -19,13 +19,13 @@
 
         <v-window v-model="tab">
             <v-window-item value="one">
-                <div class="bg-white rounded-lg mx-40 my-20">
+                <div class="bg-white rounded-lg m-0 md:mx-20 lg:mx-40 my-20">
                     <user-informations />
                 </div>
             </v-window-item>
 
             <v-window-item value="two">
-                <div class="bg-white rounded mx-40 my-20">
+                <div class="bg-white rounded m-0 md:mx-20 lg:mx-40 my-20">
                     <change-password />
                 </div>
             </v-window-item>

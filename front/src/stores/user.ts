@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode';
 export const useUserStore = defineStore('user', () => {
     const router = useRouter();
 
-    const { _signin, _signup, _getSelfUser, _getUsers, _signinWithToken, _changePassword, _resetPassword, _validateResetPassword, _updateUser } = userService;
+    const { _signin, _signup, _getSelfUser, _getUsers, _signinWithToken, _checkTokenValidity, _changePassword, _resetPassword, _validateResetPassword, _updateUser } = userService;
 
     const user = ref<userInterface>({
         id: null,
@@ -104,7 +104,11 @@ export const useUserStore = defineStore('user', () => {
     }
 
     async function checkTokenValidity(payload: { token: string }) {
-
+        try {
+            await _checkTokenValidity(payload);
+        } catch (error) {
+            throw error;
+        }
     }
 
     async function logout() {

@@ -47,6 +47,8 @@ security:
         # - { path: ^/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI
         - { path: ^/(authentication_token|token/refresh), roles: PUBLIC_ACCESS }
         - { path: ^/reset_password, roles: PUBLIC_ACCESS }
+        - { path: ^/check_token_validity, roles: PUBLIC_ACCESS }
+        - { path: ^/validate_reset_password, roles: PUBLIC_ACCESS }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_SUPER_VIP

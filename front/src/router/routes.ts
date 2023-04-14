@@ -20,6 +20,7 @@ import ActivateStatus from "@/views/user/ActivateStatus.vue";
 import ResetPassword from "@/views/session/ResetPassword.vue";
 import ValidateResetPassword from "@/views/session/ValidateResetPassword.vue";
 import Session from "@/views/session/Session.vue";
+import InvalidToken from "@/views/InvalidToken.vue";
 
 export default [
     {
@@ -32,7 +33,7 @@ export default [
         path: '/activate-status/:id',
         component: ActivateStatus,
         name: 'activate-status',
-        meta: { requiresAuth: false, requiresAdmin: false }
+        meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
     },
     {
         path: '/resetpassword',
@@ -44,7 +45,7 @@ export default [
         path: '/users/validate/password',
         component: ValidateResetPassword,
         name: 'validate-password',
-        meta: { requiresAuth: false, requiresAdmin: false }
+        meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
     },
     {
         path: '/admin',
@@ -128,19 +129,19 @@ export default [
                 path: 'login',
                 component: Login,
                 name: 'login',
-                meta: { requiresAuth: false, requiresAdmin: false }
+                meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
             },
             {
                 path: 'register',
                 component: Signup,
                 name: 'register',
-                meta: { requiresAuth: false, requiresAdmin: false }
+                meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
             },
             {
                 path: 'forgot-password',
                 component: ResetPassword,
                 name: 'forgot-password',
-                meta: { requiresAuth: false, requiresAdmin: false }
+                meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
             }
         ]
     },
@@ -174,4 +175,10 @@ export default [
         name: 'successful-payment',
         meta: { requiresAuth: false, requiresAdmin: false }
     },
+    {
+        path: '/invalid-token',
+        component: InvalidToken,
+        name: 'invalid-token',
+        meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
+    }
 ]
