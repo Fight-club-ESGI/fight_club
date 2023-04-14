@@ -2,6 +2,7 @@
 
 namespace App\Controller\User;
 
+use Carbon\Carbon;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,22 +32,24 @@ class ResetPasswordController extends AbstractController
         }
 
         $token = bin2hex(random_bytes(32));
-
         $user->setToken($token);
+        $user->setTokenDate(Carbon::now());
         $this->managerRegistry->getManager()->flush();
 
         // TODO : send email
-        $email = (new Email())
+        $mail = (new Email())
             ->from($_ENV['MAILER_FROM'])
             ->to($user->getEmail())
             ->subject('Password reset')
             ->html('<p>Hi ' . $user->getEmail() . ',</p>
             <p>Click on the link below to reset your password.</p>
-            <p><a href="http://localhost:8080/users/validate/password' . $token . '">Reset password</a></p>
+            <p><a href="http://localhost:5173/users/validate/password?token=' . $token . '">Reset password</a></p>
+            <p>The validity of this link is <b>30min</b></p>
+            <br />
             <p>Thanks,</p>
             <p>Thunderous Knockout Fighting</p>');
 
-        $this->mailer->send($email);
+        $this->mailer->send($mail);
 
         return $this->json('Success');
     }

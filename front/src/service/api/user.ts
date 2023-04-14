@@ -27,8 +27,35 @@ class User {
 
     async _changePassword(payload: { password: string, newPassword: string }): Promise<void> {
         try {
-            const uri = '/change-password'
-            await client.put(uri, payload);
+            const uri = '/change_password'
+            await client.post(uri, payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _resetPassword(payload: { email: string }): Promise<void> {
+        try {
+            const uri = '/reset_password';
+            await clientWithoutAuth.post(uri, payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _validateResetPassword(payload: { token: string, password: string }) {
+        try {
+            const uri = '/validate_reset_password';
+            await clientWithoutAuth.post(uri, payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _checkTokenValidity(payload: { token: string }) {
+        try {
+            const uri = `/check_token_validity/${payload.token}`;
+            return clientWithoutAuth.get(uri);
         } catch (error) {
             throw error;
         }

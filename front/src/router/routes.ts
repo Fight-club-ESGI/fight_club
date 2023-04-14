@@ -17,6 +17,10 @@ import Ticketing from '@/views/ticketing/Ticketing.vue';
 import FailedPayment from '@/views/checkout/FailedPayment.vue';
 import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
 import ActivateStatus from "@/views/user/ActivateStatus.vue";
+import ResetPassword from "@/views/session/ResetPassword.vue";
+import ValidateResetPassword from "@/views/session/ValidateResetPassword.vue";
+import Session from "@/views/session/Session.vue";
+import InvalidToken from "@/views/InvalidToken.vue";
 
 export default [
     {
@@ -29,7 +33,19 @@ export default [
         path: '/activate-status/:id',
         component: ActivateStatus,
         name: 'activate-status',
-        meta: { requiresAuth: false, requiresAdmin: false }
+        meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
+    },
+    {
+        path: '/resetpassword',
+        component: ResetPassword,
+        name: 'reset-password',
+        meta: { requiresAuth: true, requiresAdmin: false }
+    },
+    {
+        path: '/users/validate/password',
+        component: ValidateResetPassword,
+        name: 'validate-password',
+        meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
     },
     {
         path: '/admin',
@@ -104,10 +120,30 @@ export default [
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
-        path: '/login',
-        component: Login,
-        name: 'login',
-        meta: { requiresAuth: false, requiresAdmin: false }
+        path: '/session',
+        component: Session,
+        name: 'session',
+        redirect: '/session/login',
+        children: [
+            {
+                path: 'login',
+                component: Login,
+                name: 'login',
+                meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
+            },
+            {
+                path: 'register',
+                component: Signup,
+                name: 'register',
+                meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
+            },
+            {
+                path: 'forgot-password',
+                component: ResetPassword,
+                name: 'forgot-password',
+                meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
+            }
+        ]
     },
     {
         path: '/signup',
@@ -139,4 +175,10 @@ export default [
         name: 'successful-payment',
         meta: { requiresAuth: false, requiresAdmin: false }
     },
+    {
+        path: '/invalid-token',
+        component: InvalidToken,
+        name: 'invalid-token',
+        meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
+    }
 ]
