@@ -44,7 +44,7 @@ class ResetPasswordController extends AbstractController
             ->html('<p>Hi ' . $user->getEmail() . ',</p>
             <p>Click on the link below to reset your password.</p>
             <p><a href="http://localhost:5173/users/validate/password?token=' . $token . '">Reset password</a></p>
-            <p>The validity of this link is <b>10min</b></p>
+            <p>The validity of this link is <b>30min</b></p>
             <br />
             <p>Thanks,</p>
             <p>Thunderous Knockout Fighting</p>');

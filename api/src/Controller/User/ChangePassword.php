@@ -3,11 +3,12 @@
 namespace App\Controller\User;
 
 use App\Entity\User;
-use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -16,46 +17,36 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsController]
-class ValidateResetPasswordController extends AbstractController
+class ChangePassword extends AbstractController
 {
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly ManagerRegistry $managerRegistry,
-        private readonly UserPasswordHasherInterface $passwordHasher
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly Security $security
     ) {}
 
     public function __invoke(): Response
     {
-        // TODO : Secure if not email in body
-
-        $token = json_decode($this->requestStack->getCurrentRequest()->getContent())->token;
+        $newPassword = json_decode($this->requestStack->getCurrentRequest()->getContent())->newPassword;
         $password = json_decode($this->requestStack->getCurrentRequest()->getContent())->password;
 
         /** @var User $user */
-        if (!$user = $this->managerRegistry->getRepository(User::class)->findOneBy(['token' => $token])) {
+        if (!$user = $this->managerRegistry->getRepository(User::class)->findOneBy(['id' => $this->security->getUser()->getId()])) {
             throw $this->createNotFoundException();
         }
 
-        if (!$user->getToken() || !$user->getTokenDate()) {
-            throw new BadRequestException("Link validity has expired", 400);
+        // Check that password equals old password
+        if (!password_verify($password, $user->getPassword())) {
+            throw new BadRequestException("Error while updating password, please try again", 400);
         }
 
-        $tokenDateValidity = new Carbon($user->getTokenDate());
-        $tokenDateValidity->addSeconds(60);
-        $tokenValidity = $tokenDateValidity->greaterThan(Carbon::now());
-
-        if (!$tokenValidity) {
-            throw new BadRequestException("Token validity has expired, please try again", 400);
-        }
-
-        $hashedPassword = $this->passwordHasher->hashPassword(
+        $newlyHashedPassword = $this->passwordHasher->hashPassword(
             $user,
-            $password
+            $newPassword
         );
 
-        $user->setPassword($hashedPassword);
-        $user->setToken(null);
-        $user->setTokenDate(null);
+        $user->setPassword($newlyHashedPassword);
         $this->managerRegistry->getManager()->flush();
 
         return new Response("Password successfully modified", 200);

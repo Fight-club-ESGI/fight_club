@@ -1,30 +1,28 @@
 <template>
-    <v-row no-gutters justify="center">
-        <v-col cols="10" md="6" lg="5">
-            <v-card class="pa-5 mt-12">
-                <h1 class="text-2xl font-bold pb-5">Change Password</h1>
-                <v-form v-model="valid" ref="form">
-                    <v-text-field
-                        v-model="newPassword"
-                        :rules="[rules.required, rules.minLength]"
-                        prepend-icon="mdi-lock-outline"
-                        type="password"
-                        placeholder="New Password"
-                        label="New Password"
-                    />
-                    <v-text-field
-                        v-model="confirmPassword"
-                        :rules="[rules.required, rules.minLength, rules.samePassword]"
-                        prepend-icon="mdi-lock-outline"
-                        type="password"
-                        placeholder="Confirm Password"
-                        label="Confirm Password"
-                    />
-                    <v-btn block color="primary" @click="validate">Confirm</v-btn>
-                </v-form>
-            </v-card>
-        </v-col>
-    </v-row>
+    <div class="grid h-screen place-items-center bg-neutral-800 text-white h-full">
+        <div class="w-1/2">
+            <h1 class="text-2xl font-bold pb-5 text-center">Reset Password</h1>
+            <v-form v-model="valid" ref="form">
+                <v-text-field
+                    v-model="newPassword"
+                    :rules="[rules.required, rules.minLength]"
+                    prepend-icon="mdi-lock-outline"
+                    type="password"
+                    placeholder="New Password"
+                    label="New Password"
+                />
+                <v-text-field
+                    v-model="confirmPassword"
+                    :rules="[rules.required, rules.minLength, rules.samePassword]"
+                    prepend-icon="mdi-lock-outline"
+                    type="password"
+                    placeholder="Confirm Password"
+                    label="Confirm Password"
+                />
+                <v-btn block color="primary" @click="validate">Confirm</v-btn>
+            </v-form>       
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -36,7 +34,7 @@ export default defineComponent({
     setup() {
         const route = useRoute();
         const router = useRouter();
-        const userToken = route.query.token;
+        const userToken: any = route.query.token;
         const userStore = useUserStore();
         const { validateResetPassword, checkTokenValidity } = userStore;
 
@@ -48,8 +46,11 @@ export default defineComponent({
 
         onMounted(async () => {
             try {
-                await checkTokenValidity({ token: userToken });
+                if (userToken) {
+                    await checkTokenValidity({ token: userToken });
+                }
             } catch (err) {
+                router.push({ name: 'invalid-token' });
                 console.error(err);
             }
         });
@@ -68,7 +69,7 @@ export default defineComponent({
                     createToast('Password changed', { type: 'success', position: 'bottom-right' });
                     return router.push({ name: 'login' });
                 } catch (error) {
-                    createToast('Passwords incorrect', { type: 'danger', position: 'bottom-right' });
+                    router.push({ name: 'invalid-token' });
                 }
             }
         };

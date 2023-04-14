@@ -20,6 +20,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { createToast } from 'mosha-vue-toastify';
 
 const form = ref();
 const valid = ref(true);
@@ -34,16 +35,14 @@ async function validate() {
 
     if (valid) {
         try {
-            resetPassword({ email: email.value });
-        } catch (err) {}
+            await resetPassword({ email: email.value });
+            createToast('Check your email to reset your password', { type: "success", position: "bottom-right"});
+        } catch (err) {
+            console.error(err)
+        }
     }
 }
 </script>
 
 <style scoped>
-.custom-link:link,
-.custom-link:visited {
-    color: #424242;
-    text-decoration: none;
-}
 </style>

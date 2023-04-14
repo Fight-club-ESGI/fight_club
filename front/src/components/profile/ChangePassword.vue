@@ -56,11 +56,14 @@ export default defineComponent({
             try {
                 const { valid } = await form.value.validate();
                 if (valid) {
-                    await changePassword();
+                    await changePassword({ password: oldPassword.value, newPassword: newPassword.value });
                     createToast('Password changed', { type: 'success', position: 'bottom-right' });
+                    oldPassword.value = "";
+                    newPassword.value = "";
+                    confirmPassword.value = "";
                 }
-            } catch (error) {
-                createToast('Passwords incorrect', { type: 'danger', position: 'bottom-right' });
+            } catch (err) {
+                createToast("Error while updating password, please try again", { type: 'danger', position: 'bottom-right' });
             }
         };
 

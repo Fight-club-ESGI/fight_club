@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Controller\User\ChangePassword;
 use App\Controller\User\CheckTokenValidityController;
 use Carbon\Carbon;
 use ApiPlatform\Metadata\ApiResource;
@@ -82,8 +83,14 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Get(
             uriTemplate: '/check_token_validity/{token}',
             controller: CheckTokenValidityController::class,
-            name: 'check-token-validity'
-        )
+            read: false,
+            name: 'check-token-validity',
+        ),
+        new Post(
+            uriTemplate: '/change_password',
+            controller: ChangePassword::class,
+            name: 'validate-reset-password'
+        ),
     ]
 )]
 #[Vich\Uploadable]
@@ -334,10 +341,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param Carbon $tokenDate
+     * @param Carbon | null $tokenDate
      * @return self
      */
-    public function setTokenDate(Carbon $tokenDate): self
+    public function setTokenDate(Carbon | null $tokenDate): self
     {
         $this->tokenDate = $tokenDate;
         return $this;
