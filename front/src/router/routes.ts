@@ -10,6 +10,7 @@ import Sponsorship from "@/views/admin/Sponsorship.vue"
 import FightersAdmin from "@/views/admin/Fighters.vue"
 import AdminView from "@/views/admin/AdminView.vue"
 import ProfileView from "@/views/user/Profile.vue";
+import EventDetailsAdmin from "@/views/admin/EventDetails.vue";
 import UserBetsHistory from "@/views/bet/UserBetsHistory.vue";
 import UserTicketsHistory from "@/views/ticketing/UserTicketsHistory.vue";
 import Wallet from "@/components/profile/Wallet.vue";
@@ -61,6 +62,12 @@ export default [
                 path: 'events',
                 component: Event,
                 name: 'event-admin',
+                meta: { requiresAuth: true, requiresAdmin: true }
+            },
+            {
+                path: 'events/:id',
+                component: EventDetailsAdmin,
+                name: 'event-details-admin',
                 meta: { requiresAuth: true, requiresAdmin: true }
             },
             {

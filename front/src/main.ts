@@ -1,3 +1,4 @@
+import { useUserStore } from '@/stores/user'
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
@@ -13,4 +14,11 @@ import 'virtual:windi.css'
 
 // Mosha-toast-vue
 import 'mosha-vue-toastify/dist/style.css'
-createApp(App).use(vuetify).use(createPinia()).use(router).mount('#app')
+
+const pinia = createPinia()
+const app = createApp(App)
+
+app.use(pinia)
+app.use(vuetify)
+app.use(router)
+app.mount('#app')

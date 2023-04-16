@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-column gap-4">
-        <div v-for="event of events" :key="event.id" @click="router.push({ name: 'event-details', params: { id: event.id } })" class="cursor-pointer">
+        <div v-for="event of events" :key="event.id" @click="router.push({ name: admin ? 'event-details-admin' : 'event-details', params: { id: event.id } })" class="cursor-pointer">
             <v-card class="grid grid-cols-5">
                 <div class="col-span-1 pa-5 text-center text-lg m-auto">
                     {{
