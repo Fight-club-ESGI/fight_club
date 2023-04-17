@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -11,9 +12,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            normalizationContext: ['groups' => ['event:get']],
+            denormalizationContext: ['groups' => ['event:post']],
+        )
+    ]
+)]
 class Event
 {
     use EntityIdTrait;
@@ -24,33 +33,73 @@ class Event
     private ?FightCategory $fightCategory = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private ?string $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private ?string $location_link = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private ?\DateTimeInterface $time_start = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private ?\DateTimeInterface $time_end = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private ?int $capacity = null;
 
     #[ORM\Column]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private ?bool $vip = false;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private Collection $tickets;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
+    #[Groups([
+        'event:get',
+        'event:post'
+    ])]
     private Collection $fights;
 
     public function __construct()
