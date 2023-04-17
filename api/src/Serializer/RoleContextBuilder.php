@@ -35,6 +35,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
             }
 
             if (isset($context['groups'])) {
+
                 if ($normalization) {
                     # Normalization part
                     if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
@@ -64,6 +65,12 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                     } else {
 
                     }
+                    $context['groups'][] = 'additional:post';
+                }
+            } else {
+                if ($normalization) {
+                    $context['groups'][] = 'additional:get';
+                } else {
                     $context['groups'][] = 'additional:post';
                 }
             }

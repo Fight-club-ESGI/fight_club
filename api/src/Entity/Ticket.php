@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TicketRepository;
@@ -10,34 +11,71 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            normalizationContext: ['groups' => ['ticket:get']],
+            denormalizationContext: ['groups' => ['ticket:post']],
+            read: false
+        )
+    ]
+)]
 class Ticket
 {
     use EntityIdTrait;
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[Groups([
+        'ticket:get',
+        'ticket:post'
+    ])]
     private ?TicketCategory $ticketCategory = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'ticket:get',
+        'ticket:post'
+    ])]
     private ?Event $event = null;
 
     #[ORM\Column]
+    #[Groups([
+        'ticket:get',
+        'ticket:post'
+    ])]
     private ?float $price = 0;
 
     #[ORM\Column]
+    #[Groups([
+        'ticket:get',
+        'ticket:post'
+    ])]
     private ?bool $availability = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups([
+        'ticket:get',
+        'ticket:post'
+    ])]
     private ?\DateTimeInterface $time_start = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups([
+        'ticket:get',
+        'ticket:post'
+    ])]
     private ?\DateTimeInterface $time_end = null;
 
     #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'tickets')]
+    #[Groups([
+        'ticket:get',
+        'ticket:post'
+    ])]
     private Collection $orders;
 
     public function __construct()
