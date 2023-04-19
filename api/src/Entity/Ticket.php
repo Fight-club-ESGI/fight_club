@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -17,9 +19,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
-            normalizationContext: ['groups' => ['ticket:get']],
             denormalizationContext: ['groups' => ['ticket:post']],
             read: false
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['ticket:get']],
+            security: 'is_granted("ROLE_ADMIN") || object._order.user == user',
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['ticket:get:collection']],
         )
     ]
 )]
@@ -50,6 +58,9 @@ class Ticket
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
     private ?TicketCategory $ticket_category = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $reference = null;
 
     public function getTicketEvent(): ?TicketEvent
     {
@@ -107,6 +118,18 @@ class Ticket
     public function setTicketCategory(?TicketCategory $ticket_category): self
     {
         $this->ticket_category = $ticket_category;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
 
         return $this;
     }

@@ -3,37 +3,59 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Entity\Trait\EntityIdTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TicketEventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TicketEventRepository::class)]
 #[ApiResource(
     operations: [
         new Post(
-            normalizationContext: ['groups' => ['event:get']],
-            denormalizationContext: ['groups' => ['event:post']],
+            denormalizationContext: ['groups' => ['ticket:event:post']],
+            security: 'is_granted("ROLE_ADMIN")',
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['ticket:event:get']],
+
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['ticket:event:get']],
         )
     ]
 )]
 class TicketEvent
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use EntityIdTrait;
+    use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'ticket_events')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'ticket:event:get',
+        'ticket:event:post'
+    ])]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'ticket_events')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'ticket:event:post',
+        'ticket:event:get',
+    ])]
     private ?TicketCategory $ticket_category = null;
 
     #[ORM\Column]
+    #[Groups([
+        'ticket:event:post',
+        'ticket:event:get',
+    ])]
     private ?int $max_quantity = null;
 
     #[ORM\OneToMany(mappedBy: 'ticket_event', targetEntity: Ticket::class)]

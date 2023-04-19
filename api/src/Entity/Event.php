@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -20,6 +22,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             normalizationContext: ['groups' => ['event:get']],
             denormalizationContext: ['groups' => ['event:post']],
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['event:get']],
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['event:get']],
         )
     ]
 )]

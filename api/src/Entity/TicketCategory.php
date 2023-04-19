@@ -3,31 +3,49 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TicketCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TicketCategoryRepository::class)]
 #[ORM\Table(name: '`ticket_category`')]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            denormalizationContext: ['groups' => ['ticket:category:post']],
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['ticket:category:get']],
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['ticket:category:get']],
+        )
+    ]
+)]
 class TicketCategory
 {
     use EntityIdTrait;
     use TimestampableTrait;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'ticket:category:get',
+        'ticket:category:post'
+    ])]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'float')]
-    private ?float $price = 0;
-
-    #[ORM\Column(type: 'integer')]
-    private ?int $max_quantity = 0;
-
     #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: TicketEvent::class)]
+    #[Groups([
+        'ticket:category:get',
+        'ticket:category:post'
+    ])]
     private Collection $ticket_events;
 
     #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: Ticket::class)]
@@ -47,30 +65,6 @@ class TicketCategory
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function getMaxQuantity(): ?int
-    {
-        return $this->max_quantity;
-    }
-
-    public function setMaxQuantity(int $max_quantity): self
-    {
-        $this->max_quantity = $max_quantity;
 
         return $this;
     }
