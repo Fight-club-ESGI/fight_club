@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\Event\EventTickets;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -19,15 +22,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ApiResource(
     operations: [
-        new Post(
-            normalizationContext: ['groups' => ['event:get']],
-            denormalizationContext: ['groups' => ['event:post']],
-        ),
-        new Get(
-            normalizationContext: ['groups' => ['event:get']],
-        ),
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Delete(),
+        new Put(),
         new GetCollection(
-            normalizationContext: ['groups' => ['event:get']],
+            uriTemplate: '/events/{eventId}/tickets',
+            controller: EventTickets::class,
+            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            read: false,
+            name: 'event_tickets'
         )
     ]
 )]
@@ -38,76 +43,47 @@ class Event
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?FightCategory $fightCategory = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $location_link = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?\DateTimeInterface $time_start = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?\DateTimeInterface $time_end = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?int $capacity = null;
 
     #[ORM\Column]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?bool $vip = false;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private Collection $tickets;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
-    #[Groups([
-        'event:get',
-        'event:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private Collection $fights;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: TicketEvent::class)]
@@ -224,36 +200,6 @@ class Event
     public function setVip(bool $vip): self
     {
         $this->vip = $vip;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Ticket>
-     */
-    public function getTickets(): Collection
-    {
-        return $this->tickets;
-    }
-
-    public function addTicket(Ticket $ticket): self
-    {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets->add($ticket);
-            $ticket->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTicket(Ticket $ticket): self
-    {
-        if ($this->tickets->removeElement($ticket)) {
-            // set the owning side to null (unless already changed)
-            if ($ticket->getEvent() === $this) {
-                $ticket->setEvent(null);
-            }
-        }
 
         return $this;
     }

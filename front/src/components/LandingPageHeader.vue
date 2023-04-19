@@ -1,7 +1,9 @@
 <template>
-    <div class="flex items-center align-middle bg-black/20 h-24 fixed w-full text-white px-20">
+    <v-app-bar>
+        <div class="flex items-center align-middle bg-black/80 h-20 fixed w-full text-white px-20 z-5000">
         <div
-            class="h-full w-1/4 bg-cover bg-center"
+            @click="router.push({ name: 'home' })"
+            class="h-full w-1/4 bg-cover bg-center cursor-pointer"
             style="background-image: url('src/assets/Thunderous_knockout__2_-removebg-preview.png');"
         >
         </div>
@@ -22,6 +24,8 @@
             </v-list>
         </div>
     </div>
+    </v-app-bar>
+
 </template>
 <script lang="ts">
 import { storeToRefs } from 'pinia';

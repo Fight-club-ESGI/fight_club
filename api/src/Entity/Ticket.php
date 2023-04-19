@@ -18,16 +18,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 #[ApiResource(
     operations: [
-        new Post(
-            denormalizationContext: ['groups' => ['ticket:post']],
-            read: false
-        ),
         new Get(
-            normalizationContext: ['groups' => ['ticket:get']],
-            security: 'is_granted("ROLE_ADMIN") || object._order.user == user',
+            normalizationContext: ['groups' => ['tickets:get']],
+            read: true
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['ticket:get:collection']],
+            normalizationContext: ['groups' => ['tickets:get']],
+            read: true
+        ),
+        new Post(
+            normalizationContext: ['groups' => ['tickets:get']],
+            read: true
         )
     ]
 )]
@@ -38,28 +39,30 @@ class Ticket
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?TicketEvent $ticket_event = null;
 
     #[ORM\Column]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?Order $_order = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?TicketCategory $ticket_category = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $reference = null;
 
     public function getTicketEvent(): ?TicketEvent

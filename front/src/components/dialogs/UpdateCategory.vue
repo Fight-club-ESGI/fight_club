@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="dialog" max-width="50%">
+        <v-dialog v-model="dialog" max-width="75%">
             <template v-slot:activator="{ props }">
                 <span v-bind="props"> Update </span>
             </template>

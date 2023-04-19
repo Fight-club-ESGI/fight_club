@@ -16,7 +16,7 @@ export default defineComponent({
         const { getEvent } = eventStore;
         const { event } = storeToRefs(eventStore);
 
-        const eventId = computed(() => route.params.id);
+        const eventId = computed(() => route.params.id.toString());
 
         onMounted(async () => {
             try {
