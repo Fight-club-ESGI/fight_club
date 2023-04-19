@@ -21,11 +21,21 @@ class TicketCategory
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'ticketCategory', targetEntity: Ticket::class)]
+    #[ORM\Column(type: 'float')]
+    private ?float $price = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private ?int $max_quantity = 0;
+
+    #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: TicketEvent::class)]
+    private Collection $ticket_events;
+
+    #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: Ticket::class)]
     private Collection $tickets;
 
     public function __construct()
     {
+        $this->ticket_events = new ArrayCollection();
         $this->tickets = new ArrayCollection();
     }
 
@@ -37,6 +47,60 @@ class TicketCategory
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getMaxQuantity(): ?int
+    {
+        return $this->max_quantity;
+    }
+
+    public function setMaxQuantity(int $max_quantity): self
+    {
+        $this->max_quantity = $max_quantity;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TicketEvent>
+     */
+    public function getTicketEvents(): Collection
+    {
+        return $this->ticket_events;
+    }
+
+    public function addTicketEvent(TicketEvent $ticketEvent): self
+    {
+        if (!$this->ticket_events->contains($ticketEvent)) {
+            $this->ticket_events->add($ticketEvent);
+            $ticketEvent->setTicketCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicketEvent(TicketEvent $ticketEvent): self
+    {
+        if ($this->ticket_events->removeElement($ticketEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($ticketEvent->getTicketCategory() === $this) {
+                $ticketEvent->setTicketCategory(null);
+            }
+        }
 
         return $this;
     }

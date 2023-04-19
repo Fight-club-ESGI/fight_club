@@ -29,11 +29,11 @@ class Ticket
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
-    private ?TicketCategory $ticketCategory = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TicketEvent $ticket_event = null;
+
+    #[ORM\Column]
+    private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
@@ -43,66 +43,22 @@ class Ticket
     ])]
     private ?Event $event = null;
 
-    #[ORM\Column]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
-    private ?float $price = 0;
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Order $_order = null;
 
-    #[ORM\Column]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
-    private ?bool $availability = false;
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TicketCategory $ticket_category = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
-    private ?\DateTimeInterface $time_start = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
-    private ?\DateTimeInterface $time_end = null;
-
-    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'tickets')]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
-    private Collection $orders;
-
-    public function __construct()
+    public function getTicketEvent(): ?TicketEvent
     {
-        $this->orders = new ArrayCollection();
+        return $this->ticket_event;
     }
 
-    public function getTicketCategory(): ?TicketCategory
+    public function setTicketEvent(?TicketEvent $ticket_event): self
     {
-        return $this->ticketCategory;
-    }
-
-    public function setTicketCategory(?TicketCategory $ticketCategory): self
-    {
-        $this->ticketCategory = $ticketCategory;
-
-        return $this;
-    }
-
-    public function getEvent(): ?Event
-    {
-        return $this->event;
-    }
-
-    public function setEvent(?Event $event): self
-    {
-        $this->event = $event;
+        $this->ticket_event = $ticket_event;
 
         return $this;
     }
@@ -119,65 +75,38 @@ class Ticket
         return $this;
     }
 
-    public function isAvailability(): ?bool
+    public function getEvent(): ?Event
     {
-        return $this->availability;
+        return $this->event;
     }
 
-    public function setAvailability(bool $availability): self
+    public function setEvent(?Event $event): self
     {
-        $this->availability = $availability;
+        $this->event = $event;
 
         return $this;
     }
 
-    public function getTimeStart(): ?\DateTimeInterface
+    public function getOrder(): ?Order
     {
-        return $this->time_start;
+        return $this->_order;
     }
 
-    public function setTimeStart(\DateTimeInterface $time_start): self
+    public function setOrder(?Order $_order): self
     {
-        $this->time_start = $time_start;
+        $this->_order = $_order;
 
         return $this;
     }
 
-    public function getTimeEnd(): ?\DateTimeInterface
+    public function getTicketCategory(): ?TicketCategory
     {
-        return $this->time_end;
+        return $this->ticket_category;
     }
 
-    public function setTimeEnd(?\DateTimeInterface $time_end): self
+    public function setTicketCategory(?TicketCategory $ticket_category): self
     {
-        $this->time_end = $time_end;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->addTicket($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->removeElement($order)) {
-            $order->removeTicket($this);
-        }
+        $this->ticket_category = $ticket_category;
 
         return $this;
     }
