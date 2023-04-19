@@ -6,13 +6,21 @@ const ticketCategoryNamespace = '/ticket_categories';
 export interface ITicket {
     id: string
     price: number
+    availability: boolean,
     event: string
-    ticketCategory: string | null
+    ticketCategory: ITicketCategory
+}
+
+export interface ICreateTicket {
+    price: number
+    availability: boolean,
+    event: string
+    ticketCategory: string
 }
 
 export interface ITicketCategory {
     id: string
-    name: number
+    name: string
     tickets: ITicket[]
     createdAt: string
     updatedAt: string
@@ -22,7 +30,7 @@ class Ticket {
 
     async _getTickets(eventId: string) {
         try {
-            const uri = `${ticketNamespace}/${eventId}`;
+            const uri = `/events/${eventId}${ticketNamespace}`;
             const res = await client.get(uri);
             return res.data;
         } catch (error) {
@@ -30,9 +38,9 @@ class Ticket {
         }
     }
 
-    async _createTicket(payload: { event: string, price: string, availbility: number, ticketCategory: string }): Promise<ITicket> {
+    async _createTicket(payload: ICreateTicket): Promise<ITicket> {
         try {
-            const uri = `${ticketNamespace}/${payload.event}`;
+            const uri = `${ticketNamespace}`;
             const res = await client.post(uri, payload);
             return res.data;
         } catch (error) {

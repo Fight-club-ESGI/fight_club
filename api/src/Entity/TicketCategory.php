@@ -9,6 +9,7 @@ use App\Repository\TicketCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TicketCategoryRepository::class)]
 #[ORM\Table(name: '`ticket_category`')]
@@ -19,6 +20,7 @@ class TicketCategory
     use TimestampableTrait;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'ticketCategory', targetEntity: Ticket::class)]

@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\Event\EventTickets;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -11,9 +17,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Delete(),
+        new Put(),
+        new GetCollection(
+            uriTemplate: '/events/{eventId}/tickets',
+            controller: EventTickets::class,
+            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            read: false,
+            name: 'event_tickets'
+        )
+    ]
+)]
 class Event
 {
     use EntityIdTrait;
@@ -21,30 +43,39 @@ class Event
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?FightCategory $fightCategory = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $location_link = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?\DateTimeInterface $time_start = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?\DateTimeInterface $time_end = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?int $capacity = null;
 
     #[ORM\Column]
+    #[Groups(['admin:get', 'tickets:get'])]
     private ?bool $vip = false;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
