@@ -58,13 +58,21 @@ class OrderController extends AbstractController
 
         // Créer les tickets et les ajouter à la commande
         for ($i = 0; $i < $quantity; $i++) {
-            $ticket = new Ticket();
-            $ticket->setTicketEvent($ticketEvent);
-            $ticket->setPrice($ticketEvent->getPrice());
-            $ticket->setEvent($ticketEvent->getEvent());
-            $ticket->setTicketCategory($ticketEvent->getTicketCategory());
-            $ticket->setOrder($order);
-            $ticket->setReference(sprintf('%s-%s-%s-%s', $eventId, $ticketCategoryId, date('Ymd'), bin2hex(random_bytes(3))));
+            $ticket = (new Ticket())
+                ->setTicketEvent($ticketEvent)
+                ->setPrice($ticketEvent->getPrice())
+                ->setEvent($ticketEvent->getEvent())
+                ->setTicketCategory($ticketEvent->getTicketCategory())
+                ->setOrder($order)
+                ->setReference(
+                    sprintf(
+                        '%s-%s-%s-%s',
+                        $eventId,
+                        $ticketCategoryId,
+                        date('Ymd'),
+                        bin2hex(random_bytes(3))
+                    )
+                );
 
             $order->addTicket($ticket);
         }
