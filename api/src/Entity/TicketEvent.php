@@ -51,6 +51,7 @@ class TicketEvent
     ])]
     private ?TicketCategory $ticket_category = null;
 
+
     #[ORM\Column]
     #[Groups([
         'ticket:event:post',

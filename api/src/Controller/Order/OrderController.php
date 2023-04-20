@@ -17,20 +17,14 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class OrderController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private TicketEventRepository $ticketEventRepository;
-    private Security $security;
 
-    public function __construct(EntityManagerInterface $entityManager, TicketEventRepository $ticketEventRepository, Security $security)
-    {
-        $this->entityManager = $entityManager;
-        $this->ticketEventRepository = $ticketEventRepository;
-        $this->security = $security;
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TicketEventRepository $ticketEventRepository,
+        private readonly Security $security
+    ) {
     }
 
-    /**
-     * @Route("/orders/create", methods={"POST"})
-     */
     public function __invoke(Request $request): Response
     {
         $eventId = $request->get('event_id');
@@ -64,15 +58,7 @@ class OrderController extends AbstractController
                 ->setEvent($ticketEvent->getEvent())
                 ->setTicketCategory($ticketEvent->getTicketCategory())
                 ->setOrder($order)
-                ->setReference(
-                    sprintf(
-                        '%s-%s-%s-%s',
-                        $eventId,
-                        $ticketCategoryId,
-                        date('Ymd'),
-                        bin2hex(random_bytes(3))
-                    )
-                );
+                ->setReference();
 
             $order->addTicket($ticket);
         }

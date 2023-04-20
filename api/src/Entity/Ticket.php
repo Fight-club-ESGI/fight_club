@@ -130,9 +130,13 @@ class Ticket
         return $this->reference;
     }
 
-    public function setReference(string $reference): self
+    public function setReference(string|null $reference = null): self
     {
-        $this->reference = $reference;
+        if (is_null($this->reference) && is_null($reference)) {
+            $this->reference = sprintf('T-%s-%s', date('Ymd'), bin2hex(random_bytes(3)));
+        } else {
+            $this->reference = $reference;
+        }
 
         return $this;
     }
