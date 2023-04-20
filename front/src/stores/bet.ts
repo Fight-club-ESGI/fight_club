@@ -1,12 +1,15 @@
 import { defineStore } from "pinia";
-import { FightBetI } from "../interfaces/payload";
+import { FightBetI, CurrentBetI } from "../interfaces/payload";
 import { ref } from "vue";
 import { betService } from "../service/api";
+import { setCurrentBetToLocalStorage, getCurrentBetFromLocalStorage } from "../service/bets";
 
 export const useBetStore = defineStore('bet', () => {
 
     const bet = ref<FightBetI>();
     const bets = ref<FightBetI[]>([]);
+
+    const currentBet = ref<any[]>(getCurrentBetFromLocalStorage());
 
     async function betWallet(payload: { fight: string, betOn: string, amount: number }) {
         try {
@@ -20,6 +23,16 @@ export const useBetStore = defineStore('bet', () => {
     async function betDirect(payload: { fight: string, betOn: string, amount: number }) {
         try {
             const res = await betService._betDirect(payload);
+            return res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function setCurrentBet(currentBets: CurrentBetI[]) {
+        try {
+            const res = setCurrentBetToLocalStorage(currentBets);
+            currentBet.value = currentBets;
             return res;
         } catch (error) {
             throw error;
@@ -53,5 +66,5 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    return { betWallet, betDirect, createBet, getBet, getBets, bet, bets }
+    return { betWallet, betDirect, setCurrentBet, createBet, getBet, getBets, bet, bets, currentBet }
 });

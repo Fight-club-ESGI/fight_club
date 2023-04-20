@@ -7,6 +7,32 @@
         "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
         "capacity": 24,
         "category": "LightWeight",
+        "fight": {
+            "fighterA": {
+                "id": "fighter1",
+                "firstname": "Mike",
+                "lastname": "Tyson",
+                "height": 180,
+                "weight": 95,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "10/10/1975"
+            },
+            "fighterB": {
+                "id": "fighter2",
+                "firstname": "James",
+                "lastname": "Harden",
+                "height": 200,
+                "weight": 94,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "05/05/1975"
+            },
+            "ratingFighterA": 1.2,
+            "ratingFighterB": 8,
+            "ratingNullMatch" : 22,
+            "eventId": "string"
+        },
         "locationLink": "string",
         "startTimestamp": "2023-02-02T20:48:58.103Z",
         "endTimestamp": "2023-02-02T20:48:58.103Z",
@@ -20,6 +46,32 @@
         "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
         "capacity": 24,
         "category": "LightWeight",
+        "fight": {
+            "fighterA": {
+                "id": "fighter1",
+                "firstname": "Mike",
+                "lastname": "Tyson",
+                "height": 180,
+                "weight": 95,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "10/10/1975"
+            },
+            "fighterB": {
+                "id": "fighter2",
+                "firstname": "James",
+                "lastname": "Harden",
+                "height": 200,
+                "weight": 94,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "05/05/1975"
+            },
+            "ratingFighterA": 1.2,
+            "ratingFighterB": 8,
+            "ratingNullMatch" : 22,
+            "eventId": "string"
+        },
         "locationLink": "string",
         "startTimestamp": "2023-02-02T20:48:58.103Z",
         "endTimestamp": "2023-02-02T20:48:58.103Z",
@@ -33,6 +85,32 @@
         "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
         "capacity": 24,
         "category": "LightWeight",
+        "fight": {
+            "fighterA": {
+                "id": "fighter1",
+                "firstname": "Mike",
+                "lastname": "Tyson",
+                "height": 180,
+                "weight": 95,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "10/10/1975"
+            },
+            "fighterB": {
+                "id": "fighter2",
+                "firstname": "James",
+                "lastname": "Harden",
+                "height": 200,
+                "weight": 94,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "05/05/1975"
+            },
+            "ratingFighterA": 1.2,
+            "ratingFighterB": 8,
+            "ratingNullMatch" : 22,
+            "eventId": "string"
+        },
         "locationLink": "string",
         "startTimestamp": "2023-02-02T20:48:58.103Z",
         "endTimestamp": "2023-02-02T20:48:58.103Z",
@@ -46,6 +124,32 @@
         "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
         "capacity": 24,
         "category": "LightWeight",
+        "fight": {
+            "fighterA": {
+                "id": "fighter1",
+                "firstname": "Mike",
+                "lastname": "Tyson",
+                "height": 180,
+                "weight": 95,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "10/10/1975"
+            },
+            "fighterB": {
+                "id": "fighter2",
+                "firstname": "James",
+                "lastname": "Harden",
+                "height": 200,
+                "weight": 94,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "05/05/1975"
+            },
+            "ratingFighterA": 1.2,
+            "ratingFighterB": 8,
+            "ratingNullMatch" : 22,
+            "eventId": "string"
+        },
         "locationLink": "string",
         "startTimestamp": "2023-02-02T20:48:58.103Z",
         "endTimestamp": "2023-02-02T20:48:58.103Z",
@@ -59,9 +163,74 @@
         "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
         "capacity": 24,
         "category": "LightWeight",
+        "fight": {
+            "fighterA": {
+                "id": "fighter1",
+                "firstname": "Mike",
+                "lastname": "Tyson",
+                "height": 180,
+                "weight": 95,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "10/10/1975"
+            },
+            "fighterB": {
+                "id": "fighter2",
+                "firstname": "James",
+                "lastname": "Harden",
+                "height": 200,
+                "weight": 94,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "05/05/1975"
+            },
+            "ratingFighterA": 1.2,
+            "ratingFighterB": 8,
+            "ratingNullMatch" : 22,
+            "eventId": "string"
+        },
         "locationLink": "string",
         "startTimestamp": "2023-02-02T20:48:58.103Z",
         "endTimestamp": "2023-02-02T20:48:58.103Z",
-        "VIP": true
+        "VIP": false
+    },
+    {
+        "id": "6",
+        "name": "Street Fight",
+        "location": "Avenue de la pensée",
+        "description": "Soon, you'll see what hell is like",
+        "image": "https://images.unsplash.com/photo-1525711857929-4272fb4a040f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+        "capacity": 24,
+        "category": "LightWeight",
+        "fight": {
+            "fighterA": {
+                "id": "fighter1",
+                "firstname": "Mike",
+                "lastname": "Tyson",
+                "height": 180,
+                "weight": 95,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "10/10/1975"
+            },
+            "fighterB": {
+                "id": "fighter2",
+                "firstname": "James",
+                "lastname": "Harden",
+                "height": 200,
+                "weight": 94,
+                "nationality": "american",
+                "gender": "male",
+                "birthdate": "05/05/1975"
+            },
+            "ratingFighterA": 1.2,
+            "ratingFighterB": 8,
+            "ratingNullMatch" : 22,
+            "eventId": "string"
+        },
+        "locationLink": "string",
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "VIP": false
     }
 ]

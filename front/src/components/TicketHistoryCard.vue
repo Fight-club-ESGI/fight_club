@@ -10,7 +10,7 @@
                 </div>
                 <v-row no-gutters justify="space-between">
                     <div class="my-1">Seat {{ ticket.placeSeat }} - {{ ticket.category }}</div>
-                    <div class="my-1 text-right font-weight-bold">{{ formatMoney(ticket.price) }} €</div>
+                    <div class="my-1 text-right font-weight-bold">{{ formatMoneyOrRating(ticket.price) }} €</div>
                 </v-row>
             </v-col>
         </v-row>
@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { formatMoney } from '@/service/helpers';
+import { formatMoneyOrRating } from '@/service/helpers';
 defineProps({
     ticket: {
         type: Object,

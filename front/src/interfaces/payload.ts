@@ -49,10 +49,15 @@ export interface EventI {
 export interface FightI {
 	fighterA: FighterI
 	fighterB: FighterI
+	ratingFighterA: number
+	ratingFighterB: number
+	ratingNullMatch : number
 	eventId: string
-	winner: FighterI
-	looser: FighterI
+	winner?: FighterI
+	looser?: FighterI
+	null? : null
 }
+
 
 export interface FightBetI {
 	id?: string
@@ -67,4 +72,10 @@ export interface SponsorshipI {
 	sponsored: string
 	emailValidation: boolean
 	sponsorValidation: boolean
+}
+
+export interface CurrentBetI {
+	event: EventI
+	expectedWinner: string
+	amount: number
 }

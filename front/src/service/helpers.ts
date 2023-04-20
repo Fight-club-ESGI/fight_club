@@ -1,3 +1,3 @@
-export function formatMoney(price:number): string {
+export function formatMoneyOrRating(price:number): string {
     return price.toFixed(2).replace('.', ',');
 }

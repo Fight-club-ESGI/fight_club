@@ -33,8 +33,8 @@
                     <p class="my-2">Possible gains</p>
                 </v-col>
                 <v-col cols="2">
-                    <p class="my-2 text-center">{{ formatMoney(bet.betAmount) }} €</p>
-                    <p class="my-2 text-center font-weight-bold text-xl">{{ formatMoney(bet.possibleGain) }} €</p>
+                    <p class="my-2 text-center">{{ formatMoneyOrRating(bet.betAmount) }} €</p>
+                    <p class="my-2 text-center font-weight-bold text-xl">{{ formatMoneyOrRating(bet.possibleGain) }} €</p>
                 </v-col>
             </v-row>
         </div>
@@ -60,10 +60,12 @@
                     <p v-if="bet.status === 'won'" class="my-2">Gains</p>
                 </v-col>
                 <v-col cols="2">
-                    <p class="my-2 text-center">{{ formatMoney(bet.betAmount) }} €</p>
-                    <p v-if="bet.status === 'finished'" class="my-2 text-center font-weight-bold text-xl">{{ formatMoney(bet.possibleGain) }} €</p>
+                    <p class="my-2 text-center">{{ formatMoneyOrRating(bet.betAmount) }} €</p>
+                    <p v-if="bet.status === 'finished'" class="my-2 text-center font-weight-bold text-xl">
+                        {{ formatMoneyOrRating(bet.possibleGain) }} €
+                    </p>
                     <p v-if="bet.status === 'won'" class="my-2 text-center font-weight-bold text-xl">
-                        {{ formatMoney(bet.betAmount + bet.possibleGain) }} €
+                        {{ formatMoneyOrRating(bet.betAmount + bet.possibleGain) }} €
                     </p>
                 </v-col>
                 <v-col cols="2 offset-10">
@@ -79,7 +81,7 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { formatMoney } from '@/service/helpers';
+import { formatMoneyOrRating } from '@/service/helpers';
 defineProps({
     bet: {
         type: Object,
