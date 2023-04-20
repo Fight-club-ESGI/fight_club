@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Controller\Wallet\WalletDepositCheckoutConfirmation;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -24,6 +25,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('ROLE_USER')",
             name: 'wallet_transaction_confirmation'
         ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['wallet_transaction:get_collection']],
+        ),
     ]
 )]
 class WalletTransaction
@@ -35,11 +39,21 @@ class WalletTransaction
     private ?Wallet $wallet = null;
 
     #[ORM\Column]
-    #[Groups(['user:self', 'admin:get', 'wallet_transaction:get'])]
+    #[Groups([
+        'user:self',
+        'admin:get',
+        'wallet_transaction:get',
+        'wallet_transaction:get_collection'
+    ])]
     private ?int $amount = null;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionStatusEnum::class)]
-    #[Groups(['user:self', 'admin:get', 'wallet_transaction:get'])]
+    #[Groups([
+        'user:self',
+        'admin:get',
+        'wallet_transaction:get',
+        'wallet_transaction:get_collection',
+    ])]
     private ?WalletTransactionStatusEnum $status = WalletTransactionStatusEnum::PENDING;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionTypeEnum::class)]
