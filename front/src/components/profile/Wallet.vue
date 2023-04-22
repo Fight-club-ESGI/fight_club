@@ -1,8 +1,9 @@
 <template>
     <div class="flex h-full space-x-5 p-10">
-        <v-card class="pa-10 w-1/4 rounded" >
-            <div class="text-center">
-                <div class="text-3xl mb-6">{{ user.wallet.amount }} €</div>
+        <div class="flex flex-col w-1/4 rounded space-y-5" >
+            <div class="text-center bg-neutral-100 p-10 rounded">
+                <div class="font-bold text-2xl">Your wallet funds</div>
+                <div class="font-bold text-3xl p-6">{{ user.wallet.amount }} €</div>
             </div>
             <div>
                 <v-text-field type="number" v-model.number="wallet_input_amount" />
@@ -15,17 +16,17 @@
                     <v-btn block class="ml-2" @click="wallet_deposit()"> Deposit </v-btn>
                 </div>
             </div>
-        </v-card>
-        <v-card class="pa-5 w-3/4 rounded">
+        </div>
+        <div class="pa-5 w-3/4 rounded bg-neutral-100">
             <div class="text-2xl font-bold">Transaction history</div>
-            <v-card class="pa-5 mt-12" v-for="transaction in walletHistoryData">
+            <v-card class="pa-5 mt-12" v-for="transaction in walletTransactionHistory">
                 {{ transaction.id }}
                 {{ transaction.createdAt }}
                 {{ transaction.updatedAt }}
                 {{ transaction.amount }}
                 {{ transaction.status }}
             </v-card>
-        </v-card>
+        </div>
     </div>
 </template>
 
@@ -45,7 +46,7 @@ const { deposit, withdraw, wallet } = walletStore;
 const walletTransactionStore = useWalletTransactionStore();
 
 const { getWalletTransactionHistory } = walletTransactionStore
-const { walletHistoryData } = storeToRefs(walletTransactionStore);
+const { walletTransactionHistory } = storeToRefs(walletTransactionStore);
 
 const { user } = storeToRefs(useUserStore());
 const wallet_deposit = async () => {
