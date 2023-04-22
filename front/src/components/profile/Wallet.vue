@@ -10,10 +10,10 @@
             </div>
             <div class="flex">
                 <div class="w-1/2">
-                    <v-btn block color="secondary" class="mr-2" @click="wallet_withdraw()"> Withdraw </v-btn>
+                    <v-btn block color="secondary" class="mr-2" @click="wallet_withdraw()">Withdraw</v-btn>
                 </div>
                 <div class="w-1/2">
-                    <v-btn block class="ml-2" @click="wallet_deposit()"> Deposit </v-btn>
+                    <v-btn block class="ml-2" @click="wallet_deposit()">Deposit</v-btn>
                 </div>
             </div>
         </div>
