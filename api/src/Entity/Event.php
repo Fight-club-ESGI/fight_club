@@ -23,8 +23,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(),
-        new GetCollection(),
-        new Post(),
+        new GetCollection(
+            normalizationContext: ['groups' => ['events:get']],
+        ),
+        new Post(
+            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            denormalizationContext: ['groups' => ['tickets:post']],
+            security: 'is_granted("ROLE_ADMIN")',
+        ),
         new Delete(),
         new Put(),
         new GetCollection(
@@ -43,39 +49,39 @@ class Event
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'events:get'])]
     private ?FightCategory $fightCategory = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
     private ?string $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
     private ?string $location_link = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
     private ?\DateTimeInterface $time_start = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
     private ?\DateTimeInterface $time_end = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
     private ?int $capacity = null;
 
     #[ORM\Column]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
     private ?bool $vip = false;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
@@ -87,6 +93,7 @@ class Event
     private Collection $fights;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: TicketEvent::class)]
+    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post', 'events:get'])]
     private Collection $ticket_events;
 
     public function __construct()

@@ -19,7 +19,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
+            normalizationContext: ['groups' => ['ticket:category:get']],
             denormalizationContext: ['groups' => ['ticket:category:post']],
+            security: 'is_granted("ROLE_ADMIN")',
         ),
         new Get(
             normalizationContext: ['groups' => ['ticket:category:get']],
@@ -35,11 +37,11 @@ class TicketCategory
     use TimestampableTrait;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: TicketEvent::class)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post'])]
     private Collection $ticket_events;
 
     #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: Ticket::class)]
