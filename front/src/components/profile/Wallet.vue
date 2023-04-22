@@ -35,18 +35,22 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { useWalletStore } from '@/stores/wallet';
 import { createToast } from 'mosha-vue-toastify';
 import { useUserStore } from '@/stores/user';
+import {useWalletTransactionStore} from "@/stores/walletTransaction";
 
 const wallet_amount = ref(0);
 const wallet_input_amount = ref('0');
 const walletStore = useWalletStore();
-const { walletHistory, deposit, withdraw, wallet } = walletStore;
-const { walletHistoryData } = storeToRefs(walletStore);
+const { deposit, withdraw, wallet } = walletStore;
+
+const walletTransactionStore = useWalletTransactionStore();
+
+const { getWalletTransactionHistory } = walletTransactionStore
+const { walletHistoryData } = storeToRefs(walletTransactionStore);
 
 const { user } = storeToRefs(useUserStore());
 const wallet_deposit = async () => {
     try {
-        let url = await deposit(wallet_input_amount.value);
-        window.location.href = url;
+        window.location.href = await deposit(wallet_input_amount.value);
         createToast('Deposit success', { position: 'bottom-right', type: 'success' });
     } catch (e) {
         createToast('Error during deposit', { position: 'bottom-right', type: 'danger' });
@@ -67,7 +71,7 @@ const wallet_withdraw = async () => {
 
 onMounted(async () => {
     try {
-        await walletHistory();
+        await getWalletTransactionHistory();
     } catch (e) {}
 });
 </script>

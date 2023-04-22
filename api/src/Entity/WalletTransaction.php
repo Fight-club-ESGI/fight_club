@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(
-            uriTemplate: "/wallet_transaction/{id}/confirmation",
+            uriTemplate: "/wallet_transactions/{id}/confirmation",
             controller: WalletDepositCheckoutConfirmation::class,
             normalizationContext: ['groups' => ['wallet_transaction:get']],
             security: "is_granted('ROLE_USER')",

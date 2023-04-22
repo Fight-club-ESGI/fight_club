@@ -25,7 +25,9 @@ class WalletDepositCheckoutConfirmation extends AbstractController
 
     public function __invoke(Request $request, WalletTransaction $wallet_transaction): WalletTransaction
     {
+
         $this->checkout->confirmation($wallet_transaction);
+
         return $wallet_transaction;
     }
 }

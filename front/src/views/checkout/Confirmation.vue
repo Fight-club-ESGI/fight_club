@@ -1,22 +1,77 @@
 <template>
-    <div>
-        <div>
+    <div class="flex flex-column h-full place-content-center items-center">
+        <div
+            v-if="walletTransaction.status === 'success'"
+            class="flex flex-col text-center items-center"
+        >
+            <Icon
+                size="200"
+                icon="emojione:white-heavy-check-mark"
+            />
+            <p
+                class="text-3xl"
+            >
+                Payment approved
+            </p>
+        </div>
+        <div
+            v-else-if="walletTransaction.status === 'rejected'"
+            class="flex flex-col text-center items-center"
+        >
+            <Icon
+                height="200"
+                icon="emojione:no-entry"
+            />
+            <p class="text-3xl font-bold p-4">Payment rejected</p>
+        </div>
+        <div
+            v-else-if="walletTransaction.status === 'cancelled'"
+            class="flex flex-col text-center items-center"
+        >
+            <Icon
+                height="200"
+                icon="emojione:no-entry"
+            />
+            Payment cancelled
+        </div>
+        <div
+            v-else-if="walletTransaction.status === 'pending'"
+            class="flex flex-col text-center items-center"
+        >
+            <Icon
+                height="200"
+                icon="emojione:three-thirty"
+            />
+
             Payment pending
         </div>
         <div>
-            Payment approved
-        </div>
-        <div>
-            Payment rejected
-        </div>
-        <div>
-            Payment cancelled
-        </div>
-        <div>
-            Back to ....
+            <v-btn
+                :to="{ name: 'user-wallet' }"
+            >
+                Back to wallet
+            </v-btn>
         </div>
     </div>
 </template>
+
+<script setup>
+import {useRoute} from "vue-router";
+import {storeToRefs} from "pinia";
+import {useWalletTransactionStore} from "@/stores/walletTransaction";
+import {Icon} from "@iconify/vue/dist/iconify.js";
+
+const walletTransactionStore = useWalletTransactionStore();
+
+const route = useRoute();
+
+const { transactionConfirmation } = walletTransactionStore;
+const { walletTransaction } = storeToRefs(walletTransactionStore);
+
+transactionConfirmation(route.query['transaction_id'])
+
+console.log()
+</script>
 
 <style scoped>
 .custom-font {
