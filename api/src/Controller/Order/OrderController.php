@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Order;
 
 use App\Entity\Event;
 use App\Entity\Order;

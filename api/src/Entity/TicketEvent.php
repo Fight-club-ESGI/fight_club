@@ -18,12 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
+            normalizationContext: ['groups' => ['ticket:event:get']],
             denormalizationContext: ['groups' => ['ticket:event:post']],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Get(
             normalizationContext: ['groups' => ['ticket:event:get']],
-
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['ticket:event:get']],
@@ -47,10 +47,9 @@ class TicketEvent
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'ticket:event:post',
-        'ticket:event:get',
+        'ticket:event:get'
     ])]
     private ?TicketCategory $ticket_category = null;
-
 
     #[ORM\Column]
     #[Groups([
@@ -63,6 +62,10 @@ class TicketEvent
     private Collection $tickets;
 
     #[ORM\Column]
+    #[Groups([
+        'ticket:event:post',
+        'ticket:event:get',
+    ])]
     private ?float $price = null;
 
     public function __construct()
