@@ -3,29 +3,53 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TicketCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TicketCategoryRepository::class)]
 #[ORM\Table(name: '`ticket_category`')]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            normalizationContext: ['groups' => ['ticket:category:get']],
+            denormalizationContext: ['groups' => ['ticket:category:post']],
+            security: 'is_granted("ROLE_ADMIN")',
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['ticket:category:get']],
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['ticket:category:get']],
+        )
+    ]
+)]
 class TicketCategory
 {
     use EntityIdTrait;
     use TimestampableTrait;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post'])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'ticketCategory', targetEntity: Ticket::class)]
+    #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: TicketEvent::class)]
+    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post'])]
+    private Collection $ticket_events;
+
+    #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: Ticket::class)]
     private Collection $tickets;
 
     public function __construct()
     {
+        $this->ticket_events = new ArrayCollection();
         $this->tickets = new ArrayCollection();
     }
 
@@ -37,6 +61,36 @@ class TicketCategory
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TicketEvent>
+     */
+    public function getTicketEvents(): Collection
+    {
+        return $this->ticket_events;
+    }
+
+    public function addTicketEvent(TicketEvent $ticketEvent): self
+    {
+        if (!$this->ticket_events->contains($ticketEvent)) {
+            $this->ticket_events->add($ticketEvent);
+            $ticketEvent->setTicketCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicketEvent(TicketEvent $ticketEvent): self
+    {
+        if ($this->ticket_events->removeElement($ticketEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($ticketEvent->getTicketCategory() === $this) {
+                $ticketEvent->setTicketCategory(null);
+            }
+        }
 
         return $this;
     }

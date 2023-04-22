@@ -8,8 +8,8 @@ const router = createRouter({
     routes
 });
 
-router.beforeResolve((to, from, next) => {
-    const userStore = useUserStore();
+router.beforeResolve(async (to, from, next) => {
+    const userStore = await useUserStore();
     const { isAdmin, isConnected } = storeToRefs(userStore);
 
     if (to?.meta?.requiresAuth) {
