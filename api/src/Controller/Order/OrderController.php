@@ -2,17 +2,13 @@
 
 namespace App\Controller\Order;
 
-use App\Entity\Event;
 use App\Entity\Order;
 use App\Entity\Ticket;
-use App\Entity\TicketCategory;
-use App\Entity\TicketEvent;
 use App\Repository\TicketEventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class OrderController extends AbstractController

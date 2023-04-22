@@ -34,8 +34,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete(),
         new Put(),
         new GetCollection(
-            uriTemplate: '/events/{eventId}/tickets',
-            controller: EventTickets::class,
             normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
             read: false,
             name: 'event_tickets'
