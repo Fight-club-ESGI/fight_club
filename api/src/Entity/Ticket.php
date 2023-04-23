@@ -74,7 +74,7 @@ class Ticket
         'admin:get',
         'tickets:get'
     ])]
-    private ?TicketCategory $ticket_category = null;
+    private ?TicketCategory $ticketCategory = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
@@ -133,12 +133,12 @@ class Ticket
 
     public function getTicketCategory(): ?TicketCategory
     {
-        return $this->ticket_category;
+        return $this->ticketCategory;
     }
 
-    public function setTicketCategory(?TicketCategory $ticket_category): self
+    public function setTicketCategory(?TicketCategory $ticketCategory): self
     {
-        $this->ticket_category = $ticket_category;
+        $this->ticketCategory = $ticketCategory;
 
         return $this;
     }
