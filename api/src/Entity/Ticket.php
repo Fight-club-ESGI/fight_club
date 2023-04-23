@@ -39,30 +39,48 @@ class Ticket
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
     private ?TicketEvent $ticket_event = null;
 
     #[ORM\Column]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
     private ?Order $_order = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['admin:get', 'tickets:get'])]
-    private ?TicketCategory $ticket_category = null;
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
+    private ?TicketCategory $ticketCategory = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
     private ?string $reference = null;
 
     public function getTicketEvent(): ?TicketEvent
@@ -115,12 +133,12 @@ class Ticket
 
     public function getTicketCategory(): ?TicketCategory
     {
-        return $this->ticket_category;
+        return $this->ticketCategory;
     }
 
-    public function setTicketCategory(?TicketCategory $ticket_category): self
+    public function setTicketCategory(?TicketCategory $ticketCategory): self
     {
-        $this->ticket_category = $ticket_category;
+        $this->ticketCategory = $ticketCategory;
 
         return $this;
     }

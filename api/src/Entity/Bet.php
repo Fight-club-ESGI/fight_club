@@ -11,13 +11,21 @@ use App\Entity\Trait\TimestampableTrait;
 use App\Enum\Bet\BetStatusEnum;
 use App\Repository\BetRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BetRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(),
+        new Get(
+            normalizationContext: ['groups' => ['bet:get']]
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => []]
+        ),
+        new Post(
+            normalizationContext: ['groups' => ['bet:get']],
+            denormalizationContext: ['groups' => ['bet:post']]
+        ),
     ]
 )]
 class Bet
@@ -27,20 +35,40 @@ class Bet
 
     #[ORM\ManyToOne(inversedBy: 'bets')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'bet:get',
+    ])]
     private ?Fight $fight = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'bet:get',
+    ])]
     private ?User $betOn = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'bet:get',
+    ])]
     private ?User $bettor = null;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'bet:get',
+    ])]
     private ?float $amount = 0.00;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'admin:get',
+        'bet:get',
+    ])]
     private ?BetStatusEnum $status = BetStatusEnum::PENDING;
 
     public function getFight(): ?Fight

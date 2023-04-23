@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -11,10 +12,19 @@ use App\Repository\FighterRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: FighterRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            normalizationContext: ["groups" => []],
+            denormalizationContext: ["groups" => []],
+            security: "is_granted('ROLE_ADMIN')"
+        )
+    ]
+)]
 #[Vich\Uploadable]
 class Fighter
 {
@@ -23,30 +33,65 @@ class Fighter
     use TimestampableTrait;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?string $lastname = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?int $height = null;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?int $weight = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?string $nationality = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?FighterGenderEnum $gender = FighterGenderEnum::FEMALE;
 
     #[ORM\ManyToOne(inversedBy: 'fighters')]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?FightCategory $fightCategory = null;
 
     #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
+    #[Groups([
+        'admin:get',
+    ])]
     private Collection $fights;
 
     public function getFirstname(): ?string

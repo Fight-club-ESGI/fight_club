@@ -18,8 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
-            normalizationContext: ['groups' => ['ticket:event:get']],
-            denormalizationContext: ['groups' => ['ticket:event:post']],
+            normalizationContext: ['groups' => []],
+            denormalizationContext: ['groups' => []],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Get(
@@ -35,34 +35,45 @@ class TicketEvent
     use EntityIdTrait;
     use TimestampableTrait;
 
-    #[ORM\ManyToOne(inversedBy: 'ticket_events')]
+    #[ORM\ManyToOne(inversedBy: 'ticketEvents')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'admin:get',
+        'admin:post',
         'ticket:event:get',
         'ticket:event:post'
     ])]
     private ?Event $event = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ticket_events')]
+    #[ORM\ManyToOne(inversedBy: 'ticketEvents')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'admin:get',
+        'admin:post',
         'ticket:event:post',
         'ticket:event:get'
     ])]
-    private ?TicketCategory $ticket_category = null;
+    private ?TicketCategory $ticketCategory = null;
 
     #[ORM\Column]
     #[Groups([
+        'admin:get',
+        'admin:post',
         'ticket:event:post',
         'ticket:event:get',
     ])]
-    private ?int $max_quantity = null;
+    private ?int $maxQuantity = null;
 
     #[ORM\OneToMany(mappedBy: 'ticket_event', targetEntity: Ticket::class)]
+    #[Groups([
+        'admin:get',
+    ])]
     private Collection $tickets;
 
     #[ORM\Column]
     #[Groups([
+        'admin:get',
+        'admin:post',
         'ticket:event:post',
         'ticket:event:get',
     ])]
@@ -87,24 +98,24 @@ class TicketEvent
 
     public function getTicketCategory(): ?TicketCategory
     {
-        return $this->ticket_category;
+        return $this->ticketCategory;
     }
 
-    public function setTicketCategory(?TicketCategory $ticket_category): self
+    public function setTicketCategory(?TicketCategory $ticketCategory): self
     {
-        $this->ticket_category = $ticket_category;
+        $this->ticketCategory = $ticketCategory;
 
         return $this;
     }
 
     public function getMaxQuantity(): ?int
     {
-        return $this->max_quantity;
+        return $this->maxQuantity;
     }
 
-    public function setMaxQuantity(int $max_quantity): self
+    public function setMaxQuantity(int $maxQuantity): self
     {
-        $this->max_quantity = $max_quantity;
+        $this->maxQuantity = $maxQuantity;
 
         return $this;
     }

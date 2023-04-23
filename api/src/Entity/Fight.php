@@ -3,15 +3,23 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FightRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            security: "is_granted('ROLE_ADMIN')"
+        )
+    ]
+)]
 class Fight
 {
     use EntityIdTrait;
@@ -19,32 +27,65 @@ class Fight
 
     #[ORM\ManyToOne(inversedBy: 'fights')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'fighterA')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
     private ?Fighter $fighterA = null;
 
     #[ORM\ManyToOne(inversedBy: 'fighterB')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
     private ?Fighter $fighterB = null;
 
     #[ORM\ManyToOne(inversedBy: 'winners')]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
     private ?Fighter $winner = null;
 
     #[ORM\ManyToOne(inversedBy: 'losers')]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
     private ?Fighter $loser = null;
 
     #[ORM\Column(options: ['default' => false])]
+    #[Groups([
+        'admin:get',
+    ])]
     private ?bool $winnerValidation = false;
 
     #[ORM\ManyToOne]
+    #[Groups([
+        'admin:get',
+    ])]
     private ?User $adminValidatorA = null;
 
     #[ORM\ManyToOne]
+    #[Groups([
+        'admin:get',
+    ])]
     private ?User $adminValidatorB = null;
 
     #[ORM\OneToMany(mappedBy: 'fight', targetEntity: Bet::class)]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
     private Collection $bets;
 
     public function __construct()

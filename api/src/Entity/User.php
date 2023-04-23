@@ -45,6 +45,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                 'multipart' => ['multipart/form-data'],
                 'json' => ['application/json']
             ],
+            normalizationContext: ['groups' => ['user:get']],
+            denormalizationContext: ['groups' => ['user:post']],
             processor: UserPasswordHasher::class,
         ),
         new Get(
@@ -121,7 +123,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['admin:get'])]
+    #[Groups([
+        'admin:get',
+        'user:post'
+    ])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]

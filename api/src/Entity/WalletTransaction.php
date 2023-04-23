@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Controller\Wallet\WalletDepositCheckoutConfirmation;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -17,13 +18,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`wallet_transaction`')]
 #[ApiResource(
     operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['wallet:transaction:get']],
+        ),
         new Get(
-            uriTemplate: "/wallet_transaction/{id}/confirmation",
+            uriTemplate: "/wallet_transactions/{id}/confirmation",
             controller: WalletDepositCheckoutConfirmation::class,
-            normalizationContext: ['groups' => ['wallet_transaction:get']],
+            normalizationContext: ['groups' => ['wallet:transaction:get']],
             security: "is_granted('ROLE_USER')",
             name: 'wallet_transaction_confirmation'
-        ),
+        )
     ]
 )]
 class WalletTransaction
@@ -32,23 +36,45 @@ class WalletTransaction
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'walletTransactions')]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get'
+    ])]
     private ?Wallet $wallet = null;
 
     #[ORM\Column]
-    #[Groups(['user:self', 'admin:get', 'wallet_transaction:get'])]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get'
+    ])]
     private ?int $amount = null;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionStatusEnum::class)]
-    #[Groups(['user:self', 'admin:get', 'wallet_transaction:get'])]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get'
+    ])]
     private ?WalletTransactionStatusEnum $status = WalletTransactionStatusEnum::PENDING;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionTypeEnum::class)]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get',
+    ])]
     private ?WalletTransactionTypeEnum $type = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get'
+    ])]
     private ?string $transaction = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get'
+    ])]
     private ?string $stripe_ref = null;
 
     public function getWallet(): ?Wallet

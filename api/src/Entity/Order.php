@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -59,21 +60,44 @@ class Order
 
     #[ORM\OneToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?User $customer = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?OrderStatusEnum $status = OrderStatusEnum::PENDING;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?OrderPaymentTypeEnum $paymentType = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?string $stripe = null;
 
     #[ORM\OneToMany(mappedBy: '_order', targetEntity: Ticket::class)]
+    #[Groups([
+        'admin:get'
+    ])]
     private Collection $tickets;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?float $price = null;
 
     public function __construct()

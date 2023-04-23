@@ -37,19 +37,30 @@ class TicketCategory
     use TimestampableTrait;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post'
+    ])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: TicketEvent::class)]
-    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post'])]
-    private Collection $ticket_events;
+    #[ORM\OneToMany(mappedBy: 'ticketCategory', targetEntity: TicketEvent::class)]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+    ])]
+    private Collection $ticketEvents;
 
-    #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: Ticket::class)]
+    #[ORM\OneToMany(mappedBy: 'ticketCategory', targetEntity: Ticket::class)]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+    ])]
     private Collection $tickets;
 
     public function __construct()
     {
-        $this->ticket_events = new ArrayCollection();
+        $this->ticketEvents = new ArrayCollection();
         $this->tickets = new ArrayCollection();
     }
 
@@ -70,13 +81,13 @@ class TicketCategory
      */
     public function getTicketEvents(): Collection
     {
-        return $this->ticket_events;
+        return $this->ticketEvents;
     }
 
     public function addTicketEvent(TicketEvent $ticketEvent): self
     {
-        if (!$this->ticket_events->contains($ticketEvent)) {
-            $this->ticket_events->add($ticketEvent);
+        if (!$this->ticketEvents->contains($ticketEvent)) {
+            $this->ticketEvents->add($ticketEvent);
             $ticketEvent->setTicketCategory($this);
         }
 
@@ -85,7 +96,7 @@ class TicketCategory
 
     public function removeTicketEvent(TicketEvent $ticketEvent): self
     {
-        if ($this->ticket_events->removeElement($ticketEvent)) {
+        if ($this->ticketEvents->removeElement($ticketEvent)) {
             // set the owning side to null (unless already changed)
             if ($ticketEvent->getTicketCategory() === $this) {
                 $ticketEvent->setTicketCategory(null);

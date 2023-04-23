@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Controller\Event\EventTickets;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -47,51 +46,106 @@ class Event
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
-    #[Groups(['admin:get', 'tickets:get', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'events:get'
+    ])]
     private ?FightCategory $fightCategory = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
+    ])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
+    ])]
     private ?string $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
+    ])]
     private ?string $location_link = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
+    ])]
     private ?\DateTimeInterface $time_start = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
+    ])]
     private ?\DateTimeInterface $time_end = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
+    ])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
+    ])]
     private ?int $capacity = null;
 
     #[ORM\Column]
-    #[Groups(['admin:get', 'tickets:get', 'tickets:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
+    ])]
     private ?bool $vip = false;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
     private Collection $tickets;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
-    #[Groups(['admin:get', 'tickets:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
     private Collection $fights;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: TicketEvent::class)]
-    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post', 'events:get'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post',
+        'events:get'
+    ])]
     private Collection $ticket_events;
 
     public function __construct()
