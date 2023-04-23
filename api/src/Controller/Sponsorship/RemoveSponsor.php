@@ -5,6 +5,7 @@ namespace App\Controller\Sponsorship;
 use App\Repository\SponsorshipRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Response;
 
 class RemoveSponsor extends AbstractController
@@ -14,15 +15,19 @@ class RemoveSponsor extends AbstractController
         private readonly SponsorshipRepository $sponsorshipRepository)
     {}
 
-    public function __invoke(string $sponsorshipId): Response
+    public function __invoke(string $sponsorshipId)
 
     {
         $sponsorship = $this->sponsorshipRepository->find($sponsorshipId);
 
+        if($sponsorship == null) {
+            throw new BadRequestException("Entity not found");
+        }
+
         $this->entityManager->remove($sponsorship);
         $this->entityManager->flush();
 
-        return new Response(null, 200, ["Content-Type" => "application/json"]);
+        return "Success";
     }
 
 }

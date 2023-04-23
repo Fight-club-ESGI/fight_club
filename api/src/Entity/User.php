@@ -152,6 +152,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['admin:get', 'user:self'])]
     private ?Order $orders = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['admin:get', 'user:self'])]
+    private ?string $VIPToken = null;
+
     public function __construct()
     {
         $this->sponsorshipsAsSponsor = new ArrayCollection();
@@ -177,7 +181,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -350,9 +354,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @param Carbon | null $tokenDate
      * @return self
      */
-    public function setTokenDate(Carbon | null $tokenDate): self
+    public function setTokenDate(Carbon|null $tokenDate): self
     {
         $this->tokenDate = $tokenDate;
+        return $this;
+    }
+
+    public function getVIPToken(): ?string
+    {
+        return $this->VIPToken;
+    }
+
+    public function setVIPToken(?string $VIPToken): self
+    {
+        $this->VIPToken = $VIPToken;
         return $this;
     }
 }

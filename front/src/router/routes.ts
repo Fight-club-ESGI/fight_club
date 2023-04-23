@@ -22,6 +22,7 @@ import ResetPassword from "@/views/session/ResetPassword.vue";
 import ValidateResetPassword from "@/views/session/ValidateResetPassword.vue";
 import Session from "@/views/session/Session.vue";
 import InvalidToken from "@/views/InvalidToken.vue";
+import BecomeVIP from "@/views/sponsor/BecomeVIP.vue";
 
 export default [
     {
@@ -186,6 +187,12 @@ export default [
         path: '/invalid-token',
         component: InvalidToken,
         name: 'invalid-token',
+        meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
+    },
+    {
+        path: '/become-vip',
+        component: BecomeVIP,
+        name: 'become-vip',
         meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
     }
 ]

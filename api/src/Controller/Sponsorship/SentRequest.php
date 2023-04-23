@@ -23,14 +23,6 @@ class SentRequest extends AbstractController
         $sponsor = $this->userRepository->find($this->security->getUser()->getId());
         $sponsorship = $this->sponsorshipRepository->findBy(['sponsor' => $sponsor->getId(), 'emailValidation' => true, 'sponsorValidation' => false]);
 
-        $response = array('sponsorship' => $sponsorship);
-
-        $jsonObject = $this->serializer->serialize($response, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
-
-        return new Response($jsonObject, 200, ["Content-Type" => "application/json"]);
+        return $sponsorship;
     }
 }

@@ -6,8 +6,7 @@ use App\Repository\SponsorshipRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class AcceptRequest extends AbstractController
 {
@@ -15,10 +14,10 @@ class AcceptRequest extends AbstractController
         private readonly EntityManagerInterface $entityManager,
         private readonly UserRepository $userRepository,
         private readonly SponsorshipRepository $sponsorshipRepository,
-        private readonly SerializerInterface $serializer)
+        private readonly Security $security)
     {}
 
-    public function __invoke(string $sponsorshipId): Response
+    public function __invoke(string $sponsorshipId)
     {
         $sponsorship = $this->sponsorshipRepository->find($sponsorshipId);
         $sponsor = $this->userRepository->find($this->security->getUser()->getId());
@@ -31,17 +30,7 @@ class AcceptRequest extends AbstractController
 
             $this->entityManager->flush();
 
-            $response = array('sponsorship' => $sponsorship);
-
-            $jsonObject = $this->serializer->serialize($response, 'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
-
-            return new Response($jsonObject, 200, ["Content-Type" => "application/json"]);
-        } else {
-            return new Response(null, 404);
+            return $sponsorship;
         }
     }
 }

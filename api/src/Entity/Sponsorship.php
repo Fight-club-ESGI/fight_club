@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -10,8 +11,9 @@ use App\Controller\Sponsorship\AcceptedRequest;
 use App\Controller\Sponsorship\AcceptRequest;
 use App\Controller\Sponsorship\PendingRequest;
 use App\Controller\Sponsorship\RemoveSponsor;
+use App\Controller\Sponsorship\SendInvitation;
 use App\Controller\Sponsorship\SentRequest;
-use App\Controller\Sponsorship\SponsorLinkController;
+use App\Controller\Sponsorship\ValidateVIP;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\SponsorshipRepository;
@@ -22,40 +24,48 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Post(
-            uriTemplate: '/sponsorships/{sponsoredId}/validate-email',
-            controller: SponsorLinkController::class,
-            normalizationContext: ['groups' => ['sponsor:get']],
-            denormalizationContext: ['groups' => ['sponsor:post']]
-        ),
-        new Post(
+        new Get(),
+        new Post(),
+        new Get(
             uriTemplate: '/sponsorships/{sponsorshipId}/accept-request',
             controller: AcceptRequest::class,
             normalizationContext: ['groups' => ['sponsor:get']],
-            denormalizationContext: ['groups' => ['sponsor:post']]
+            read: false
         ),
-        new Post(
+        new Delete(
             uriTemplate: '/sponsorships/requests/remove/{sponsorshipId}',
             controller: RemoveSponsor::class,
+            normalizationContext: ['groups' => ['sponsor:get']],
+            read: false
+        ),
+        new Post(
+            uriTemplate: '/sponsorships/send-invitation',
+            controller: SendInvitation::class,
             normalizationContext: ['groups' => ['sponsor:get']],
             denormalizationContext: ['groups' => ['sponsor:post']]
         ),
         new Get(
+            uriTemplate: '/sponsorships/{token}/validate-email',
+            controller: ValidateVIP::class,
+            normalizationContext: ['groups' => ['sponsor:get']],
+            read: false
+        ),
+        new Get(
             uriTemplate: '/sponsorships/requests/pending',
             controller: PendingRequest::class,
-            normalizationContext: ['groups' => ['sponsor:get']],
+            normalizationContext: ['groups' => ['sponsor:get', 'user:get']],
             read: false
         ),
         new Get(
             uriTemplate: '/sponsorships/requests/sent',
             controller: SentRequest::class,
-            normalizationContext: ['groups' => ['sponsor:get']],
+            normalizationContext: ['groups' => ['sponsor:get', 'user:get']],
             read: false
         ),
         new Get(
             uriTemplate: '/sponsorships/requests/accepted',
             controller: AcceptedRequest::class,
-            normalizationContext: ['groups' => ['sponsor:get']],
+            normalizationContext: ['groups' => ['sponsor:get', 'user:get']],
             read: false
         )
     ]
