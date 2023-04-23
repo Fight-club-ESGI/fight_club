@@ -21,7 +21,6 @@ export default defineComponent({
         onMounted(async () => {
             if (refreshToken.value) {
                 try {
-                    // TODO: Uncomment when the back function is ready
                     await signinWithToken(refreshToken.value);
                 } catch (error) {}
             }

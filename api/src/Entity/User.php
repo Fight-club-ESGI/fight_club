@@ -118,7 +118,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:get_collection',
         'admin:post',
         'admin:patch',
-        'user:self'
+        'user:self',
+        'user:post'
     ])]
     private array $roles = [];
 

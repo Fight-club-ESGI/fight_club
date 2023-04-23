@@ -3,6 +3,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use App\Controller\Sponsorship\AcceptedRequest;
+use App\Controller\Sponsorship\AcceptRequest;
+use App\Controller\Sponsorship\PendingRequest;
+use App\Controller\Sponsorship\RemoveSponsor;
+use App\Controller\Sponsorship\SentRequest;
+use App\Controller\Sponsorship\SponsorLinkController;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\SponsorshipRepository;
@@ -10,7 +19,47 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SponsorshipRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Post(
+            uriTemplate: '/sponsorships/{sponsoredId}/validate-email',
+            controller: SponsorLinkController::class,
+            normalizationContext: ['groups' => ['sponsor:get']],
+            denormalizationContext: ['groups' => ['sponsor:post']]
+        ),
+        new Post(
+            uriTemplate: '/sponsorships/{sponsorshipId}/accept-request',
+            controller: AcceptRequest::class,
+            normalizationContext: ['groups' => ['sponsor:get']],
+            denormalizationContext: ['groups' => ['sponsor:post']]
+        ),
+        new Post(
+            uriTemplate: '/sponsorships/requests/remove/{sponsorshipId}',
+            controller: RemoveSponsor::class,
+            normalizationContext: ['groups' => ['sponsor:get']],
+            denormalizationContext: ['groups' => ['sponsor:post']]
+        ),
+        new Get(
+            uriTemplate: '/sponsorships/requests/pending',
+            controller: PendingRequest::class,
+            normalizationContext: ['groups' => ['sponsor:get']],
+            read: false
+        ),
+        new Get(
+            uriTemplate: '/sponsorships/requests/sent',
+            controller: SentRequest::class,
+            normalizationContext: ['groups' => ['sponsor:get']],
+            read: false
+        ),
+        new Get(
+            uriTemplate: '/sponsorships/requests/accepted',
+            controller: AcceptedRequest::class,
+            normalizationContext: ['groups' => ['sponsor:get']],
+            read: false
+        )
+    ]
+)]
 class Sponsorship
 {
     use EntityIdTrait;
@@ -20,7 +69,8 @@ class Sponsorship
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'sponsor:get'
     ])]
     private ?User $sponsor = null;
 
