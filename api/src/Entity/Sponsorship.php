@@ -7,6 +7,7 @@ use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\SponsorshipRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SponsorshipRepository::class)]
 #[ApiResource]
@@ -17,16 +18,31 @@ class Sponsorship
 
     #[ORM\ManyToOne(inversedBy: 'sponsorshipsAsSponsor')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?User $sponsor = null;
 
     #[ORM\OneToOne(inversedBy: 'sponsorshipsAsSponsored')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?User $sponsored = null;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'admin:post'
+    ])]
     private ?bool $emailValidation = false;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+    ])]
     private ?bool $sponsorValidation = false;
 
     public function getSponsor(): ?User

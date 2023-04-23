@@ -3,30 +3,54 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\WeightCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WeightCategoryRepository::class)]
 #[ORM\Table(name: '`weight_category`')]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            normalizationContext: ['groups' => ['wallet:category:get']]
+        )
+    ]
+)]
 class WeightCategory
 {
     use EntityIdTrait;
     use TimestampableTrait;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'wallet:category:get'
+    ])]
     private ?int $min_weight = null;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'wallet:category:get'
+    ])]
     private ?int $max_weight = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'admin:get',
+        'wallet:category:get'
+    ])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'weightCategories')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups([
+        'admin:get',
+        'wallet:category:get'
+    ])]
     private ?FightCategory $fightCategory = null;
 
     public function getMinWeight(): ?int

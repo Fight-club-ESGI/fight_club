@@ -37,14 +37,27 @@ class TicketCategory
     use TimestampableTrait;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post'
+    ])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: TicketEvent::class)]
-    #[Groups(['admin:get', 'tickets:get', 'ticket:category:post'])]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post'
+    ])]
     private Collection $ticket_events;
 
     #[ORM\OneToMany(mappedBy: 'ticket_category', targetEntity: Ticket::class)]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post'
+    ])]
     private Collection $tickets;
 
     public function __construct()

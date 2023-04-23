@@ -9,6 +9,7 @@ use App\Repository\FightCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FightCategoryRepository::class)]
 #[ApiResource]
@@ -18,15 +19,28 @@ class FightCategory
     use TimestampableTrait;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'fightCategory', targetEntity: WeightCategory::class, orphanRemoval: true)]
+    #[Groups([
+        'admin:get',
+    ])]
     private Collection $weightCategories;
 
     #[ORM\OneToMany(mappedBy: 'fightCategory', targetEntity: Fighter::class)]
+    #[Groups([
+        'admin:get',
+    ])]
     private Collection $fighters;
 
     #[ORM\OneToMany(mappedBy: 'fightCategory', targetEntity: Event::class)]
+    #[Groups([
+        'admin:get',
+    ])]
     private Collection $events;
 
     public function __construct()

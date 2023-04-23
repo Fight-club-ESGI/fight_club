@@ -18,8 +18,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
-            normalizationContext: ['groups' => ['ticket:event:get']],
-            denormalizationContext: ['groups' => ['ticket:event:post']],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Get(
@@ -38,6 +36,8 @@ class TicketEvent
     #[ORM\ManyToOne(inversedBy: 'ticket_events')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'admin:get',
+        'admin:post',
         'ticket:event:get',
         'ticket:event:post'
     ])]
@@ -46,6 +46,8 @@ class TicketEvent
     #[ORM\ManyToOne(inversedBy: 'ticket_events')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'admin:get',
+        'admin:post',
         'ticket:event:post',
         'ticket:event:get'
     ])]
@@ -53,16 +55,24 @@ class TicketEvent
 
     #[ORM\Column]
     #[Groups([
+        'admin:get',
+        'admin:post',
         'ticket:event:post',
         'ticket:event:get',
     ])]
     private ?int $max_quantity = null;
 
     #[ORM\OneToMany(mappedBy: 'ticket_event', targetEntity: Ticket::class)]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
     private Collection $tickets;
 
     #[ORM\Column]
     #[Groups([
+        'admin:get',
+        'admin:post',
         'ticket:event:post',
         'ticket:event:get',
     ])]
