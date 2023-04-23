@@ -19,6 +19,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         new Post(
+            normalizationContext: ["groups" => []],
+            denormalizationContext: ["groups" => []],
             security: "is_granted('ROLE_ADMIN')"
         )
     ]

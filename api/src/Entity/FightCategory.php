@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -16,9 +17,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
-            denormalizationContext: ["groups" => ["admin:post"]],
-            normalizationContext: ["groups" => ["admin:get"]],
+            normalizationContext: ["groups" => []],
+            denormalizationContext: ["groups" => []],
             security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Get(
+            normalizationContext: ["groups" => ["fight:category:get"]]
         )
     ]
 )]

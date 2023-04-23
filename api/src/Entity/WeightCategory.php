@@ -15,7 +15,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
-            normalizationContext: ['groups' => ['wallet:category:get']]
+            normalizationContext: ['groups' => ['wallet:category:get']],
+            denormalizationContext: ['groups' => []],
+            security: "is_granted('ROLE_ADMIN')"
         )
     ]
 )]
@@ -27,20 +29,23 @@ class WeightCategory
     #[ORM\Column]
     #[Groups([
         'admin:get',
+        'admin:post',
         'wallet:category:get'
     ])]
-    private ?int $min_weight = null;
+    private ?int $minWeight = null;
 
     #[ORM\Column]
     #[Groups([
         'admin:get',
+        'admin:post',
         'wallet:category:get'
     ])]
-    private ?int $max_weight = null;
+    private ?int $maxWeight = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
         'admin:get',
+        'admin:post',
         'wallet:category:get'
     ])]
     private ?string $name = null;
@@ -49,30 +54,31 @@ class WeightCategory
     #[ORM\JoinColumn(nullable: true)]
     #[Groups([
         'admin:get',
+        'admin:post',
         'wallet:category:get'
     ])]
     private ?FightCategory $fightCategory = null;
 
     public function getMinWeight(): ?int
     {
-        return $this->min_weight;
+        return $this->minWeight;
     }
 
-    public function setMinWeight(int $min_weight): self
+    public function setMinWeight(int $minWeight): self
     {
-        $this->min_weight = $min_weight;
+        $this->minWeight = $minWeight;
 
         return $this;
     }
 
     public function getMaxWeight(): ?int
     {
-        return $this->max_weight;
+        return $this->maxWeight;
     }
 
-    public function setMaxWeight(int $max_weight): self
+    public function setMaxWeight(int $maxWeight): self
     {
-        $this->max_weight = $max_weight;
+        $this->maxWeight = $maxWeight;
 
         return $this;
     }
