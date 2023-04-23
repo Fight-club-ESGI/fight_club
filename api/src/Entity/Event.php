@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Controller\Event\EventTickets;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightCategoryRepository;
@@ -12,7 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FightCategoryRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            denormalizationContext: ["groups" => ["admin:post"]],
+            normalizationContext: ["groups" => ["admin:get"]],
+            security: "is_granted('ROLE_ADMIN')"
+        )
+    ]
+)]
 class FightCategory
 {
     use EntityIdTrait;
