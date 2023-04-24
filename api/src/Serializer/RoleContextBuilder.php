@@ -39,7 +39,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                 if ($normalization) {
                     # Normalization part
                     if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                        $context['groups'][] = 'admin:get';
+                        // $context['groups'][] = 'admin:get';
                         $context['groups'][] = 'admin:post';
                         $context['groups'][] = 'admin:patch';
                     } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
