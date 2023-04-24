@@ -64,7 +64,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['user:get_collection']],
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_USER')"
         ),
         new Patch(
             normalizationContext: ['groups' => ['user:get']],
@@ -111,7 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:post',
         'user:get_collection',
         'user:patch',
-        'user:self',
+        'user:self'
     ])]
     private ?string $email = null;
 

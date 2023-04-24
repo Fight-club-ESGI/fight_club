@@ -38,6 +38,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             security: "is_granted('ROLE_ADMIN')"
         ),
         new Patch(
+            inputFormats: [
+                'json' => ['application/json']
+            ],
             normalizationContext: ["groups" => ['fighter:get']],
             denormalizationContext: ["groups" => ['fighter:post']],
             security: "is_granted('ROLE_ADMIN')"
