@@ -30,19 +30,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/sponsorships/{sponsorshipId}/accept-request',
             controller: AcceptRequest::class,
             normalizationContext: ['groups' => ['sponsor:get']],
+            security: 'is_granted("ROLE_ADMIN")',
             read: false
         ),
         new Delete(
             uriTemplate: '/sponsorships/requests/remove/{sponsorshipId}',
             controller: RemoveSponsor::class,
             normalizationContext: ['groups' => ['sponsor:get']],
+            security: 'is_granted("ROLE_ADMIN")',
             read: false
         ),
         new Post(
             uriTemplate: '/sponsorships/send-invitation',
             controller: SendInvitation::class,
             normalizationContext: ['groups' => ['sponsor:get']],
-            denormalizationContext: ['groups' => ['sponsor:post']]
+            denormalizationContext: ['groups' => ['sponsor:post']],
+            security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_VVIP")',
+            read: false
         ),
         new Get(
             uriTemplate: '/sponsorships/{token}/validate-email',
@@ -54,6 +58,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/sponsorships/requests/pending',
             controller: PendingRequest::class,
             normalizationContext: ['groups' => ['sponsor:get', 'user:get']],
+            security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_VVIP")',
             read: false
         ),
         new Get(
@@ -66,6 +71,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/sponsorships/requests/accepted',
             controller: AcceptedRequest::class,
             normalizationContext: ['groups' => ['sponsor:get', 'user:get']],
+            security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_VVIP")',
             read: false
         )
     ]
@@ -80,7 +86,8 @@ class Sponsorship
     #[Groups([
         'admin:get',
         'admin:post',
-        'sponsor:get'
+        'sponsor:get',
+        'sponsor:post'
     ])]
     private ?User $sponsor = null;
 
@@ -88,7 +95,8 @@ class Sponsorship
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'sponsor:post'
     ])]
     private ?User $sponsored = null;
 

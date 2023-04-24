@@ -70,7 +70,7 @@ export default defineComponent({
                 try {
                     const payload = {
                         sponsorId: user.value.id,
-                        sponsored: email.value,
+                        sponsoredEmail: email.value,
                     };
                     await sendSponsoLink(payload);
                 } catch {

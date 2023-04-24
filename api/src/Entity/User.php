@@ -64,6 +64,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['user:get_collection']],
+            security: "is_granted('ROLE_USER')",
         ),
         new Patch(
             normalizationContext: ['groups' => ['user:get']],
@@ -87,11 +88,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             controller: CheckTokenValidityController::class,
             read: false,
             name: 'check-token-validity',
+
         ),
         new Post(
             uriTemplate: '/change_password',
             controller: ChangePassword::class,
-            name: 'validate-reset-password'
+            security: "is_granted('ROLE_USER')",
+            name: 'validate-reset-password',
         ),
     ]
 )]

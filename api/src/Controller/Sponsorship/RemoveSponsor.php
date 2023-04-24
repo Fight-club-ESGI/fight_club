@@ -15,7 +15,7 @@ class RemoveSponsor extends AbstractController
         private readonly SponsorshipRepository $sponsorshipRepository)
     {}
 
-    public function __invoke(string $sponsorshipId)
+    public function __invoke(string $sponsorshipId): Response
 
     {
         $sponsorship = $this->sponsorshipRepository->find($sponsorshipId);
@@ -27,7 +27,7 @@ class RemoveSponsor extends AbstractController
         $this->entityManager->remove($sponsorship);
         $this->entityManager->flush();
 
-        return "Success";
+        return new Response($sponsorshipId, 200);
     }
 
 }

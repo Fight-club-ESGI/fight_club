@@ -1,4 +1,4 @@
-import { client } from "..";
+import { client, clientWithoutAuth } from "..";
 import { FighterI } from "../../interfaces/payload";
 
 const namespace = '/fighters';
@@ -7,7 +7,7 @@ class Fighter {
 
     async _getFighters(): Promise<FighterI[]> {
         try {
-            const res = await client.get(namespace);
+            const res = await clientWithoutAuth.get(namespace);
             return res.data;
         } catch (error) {
             throw error;
@@ -17,7 +17,7 @@ class Fighter {
     async _getFighter(id: string): Promise<FighterI> {
         try {
             const uri = `${namespace}/${id}`;
-            const res = await client.get(uri);
+            const res = await clientWithoutAuth.get(uri);
             return res.data;
         } catch (error) {
             throw error;
@@ -36,7 +36,7 @@ class Fighter {
     async _upadateFighter(payload: FighterI): Promise<FighterI> {
         try {
             const uri = `${namespace}/${payload.id}`;
-            const res = await client.put(uri, payload);
+            const res = await client.patch(uri, payload);
             return res.data;
         } catch (error) {
             throw error;

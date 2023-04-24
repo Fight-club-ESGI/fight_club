@@ -3,7 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -12,15 +17,32 @@ use App\Repository\FighterRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use http\Env\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: FighterRepository::class)]
 #[ApiResource(
     operations: [
+        new GetCollection(
+            normalizationContext: ["groups" => ['fighter:get']],
+            name: "get_fighters"
+        ),
+        new Get(
+            normalizationContext: ["groups" => ['fighter:get']],
+            read: false
+        ),
         new Post(
-            normalizationContext: ["groups" => []],
-            denormalizationContext: ["groups" => []],
+            normalizationContext: ["groups" => ['fighter:get']],
+            denormalizationContext: ["groups" => ['fighter:post']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Patch(
+            normalizationContext: ["groups" => ['fighter:get']],
+            denormalizationContext: ["groups" => ['fighter:post']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Delete(
             security: "is_granted('ROLE_ADMIN')"
         )
     ]
@@ -35,49 +57,63 @@ class Fighter
     #[ORM\Column(length: 255)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'fighter:get',
+        'fighter:post'
     ])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'fighter:get',
+        'fighter:post'
     ])]
     private ?string $lastname = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'fighter:get',
+        'fighter:post'
     ])]
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'fighter:get',
+        'fighter:post'
     ])]
     private ?int $height = null;
 
     #[ORM\Column]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'fighter:get',
+        'fighter:post'
     ])]
     private ?int $weight = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'fighter:get',
+        'fighter:post'
     ])]
     private ?string $nationality = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'fighter:get',
+        'fighter:post'
     ])]
     private ?FighterGenderEnum $gender = FighterGenderEnum::FEMALE;
 
@@ -90,7 +126,7 @@ class Fighter
 
     #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
     #[Groups([
-        'admin:get',
+        'admin:get'
     ])]
     private Collection $fights;
 

@@ -27,7 +27,7 @@ class SendInvitation extends AbstractController
 
     public function __invoke(): Response
     {
-        $sponsoredMail = json_decode($this->requestStack->getCurrentRequest()->getContent())->sponsored;
+        $sponsoredMail = json_decode($this->requestStack->getCurrentRequest()->getContent())->sponsoredEmail;
         $sponsorId = json_decode($this->requestStack->getCurrentRequest()->getContent())->sponsorId;
 
         $sponsor = $this->userRepository->find($sponsorId);
@@ -65,7 +65,7 @@ class SendInvitation extends AbstractController
             return new Response(null, 200, ["Content-Type" => "application/json"]);
 
         } else {
-            return new Response(null, 404);
+            return new Response("Failed to send mail, please try again", 400);
         }
     }
 }

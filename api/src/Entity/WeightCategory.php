@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -14,6 +16,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`weight_category`')]
 #[ApiResource(
     operations: [
+        new GetCollection(),
+        new Get(),
         new Post(
             normalizationContext: ['groups' => ['wallet:category:get']],
             denormalizationContext: ['groups' => []],

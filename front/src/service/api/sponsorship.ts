@@ -18,7 +18,7 @@ class Sponsorship {
     async _acceptRequest(sponsorshipId: string): Promise<void> {
         try {
             const uri = `${namespace}/${sponsorshipId}/accept-request`;
-            const res = await client.post(uri);
+            const res = await client.get(uri);
             return res.data;
         } catch (error) {
             throw error;
