@@ -48,7 +48,7 @@ export default defineComponent({
         const { users, user } = storeToRefs(userStore);
 
         const sponsorshipStore = useSponsorshipStore();
-        const { addSponsorship, sendSponsoLink } = sponsorshipStore;
+        const { sendSponsoLink } = sponsorshipStore;
 
         const email = ref<string>('');
         const valid = ref<boolean>();
