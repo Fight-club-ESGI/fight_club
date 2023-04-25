@@ -1,31 +1,29 @@
 <template>
     <v-app-bar>
         <div class="flex items-center align-middle bg-black/80 h-20 fixed w-full text-white px-20 z-5000">
-        <div
-            @click="router.push({ name: 'home' })"
-            class="h-full w-1/4 bg-cover bg-center cursor-pointer"
-            style="background-image: url('src/assets/Thunderous_knockout__2_-removebg-preview.png');"
-        >
+            <div
+                @click="router.push({ name: 'home' })"
+                class="h-full w-1/4 bg-cover bg-center cursor-pointer"
+                style="background-image: url('src/assets/Thunderous_knockout__2_-removebg-preview.png')"
+            ></div>
+            <div class="flex w-full">
+                <v-list class="flex bg-transparent text-white">
+                    <v-list-item>Home</v-list-item>
+                    <v-list-item @click="router.push({ name: 'bets' })">Bets</v-list-item>
+                    <v-list-item>Booking</v-list-item>
+                    <v-list-item>About Us</v-list-item>
+                </v-list>
+                <v-spacer />
+                <v-list v-if="!isConnected" class="flex bg-transparent text-white">
+                    <v-list-item @click="router.push({ name: 'login' })">Sign In</v-list-item>
+                    <v-list-item @click="router.push({ name: 'signup' })">Register</v-list-item>
+                </v-list>
+                <v-list v-else class="flex bg-transparent text-white">
+                    <v-list-item @click="router.push({ name: 'user-profile' })">Access to my Platform</v-list-item>
+                </v-list>
+            </div>
         </div>
-        <div class="flex w-full">
-            <v-list class="flex bg-transparent text-white">
-                <v-list-item>Home</v-list-item>
-                <v-list-item>Bets</v-list-item>
-                <v-list-item>Booking</v-list-item>
-                <v-list-item>About Us</v-list-item>
-            </v-list>
-            <v-spacer />
-            <v-list v-if="!isConnected" class="flex bg-transparent text-white">
-                <v-list-item @click="router.push({ name: 'login' })">Sign In</v-list-item>
-                <v-list-item @click="router.push({ name: 'signup' })">Register</v-list-item>
-            </v-list>
-            <v-list v-else class="flex bg-transparent text-white">
-                <v-list-item @click="router.push({ name: 'user-profile' })">Access to my Platform</v-list-item>
-            </v-list>
-        </div>
-    </div>
     </v-app-bar>
-
 </template>
 <script lang="ts">
 import { storeToRefs } from 'pinia';

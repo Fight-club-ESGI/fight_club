@@ -1,14 +1,20 @@
-import { defineStore } from "pinia";
-import { FightBetI } from "../interfaces/payload";
-import { ref } from "vue";
-import { betService } from "../service/api";
+import { defineStore } from 'pinia';
+import { FightBetI, CurrentBetI } from '../interfaces/payload';
+import { ref } from 'vue';
+import { betService } from '../service/api';
+import { setCurrentBetToLocalStorage, getCurrentBetFromLocalStorage } from '../service/bets';
 
 export const useBetStore = defineStore('bet', () => {
-
     const bet = ref<FightBetI>();
     const bets = ref<FightBetI[]>([]);
 
-    async function betWallet(payload: { fight: string, betOn: string, amount: number }) {
+    const currentBet = ref<Partial<CurrentBetI>>();
+
+    function $resetCurrentBet() {
+        currentBet.value = undefined;
+    }
+
+    async function betWallet(payload: { fight: string; betOn: string; amount: number }) {
         try {
             const res = await betService._betWallet(payload);
             return res;
@@ -17,9 +23,19 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    async function betDirect(payload: { fight: string, betOn: string, amount: number }) {
+    async function betDirect(payload: { fight: string; betOn: string; amount: number }) {
         try {
             const res = await betService._betDirect(payload);
+            return res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function setCurrentBet(bet: CurrentBetI) {
+        try {
+            const res = setCurrentBetToLocalStorage(bet);
+            currentBet.value = bet;
             return res;
         } catch (error) {
             throw error;
@@ -35,7 +51,7 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    async function getBet(payload: { id: string, betId: string }) {
+    async function getBet(payload: { id: string; betId: string }) {
         try {
             const res = await betService._getBet(payload);
             bet.value = res;
@@ -53,5 +69,5 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    return { betWallet, betDirect, createBet, getBet, getBets, bet, bets }
+    return { currentBet, $resetCurrentBet, betWallet, betDirect, setCurrentBet, createBet, getBet, getBets, bet, bets, currentBet };
 });
