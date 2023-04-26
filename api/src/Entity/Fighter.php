@@ -17,8 +17,8 @@ use App\Repository\FighterRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use http\Env\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: FighterRepository::class)]
@@ -26,11 +26,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     operations: [
         new GetCollection(
             normalizationContext: ["groups" => ['fighter:get']],
-            name: "get_fighters"
+            name: "get_fighters",
         ),
         new Get(
             normalizationContext: ["groups" => ['fighter:get']],
-            read: false
         ),
         new Post(
             normalizationContext: ["groups" => ['fighter:get']],
@@ -125,12 +124,14 @@ class Fighter
         'admin:get',
         'admin:post'
     ])]
+    #[MaxDepth(2)]
     private ?FightCategory $fightCategory = null;
 
     #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
     #[Groups([
         'admin:get'
     ])]
+    #[MaxDepth(2)]
     private Collection $fights;
 
     public function getFirstname(): ?string
