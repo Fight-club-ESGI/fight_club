@@ -66,12 +66,15 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
 
                     }
                     $context['groups'][] = 'additional:post';
+                    $context['enable_max_depth'] = true;
                 }
             } else {
                 if ($normalization) {
                     $context['groups'][] = 'additional:get';
+                    $context['enable_max_depth'] = true;
                 } else {
                     $context['groups'][] = 'additional:post';
+                    $context['enable_max_depth'] = true;
                 }
             }
         }
