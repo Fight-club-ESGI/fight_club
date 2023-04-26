@@ -47,6 +47,7 @@ export interface EventI {
     endTimestamp: string;
 }
 export interface FightI {
+    id: string;
     fighterA: FighterI;
     fighterB: FighterI;
     ratingFighterA: number;
@@ -60,19 +61,18 @@ export interface FightI {
 }
 
 export interface FightBetI {
-    id?: string;
+    id: string;
     fightId: string;
-    amount: number;
-    bet_on: string;
-    bet_user: string;
-}
-
-export interface CurrentBetI {
     fighterA: FighterI;
     fighterB: FighterI;
     expectedWinner: string;
-    amount?: number;
     rating: number;
+}
+
+export interface CurrentBetI {
+    id: string;
+    bets: FightBetI[];
+    amount: number;
 }
 
 export interface SponsorshipI {

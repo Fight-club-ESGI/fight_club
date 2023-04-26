@@ -1,6 +1,6 @@
 [
     {
-        "id": 1,
+        "id": "1",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -29,7 +29,7 @@
         "eventId": "string"
     },
     {
-        "id": 2,
+        "id": "2",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -58,7 +58,7 @@
         "eventId": "string"
     },
     {
-        "id": 3,
+        "id": "3",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -87,7 +87,7 @@
         "eventId": "string"
     },
     {
-        "id": 4,
+        "id": "4",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -116,7 +116,7 @@
         "eventId": "string"
     },
     {
-        "id": 5,
+        "id": "5",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -145,7 +145,7 @@
         "eventId": "string"
     },
     {
-        "id": 6,
+        "id": "6",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -174,7 +174,7 @@
         "eventId": "string"
     },
     {
-        "id": 7,
+        "id": "7",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -203,7 +203,7 @@
         "eventId": "string"
     },
     {
-        "id": 8,
+        "id": "8",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -232,7 +232,7 @@
         "eventId": "string"
     },
     {
-        "id": 9,
+        "id": "9",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",
@@ -261,7 +261,7 @@
         "eventId": "string"
     },
     {
-        "id": 10,
+        "id": "10",
         "fighterA": {
             "id": "fighter1",
             "firstname": "Mike",

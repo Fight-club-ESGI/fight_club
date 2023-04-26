@@ -18,51 +18,78 @@
                 <div class="text-center">
                     <v-btn
                         @click="
-                            setCurrentBet(
+                            bet(
+                                props.fight.id,
+                                currentBet,
                                 constructFullName(props.fight.fighterA.firstname, props.fight.fighterA.lastname),
                                 props.fight.ratingFighterA,
                             )
                         "
                         class="mx-2"
-                        color="secondary"
+                        :color="
+                            isThereABetOnTheFighter(
+                                props.fight.id,
+                                currentBet,
+                                constructFullName(props.fight.fighterA.firstname, props.fight.fighterA.lastname),
+                            )
+                                ? 'secondary'
+                                : 'primary'
+                        "
                         :min-height="50"
                         :min-width="140"
                         rounded="false"
                     >
                         <div>
+                            {{
+                                isThereABetOnTheFighter(
+                                    props.fight.id,
+                                    currentBet,
+                                    constructFullName(props.fight.fighterA.firstname, props.fight.fighterA.lastname),
+                                )
+                            }}
                             <p>{{ props.fight.fighterA.firstname }} {{ props.fight.fighterA.lastname }}</p>
-                            <p>{{ formatMoney(props.fight.ratingFighterA) }}</p>
+                            <p>{{ formatNumber(props.fight.ratingFighterA) }}</p>
                         </div>
                     </v-btn>
                     <v-btn
-                        @click="setCurrentBet('Null', props.fight.ratingNullMatch)"
+                        @click="bet(props.fight.id, currentBet, 'Null', props.fight.ratingNullMatch)"
                         class="mx-2"
-                        color="secondary"
+                        :color="isThereABetOnTheFighter(props.fight.id, currentBet, 'Null') ? 'secondary' : 'primary'"
                         :min-height="50"
                         :min-width="140"
                         rounded="false"
                     >
                         <div>
                             <p>Null</p>
-                            <p>{{ formatMoney(props.fight.ratingNullMatch) }}</p>
+                            <p>{{ formatNumber(props.fight.ratingNullMatch) }}</p>
                         </div>
                     </v-btn>
                     <v-btn
                         @click="
-                            setCurrentBet(
+                            bet(
+                                props.fight.id,
+                                currentBet,
                                 constructFullName(props.fight.fighterB.firstname, props.fight.fighterB.lastname),
                                 props.fight.ratingFighterB,
                             )
                         "
                         class="mx-2"
-                        color="secondary"
+                        :color="
+                            isThereABetOnTheFighter(
+                                props.fight.id,
+                                currentBet,
+                                constructFullName(props.fight.fighterB.firstname, props.fight.fighterB.lastname),
+                            )
+                                ? 'secondary'
+                                : 'primary'
+                        "
                         :min-height="50"
                         :min-width="140"
                         rounded="false"
                     >
                         <div>
                             <p>{{ props.fight.fighterB.firstname }} {{ props.fight.fighterB.lastname }}</p>
-                            <p>{{ formatMoney(props.fight.ratingFighterB) }}</p>
+                            <p>{{ formatNumber(props.fight.ratingFighterB) }}</p>
                         </div>
                     </v-btn>
                 </div>
@@ -72,25 +99,56 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { DateTime } from 'luxon';
-import { formatMoney, constructFullName } from '@/service/helpers';
+import { formatNumber, constructFullName } from '@/service/helpers';
 import { useBetStore } from '@/stores/bet';
-import { FightI } from '@/interfaces/payload';
+import { CurrentBetI, FightI, FightBetI } from '@/interfaces/payload';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps<{
     fight: FightI;
 }>();
 const betStore = useBetStore();
+const { currentBet } = storeToRefs(betStore);
 
-function setCurrentBet(expectedWinner: string, rating: number, amount: number = 0) {
+function isFightAlreadyOnCurrentBet(fightId: string, currentBet: CurrentBetI) {
+    return currentBet.bets.find((e: FightBetI) => e.fightId === fightId) !== undefined;
+}
+
+function isThereABetOnTheFighter(fightId: string, currentBet: CurrentBetI, expectedWinner: string) {
+    return currentBet.bets.find((e: FightBetI) => e.fightId === fightId)?.expectedWinner === expectedWinner;
+}
+
+function bet(fightId: string, currentBet: CurrentBetI, expectedWinner: string, rating: number, amount: number = 0) {
+    if (isFightAlreadyOnCurrentBet(fightId, currentBet)) {
+        if (isThereABetOnTheFighter(fightId, currentBet, expectedWinner)) {
+            removeToCurrentBetStore(fightId, currentBet);
+        } else {
+            removeToCurrentBetStore(fightId, currentBet);
+            addBetToCurrentBetStore(expectedWinner, rating, amount);
+        }
+    } else addBetToCurrentBetStore(expectedWinner, rating, amount);
+}
+
+function removeToCurrentBetStore(fightId: string, currentBet: CurrentBetI) {
+    const objWithIdIndex = currentBet.bets.findIndex((e: FightBetI) => e.fightId === fightId);
+    currentBet.bets = currentBet.bets.splice(objWithIdIndex, 1);
     betStore.$patch((state) => {
-        state.currentBet = {
+        state.currentBet;
+    });
+}
+
+function addBetToCurrentBetStore(expectedWinner: string, rating: number, amount: number = 0) {
+    betStore.$patch((state) => {
+        state.currentBet?.bets.push({
+            id: props.fight.id,
+            fightId: props.fight.id,
             fighterA: props.fight.fighterA,
             fighterB: props.fight.fighterB,
             expectedWinner: expectedWinner,
-            amount: amount,
             rating: rating,
-        };
+        });
     });
 }
 </script>

@@ -1,4 +1,4 @@
-export function formatMoney(price: number): string {
+export function formatNumber(price: number = 0): string {
     return price.toFixed(2).replace('.', ',');
 }
 
