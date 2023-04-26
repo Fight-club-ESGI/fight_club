@@ -40,13 +40,6 @@
                         rounded="false"
                     >
                         <div>
-                            {{
-                                isThereABetOnTheFighter(
-                                    props.fight.id,
-                                    currentBet,
-                                    constructFullName(props.fight.fighterA.firstname, props.fight.fighterA.lastname),
-                                )
-                            }}
                             <p>{{ props.fight.fighterA.firstname }} {{ props.fight.fighterA.lastname }}</p>
                             <p>{{ formatNumber(props.fight.ratingFighterA) }}</p>
                         </div>

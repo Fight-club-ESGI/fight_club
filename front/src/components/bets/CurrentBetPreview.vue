@@ -3,7 +3,6 @@
         <v-row no-gutters justify="center">
             <v-row no-gutters justify="space-between" class="z-10 bg-white sticky top-0">
                 <v-col cols="auto">
-                    {{ currentBet }}
                     <p class="pa-4">My bet ({{ currentBet.bets.length }} selected)</p>
                 </v-col>
                 <v-col cols="auto">
@@ -33,9 +32,6 @@
                                 <p>Rating</p>
                                 <p class="font-weight-bold text-xl">{{ formatNumber(bet.rating) }}</p>
                             </v-col>
-                            <v-col cols="auto">
-                                <v-text-field label="Bet" type="number" v-model="amount" />
-                            </v-col>
                         </v-row>
                     </div>
                 </div>
@@ -51,6 +47,9 @@
         <div class="z-10 bg-white overflow-y-auto sticky bottom-0">
             <v-divider></v-divider>
             <v-row no-gutters justify="space-between" class="pa-2">
+                <v-col cols="12">
+                    <v-text-field label="Bet" type="number" v-model="amount" />
+                </v-col>
                 <v-col cols="auto">
                     <p class="font-weight-bold">Bet</p>
                     <p class="font-weight-bold">Possible gains</p>
