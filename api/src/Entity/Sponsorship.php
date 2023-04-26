@@ -17,6 +17,7 @@ use App\Controller\Sponsorship\ValidateVIP;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\SponsorshipRepository;
+use App\State\UserPasswordHasher;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -46,7 +47,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['sponsor:get']],
             denormalizationContext: ['groups' => ['sponsor:post']],
             security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_VVIP")',
-            read: false
+            read: false,
+            processor: UserPasswordHasher::class
+
         ),
         new Get(
             uriTemplate: '/sponsorships/{token}/validate-email',
