@@ -5,7 +5,7 @@
                 <BetOnAFightCard class="my-4" v-for="fight in fights" :fight="fight" />
             </v-col>
             <v-col cols="4">
-                <CurrentBetPreview class="mt-4" />
+                <CurrentBetPreview class="mt-4 fixed top-18 right-18 w-120 h-8/10 overflow-y-auto" />
             </v-col>
         </v-row>
     </v-container>
