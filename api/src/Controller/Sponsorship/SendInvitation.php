@@ -106,6 +106,7 @@ class SendInvitation extends AbstractController
             $sponsorship->setSponsored($user);
 
             $this->entityManager->persist($user);
+            $this->entityManager->persist($sponsorship);
             $this->entityManager->flush();
             return new Response(null, 200, ["Content-Type" => "application/json"]);
         }
