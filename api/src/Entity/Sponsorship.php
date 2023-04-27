@@ -31,7 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/sponsorships/{sponsorshipId}/accept-request',
             controller: AcceptRequest::class,
             normalizationContext: ['groups' => ['sponsor:get']],
-            security: 'is_granted("ROLE_ADMIN")',
+            security: 'is_granted("ROLE_VVIP")',
             read: false
         ),
         new Delete(
