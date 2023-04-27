@@ -21,22 +21,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
         new GetCollection(
-            normalizationContext: ['groups' => ['events:get']],
+            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            name: 'event_tickets'
         ),
+        new Get(),
         new Post(
             normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
             denormalizationContext: ['groups' => ['tickets:post']],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Delete(),
-        new Put(),
-        new GetCollection(
-            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
-            read: false,
-            name: 'event_tickets'
-        )
+        new Put()
     ]
 )]
 class Event

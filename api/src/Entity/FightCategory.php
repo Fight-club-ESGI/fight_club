@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -12,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: FightCategoryRepository::class)]
 #[ApiResource(
@@ -22,6 +24,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('ROLE_ADMIN')"
         ),
         new Get(
+            normalizationContext: ["groups" => ["fight:category:get"]]
+        ),
+        new GetCollection(
             normalizationContext: ["groups" => ["fight:category:get"]]
         )
     ]

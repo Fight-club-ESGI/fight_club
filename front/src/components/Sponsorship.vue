@@ -48,7 +48,7 @@ export default defineComponent({
         const { users, user } = storeToRefs(userStore);
 
         const sponsorshipStore = useSponsorshipStore();
-        const { addSponsorship, sendSponsoLink } = sponsorshipStore;
+        const { sendSponsoLink } = sponsorshipStore;
 
         const email = ref<string>('');
         const valid = ref<boolean>();
@@ -70,7 +70,7 @@ export default defineComponent({
                 try {
                     const payload = {
                         sponsorId: user.value.id,
-                        sponsored: email.value,
+                        sponsoredEmail: email.value,
                     };
                     await sendSponsoLink(payload);
                 } catch {

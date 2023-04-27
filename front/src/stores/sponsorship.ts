@@ -19,9 +19,9 @@ export const useSponsorshipStore = defineStore('sponsorship', () => {
         }
     }
 
-    async function validateEmail(sponsoredId: string) {
+    async function validateEmail(token: string) {
         try {
-            await sponsorshipService._validateEmail(sponsoredId);
+            await sponsorshipService._validateEmail(token);
         } catch (error) {
             throw error;
         }

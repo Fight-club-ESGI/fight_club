@@ -31,6 +31,8 @@
 import { storeToRefs } from 'pinia';
 import { defineComponent, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { useRoute } from "vue-router";
+
 export default defineComponent({
     props: {
         display: {
@@ -40,6 +42,7 @@ export default defineComponent({
     },
     setup() {
         // const display = props
+        const route = useRoute();
         const userStore = useUserStore();
         const { user, isAdmin } = storeToRefs(userStore);
         const { logout } = userStore;
@@ -47,7 +50,7 @@ export default defineComponent({
             logout();
         };
 
-        return { user, isAdmin, logoutUser };
+        return { user, isAdmin, logoutUser, route };
     },
 });
 </script>

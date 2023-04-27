@@ -7,7 +7,8 @@ class Sponsorship {
 
     async _sendSponsoLink(payload: { sponsorId: string, sponsored: string }): Promise<void> {
         try {
-            const res = await client.post('/sponsor-link', payload);
+            const uri = `${namespace}/send-invitation`
+            const res = await client.post(uri, payload);
             return res.data;
         } catch (error) {
             throw error;
@@ -17,7 +18,7 @@ class Sponsorship {
     async _acceptRequest(sponsorshipId: string): Promise<void> {
         try {
             const uri = `${namespace}/${sponsorshipId}/accept-request`;
-            const res = await client.post(uri);
+            const res = await client.get(uri);
             return res.data;
         } catch (error) {
             throw error;
@@ -27,18 +28,17 @@ class Sponsorship {
     async _removeSponsorship(sponsorshipId: string): Promise<void> {
         try {
             const uri = `${namespace}/requests/remove/${sponsorshipId}`;
-            const res = await client.post(uri);
+            const res = await client.delete(uri);
             return res.data;
         } catch (error) {
             throw error;
         }
     }
-   
-    async _validateEmail(sponsoredId: string): Promise<void> {
+
+    async _validateEmail(token: string): Promise<void> {
         try {
-            const uri = `${namespace}/${sponsoredId}/validate-email`;
-            console.log(uri)
-            const res = await clientWithoutAuth.post(uri);
+            const uri = `${namespace}/${token}/validate-email`;
+            const res = await clientWithoutAuth.get(uri);
             return res.data;
         } catch (error) {
             throw error;
@@ -53,7 +53,7 @@ class Sponsorship {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 
     async _getAcceptedSponsorships(): Promise<SponsorshipResponseI[]> {
         try {
