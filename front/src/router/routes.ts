@@ -22,6 +22,7 @@ import ResetPassword from "@/views/session/ResetPassword.vue";
 import ValidateResetPassword from "@/views/session/ValidateResetPassword.vue";
 import Session from "@/views/session/Session.vue";
 import InvalidToken from "@/views/InvalidToken.vue";
+import CheckoutConfirmation from "@/views/checkout/Confirmation.vue";
 import BecomeVIP from "@/views/sponsor/BecomeVIP.vue";
 
 export default [
@@ -101,6 +102,12 @@ export default [
         path: '/wallet',
         component: Wallet,
         name: 'user-wallet',
+        meta: { requiresAuth: false, requiresAdmin: false }
+    },
+    {
+        path: '/checkout/confirmation',
+        name: 'checkout-confirmation',
+        component: CheckoutConfirmation,
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {

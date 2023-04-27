@@ -27,7 +27,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['wallet:transaction:get']],
             security: "is_granted('ROLE_USER')",
             name: 'wallet_transaction_confirmation'
-        )
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['wallet:transaction:get_collection']],
+        ),
     ]
 )]
 class WalletTransaction
@@ -44,15 +47,19 @@ class WalletTransaction
 
     #[ORM\Column]
     #[Groups([
+        'user:self',
         'admin:get',
-        'wallet:transaction:get'
+        'wallet:transaction:get',
+        'wallet:transaction:get_collection'
     ])]
     private ?int $amount = null;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionStatusEnum::class)]
     #[Groups([
+        'user:self',
         'admin:get',
-        'wallet:transaction:get'
+        'wallet:transaction:get',
+        'wallet:transaction:get_collection',
     ])]
     private ?WalletTransactionStatusEnum $status = WalletTransactionStatusEnum::PENDING;
 

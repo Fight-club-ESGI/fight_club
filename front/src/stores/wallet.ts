@@ -5,16 +5,6 @@ import { walletService } from "../service/api";
 export const useWalletStore = defineStore('wallet', () => {
 
     const wallet = ref<number>();
-    const walletHistoryData = ref([]);
-
-    async function walletHistory() {
-        try {
-            const res = await walletService._walletHistory();
-            walletHistoryData.value = res;
-        } catch (error) {
-            throw error;
-        }
-    }
 
     async function deposit(amount: string) {
         try {
@@ -38,5 +28,5 @@ export const useWalletStore = defineStore('wallet', () => {
         }
     }
 
-    return { deposit, wallet, walletHistory, withdraw, walletHistoryData }
+    return { deposit, wallet, withdraw }
 });
