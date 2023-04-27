@@ -3,7 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -17,10 +21,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ApiResource(
     operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            name: 'event_tickets'
+        ),
+        new Get(),
         new Post(
-            normalizationContext: ['groups' => ['event:get']],
-            denormalizationContext: ['groups' => ['event:post']],
-        )
+            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            denormalizationContext: ['groups' => ['tickets:post']],
+            security: 'is_granted("ROLE_ADMIN")',
+        ),
+        new Delete(),
+        new Put()
     ]
 )]
 class Event
@@ -30,82 +42,113 @@ class Event
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'events:get'
+    ])]
     private ?FightCategory $fightCategory = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
     ])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
     ])]
     private ?string $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
     ])]
     private ?string $location_link = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
     ])]
     private ?\DateTimeInterface $time_start = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
     ])]
     private ?\DateTimeInterface $time_end = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
     ])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
     ])]
     private ?int $capacity = null;
 
     #[ORM\Column]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get',
+        'tickets:post',
+        'events:get'
     ])]
     private ?bool $vip = false;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get'
     ])]
     private Collection $tickets;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
     #[Groups([
-        'event:get',
-        'event:post'
+        'admin:get',
+        'tickets:get'
     ])]
     private Collection $fights;
+
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: TicketEvent::class)]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post',
+        'events:get'
+    ])]
+    private Collection $ticket_events;
 
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
         $this->fights = new ArrayCollection();
+        $this->ticket_events = new ArrayCollection();
     }
 
     public function getFightCategory(): ?FightCategory
@@ -217,36 +260,6 @@ class Event
     }
 
     /**
-     * @return Collection<int, Ticket>
-     */
-    public function getTickets(): Collection
-    {
-        return $this->tickets;
-    }
-
-    public function addTicket(Ticket $ticket): self
-    {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets->add($ticket);
-            $ticket->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTicket(Ticket $ticket): self
-    {
-        if ($this->tickets->removeElement($ticket)) {
-            // set the owning side to null (unless already changed)
-            if ($ticket->getEvent() === $this) {
-                $ticket->setEvent(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Fight>
      */
     public function getFights(): Collection
@@ -270,6 +283,36 @@ class Event
             // set the owning side to null (unless already changed)
             if ($fight->getEvent() === $this) {
                 $fight->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TicketEvent>
+     */
+    public function getTicketEvents(): Collection
+    {
+        return $this->ticket_events;
+    }
+
+    public function addTicketEvent(TicketEvent $ticketEvent): self
+    {
+        if (!$this->ticket_events->contains($ticketEvent)) {
+            $this->ticket_events->add($ticketEvent);
+            $ticketEvent->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicketEvent(TicketEvent $ticketEvent): self
+    {
+        if ($this->ticket_events->removeElement($ticketEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($ticketEvent->getEvent() === $this) {
+                $ticketEvent->setEvent(null);
             }
         }
 

@@ -1,16 +1,16 @@
 <template>
-    <div class="flex items-center align-middle bg-black/20 h-24 fixed w-full text-white px-20">
-        <div
-            class="h-full w-1/4 bg-cover bg-center"
-            style="background-image: url('src/assets/Thunderous_knockout__2_-removebg-preview.png');"
-        >
-        </div>
+    <v-app-bar>
+        <div class="flex items-center align-middle bg-black/80 fixed w-full text-white px-10 z-5000">
+        <v-app-bar-nav-icon @click="emit('toggleNavigationDrawer')" v-if="isAdmin"></v-app-bar-nav-icon>
+        <v-img @click="router.push({ name: 'home' })" class="cursor-pointer" height="100" width="100" src="src/assets/home.png"></v-img>
         <div class="flex w-full">
-            <v-list class="flex bg-transparent text-white">
-                <v-list-item>Home</v-list-item>
-                <v-list-item>Bets</v-list-item>
-                <v-list-item>Booking</v-list-item>
-                <v-list-item>About Us</v-list-item>
+            <v-list v-if="!isConnected" class="flex bg-transparent text-white">
+                <v-list-item @click="router.push({ name: 'fighters' })">Fighters</v-list-item>
+                <v-list-item @click="router.push({ name: 'events' })">Events</v-list-item>
+            </v-list>
+            <v-list v-else class="flex bg-transparent text-white">
+                <v-list-item @click="router.push({ name: 'fighters' })">Fighters</v-list-item>
+                <v-list-item @click="router.push({ name: 'events' })">Events</v-list-item>
             </v-list>
             <v-spacer />
             <v-list v-if="!isConnected" class="flex bg-transparent text-white">
@@ -22,6 +22,8 @@
             </v-list>
         </div>
     </div>
+    </v-app-bar>
+
 </template>
 <script lang="ts">
 import { storeToRefs } from 'pinia';

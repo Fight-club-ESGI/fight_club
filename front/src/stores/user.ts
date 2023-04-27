@@ -58,12 +58,8 @@ export const useUserStore = defineStore('user', () => {
             const res = await _signin(payload);
             token.value = res.token;
             refreshToken.value = res.refresh_token;
-            const tokenValue = jwt_decode(res.token);
-            user.value.username = tokenValue?.username;
-            user.value.email = tokenValue?.username;
-            user.value.roles = tokenValue?.roles;
-            // const self = await _getSelfUser();
-            // user.value = self;
+            const self = await _getSelfUser();
+            user.value = self;
         } catch (error) {
             throw error;
         }
@@ -123,21 +119,23 @@ export const useUserStore = defineStore('user', () => {
     async function logout() {
         try {
             user.value = {
-              id: null,
-              username: null,
-              roles: null,
-              email: null,
-              sponsorshipAsSponsor: [],
-              createdAt: null,
-              updatedAt: null,
-              wallet: {
                 id: null,
-                amount: null,
+                username: null,
+                roles: null,
+                email: null,
+                sponsorshipAsSponsor: [],
                 createdAt: null,
                 updatedAt: null,
-              }
+                wallet: {
+                    id: null,
+                    amount: null,
+                    createdAt: null,
+                    updatedAt: null,
+                }
             };
             router.push({ name: 'login' });
+            token.value = "";
+            refreshToken.value = "";
         } catch (error) {
             throw error;
         }
@@ -151,7 +149,7 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    async function updateUser(payload: { id: string }) {
+    async function updateUser(payload: { id: string, username: string }) {
         try {
             const res = await _updateUser(payload);
             user.value = res;

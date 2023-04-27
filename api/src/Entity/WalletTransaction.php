@@ -18,15 +18,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`wallet_transaction`')]
 #[ApiResource(
     operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['wallet:transaction:get']],
+        ),
         new Get(
             uriTemplate: "/wallet_transactions/{id}/confirmation",
             controller: WalletDepositCheckoutConfirmation::class,
-            normalizationContext: ['groups' => ['wallet_transaction:get']],
+            normalizationContext: ['groups' => ['wallet:transaction:get']],
             security: "is_granted('ROLE_USER')",
             name: 'wallet_transaction_confirmation'
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['wallet_transaction:get_collection']],
+            normalizationContext: ['groups' => ['wallet:transaction:get_collection']],
         ),
     ]
 )]
@@ -36,14 +39,18 @@ class WalletTransaction
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'walletTransactions')]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get'
+    ])]
     private ?Wallet $wallet = null;
 
     #[ORM\Column]
     #[Groups([
         'user:self',
         'admin:get',
-        'wallet_transaction:get',
-        'wallet_transaction:get_collection'
+        'wallet:transaction:get',
+        'wallet:transaction:get_collection'
     ])]
     private ?int $amount = null;
 
@@ -51,18 +58,30 @@ class WalletTransaction
     #[Groups([
         'user:self',
         'admin:get',
-        'wallet_transaction:get',
-        'wallet_transaction:get_collection',
+        'wallet:transaction:get',
+        'wallet:transaction:get_collection',
     ])]
     private ?WalletTransactionStatusEnum $status = WalletTransactionStatusEnum::PENDING;
 
     #[ORM\Column(length: 255, enumType: WalletTransactionTypeEnum::class)]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get',
+    ])]
     private ?WalletTransactionTypeEnum $type = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get'
+    ])]
     private ?string $transaction = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        'admin:get',
+        'wallet:transaction:get'
+    ])]
     private ?string $stripe_ref = null;
 
     public function getWallet(): ?Wallet

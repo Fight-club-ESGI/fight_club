@@ -1,5 +1,5 @@
 <template>
-    <table class="w-ful text-left pl-2 pb-2">
+    <table v-if="fighters && fighters.length > 0" class="w-ful text-left pl-2 pb-2">
         <thead>
             <tr>
                 <th>Icon</th>
@@ -35,6 +35,7 @@
             </tr>
         </tbody>
     </table>
+    <v-alert v-else color="blue-grey-lighten-4">Create a fighter</v-alert>
 </template>
 
 <script lang="ts">

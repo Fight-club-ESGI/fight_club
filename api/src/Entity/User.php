@@ -45,6 +45,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                 'multipart' => ['multipart/form-data'],
                 'json' => ['application/json']
             ],
+            normalizationContext: ['groups' => ['user:get']],
+            denormalizationContext: ['groups' => ['user:post']],
             processor: UserPasswordHasher::class,
         ),
         new Get(
@@ -62,6 +64,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['user:get_collection']],
+            security: "is_granted('ROLE_USER')"
         ),
         new Patch(
             normalizationContext: ['groups' => ['user:get']],
@@ -85,11 +88,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             controller: CheckTokenValidityController::class,
             read: false,
             name: 'check-token-validity',
+
         ),
         new Post(
             uriTemplate: '/change_password',
             controller: ChangePassword::class,
-            name: 'validate-reset-password'
+            security: "is_granted('ROLE_USER')",
+            name: 'validate-reset-password',
         ),
     ]
 )]
@@ -106,7 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:post',
         'user:get_collection',
         'user:patch',
-        'user:self',
+        'user:self'
     ])]
     private ?string $email = null;
 
@@ -116,12 +121,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:get_collection',
         'admin:post',
         'admin:patch',
-        'user:self'
+        'user:self',
+        'user:post'
     ])]
     private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['admin:get'])]
+    #[Groups([
+        'admin:get',
+        'user:post'
+    ])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -145,6 +154,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
     #[Groups(['admin:get', 'user:self'])]
     private ?Order $orders = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['admin:get', 'user:self'])]
+    private ?string $VIPToken = null;
 
     public function __construct()
     {
@@ -171,7 +184,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -344,9 +357,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @param Carbon | null $tokenDate
      * @return self
      */
-    public function setTokenDate(Carbon | null $tokenDate): self
+    public function setTokenDate(Carbon|null $tokenDate): self
     {
         $this->tokenDate = $tokenDate;
+        return $this;
+    }
+
+    public function getVIPToken(): ?string
+    {
+        return $this->VIPToken;
+    }
+
+    public function setVIPToken(?string $VIPToken): self
+    {
+        $this->VIPToken = $VIPToken;
         return $this;
     }
 }

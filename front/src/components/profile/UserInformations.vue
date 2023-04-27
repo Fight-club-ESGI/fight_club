@@ -18,7 +18,7 @@ import { createToast } from 'mosha-vue-toastify';
 export default defineComponent({
     setup() {
         const userStore = useUserStore();
-        const { user } = storeToRefs(userStore);
+        const { user } = userStore;
         const { updateUser } = userStore;
 
         const form = ref();
@@ -32,7 +32,7 @@ export default defineComponent({
             try {
                 const { valid } = await form.value.validate();
                 if (valid) {
-                    await updateUser();
+                    await updateUser({ username: user.username, id: user.id });
                     createToast('User updated', { type: 'success', position: 'bottom-right' });
                 }
             } catch (error) {

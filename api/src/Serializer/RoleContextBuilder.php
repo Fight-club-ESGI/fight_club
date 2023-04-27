@@ -40,6 +40,20 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                     # Normalization part
                     if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
                         $context['groups'][] = 'admin:get';
+                    } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
+
+                    } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
+
+                    } else if ($this->authorizationChecker->isGranted('ROLE_USER')) {
+
+                    } else {
+
+                    }
+                    $context['groups'][] = 'additional:get';
+                    $context['enable_max_depth'] = true;
+                } else {
+                    # Denormalization part
+                    if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
                         $context['groups'][] = 'admin:post';
                         $context['groups'][] = 'admin:patch';
                     } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
@@ -51,27 +65,16 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                     } else {
 
                     }
-                    $context['groups'][] = 'additional:get';
-                } else {
-                    # Denormalization part
-                    if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                        $context['groups'][] = 'admin:post';
-                    } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
-
-                    } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
-
-                    } else if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-
-                    } else {
-
-                    }
                     $context['groups'][] = 'additional:post';
+                    $context['enable_max_depth'] = true;
                 }
             } else {
                 if ($normalization) {
                     $context['groups'][] = 'additional:get';
+                    $context['enable_max_depth'] = true;
                 } else {
                     $context['groups'][] = 'additional:post';
+                    $context['enable_max_depth'] = true;
                 }
             }
         }

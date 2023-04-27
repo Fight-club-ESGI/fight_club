@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -16,10 +18,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 #[ApiResource(
     operations: [
+        new Get(
+            normalizationContext: ['groups' => ['tickets:get']],
+            read: true
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['tickets:get']],
+            read: true
+        ),
         new Post(
-            normalizationContext: ['groups' => ['ticket:get']],
-            denormalizationContext: ['groups' => ['ticket:post']],
-            read: false
+            normalizationContext: ['groups' => ['tickets:get']],
+            read: true
         )
     ]
 )]
@@ -29,80 +38,59 @@ class Ticket
     use TimestampableTrait;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
-        'ticket:get',
-        'ticket:post'
+        'admin:get',
+        'tickets:get'
     ])]
-    private ?TicketCategory $ticketCategory = null;
+    private ?TicketEvent $ticket_event = null;
+
+    #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'tickets:get'
+    ])]
+    private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
-        'ticket:get',
-        'ticket:post'
+        'admin:get',
+        'tickets:get'
     ])]
     private ?Event $event = null;
 
-    #[ORM\Column]
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
-        'ticket:get',
-        'ticket:post'
+        'admin:get',
+        'tickets:get'
     ])]
-    private ?float $price = 0;
+    private ?Order $_order = null;
 
-    #[ORM\Column]
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
-        'ticket:get',
-        'ticket:post'
+        'admin:get',
+        'tickets:get'
     ])]
-    private ?bool $availability = false;
+    private ?TicketCategory $ticketCategory = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(length: 255)]
     #[Groups([
-        'ticket:get',
-        'ticket:post'
+        'admin:get',
+        'tickets:get'
     ])]
-    private ?\DateTimeInterface $time_start = null;
+    private ?string $reference = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
-    private ?\DateTimeInterface $time_end = null;
-
-    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'tickets')]
-    #[Groups([
-        'ticket:get',
-        'ticket:post'
-    ])]
-    private Collection $orders;
-
-    public function __construct()
+    public function getTicketEvent(): ?TicketEvent
     {
-        $this->orders = new ArrayCollection();
+        return $this->ticket_event;
     }
 
-    public function getTicketCategory(): ?TicketCategory
+    public function setTicketEvent(?TicketEvent $ticket_event): self
     {
-        return $this->ticketCategory;
-    }
-
-    public function setTicketCategory(?TicketCategory $ticketCategory): self
-    {
-        $this->ticketCategory = $ticketCategory;
-
-        return $this;
-    }
-
-    public function getEvent(): ?Event
-    {
-        return $this->event;
-    }
-
-    public function setEvent(?Event $event): self
-    {
-        $this->event = $event;
+        $this->ticket_event = $ticket_event;
 
         return $this;
     }
@@ -119,64 +107,53 @@ class Ticket
         return $this;
     }
 
-    public function isAvailability(): ?bool
+    public function getEvent(): ?Event
     {
-        return $this->availability;
+        return $this->event;
     }
 
-    public function setAvailability(bool $availability): self
+    public function setEvent(?Event $event): self
     {
-        $this->availability = $availability;
+        $this->event = $event;
 
         return $this;
     }
 
-    public function getTimeStart(): ?\DateTimeInterface
+    public function getOrder(): ?Order
     {
-        return $this->time_start;
+        return $this->_order;
     }
 
-    public function setTimeStart(\DateTimeInterface $time_start): self
+    public function setOrder(?Order $_order): self
     {
-        $this->time_start = $time_start;
+        $this->_order = $_order;
 
         return $this;
     }
 
-    public function getTimeEnd(): ?\DateTimeInterface
+    public function getTicketCategory(): ?TicketCategory
     {
-        return $this->time_end;
+        return $this->ticketCategory;
     }
 
-    public function setTimeEnd(?\DateTimeInterface $time_end): self
+    public function setTicketCategory(?TicketCategory $ticketCategory): self
     {
-        $this->time_end = $time_end;
+        $this->ticketCategory = $ticketCategory;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
+    public function getReference(): ?string
     {
-        return $this->orders;
+        return $this->reference;
     }
 
-    public function addOrder(Order $order): self
+    public function setReference(string|null $reference = null): self
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->addTicket($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->removeElement($order)) {
-            $order->removeTicket($this);
+        if (is_null($this->reference) && is_null($reference)) {
+            $this->reference = sprintf('T-%s-%s', date('Ymd'), bin2hex(random_bytes(3)));
+        } else {
+            $this->reference = $reference;
         }
 
         return $this;

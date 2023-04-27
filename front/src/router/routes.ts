@@ -10,6 +10,7 @@ import Sponsorship from "@/views/admin/Sponsorship.vue"
 import FightersAdmin from "@/views/admin/Fighters.vue"
 import AdminView from "@/views/admin/AdminView.vue"
 import ProfileView from "@/views/user/Profile.vue";
+import EventDetailsAdmin from "@/views/admin/EventDetails.vue";
 import UserBetsHistory from "@/views/bet/UserBetsHistory.vue";
 import UserTicketsHistory from "@/views/ticketing/UserTicketsHistory.vue";
 import Wallet from "@/components/profile/Wallet.vue";
@@ -22,6 +23,7 @@ import ValidateResetPassword from "@/views/session/ValidateResetPassword.vue";
 import Session from "@/views/session/Session.vue";
 import InvalidToken from "@/views/InvalidToken.vue";
 import CheckoutConfirmation from "@/views/checkout/Confirmation.vue";
+import BecomeVIP from "@/views/sponsor/BecomeVIP.vue";
 
 export default [
     {
@@ -62,6 +64,12 @@ export default [
                 path: 'events',
                 component: Event,
                 name: 'event-admin',
+                meta: { requiresAuth: true, requiresAdmin: true }
+            },
+            {
+                path: 'events/:id',
+                component: EventDetailsAdmin,
+                name: 'event-details-admin',
                 meta: { requiresAuth: true, requiresAdmin: true }
             },
             {
@@ -186,6 +194,12 @@ export default [
         path: '/invalid-token',
         component: InvalidToken,
         name: 'invalid-token',
+        meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
+    },
+    {
+        path: '/become-vip',
+        component: BecomeVIP,
+        name: 'become-vip',
         meta: { requiresAuth: false, requiresAdmin: false, hideHeader: true }
     }
 ]

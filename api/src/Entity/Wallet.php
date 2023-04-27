@@ -45,14 +45,25 @@ class Wallet
     use TimestampableTrait;
 
     #[ORM\Column]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self'
+    ])]
     private ?int $amount = 0;
 
     #[ORM\OneToOne(inversedBy: 'wallet', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+        'user:self'
+    ])]
     private ?User $users = null;
 
     #[ORM\OneToMany(mappedBy: 'wallet', targetEntity: WalletTransaction::class)]
+    #[Groups([
+        'admin:get',
+        'user:self'
+    ])]
     private Collection $walletTransactions;
 
     public function __construct()

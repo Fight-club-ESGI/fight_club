@@ -1,13 +1,13 @@
 <template>
     <v-card class="pa-5">
         <v-card-title>Pending requests</v-card-title>
-        <v-card-text v-if="pendingSponsorships.sponsorship && pendingSponsorships.sponsorship.length > 0" class="pt-5">
+        <v-card-text v-if="pendingSponsorships && pendingSponsorships.length > 0" class="pt-5">
             <table class="w-full">
                 <th v-for="tableHeader in tableHeaders" class="w-100 text-left pl-2 pb-2">
                     {{ tableHeader }}
                 </th>
                 <tbody>
-                    <tr v-for="(request, i) of pendingSponsorships.sponsorship" :class="[i % 2 !== 1 ? 'bg-white' : ''] + ' h-10'">
+                    <tr v-for="(request, i) of pendingSponsorships" :class="[i % 2 !== 1 ? 'bg-white' : ''] + ' h-10'">
                         <td class="pl-2">{{ request.sponsored.username }}</td>
                         <td class="pl-2">{{ request.sponsored.email }}</td>
                         <td class="pl-2 font-bold">PENDING</td>
