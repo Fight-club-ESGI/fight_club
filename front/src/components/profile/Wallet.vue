@@ -41,7 +41,8 @@ import {useWalletTransactionStore} from "@/stores/walletTransaction";
 const wallet_amount = ref(0);
 const wallet_input_amount = ref('0');
 const walletStore = useWalletStore();
-const { deposit, withdraw, wallet } = walletStore;
+const { deposit, withdraw } = walletStore;
+const { amount } = storeToRefs(walletStore);
 
 const walletTransactionStore = useWalletTransactionStore();
 

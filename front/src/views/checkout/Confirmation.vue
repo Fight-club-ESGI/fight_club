@@ -1,15 +1,15 @@
 <template>
     <div class="flex flex-column h-full place-content-center items-center">
         <div
-            v-if="walletTransaction.status === 'success'"
+            v-if="walletTransaction.status === 'accepted'"
             class="flex flex-col text-center items-center"
         >
             <Icon
-                size="200"
+                height="200"
                 icon="emojione:white-heavy-check-mark"
             />
             <p
-                class="text-3xl"
+                class="text-3xl font-bold p-4"
             >
                 Payment approved
             </p>
@@ -32,7 +32,7 @@
                 height="200"
                 icon="emojione:no-entry"
             />
-            Payment cancelled
+            <p class="text-3xl font-bold p-4">Payment cancelled</p>
         </div>
         <div
             v-else-if="walletTransaction.status === 'pending'"
@@ -43,7 +43,7 @@
                 icon="emojione:three-thirty"
             />
 
-            Payment pending
+            <p class="text-3xl font-bold p-4">Payment pending</p>
         </div>
         <div>
             <v-btn

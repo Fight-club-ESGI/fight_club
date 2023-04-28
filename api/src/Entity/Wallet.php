@@ -14,11 +14,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: WalletRepository::class)]
 #[ORM\Table(name: '`wallet`')]
 #[ApiResource(
     operations: [
+        new Get(
+            uriTemplate: '/wallet',
+            normalizationContext: ['groups' => ['user:get']],
+            security: 'is_granted("ROLE_USER")',
+            read: true,
+            name: 'self_user_wallet'
+        ),
         new Get(
             normalizationContext: ['groups' => ['user:get']],
             security: "is_granted('ROLE_ADMIN')",
@@ -57,6 +65,7 @@ class Wallet
         'admin:get',
         'user:self'
     ])]
+    #[MaxDepth(1)]
     private ?User $users = null;
 
     #[ORM\OneToMany(mappedBy: 'wallet', targetEntity: WalletTransaction::class)]

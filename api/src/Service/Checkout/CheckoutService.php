@@ -47,7 +47,7 @@ class CheckoutService
         $this->entityManager->persist($walletTransaction);
         $this->entityManager->flush();
 
-        return $this->stripe->checkout->sessions->create($params);
+        return $checkout_session;
     }
 
     public function recordWalletTransaction(Wallet $wallet, float $amount, WalletTransactionStatusEnum $status, WalletTransactionTypeEnum $type): WalletTransaction
