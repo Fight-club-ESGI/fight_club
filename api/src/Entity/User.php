@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -52,6 +53,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Get(
             normalizationContext: ['groups' => ['user:get']],
             security: "is_granted('ROLE_USER')"
+        ),
+        new Get(
+            uriTemplate: '/self',
+            normalizationContext: ["groups" => []],
+            security: "is_granted('ROLE_USER')",
+            read: true,
+            name: 'self_user',
         ),
         new Get(
             uriTemplate: 'me',
@@ -141,6 +149,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
     #[Groups(['admin:get', 'user:self'])]
+    #[MaxDepth(1)]
     private ?Wallet $wallet = null;
 
     #[ORM\OneToMany(mappedBy: 'sponsor', targetEntity: Sponsorship::class)]
@@ -153,6 +162,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
     #[Groups(['admin:get', 'user:self'])]
+    #[MaxDepth(1)]
     private ?Order $orders = null;
 
     #[ORM\Column(length: 255, nullable: true)]

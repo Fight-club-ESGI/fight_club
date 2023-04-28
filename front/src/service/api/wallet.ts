@@ -3,6 +3,19 @@ const namespace = "wallet"
 
 class Wallet {
 
+    async _getWallet() {
+        try {
+            const uri = `${namespace}`;
+            const res = await client.post(uri,
+                {
+                    amount: parseFloat(amount)
+                });
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async _deposit(amount: string) {
         try {
             const uri = `${namespace}/deposit`;
