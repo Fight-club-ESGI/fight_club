@@ -20,7 +20,6 @@ class WalletWithdraw extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly Security $security,
-        private readonly UserRepository $userRepository,
     ) {}
 
     public function __invoke(Request $request): Response
@@ -31,7 +30,7 @@ class WalletWithdraw extends AbstractController
         $user = $this->security->getUser();
         $wallet = $user->getWallet();
 
-        if($user->getWallet()->getAmount() > $amount){
+        if($user->getWallet()->getAmount() >= $amount){
             $wallet->setAmount($wallet->getAmount() - $amount);
             $this->entityManager->persist($wallet);
             $this->entityManager->flush();
@@ -56,7 +55,7 @@ class WalletWithdraw extends AbstractController
             $this->entityManager->persist($transaction);
             $this->entityManager->flush();
 
-            return new Response("insufficient fund", 200, ["Content-Type" => "application/json"]);
+            return new Response("insufficient fund", 400, ["Content-Type" => "application/json"]);
         }
     }
 }

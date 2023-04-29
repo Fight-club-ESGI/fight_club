@@ -34,6 +34,9 @@ export interface WalletTransactionInterface{
   id: string | null
   amount: number | null
   status: string | null
+  wallet: string | null
+  type: string | null
+  stripe_ref: string | null
   createdAt: string | null
   updatedAt: string | null
 }

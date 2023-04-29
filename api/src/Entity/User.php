@@ -55,19 +55,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             security: "is_granted('ROLE_USER')"
         ),
         new Get(
-            uriTemplate: '/self',
-            security: "is_granted('ROLE_USER')",
-            read: true,
-            name: 'self_user',
-        ),
-        new Get(
-            uriTemplate: 'me',
-            controller: UserMe::class,
-            normalizationContext: ['groups' => ['user:self']],
+            uriTemplate: '/me',
             security: "is_granted('ROLE_USER')",
             securityMessage: 'You need to be connected',
-            read: false,
-            name: 'me'
+            read: true,
+            name: 'self_user',
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['user:get_collection']],
@@ -118,6 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:post',
         'user:get_collection',
         'user:patch',
+        'user:self:get',
     ])]
     private ?string $email = null;
 
@@ -127,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:get_collection',
         'admin:post',
         'admin:patch',
-        'user:self',
+        'user:self:get',
         'user:post'
     ])]
     private array $roles = [];
@@ -145,25 +138,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Carbon $tokenDate = null;
 
     #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
     #[MaxDepth(1)]
     private ?Wallet $wallet = null;
 
     #[ORM\OneToMany(mappedBy: 'sponsor', targetEntity: Sponsorship::class)]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
     private Collection $sponsorshipsAsSponsor;
 
     #[ORM\OneToOne(mappedBy: 'sponsored', targetEntity: Sponsorship::class)]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
     private ?Sponsorship $sponsorshipsAsSponsored;
 
     #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
     #[MaxDepth(1)]
     private ?Order $orders = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
     private ?string $VIPToken = null;
 
     public function __construct()

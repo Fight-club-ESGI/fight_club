@@ -5,7 +5,7 @@ class Wallet {
 
     async _walletHistory() {
         try {
-            const uri = `${namespace}`;
+            const uri = `wallet_transaction`;
             const res = await client.get(uri);
             return res.data;
         } catch (error) {
