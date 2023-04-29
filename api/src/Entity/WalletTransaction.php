@@ -13,23 +13,27 @@ use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\WalletTransactionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: WalletTransactionRepository::class)]
 #[ORM\Table(name: '`wallet_transaction`')]
 #[ApiResource(
     operations: [
-        new GetCollection(
-            normalizationContext: ['groups' => ['wallet:transaction:get']],
-        ),
         new Get(
             uriTemplate: "/wallet_transactions/{id}/confirmation",
             controller: WalletDepositCheckoutConfirmation::class,
             normalizationContext: ['groups' => ['wallet:transaction:get']],
             security: "is_granted('ROLE_USER')",
-            name: 'wallet_transaction_confirmation'
+            name: "wallet_transaction_confirmation"
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['wallet:transaction:get_collection']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new GetCollection(
+            uriTemplate: "/wallet_transaction",
+            security: "is_granted('ROLE_USER')",
+            name: "self_wallet_transaction"
         ),
     ]
 )]
@@ -43,11 +47,12 @@ class WalletTransaction
         'admin:get',
         'wallet:transaction:get'
     ])]
+    #[MaxDepth(1)]
     private ?Wallet $wallet = null;
 
     #[ORM\Column]
     #[Groups([
-        'user:self',
+        'user:self:get',
         'admin:get',
         'wallet:transaction:get',
         'wallet:transaction:get_collection'
@@ -56,7 +61,7 @@ class WalletTransaction
 
     #[ORM\Column(length: 255, enumType: WalletTransactionStatusEnum::class)]
     #[Groups([
-        'user:self',
+        'user:self:get',
         'admin:get',
         'wallet:transaction:get',
         'wallet:transaction:get_collection',

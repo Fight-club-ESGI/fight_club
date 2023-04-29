@@ -22,7 +22,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new Get(
             uriTemplate: '/wallet',
-            normalizationContext: ['groups' => ['user:get']],
             security: 'is_granted("ROLE_USER")',
             read: true,
             name: 'self_user_wallet'
@@ -55,7 +54,7 @@ class Wallet
     #[ORM\Column]
     #[Groups([
         'admin:get',
-        'user:self'
+        'user:self:get'
     ])]
     private ?int $amount = 0;
 
@@ -63,7 +62,7 @@ class Wallet
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',
-        'user:self'
+        'user:self:get'
     ])]
     #[MaxDepth(1)]
     private ?User $users = null;
@@ -71,7 +70,7 @@ class Wallet
     #[ORM\OneToMany(mappedBy: 'wallet', targetEntity: WalletTransaction::class)]
     #[Groups([
         'admin:get',
-        'user:self'
+        'user:self:get'
     ])]
     private Collection $walletTransactions;
 

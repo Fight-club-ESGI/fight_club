@@ -1,31 +1,73 @@
 <template>
-    <div class="flex h-full space-x-5 p-10">
-        <div class="flex flex-col w-1/4 rounded space-y-5" >
-            <div class="text-center bg-neutral-100 p-10 rounded">
-                <div class="font-bold text-2xl">Your wallet funds</div>
-                <div class="font-bold text-3xl p-6">{{ user.wallet.amount }} €</div>
-            </div>
-            <div>
-                <v-text-field type="number" v-model.number="wallet_input_amount" />
-            </div>
-            <div class="flex">
-                <div class="w-1/2">
-                    <v-btn block color="secondary" class="mr-2" @click="wallet_withdraw()">Withdraw</v-btn>
+    <div class="flex h-full space-x-5 p-5">
+        <div class="flex flex-col h-full w-1/4 rounded " >
+            <div class="flex font-bold text-2xl h-1/12 items-center">Your wallet funds</div>
+            <div class="h-11/12">
+                <div class="text-center bg-neutral-100 p-10 rounded">
+                    <div class="font-bold text-3xl p-6">{{ wallet.amount }} €</div>
                 </div>
-                <div class="w-1/2">
-                    <v-btn block class="ml-2" @click="wallet_deposit()">Deposit</v-btn>
+                <div>
+                    <v-text-field type="number" v-model.number="wallet_input_amount" />
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <v-btn block class="rounded" @click="wallet_withdraw()">Withdraw</v-btn>
+                    </div>
+                    <div class="w-1/2">
+                        <v-btn block class="rounded" color="secondary" @click="wallet_deposit()">Deposit</v-btn>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="pa-5 w-3/4 rounded bg-neutral-100">
-            <div class="text-2xl font-bold">Transaction history</div>
-            <v-card class="pa-5 mt-12" v-for="transaction in walletTransactionHistory">
-                {{ transaction.id }}
-                {{ transaction.createdAt }}
-                {{ transaction.updatedAt }}
-                {{ transaction.amount }}
-                {{ transaction.status }}
-            </v-card>
+        <div class="w-3/4">
+            <div class="flex text-2xl h-1/12 font-bold items-center">Transaction history</div>
+            <div class="w-full h-11/12 overflow-auto rounded bg-neutral-100">
+                <div>
+                    <div class="flex p-3 flex space-x-5 items-center"
+                         v-for="transaction in walletTransactionHistory"
+                         :key="transaction.id"
+                    >
+                        <div class="w-40 font-bold text-center">
+                            {{transaction.type}}
+                        </div>
+                        <div class="flex bg-neutral-200 p-3 rounded-lg w-full items-center">
+                            <span class="">
+                                {{ transaction.amount }} €
+                            </span>
+                            <v-spacer />
+                            <span class="px-4 font-bold w-32 text-right">
+                                {{ transaction.status }}
+                            </span>
+                            <v-btn
+                                v-if="transaction.status === 'pending'"
+                                icon
+                                height="30"
+                                width="30"
+                                color="secondary"
+                                class="rounded mr-3"
+                                @click="transactionConfirmation(transaction.id)"
+                            >
+                                <Icon
+                                    height="25"
+                                    icon="material-symbols:refresh"
+                                />
+                            </v-btn>
+                            <Icon
+                                height="25"
+                                :icon="transactionStatusIcon(transaction.status)"
+                            />
+                        </div>
+                        <Icon
+                            height="40"
+                            icon="material-symbols:calendar-month"
+                        />
+                        <div class="w-64 font-bold bg-neutral-200 p-3 rounded-lg">
+                            {{ new Date(transaction.createdAt).toLocaleDateString() }}
+                            {{ new Date(transaction.createdAt).toLocaleTimeString() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -36,19 +78,19 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { useWalletStore } from '@/stores/wallet';
 import { createToast } from 'mosha-vue-toastify';
 import { useUserStore } from '@/stores/user';
-import {useWalletTransactionStore} from "@/stores/walletTransaction";
+import { useWalletTransactionStore } from "@/stores/walletTransaction";
+import { Icon } from "@iconify/vue/dist/iconify.js";
 
 const wallet_amount = ref(0);
 const wallet_input_amount = ref('0');
 const walletStore = useWalletStore();
-const { deposit, withdraw } = walletStore;
-const { amount } = storeToRefs(walletStore);
+const { deposit, withdraw, getWallet } = walletStore;
+const { wallet } = storeToRefs(walletStore);
 
 const walletTransactionStore = useWalletTransactionStore();
 
-const { getWalletTransactionHistory } = walletTransactionStore
+const { getWalletTransactionHistory, transactionConfirmation } = walletTransactionStore
 const { walletTransactionHistory } = storeToRefs(walletTransactionStore);
-
 const { user } = storeToRefs(useUserStore());
 const wallet_deposit = async () => {
     try {
@@ -71,8 +113,20 @@ const wallet_withdraw = async () => {
     }
 };
 
+const transactionStatusIcon = (status: string) => {
+    switch (status) {
+        case 'accepted':
+            return 'emojione:white-heavy-check-mark'
+        case 'pending':
+            return 'twemoji:hourglass-not-done'
+        default:
+            return 'emojione:no-entry'
+    }
+}
+
 onMounted(async () => {
     try {
+        await getWallet();
         await getWalletTransactionHistory();
     } catch (e) {}
 });

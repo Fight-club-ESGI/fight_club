@@ -6,10 +6,7 @@ class Wallet {
     async _getWallet() {
         try {
             const uri = `${namespace}`;
-            const res = await client.post(uri,
-                {
-                    amount: parseFloat(amount)
-                });
+            const res = await client.get(uri);
             return res.data;
         } catch (error) {
             throw error;
@@ -36,7 +33,7 @@ class Wallet {
                 {
                     amount: parseFloat(amount)
                 }
-                );
+            );
             return res.data;
         } catch (error) {
             throw error;

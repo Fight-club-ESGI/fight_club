@@ -31,7 +31,10 @@ export default defineComponent({
 </script>
 
 <template>
-    <v-app app>
+    <v-app
+        app
+        class="h-screen"
+    >
         <HomeHeader v-if="!route.meta?.hideHeader" @toggleNavigationDrawer="display = !display"></HomeHeader>
 
         <NavigationDrawer
@@ -39,7 +42,7 @@ export default defineComponent({
             :display="display"
         />
         <!-- Do not put padding on the v-main because it will break the website -->
-        <v-main>
+        <v-main class="h-full">
             <router-view />
         </v-main>
     </v-app>

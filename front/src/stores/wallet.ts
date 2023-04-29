@@ -1,16 +1,23 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { walletService } from "../service/api";
+import {WalletInterface} from "@/interfaces/responseAPI";
 
 export const useWalletStore = defineStore('wallet', () => {
 
-    const amount = ref<number>();
-    const wallet = ref<number>();
+    const wallet = ref<WalletInterface>(
+        {
+            id: null,
+            amount: null,
+            createdAt: null,
+            updatedAt: null
+        }
+    );
 
-    async function getWallet(amount: string) {
+    async function getWallet() {
         try {
-            const res = await walletService._deposit(amount);
-            amount.value = res.amount;
+            const res = await walletService._getWallet();
+            wallet.value = res;
 
             return res.url;
         } catch (error) {
@@ -21,7 +28,7 @@ export const useWalletStore = defineStore('wallet', () => {
     async function deposit(amount: string) {
         try {
             const res = await walletService._deposit(amount);
-            amount.value = res.amount;
+            wallet.value.amount = res.amount;
 
             return res.url;
         } catch (error) {
@@ -32,7 +39,7 @@ export const useWalletStore = defineStore('wallet', () => {
     async function withdraw(amount: string) {
         try {
             const res = await walletService._withdraw(amount);
-            wallet.value = res.amount;
+            wallet.value.amount = res.amount;
 
             return res.message;
         } catch (error) {
@@ -40,5 +47,5 @@ export const useWalletStore = defineStore('wallet', () => {
         }
     }
 
-    return { deposit, amount, withdraw }
+    return { deposit, wallet, withdraw, getWallet }
 });

@@ -69,8 +69,6 @@ const { transactionConfirmation } = walletTransactionStore;
 const { walletTransaction } = storeToRefs(walletTransactionStore);
 
 transactionConfirmation(route.query['transaction_id'])
-
-console.log()
 </script>
 
 <style scoped>

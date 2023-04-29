@@ -9,6 +9,7 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\User;
 use App\Entity\Wallet;
+use App\Entity\WalletTransaction;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -44,13 +45,17 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
                 $rootAlias = $queryBuilder->getRootAliases()[0];
                 $queryBuilder->andWhere(sprintf('%s.id = :current_user', $rootAlias));
                 $queryBuilder->setParameter('current_user', $user->getId());
-
                 break;
             case Wallet::class:
                 $rootAlias = $queryBuilder->getRootAliases()[0];
                 $queryBuilder->andWhere(sprintf('%s.users = :current_user', $rootAlias));
                 $queryBuilder->setParameter('current_user', $user->getId());
-
+                break;
+            case WalletTransaction::class:
+                $rootAlias = $queryBuilder->getRootAliases()[0];
+                $queryBuilder->andWhere(sprintf('%s.wallet = :wallet', $rootAlias));
+                $queryBuilder->setParameter('wallet', $user->getWallet()->getId());
+                $queryBuilder->orderBy(sprintf('%s.createdAt', $rootAlias), 'DESC');
                 break;
             default:
         }

@@ -10,6 +10,9 @@ export const useWalletTransactionStore = defineStore('wallet_transaction', () =>
             id: null,
             amount: null,
             status: null,
+            wallet: null,
+            type: null,
+            stripe_ref: null,
             createdAt: null,
             updatedAt: null
         }
@@ -20,6 +23,9 @@ export const useWalletTransactionStore = defineStore('wallet_transaction', () =>
             id: null,
             amount: null,
             status: null,
+            wallet: null,
+            type: null,
+            stripe_ref: null,
             createdAt: null,
             updatedAt: null
         }
@@ -33,9 +39,25 @@ export const useWalletTransactionStore = defineStore('wallet_transaction', () =>
         }
     }
 
+    async function adminGetWalletTransactionHistory() {
+        try {
+            walletTransactionHistory.value = await walletTransactionService._walletHistory();
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async function transactionConfirmation(transaction_id: string) {
         try {
             walletTransaction.value = await walletTransactionService._confirmation(transaction_id);
+
+            if ( walletTransactionHistory ) {
+
+                let idx = walletTransactionHistory.value.findIndex(transaction => transaction.id === walletTransaction.value.id)
+                if (idx !== -1) {
+                    walletTransactionHistory.value[idx] = walletTransaction.value;
+                }
+            }
         } catch (error) {
             throw error;
         }
