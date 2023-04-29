@@ -10,7 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use App\Entity\User;
 use App\Entity\Wallet;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
@@ -20,9 +20,8 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
-        switch($operation->getName()) {
-            default:
-                $this->addWhere($queryBuilder, $resourceClass);
+        if (str_starts_with($operation->getName(), "self_")) { # regex pour check si le nom de l'operation commence par self_
+            $this->addWhere($queryBuilder, $resourceClass);
         }
     }
 

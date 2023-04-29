@@ -56,7 +56,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Get(
             uriTemplate: '/self',
-            normalizationContext: ["groups" => []],
             security: "is_granted('ROLE_USER')",
             read: true,
             name: 'self_user',
@@ -119,7 +118,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:post',
         'user:get_collection',
         'user:patch',
-        'user:self'
     ])]
     private ?string $email = null;
 
@@ -136,7 +134,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([
-        'admin:get',
         'user:post'
     ])]
     private ?string $password = null;
