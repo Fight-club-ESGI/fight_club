@@ -1,7 +1,8 @@
 import { client } from "../index";
-
+import { ITicketEvent } from "@/interfaces/event";
 const ticketNamespace = '/tickets';
 const ticketCategoryNamespace = '/ticket_categories';
+const ticketEventNamespace = '/ticket_events';
 
 export interface ITicket {
     id: string
@@ -24,6 +25,10 @@ export interface ITicketCategory {
     tickets: ITicket[]
     createdAt: string
     updatedAt: string
+}
+
+export interface ICreateTicketCategory {
+    name: string
 }
 
 class Ticket {
@@ -52,6 +57,36 @@ class Ticket {
         try {
             const uri = `${ticketCategoryNamespace}`;
             const res = await client.get(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _getTicketsEvent(id: string): Promise<ITicketCategory[]> {
+        try {
+            const uri = `/events/${id}/ticket_event`;
+            const res = await client.get(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _createTicketCategory(payload: ICreateTicketCategory): Promise<ITicketCategory> {
+        try {
+            const uri = `${ticketCategoryNamespace}`;
+            const res = await client.post(uri, payload);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _createTicketEvent(payload: ITicketEvent): Promise<any> {
+        try {
+            const uri = `${ticketEventNamespace}`;
+            const res = await client.post(uri, payload);
             return res.data;
         } catch (error) {
             throw error;

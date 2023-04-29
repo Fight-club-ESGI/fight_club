@@ -13,20 +13,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: TicketEventRepository::class)]
 #[ApiResource(
     operations: [
         new Post(
-            normalizationContext: ['groups' => []],
-            denormalizationContext: ['groups' => []],
+            normalizationContext: ['groups' => ['ticket:event:get', 'ticket:category:get']],
+            denormalizationContext: ['groups' => ['ticket:event:post']],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Get(
             normalizationContext: ['groups' => ['ticket:event:get']],
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['ticket:event:get']],
+            normalizationContext: ['groups' => ['ticket:event:get_collection']],
         )
     ]
 )]
@@ -37,6 +38,7 @@ class TicketEvent
 
     #[ORM\ManyToOne(inversedBy: 'ticketEvents')]
     #[ORM\JoinColumn(nullable: false)]
+    #[MaxDepth(1)]
     #[Groups([
         'admin:get',
         'admin:post',
@@ -47,11 +49,13 @@ class TicketEvent
 
     #[ORM\ManyToOne(inversedBy: 'ticketEvents')]
     #[ORM\JoinColumn(nullable: false)]
+    #[MaxDepth(1)]
     #[Groups([
         'admin:get',
         'admin:post',
         'ticket:event:post',
-        'ticket:event:get'
+        'ticket:event:get',
+        'event:ticket:get'
     ])]
     private ?TicketCategory $ticketCategory = null;
 
@@ -61,12 +65,16 @@ class TicketEvent
         'admin:post',
         'ticket:event:post',
         'ticket:event:get',
+        'event:ticket:get'
     ])]
     private ?int $maxQuantity = null;
 
-    #[ORM\OneToMany(mappedBy: 'ticket_event', targetEntity: Ticket::class)]
+    #[ORM\OneToMany(mappedBy: 'ticketEvent', targetEntity: Ticket::class)]
+    #[MaxDepth(1)]
     #[Groups([
         'admin:get',
+        'ticket:event:get_collection',
+        'event:ticket:get'
     ])]
     private Collection $tickets;
 
@@ -76,6 +84,7 @@ class TicketEvent
         'admin:post',
         'ticket:event:post',
         'ticket:event:get',
+        'event:ticket:get'
     ])]
     private ?float $price = null;
 
