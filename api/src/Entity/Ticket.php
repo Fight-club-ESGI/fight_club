@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 #[ApiResource(
@@ -28,6 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new Post(
             normalizationContext: ['groups' => ['tickets:get']],
+            denormalizationContext: ['groups' => ['tickets:post']],
             read: true
         )
     ]
@@ -41,16 +43,11 @@ class Ticket
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',
-        'tickets:get'
+        'tickets:get',
+        'tickets:post'
     ])]
-    private ?TicketEvent $ticket_event = null;
-
-    #[ORM\Column]
-    #[Groups([
-        'admin:get',
-        'tickets:get'
-    ])]
-    private ?float $price = null;
+    #[MaxDepth(1)]
+    private ?TicketEvent $ticketEvent = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
@@ -58,63 +55,29 @@ class Ticket
         'admin:get',
         'tickets:get'
     ])]
-    private ?Event $event = null;
-
-    #[ORM\ManyToOne(inversedBy: 'tickets')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups([
-        'admin:get',
-        'tickets:get'
-    ])]
+    #[MaxDepth(1)]
     private ?Order $_order = null;
-
-    #[ORM\ManyToOne(inversedBy: 'tickets')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups([
-        'admin:get',
-        'tickets:get'
-    ])]
-    private ?TicketCategory $ticketCategory = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
         'admin:get',
-        'tickets:get'
+        'tickets:get',
+        'tickets:post'
     ])]
     private ?string $reference = null;
 
+    public function __construct() {
+        $this->setReference();
+    }
+
     public function getTicketEvent(): ?TicketEvent
     {
-        return $this->ticket_event;
+        return $this->ticketEvent;
     }
 
-    public function setTicketEvent(?TicketEvent $ticket_event): self
+    public function setTicketEvent(?TicketEvent $ticketEvent): self
     {
-        $this->ticket_event = $ticket_event;
-
-        return $this;
-    }
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function getEvent(): ?Event
-    {
-        return $this->event;
-    }
-
-    public function setEvent(?Event $event): self
-    {
-        $this->event = $event;
+        $this->ticketEvent = $ticketEvent;
 
         return $this;
     }
@@ -127,18 +90,6 @@ class Ticket
     public function setOrder(?Order $_order): self
     {
         $this->_order = $_order;
-
-        return $this;
-    }
-
-    public function getTicketCategory(): ?TicketCategory
-    {
-        return $this->ticketCategory;
-    }
-
-    public function setTicketCategory(?TicketCategory $ticketCategory): self
-    {
-        $this->ticketCategory = $ticketCategory;
 
         return $this;
     }

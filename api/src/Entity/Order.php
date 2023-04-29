@@ -62,14 +62,16 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'order:post'
     ])]
     private ?User $customer = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
         'admin:get',
-        'admin:post'
+        'admin:post',
+        'order:post'
     ])]
     private ?OrderStatusEnum $status = OrderStatusEnum::PENDING;
 
