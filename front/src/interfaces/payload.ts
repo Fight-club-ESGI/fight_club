@@ -41,10 +41,11 @@ export interface EventI {
     image: string
     capacity: number
     category: string
-    fight: FightI[]
+    fights: FightI[]
     locationLink: string
-    startTimestamp: string
-    endTimestamp: string
+    timeStart: string
+    timeEnd: string
+    ticketEvents: []
 }
 
 export interface FightI {

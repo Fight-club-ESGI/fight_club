@@ -11,60 +11,42 @@
                     <v-form v-model="valid" ref="form">
                         <v-row justify="space-between" class="align-center">
                             <v-col>
-                                <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname" label="Firstname" />
+                                <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname"
+                                    label="Firstname" />
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="fighter.lastname" :rules="[rules.required]" placeholder="Lastname" label="Lastname" />
+                                <v-text-field v-model="fighter.lastname" :rules="[rules.required]" placeholder="Lastname"
+                                    label="Lastname" />
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date" label="Birthday" />
+                                <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date"
+                                    label="Birthday" />
                             </v-col>
                         </v-row>
                         <v-row class="align-center">
                             <v-col>
-                                <v-autocomplete
-                                    v-model="fighter.nationality"
-                                    :items="nationalityJson"
-                                    solo
-                                    :rules="[rules.required]"
-                                    variant="outlined"
-                                    label="Nationality"
-                                    placeholder="Nationality"
-                                    density="compact"
-                                    color="secondary"
-                                    style="max-height: 450px"
-                                />
+                                <v-autocomplete v-model="fighter.nationality" :items="nationalityJson" solo
+                                    :rules="[rules.required]" variant="outlined" label="Nationality"
+                                    placeholder="Nationality" density="compact" color="secondary"
+                                    style="max-height: 450px" />
                             </v-col>
                             <v-col>
-                                <v-slider
-                                    v-model="fighter.height"
-                                    label="Height (cm)"
-                                    min="70"
-                                    max="230"
-                                    :step="1"
-                                    color="primary"
-                                    track-color="secondary"
-                                    thumb-label="always"
-                                >
+                                <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1"
+                                    color="primary" track-color="secondary" thumb-label="always">
                                     <template v-slot:thumb-label="{ modelValue }">
                                         {{ modelValue }}
                                     </template>
                                 </v-slider>
                             </v-col>
                             <v-col>
-                                <v-select
-                                    v-model="fighter.gender"
-                                    :rules="[rules.required]"
-                                    label="Gender"
-                                    placeholder="Gender"
-                                    :items="['male', 'female']"
-                                    color="secondary"
-                                />
+                                <v-select v-model="fighter.gender" :rules="[rules.required]" label="Gender"
+                                    placeholder="Gender" :items="['male', 'female']" color="secondary" />
                             </v-col>
                         </v-row>
                         <v-row class="align-center">
                             <v-col cols="4">
-                                <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number" max="400" min="52" label="Weight">
+                                <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number"
+                                    max="400" min="52" label="Weight">
                                     <template v-slot:details>
                                         <div v-if="division">
                                             Category:

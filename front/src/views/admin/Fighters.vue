@@ -43,7 +43,7 @@ export default defineComponent({
         onMounted(async () => {
             try {
                 await getFighters();
-            } catch (error) {}
+            } catch (error) { }
         });
 
         return { tab, fighters, filteredFighters };

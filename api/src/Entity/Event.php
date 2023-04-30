@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\Ticket\GetTicketEventByEventId;
@@ -39,7 +40,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Delete(),
-        new Put()
+        new Patch(
+            inputFormats: [
+                'json' => ['application/json']
+            ],
+            normalizationContext: ['groups' => ['events:get']],
+            security: 'is_granted("ROLE_ADMIN")',
+        )
     ]
 )]
 class Event
@@ -52,7 +59,8 @@ class Event
     #[Groups([
         'admin:get',
         'tickets:get',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
     private ?FightCategory $fightCategory = null;
 
@@ -62,7 +70,8 @@ class Event
         'tickets:get',
         'tickets:post',
         'events:get',
-        'event:ticket:get'
+        'event:ticket:get',
+        'admin:patch'
     ])]
     private ?string $name = null;
 
@@ -71,7 +80,8 @@ class Event
         'admin:get',
         'tickets:get',
         'tickets:post',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
     private ?string $location = null;
 
@@ -80,7 +90,8 @@ class Event
         'admin:get',
         'tickets:get',
         'tickets:post',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
     private ?string $location_link = null;
 
@@ -89,25 +100,28 @@ class Event
         'admin:get',
         'tickets:get',
         'tickets:post',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
-    private ?\DateTimeInterface $time_start = null;
+    private ?\DateTimeInterface $timeStart = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups([
         'admin:get',
         'tickets:get',
         'tickets:post',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
-    private ?\DateTimeInterface $time_end = null;
+    private ?\DateTimeInterface $timeEnd = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([
         'admin:get',
         'tickets:get',
         'tickets:post',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
     private ?string $description = null;
 
@@ -116,7 +130,8 @@ class Event
         'admin:get',
         'tickets:get',
         'tickets:post',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
     private ?int $capacity = null;
 
@@ -125,7 +140,8 @@ class Event
         'admin:get',
         'tickets:get',
         'tickets:post',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
     private ?bool $vip = false;
 
@@ -133,14 +149,16 @@ class Event
     #[MaxDepth(1)]
     #[Groups([
         'admin:get',
-        'tickets:get'
+        'tickets:get',
+        'admin:patch'
     ])]
     private Collection $tickets;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
     #[Groups([
         'admin:get',
-        'tickets:get'
+        'tickets:get',
+        'admin:patch'
     ])]
     private Collection $fights;
 
@@ -151,7 +169,8 @@ class Event
         'tickets:get',
         'ticket:category:post',
         'events:get',
-        'event:ticket:get'
+        'event:ticket:get',
+        'admin:patch'
     ])]
     private Collection $ticketEvents;
 
@@ -212,24 +231,24 @@ class Event
 
     public function getTimeStart(): ?\DateTimeInterface
     {
-        return $this->time_start;
+        return $this->timeStart;
     }
 
-    public function setTimeStart(?\DateTimeInterface $time_start): self
+    public function setTimeStart(?\DateTimeInterface $timeStart): self
     {
-        $this->time_start = $time_start;
+        $this->timeStart = $timeStart;
 
         return $this;
     }
 
     public function getTimeEnd(): ?\DateTimeInterface
     {
-        return $this->time_end;
+        return $this->timeEnd;
     }
 
-    public function setTimeEnd(?\DateTimeInterface $time_end): self
+    public function setTimeEnd(?\DateTimeInterface $timeEnd): self
     {
-        $this->time_end = $time_end;
+        $this->timeEnd = $timeEnd;
 
         return $this;
     }

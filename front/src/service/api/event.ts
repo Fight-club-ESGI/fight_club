@@ -35,7 +35,8 @@ class Event {
 
     async _upadateEvent(payload: EventI): Promise<EventI> {
         try {
-            const res = await client.put(namespace, payload);
+            const uri = `${namespace}/${payload.id}`
+            const res = await client.patch(uri, payload);
             return res.data;
         } catch (error) {
             throw error;
