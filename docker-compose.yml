@@ -75,6 +75,7 @@ services:
       - ${VITE_PORT:-5173}:${VITE_PORT:-5173}
     volumes:
       - ./front:/usr/src/app
+    command: npm run dev
 
 ###> doctrine/doctrine-bundle ###
   database:

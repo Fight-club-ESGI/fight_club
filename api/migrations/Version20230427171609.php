@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230422134234 extends AbstractMigration
+final class Version20230427171609 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -47,9 +47,7 @@ final class Version20230422134234 extends AbstractMigration
         $this->addSql('ALTER TABLE ticket ADD CONSTRAINT FK_97A0ADA3A35F2858 FOREIGN KEY (_order_id) REFERENCES "order" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_97A0ADA3F49E140A ON ticket (ticket_event_id)');
         $this->addSql('CREATE INDEX IDX_97A0ADA3A35F2858 ON ticket (_order_id)');
-        $this->addSql('ALTER TABLE ticket_category DROP CONSTRAINT fk_8325e54071f7e88b');
-        $this->addSql('DROP INDEX idx_8325e54071f7e88b');
-        $this->addSql('ALTER TABLE ticket_category DROP event_id');
+        $this->addSql('ALTER TABLE "user" ADD viptoken VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
@@ -67,6 +65,9 @@ final class Version20230422134234 extends AbstractMigration
         $this->addSql('ALTER TABLE ticket_event DROP CONSTRAINT FK_139E692C71F7E88B');
         $this->addSql('ALTER TABLE ticket_event DROP CONSTRAINT FK_139E692C7ED69B9D');
         $this->addSql('DROP TABLE ticket_event');
+        $this->addSql('ALTER TABLE "user" DROP viptoken');
+        $this->addSql('ALTER TABLE "order" ADD quantity INT NOT NULL');
+        $this->addSql('ALTER TABLE "order" DROP price');
         $this->addSql('ALTER TABLE ticket DROP CONSTRAINT FK_97A0ADA3A35F2858');
         $this->addSql('DROP INDEX IDX_97A0ADA3F49E140A');
         $this->addSql('DROP INDEX IDX_97A0ADA3A35F2858');
@@ -77,11 +78,5 @@ final class Version20230422134234 extends AbstractMigration
         $this->addSql('ALTER TABLE ticket DROP _order_id');
         $this->addSql('ALTER TABLE ticket DROP reference');
         $this->addSql('ALTER TABLE ticket ALTER ticket_category_id DROP NOT NULL');
-        $this->addSql('ALTER TABLE "order" ADD quantity INT NOT NULL');
-        $this->addSql('ALTER TABLE "order" DROP price');
-        $this->addSql('ALTER TABLE "ticket_category" ADD event_id UUID NOT NULL');
-        $this->addSql('COMMENT ON COLUMN "ticket_category".event_id IS \'(DC2Type:uuid)\'');
-        $this->addSql('ALTER TABLE "ticket_category" ADD CONSTRAINT fk_8325e54071f7e88b FOREIGN KEY (event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('CREATE INDEX idx_8325e54071f7e88b ON "ticket_category" (event_id)');
     }
 }

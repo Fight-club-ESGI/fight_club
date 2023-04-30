@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -54,16 +55,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             security: "is_granted('ROLE_USER')"
         ),
         new Get(
-            uriTemplate: 'me',
-            controller: UserMe::class,
-            normalizationContext: ['groups' => ['user:self']],
+            uriTemplate: '/me',
             security: "is_granted('ROLE_USER')",
             securityMessage: 'You need to be connected',
-            read: false,
-            name: 'me'
+            read: true,
+            name: 'self_user',
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['user:get_collection']],
+            security: "is_granted('ROLE_USER')"
         ),
         new Patch(
             normalizationContext: ['groups' => ['user:get']],
@@ -87,11 +87,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             controller: CheckTokenValidityController::class,
             read: false,
             name: 'check-token-validity',
+
         ),
         new Post(
             uriTemplate: '/change_password',
             controller: ChangePassword::class,
-            name: 'validate-reset-password'
+            security: "is_granted('ROLE_USER')",
+            name: 'validate-reset-password',
         ),
     ]
 )]
@@ -108,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:post',
         'user:get_collection',
         'user:patch',
-        'user:self',
+        'user:self:get',
     ])]
     private ?string $email = null;
 
@@ -118,13 +120,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:get_collection',
         'admin:post',
         'admin:patch',
-        'user:self'
+        'user:self:get',
+        'user:post'
     ])]
     private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([
-        'admin:get',
         'user:post'
     ])]
     private ?string $password = null;
@@ -136,20 +138,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Carbon $tokenDate = null;
 
     #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
+    #[MaxDepth(1)]
     private ?Wallet $wallet = null;
 
     #[ORM\OneToMany(mappedBy: 'sponsor', targetEntity: Sponsorship::class)]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
     private Collection $sponsorshipsAsSponsor;
 
     #[ORM\OneToOne(mappedBy: 'sponsored', targetEntity: Sponsorship::class)]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
     private ?Sponsorship $sponsorshipsAsSponsored;
 
     #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
-    #[Groups(['admin:get', 'user:self'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
+    #[MaxDepth(1)]
     private ?Order $orders = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
+    private ?string $VIPToken = null;
 
     public function __construct()
     {
@@ -176,7 +199,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -349,9 +372,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @param Carbon | null $tokenDate
      * @return self
      */
-    public function setTokenDate(Carbon | null $tokenDate): self
+    public function setTokenDate(Carbon|null $tokenDate): self
     {
         $this->tokenDate = $tokenDate;
+        return $this;
+    }
+
+    public function getVIPToken(): ?string
+    {
+        return $this->VIPToken;
+    }
+
+    public function setVIPToken(?string $VIPToken): self
+    {
+        $this->VIPToken = $VIPToken;
         return $this;
     }
 }

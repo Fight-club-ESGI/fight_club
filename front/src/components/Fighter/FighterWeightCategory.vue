@@ -27,7 +27,7 @@
             </v-list-item>
         </v-list>
         <template v-else>
-            <v-alert type="info" title="No categories yet" text="Click the 'create a category' button to create a category"> </v-alert>
+            <v-alert color="blue-grey-lighten-4" title="No categories yet" text="Click the 'create a category' button to create a category"> </v-alert>
         </template>
     </div>
 </template>

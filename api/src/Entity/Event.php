@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -17,13 +18,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
         new GetCollection(
-            normalizationContext: ['groups' => ['events:get']],
+            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            name: 'event_tickets'
+        ),
+        new Get(),
+        new Get(
+            uriTemplate: 'events/{id}/ticket_event',
+            controller: GetTicketEventByEventId::class,
+            normalizationContext: ['groups' => ['event:ticket:get']]
         ),
         new Post(
             normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
@@ -31,12 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Delete(),
-        new Put(),
-        new GetCollection(
-            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
-            read: false,
-            name: 'event_tickets'
-        )
+        new Put()
     ]
 )]
 class Event
@@ -58,7 +61,8 @@ class Event
         'admin:get',
         'tickets:get',
         'tickets:post',
-        'events:get'
+        'events:get',
+        'event:ticket:get'
     ])]
     private ?string $name = null;
 
@@ -126,6 +130,7 @@ class Event
     private ?bool $vip = false;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
+    #[MaxDepth(1)]
     #[Groups([
         'admin:get',
         'tickets:get'
@@ -140,19 +145,21 @@ class Event
     private Collection $fights;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: TicketEvent::class)]
+    #[MaxDepth(3)]
     #[Groups([
         'admin:get',
         'tickets:get',
         'ticket:category:post',
-        'events:get'
+        'events:get',
+        'event:ticket:get'
     ])]
-    private Collection $ticket_events;
+    private Collection $ticketEvents;
 
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
         $this->fights = new ArrayCollection();
-        $this->ticket_events = new ArrayCollection();
+        $this->ticketEvents = new ArrayCollection();
     }
 
     public function getFightCategory(): ?FightCategory
@@ -298,13 +305,13 @@ class Event
      */
     public function getTicketEvents(): Collection
     {
-        return $this->ticket_events;
+        return $this->ticketEvents;
     }
 
     public function addTicketEvent(TicketEvent $ticketEvent): self
     {
-        if (!$this->ticket_events->contains($ticketEvent)) {
-            $this->ticket_events->add($ticketEvent);
+        if (!$this->ticketEvents->contains($ticketEvent)) {
+            $this->ticketEvents->add($ticketEvent);
             $ticketEvent->setEvent($this);
         }
 
@@ -313,7 +320,7 @@ class Event
 
     public function removeTicketEvent(TicketEvent $ticketEvent): self
     {
-        if ($this->ticket_events->removeElement($ticketEvent)) {
+        if ($this->ticketEvents->removeElement($ticketEvent)) {
             // set the owning side to null (unless already changed)
             if ($ticketEvent->getEvent() === $this) {
                 $ticketEvent->setEvent(null);

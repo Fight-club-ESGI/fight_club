@@ -24,7 +24,7 @@ class WalletDepositCheckout extends AbstractController
     public function __invoke(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
-        $amount = $data['amount'];
+        $amount = $data['amount'] * 100;
 
         $checkout_session = $this->checkout->checkout(
             $this->userRepository->find($this->security->getUser()->getId()),

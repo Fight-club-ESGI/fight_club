@@ -3,9 +3,6 @@ namespace App\Serializer;
 
 use ApiPlatform\Serializer\SerializerContextBuilderInterface;
 use App\Entity\WalletTransaction;
-use App\Repository\UserRepository;
-use PhpParser\Error;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use App\Entity\User;
@@ -15,8 +12,6 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
     public function __construct(
         private readonly SerializerContextBuilderInterface $decorated,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
-        private readonly Security $security,
-        private readonly UserRepository $userRepository
     )
     {
     }
@@ -34,48 +29,61 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                     break;
             }
 
-            if (isset($context['groups'])) {
+            if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+                $context['groups'][] = $this->adminRequestMethodGroup($request->getMethod(), $normalization);
+            } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
 
-                if ($normalization) {
-                    # Normalization part
-                    if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                        $context['groups'][] = 'admin:get';
-                        $context['groups'][] = 'admin:post';
-                        $context['groups'][] = 'admin:patch';
-                    } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
+            } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
 
-                    } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
+            } else if ($this->authorizationChecker->isGranted('ROLE_USER')) {
 
-                    } else if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-
-                    } else {
-
-                    }
-                    $context['groups'][] = 'additional:get';
-                } else {
-                    # Denormalization part
-                    if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                        $context['groups'][] = 'admin:post';
-                    } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
-
-                    } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
-
-                    } else if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-
-                    } else {
-
-                    }
-                    $context['groups'][] = 'additional:post';
-                }
             } else {
-                if ($normalization) {
-                    $context['groups'][] = 'additional:get';
-                } else {
-                    $context['groups'][] = 'additional:post';
-                }
+
+            }
+
+            $context['groups'][] = $this->additionalRequestMethodGroup($request->getMethod(), $normalization);
+            $context['enable_max_depth'] = true;
+            if (str_starts_with($context['operation_name'], "self_")) {
+                $context['groups'][] = $this->selfRequestMethodGroup($request->getMethod(), $normalization);
             }
         }
 
         return $context;
+    }
+
+    function adminRequestMethodGroup($method, $normalization) {
+        if($normalization) {
+            return 'admin:get';
+        } else {
+            return match ($method) {
+                'POST' => 'admin:post',
+                'PATCH' => 'admin:patch',
+                default => '',
+            };
+        }
+    }
+
+    function additionalRequestMethodGroup($method, $normalization) {
+        if($normalization) {
+            return 'additional:get';
+        } else {
+            return match ($method) {
+                'POST' => 'additional:post',
+                'PATCH' => 'additional:patch',
+                default => '',
+            };
+        }
+    }
+
+    function selfRequestMethodGroup($method, $normalization) {
+        if($normalization) {
+            return 'user:self:get';
+        } else {
+            return match ($method) {
+                'POST' => 'user:self:post',
+                'PATCH' => 'user:self:patch',
+                default => '',
+            };
+        }
     }
 }

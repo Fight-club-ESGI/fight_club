@@ -43,11 +43,11 @@ class CheckoutService
 
         $checkout_session = $this->stripe->checkout->sessions->create($params);
 
-        $walletTransaction->setTransaction($checkout_session->id);
+        $walletTransaction->setStripeRef($checkout_session->id);
         $this->entityManager->persist($walletTransaction);
         $this->entityManager->flush();
 
-        return $this->stripe->checkout->sessions->create($params);
+        return $checkout_session;
     }
 
     public function recordWalletTransaction(Wallet $wallet, float $amount, WalletTransactionStatusEnum $status, WalletTransactionTypeEnum $type): WalletTransaction
@@ -67,24 +67,26 @@ class CheckoutService
 
     public function confirmation(WalletTransaction $walletTransaction): void
     {
-        $transaction = $this->stripe->checkout->sessions->retrieve($walletTransaction->getTransaction(), []);
+        if ($walletTransaction->getStripeRef() !== null) {
+            $transaction = $this->stripe->checkout->sessions->retrieve($walletTransaction->getStripeRef(), []);
 
-        switch($walletTransaction->getStatus()) {
-            case WalletTransactionStatusEnum::PENDING :
-                if ($transaction->payment_status === 'paid') {
-                    $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
-                    $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + floatval($transaction->amount_total / 100));
-                } else {
-                    $walletTransaction->setStatus(WalletTransactionStatusEnum::REJECTED);
-                }
+            switch($walletTransaction->getStatus()) {
+                case WalletTransactionStatusEnum::PENDING :
+                    if ($transaction->payment_status === 'paid') {
+                        $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+                        $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + floatval($transaction->amount_total / 100));
+                    } else {
+                        $walletTransaction->setStatus(WalletTransactionStatusEnum::REJECTED);
+                    }
 
-                $this->entityManager->persist($walletTransaction);
-                $this->entityManager->flush();
-                break;
-            case WalletTransactionStatusEnum::REJECTED:
-            case WalletTransactionStatusEnum::ACCEPTED:
-            case WalletTransactionStatusEnum::CANCELLED:
-                break;
+                    $this->entityManager->persist($walletTransaction);
+                    $this->entityManager->flush();
+                    break;
+                case WalletTransactionStatusEnum::REJECTED:
+                case WalletTransactionStatusEnum::ACCEPTED:
+                case WalletTransactionStatusEnum::CANCELLED:
+                    break;
+            }
         }
     }
 

@@ -5,6 +5,8 @@ import type { SigninI, SignupI } from '@/interfaces/payload';
 import type { userInterface } from '@/interfaces/responseAPI';
 import { token, refreshToken } from '@/service';
 import { useRouter } from "vue-router"
+import jwt_decode from 'jwt-decode';
+import {WalletInterface} from "@/interfaces/responseAPI";
 
 export const useUserStore = defineStore('user', () => {
     const router = useRouter();
@@ -16,6 +18,15 @@ export const useUserStore = defineStore('user', () => {
         username: null,
         roles: null,
         email: null,
+        sponsorshipAsSponsor: [],
+        createdAt: null,
+        updatedAt: null,
+        wallet: {
+            id: null,
+            amount: null,
+            createdAt: null,
+            updatedAt: null,
+        }
     });
 
     const users = ref<userInterface[]>([]);
@@ -108,10 +119,19 @@ export const useUserStore = defineStore('user', () => {
     async function logout() {
         try {
             user.value = {
-                id: '',
-                username: '',
-                roles: [''],
-                email: '',
+                id: null,
+                username: null,
+                roles: null,
+                email: null,
+                sponsorshipAsSponsor: [],
+                createdAt: null,
+                updatedAt: null,
+                wallet: {
+                    id: null,
+                    amount: null,
+                    createdAt: null,
+                    updatedAt: null,
+                }
             };
             router.push({ name: 'login' });
             token.value = "";

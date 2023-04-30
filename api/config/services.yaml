@@ -42,3 +42,8 @@ services:
     App\EventSubscriber\User\UserRegisterSubscriber:
         tags:
             - { name: kernel.event_subscriber }
+
+    App\Doctrine\CurrentUserExtension:
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }

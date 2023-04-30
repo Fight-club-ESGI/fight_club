@@ -1,13 +1,13 @@
-import { client } from "..";
+import { client, clientWithoutAuth } from "..";
 import type { EventI } from "../../interfaces/payload";
 
 const namespace = '/events';
 
 class Event {
-    
+
     async _getEvents(): Promise<EventI[]> {
         try {
-            const res = await client.get(namespace);
+            const res = await clientWithoutAuth.get(namespace);
             return res.data;
         } catch (error) {
             throw error;
@@ -17,7 +17,7 @@ class Event {
     async _getEvent(id: string): Promise<EventI> {
         try {
             const uri = `${namespace}/${id}`;
-            const res = await client.get(uri);
+            const res = await clientWithoutAuth.get(uri);
             return res.data;
         } catch (error) {
             throw error;
