@@ -12,6 +12,7 @@ use App\Enum\Bet\BetStatusEnum;
 use App\Repository\BetRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: BetRepository::class)]
 #[ApiResource(
@@ -39,6 +40,7 @@ class Bet
         'admin:get',
         'bet:get',
     ])]
+    #[MaxDepth(1)]
     private ?Fight $fight = null;
 
     #[ORM\ManyToOne]
@@ -47,6 +49,7 @@ class Bet
         'admin:get',
         'bet:get',
     ])]
+    #[MaxDepth(1)]
     private ?User $betOn = null;
 
     #[ORM\ManyToOne]
@@ -55,6 +58,7 @@ class Bet
         'admin:get',
         'bet:get',
     ])]
+    #[MaxDepth(1)]
     private ?User $bettor = null;
 
     #[ORM\Column]

@@ -20,6 +20,7 @@ use App\Repository\SponsorshipRepository;
 use App\State\UserPasswordHasher;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: SponsorshipRepository::class)]
 #[ApiResource(
@@ -92,6 +93,7 @@ class Sponsorship
         'sponsor:get',
         'sponsor:post'
     ])]
+    #[MaxDepth(1)]
     private ?User $sponsor = null;
 
     #[ORM\OneToOne(inversedBy: 'sponsorshipsAsSponsored')]
@@ -101,6 +103,7 @@ class Sponsorship
         'admin:post',
         'sponsor:post'
     ])]
+    #[MaxDepth(1)]
     private ?User $sponsored = null;
 
     #[ORM\Column]

@@ -62,6 +62,7 @@ class Event
         'events:get',
         'admin:patch'
     ])]
+    #[MaxDepth(1)]
     private ?FightCategory $fightCategory = null;
 
     #[ORM\Column(length: 255)]

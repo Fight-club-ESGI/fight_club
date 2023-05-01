@@ -53,7 +53,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
 
     function adminRequestMethodGroup($method, $normalization) {
         if($normalization) {
-            // return 'admin:get';
+            return 'admin:get';
         } else {
             return match ($method) {
                 'POST' => 'admin:post',
