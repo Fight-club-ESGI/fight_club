@@ -47,7 +47,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const ticketStore = useTicketStore();
 const { ticketCategories } = storeToRefs(ticketStore);
-const { getTicketCategories, getTickets, createTicketEvent } = ticketStore;
+const { getTicketCategories, createTicketEvent } = ticketStore;
 
 const eventId = computed(() => route.params.id.toString());
 const ticketCategoriesName = computed(() => ticketCategories.value.map(c => c.name));
@@ -62,7 +62,6 @@ const category = ref<string>('');
 onMounted(async () => {
     try {
         await getTicketCategories();
-        await getTickets(eventId.value);
     } catch (error) {
         console.error(error)
     }

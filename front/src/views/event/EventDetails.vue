@@ -8,7 +8,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-
+import EventDetails from '@/components/EventDetails.vue';
 const items = [
     {
         title: 'Home',
