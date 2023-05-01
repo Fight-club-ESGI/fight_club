@@ -20,14 +20,16 @@
 
                         <v-list>
                             <v-list-item value="update-category"><update-category :category="category" /> </v-list-item>
-                            <v-list-item @click="remove(category)" value="delete-category" color="red-darken-1"> Delete </v-list-item>
+                            <v-list-item @click="remove(category)" value="delete-category" color="red-darken-1"> Delete
+                            </v-list-item>
                         </v-list>
                     </v-menu>
                 </template>
             </v-list-item>
         </v-list>
         <template v-else>
-            <v-alert color="blue-grey-lighten-4" title="No categories yet" text="Click the 'create a category' button to create a category"> </v-alert>
+            <v-alert variant="outlined" title="No categories yet"
+                text="Click the 'create a category' button to create a category"> </v-alert>
         </template>
     </div>
 </template>

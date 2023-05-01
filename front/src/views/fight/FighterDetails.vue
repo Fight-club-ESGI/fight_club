@@ -1,15 +1,27 @@
 <template>
-    <v-container>
-        <fighter-details />
-    </v-container>
+    <div>
+        <v-breadcrumbs :items="items"></v-breadcrumbs>
+
+        <v-container>
+            <fighter-details />
+        </v-container>
+    </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
 import FighterDetails from '@/components/Fighter/FighterDetails.vue';
 
-export default defineComponent({
-    components: { FighterDetails },
-    setup() {},
-});
+const items = [
+    {
+        title: 'Home',
+        to: { name: 'home' }
+    },
+    {
+        title: 'Fighters',
+        to: { name: 'fighters' }
+    },
+    {
+        title: 'Fighters details',
+    }
+];
 </script>

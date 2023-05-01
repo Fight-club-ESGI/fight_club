@@ -157,6 +157,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'admin:get',
         'user:self:get'
     ])]
+    #[MaxDepth(1)]
     private ?Sponsorship $sponsorshipsAsSponsored;
 
     #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]

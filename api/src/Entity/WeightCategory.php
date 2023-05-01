@@ -11,6 +11,7 @@ use App\Entity\Trait\TimestampableTrait;
 use App\Repository\WeightCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: WeightCategoryRepository::class)]
 #[ORM\Table(name: '`weight_category`')]
@@ -61,6 +62,7 @@ class WeightCategory
         'admin:post',
         'wallet:category:get'
     ])]
+    #[MaxDepth(1)]
     private ?FightCategory $fightCategory = null;
 
     public function getMinWeight(): ?int

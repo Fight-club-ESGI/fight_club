@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: FightRepository::class)]
 #[ApiResource(
@@ -31,6 +32,7 @@ class Fight
         'admin:get',
         'admin:post',
     ])]
+    #[MaxDepth(1)]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'fighterA')]
@@ -39,6 +41,7 @@ class Fight
         'admin:get',
         'admin:post',
     ])]
+    #[MaxDepth(1)]
     private ?Fighter $fighterA = null;
 
     #[ORM\ManyToOne(inversedBy: 'fighterB')]
@@ -47,6 +50,7 @@ class Fight
         'admin:get',
         'admin:post',
     ])]
+    #[MaxDepth(1)]
     private ?Fighter $fighterB = null;
 
     #[ORM\ManyToOne(inversedBy: 'winners')]
@@ -54,6 +58,7 @@ class Fight
         'admin:get',
         'admin:post',
     ])]
+    #[MaxDepth(1)]
     private ?Fighter $winner = null;
 
     #[ORM\ManyToOne(inversedBy: 'losers')]
@@ -61,6 +66,7 @@ class Fight
         'admin:get',
         'admin:post',
     ])]
+    #[MaxDepth(1)]
     private ?Fighter $loser = null;
 
     #[ORM\Column(options: ['default' => false])]
@@ -73,12 +79,14 @@ class Fight
     #[Groups([
         'admin:get',
     ])]
+    #[MaxDepth(1)]
     private ?User $adminValidatorA = null;
 
     #[ORM\ManyToOne]
     #[Groups([
         'admin:get',
     ])]
+    #[MaxDepth(1)]
     private ?User $adminValidatorB = null;
 
     #[ORM\OneToMany(mappedBy: 'fight', targetEntity: Bet::class)]
