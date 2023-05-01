@@ -1,12 +1,15 @@
 <template>
-    <v-container class="flex flex-col gap-4">
-        <create-event v-if="isAdmin" />
-        <event v-if="isVIP" :events="VIPevents" :admin="isAdmin" />
-        <event :events="filteredEvents" :admin="isAdmin" />
-    </v-container>
+    <div>
+        <v-breadcrumbs :items="items"></v-breadcrumbs>
+        <v-container class="flex flex-col">
+            <create-event v-if="isAdmin" class="pb-4" />
+            <event v-if="isVIP" :events="VIPevents" :admin="isAdmin" />
+            <event :events="filteredEvents" :admin="isAdmin" />
+        </v-container>
+    </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, onMounted, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '@/stores/event';
@@ -15,29 +18,32 @@ import Event from '@/components/Event.vue';
 import { useUserStore } from '@/stores/user';
 import CreateEvent from '@/components/dialogs/CreateEvent.vue';
 
-export default defineComponent({
-    components: { Event, CreateEvent },
-    setup() {
-        const router = useRouter();
-        const userStore = useUserStore();
-        const { isVIP, isAdmin } = storeToRefs(userStore);
-        const eventStore = useEventStore();
-        const { getEvents } = eventStore;
-        const { events } = storeToRefs(eventStore);
+const router = useRouter();
+const userStore = useUserStore();
+const { isVIP, isAdmin } = storeToRefs(userStore);
+const eventStore = useEventStore();
+const { getEvents } = eventStore;
+const { events } = storeToRefs(eventStore);
 
-        onMounted(async () => {
-            try {
-                await getEvents();
-            } catch (error) {}
-        });
-
-        const VIPevents = computed(() => {
-            return events.value.filter((event) => event.vip === true);
-        });
-
-        const filteredEvents = computed(() => events.value.filter((event) => event.vip === false));
-
-        return { events, router, VIPevents, filteredEvents, isVIP, isAdmin };
-    },
+onMounted(async () => {
+    try {
+        await getEvents();
+    } catch (error) { }
 });
+
+const VIPevents = computed(() => {
+    return events.value.filter((event) => event.vip === true);
+});
+
+const filteredEvents = computed(() => events.value.filter((event) => event.vip === false));
+
+const items = [
+    {
+        title: 'Home',
+        to: { name: 'home' }
+    },
+    {
+        title: 'Events'
+    }
+];
 </script>

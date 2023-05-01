@@ -1,15 +1,22 @@
 <template>
-    <profile />
+    <div>
+        <v-breadcrumbs :items="items"></v-breadcrumbs>
+
+        <profile />
+    </div>
     <!-- <router-view /> -->
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
 import Profile from '@/components/profile/Profile.vue';
-export default defineComponent({
-    components: { Profile },
-    setup() {
-        return {};
+
+const items = [
+    {
+        title: 'Home',
+        to: { name: 'home' }
     },
-});
+    {
+        title: 'Profile',
+    }
+];
 </script>
