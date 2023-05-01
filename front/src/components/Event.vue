@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-span-1">
                     <v-img
-                        :src="event.locationLink ? event.locationLink : 'https://placeholder.com/150?text=UpdateImageLink'"
+                        :src="event.locationLink ? event.locationLink : 'https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80'"
                         height="150" />
                 </div>
                 <div class="col-span-3 pa-5 flex flex-column relative">
