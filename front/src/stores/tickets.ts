@@ -58,5 +58,14 @@ export const useTicketStore = defineStore('ticket', () => {
         }
     }
 
-    return { tickets, ticketCategories, ticketEvent, getTickets, createTicket, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
+    async function updateTicketEvent(payload: { eventId: string, ticketCategoryId: string, maxQuantity: number }) {
+        try {
+            const res = await ticketService._updateTicketEvent(payload);
+
+        } catch {
+            throw error;
+        }
+    }
+
+    return { tickets, ticketCategories, ticketEvent, getTickets, updateTicketEvent, createTicket, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
 });

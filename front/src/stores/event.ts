@@ -37,7 +37,7 @@ export const useEventStore = defineStore('event', () => {
     async function updateEvent(payload: EventI) {
         try {
             const res = await eventService._upadateEvent(payload);
-            // fighter.value = res;
+            events.value.splice(events.value.findIndex(e => e.id === res.id), 1, res);
         } catch (error) {
             throw error;
         }
@@ -45,11 +45,12 @@ export const useEventStore = defineStore('event', () => {
 
     async function deleteEvent(id: string) {
         try {
-            const res = await eventService._deleteEvent(id);
+            await eventService._deleteEvent(id);
+            events.value.splice(events.value.findIndex(e => e.id === id), 1);
         } catch (error) {
             throw error;
         }
     }
-    
+
     return { createEvent, getEvent, getEvents, updateEvent, deleteEvent, events, event }
 });

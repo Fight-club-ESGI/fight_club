@@ -1,10 +1,11 @@
 <template>
     <div class="flex flex-column gap-4">
-        <div v-for="event of events" :key="event.id" @click="router.push({ name: admin ? 'event-details-admin' : 'event-details', params: { id: event.id } })" class="cursor-pointer">
+        <div v-for="event of events" :key="event.id"
+            @click="router.push({ name: eventNavigation, params: { id: event.id } })" class="cursor-pointer">
             <v-card class="grid grid-cols-5">
                 <div class="col-span-1 pa-5 text-center text-lg m-auto">
                     {{
-                        new Date(event.endTimestamp).toLocaleString('en-GB', {
+                        new Date(event.timeEnd).toLocaleString('en-GB', {
                             year: 'numeric',
                             month: 'long',
                             day: '2-digit',
@@ -12,12 +13,21 @@
                     }}
                 </div>
                 <div class="col-span-1">
-                    <v-img :src="event.locationLink ? event.locationLink : 'https://placeholder.com/150?text=UpdateImageLink'" height="150" />
+                    <v-img
+                        :src="event.locationLink ? event.locationLink : 'https://placeholder.com/150?text=UpdateImageLink'"
+                        height="150" />
                 </div>
                 <div class="col-span-3 pa-5 flex flex-column relative">
-                    <div v-if="admin" class="absolute right-[20px]">
-                        <update-event />
-                    </div>
+                    <v-menu v-if="admin && pathIncludeAdmin">
+                        <template v-slot:activator="{ props }">
+                            <v-btn class="absolute right-[20px]" color="primary" v-bind="props" icon="mdi-dots-horizontal"
+                                size="x-small" />
+                        </template>
+                        <v-list>
+                            <v-list-item value="update-event"> <update-event :event="event" /></v-list-item>
+                            <v-list-item value="delete-fighter" @click="deleteE(event.id)">Delete</v-list-item>
+                        </v-list>
+                    </v-menu>
                     <p class="text-lg">{{ event.name }}</p>
                     <p>
                         <span class="italic">{{ event.description }}</span> @{{ event.location }}
@@ -37,10 +47,11 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, toRefs } from 'vue';
-import { useRouter } from 'vue-router';
+import { defineComponent, PropType, toRefs, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { EventI } from '@/interfaces/payload';
 import UpdateEvent from '@/components/dialogs/UpdateEvent.vue';
+import { useEventStore } from '@/stores/event';
 
 export default defineComponent({
     components: { UpdateEvent },
@@ -56,9 +67,25 @@ export default defineComponent({
     },
     setup(props) {
         const router = useRouter();
+        const route = useRoute();
         const { events, admin } = toRefs(props);
+        const eventStore = useEventStore();
+        const { deleteEvent } = eventStore;
+        const pathIncludeAdmin = computed(() => {
+            return route.path.includes('admin');
+        })
+        const eventNavigation = computed(() => {
+            return route.path.includes('admin') ? 'event-details-admin' : 'event-details';
+        });
 
-        return { router, events, admin };
+        const deleteE = async (eventId: string) => {
+            try {
+                await deleteEvent(eventId);
+            } catch {
+                console.error(error)
+            }
+        }
+        return { router, events, admin, eventNavigation, pathIncludeAdmin, deleteE };
     },
 });
 </script>

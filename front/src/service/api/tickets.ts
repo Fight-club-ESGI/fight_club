@@ -92,6 +92,16 @@ class Ticket {
             throw error;
         }
     }
+
+    async _updateTicketEvent(payload: { eventId: string, ticketCategoryId: string, maxQuantity: number }) {
+        try {
+            const uri = `/events/${payload.eventId}/tickets_event/${payload.ticketCategoryId}`;
+            const res = await client.patch(uri, payload);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const ticketService = new Ticket();

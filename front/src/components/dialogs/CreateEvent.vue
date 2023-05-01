@@ -11,58 +11,36 @@
                     <v-form v-model="valid" ref="form">
                         <v-row justify="space-between" class="align-center">
                             <v-col>
-                                <v-text-field v-model="event.name" :rules="[rules.required]" placeholder="Name" label="Name" />
+                                <v-text-field v-model="event.name" :rules="[rules.required]" placeholder="Name"
+                                    label="Name" />
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="event.location" :rules="[rules.required]" placeholder="Location" label="Location" />
+                                <v-text-field v-model="event.location" :rules="[rules.required]" placeholder="Location"
+                                    label="Location" />
                             </v-col>
                             <v-col>
-                                <v-text-field
-                                    v-model="event.description"
-                                    :rules="[rules.required]"
-                                    type="text"
-                                    placeholder="Description"
-                                    label="Description"
-                                />
+                                <v-text-field v-model="event.description" :rules="[rules.required]" type="text"
+                                    placeholder="Description" label="Description" />
                             </v-col>
                         </v-row>
                         <v-row class="align-center">
                             <v-col>
-                                <v-text-field
-                                    v-model.number="event.capacity"
-                                    :rules="[rules.required, rules.capacity]"
-                                    type="number"
-                                    placeholder="Capacity"
-                                    label="Capacity"
-                                />
+                                <v-text-field v-model.number="event.capacity" :rules="[rules.required, rules.capacity]"
+                                    type="number" placeholder="Capacity" label="Capacity" />
                             </v-col>
                             <v-col>
-                                <v-text-field
-                                    v-model="event.locationLink"
-                                    placeholder="Location link"
-                                    label="Location link"
-                                    hint="If no image is provided, a default template"
-                                />
+                                <v-text-field v-model="event.locationLink" placeholder="Location link" label="Location link"
+                                    hint="If no image is provided, a default template" />
                             </v-col>
                             <v-col>
-                                <v-text-field
-                                    v-model="event.startTimestamp"
-                                    :rules="[rules.required]"
-                                    type="date"
-                                    placeholder="Start event"
-                                    label="Start event"
-                                />
+                                <v-text-field v-model="event.timeStart" :rules="[rules.required]" type="date"
+                                    placeholder="Start event" label="Start event" />
                             </v-col>
                         </v-row>
                         <v-row class="align-center">
                             <v-col>
-                                <v-text-field
-                                    v-model="event.endTimestamp"
-                                    :rules="[rules.required]"
-                                    type="date"
-                                    placeholder="End event"
-                                    label="End event"
-                                />
+                                <v-text-field v-model="event.timeEnd" :rules="[rules.required]" type="date"
+                                    placeholder="End event" label="End event" />
                             </v-col>
                             <v-col>
                                 <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
@@ -104,8 +82,8 @@ export default defineComponent({
             capacity: 0,
             category: null,
             locationLink: '',
-            startTimestamp: '',
-            endTimestamp: '',
+            timeStart: '',
+            timeEnd: '',
             fight: [],
             vip: false,
         });

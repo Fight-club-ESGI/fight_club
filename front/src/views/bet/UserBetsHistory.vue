@@ -1,6 +1,8 @@
 <template>
     <div class="flex flex-col h-full">
-        <div class="h-1/12 p-4 font-bold text-2xl">My bets</div>
+        <div class="h-1/12 p-4 font-bold text-2xl">
+            <v-breadcrumbs :items="items"></v-breadcrumbs>
+        </div>
         <div class="h-11/12">
             <v-tabs v-model="tab" color="secondary" align-tabs="center">
                 <v-tab value="all" class="normal-case">All</v-tab>
@@ -63,7 +65,6 @@
                     </v-window-item>
                 </v-window>
             </div>
-
         </div>
     </div>
 </template>
@@ -82,4 +83,14 @@ const finishedBets = computed(() => {
 const wonBets = computed(() => {
     return bets.filter((e) => e.status === 'won');
 });
+
+const items = [
+    {
+        title: 'Home',
+        to: { name: 'home' }
+    },
+    {
+        title: 'Bets',
+    }
+];
 </script>

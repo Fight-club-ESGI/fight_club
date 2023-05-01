@@ -14,7 +14,8 @@
         <tbody>
             <tr v-for="(fighter, i) of fighters" :key="fighter.id" :class="[i % 2 !== 1 ? 'bg-white' : ''] + ' h-10'">
                 <td>
-                    <v-avatar size="small"><v-img :src="`https://xsgames.co/randomusers/assets/avatars/pixel/43.jpg`"></v-img></v-avatar>
+                    <v-avatar size="small"><v-img
+                            :src="`https://xsgames.co/randomusers/assets/avatars/pixel/43.jpg`"></v-img></v-avatar>
                 </td>
                 <td>{{ fighter.firstname }} {{ fighter.lastname }}</td>
                 <td>{{ fighter.weight }} kg</td>
@@ -35,7 +36,7 @@
             </tr>
         </tbody>
     </table>
-    <v-alert v-else color="blue-grey-lighten-4">Create a fighter</v-alert>
+    <v-alert v-else variant="outlined">Create a fighter first</v-alert>
 </template>
 
 <script lang="ts">
@@ -64,7 +65,7 @@ export default defineComponent({
         const remove = async (fighterId: string) => {
             try {
                 await deleteFighter(fighterId);
-            } catch (error) {}
+            } catch (error) { }
         };
 
         return { fighters, remove };
@@ -83,6 +84,7 @@ table {
     margin: 0 auto;
     position: relative;
 }
+
 td,
 th {
     padding-left: 8px;
@@ -93,10 +95,12 @@ thead tr {
     background: #ffed86;
     font-size: 16px;
 }
+
 tbody tr {
     height: 48px;
     border-bottom: 1px solid #e3f1d5;
 }
+
 tbody tr:last-child {
     border: 0;
 }
