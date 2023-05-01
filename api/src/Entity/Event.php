@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Delete(),
-        new Put()
+        new Put(),
     ]
 )]
 class Event
@@ -52,7 +52,8 @@ class Event
     #[Groups([
         'admin:get',
         'tickets:get',
-        'events:get'
+        'events:get',
+        'admin:patch'
     ])]
     private ?FightCategory $fightCategory = null;
 
