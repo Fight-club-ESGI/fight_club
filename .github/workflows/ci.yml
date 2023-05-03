@@ -3,7 +3,7 @@ name: CI/CD for API Platform and VueJS
 on:
   push:
     branches:
-      - main
+      - feature/ci_cd
 
 jobs:
   build:
