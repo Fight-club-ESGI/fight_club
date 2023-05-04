@@ -60,7 +60,7 @@ jobs:
           docker-compose run front npm install
       - name: Build Frontend for production
         run: |  
-          docker-compose exec -T -d front npm run build
+          docker-compose exec -T front npm run build
       - name: Start Frontend for production
         run: |
           docker-compose exec front npm run preview
