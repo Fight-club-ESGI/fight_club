@@ -57,7 +57,7 @@ jobs:
           docker-compose up -d
       - name: Install Frontend dependencies
         run: |
-          docker-compose exec -d front npm install
+          docker-compose run -d front npm install
       - name: Build Frontend for production
         run: |  
           docker-compose exec -d front npm run build
