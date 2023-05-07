@@ -24,10 +24,12 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            normalizationContext: ['groups' => ['tickets:get', 'additional:get', 'events:get']],
             name: 'event_tickets'
         ),
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['events:get']],
+        ),
         new Get(
             uriTemplate: 'events/{id}/ticket_event',
             controller: GetTicketEventByEventId::class,
@@ -93,7 +95,7 @@ class Event
         'events:get',
         'admin:patch'
     ])]
-    private ?string $location_link = null;
+    private ?string $locationLink = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups([
@@ -219,12 +221,12 @@ class Event
 
     public function getLocationLink(): ?string
     {
-        return $this->location_link;
+        return $this->locationLink;
     }
 
-    public function setLocationLink(?string $location_link): self
+    public function setLocationLink(?string $locationLink): self
     {
-        $this->location_link = $location_link;
+        $this->locationLink = $locationLink;
 
         return $this;
     }
