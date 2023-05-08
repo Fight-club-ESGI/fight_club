@@ -14,6 +14,7 @@ import EventDetailsAdmin from "@/views/admin/EventDetails.vue";
 import UserBetsHistory from "@/views/bet/UserBetsHistory.vue";
 import UserTicketsHistory from "@/views/ticketing/UserTicketsHistory.vue";
 import Wallet from "@/views/wallet/Wallet.vue";
+import Cart from "@/views/cart/Cart.vue";
 import Ticketing from '@/views/ticketing/Ticketing.vue';
 import FailedPayment from '@/views/checkout/FailedPayment.vue';
 import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
@@ -102,6 +103,12 @@ export default [
         path: '/wallet',
         component: Wallet,
         name: 'user-wallet',
+        meta: { requiresAuth: false, requiresAdmin: false }
+    },
+    {
+        path: '/cart',
+        component: Cart,
+        name: 'user-cart',
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {

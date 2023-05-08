@@ -31,7 +31,7 @@ class Fight {
             throw error;
         }
     }
-    
+
     async _validateFight(fightId: string): Promise<string> {
         try {
             const uri = `${namespace}/${fightId}/validation`;
