@@ -8,4 +8,5 @@ enum BetStatusEnum: string
     case LOSE = 'lose';
     case DRAW = 'draw';
     case WIN = 'win';
+    case REJECTED = 'rejected';
 }

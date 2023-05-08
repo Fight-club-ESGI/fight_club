@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use App\Controller\Fight\FightChooseWinner;
+use App\Controller\Fight\FightValidation;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightRepository;
@@ -19,6 +21,22 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new Post(
             security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(
+            uriTemplate: "/fights/{fight}/validation",
+            controller: FightValidation::class,
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: "admin only",
+            read: false,
+            name: 'fight_wallet',
+        ),
+        new Post(
+            uriTemplate: "/fights/{fight}/winner",
+            controller: FightChooseWinner::class,
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: "admin only",
+            read: false,
+            name: 'fight_winner'
         ),
         new Get()
     ]
