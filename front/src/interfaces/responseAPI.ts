@@ -21,8 +21,16 @@ export interface WalletInterface {
 
 export interface CartInterface {
   id: string | null
-  amount: number | null
-  items: Array<ITicketEvent>
+  cartItems: Array<CartItemInterface>
+  createdAt: string | null
+  updatedAt: string | null
+}
+
+export interface CartItemInterface {
+  id: string | null
+  cart: string | null
+  ticketEvent: ITicketEvent
+  quantity: number | null
   createdAt: string | null
   updatedAt: string | null
 }

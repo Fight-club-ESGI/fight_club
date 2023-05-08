@@ -89,9 +89,16 @@ class TicketEvent
     ])]
     private ?float $price = null;
 
+    #[ORM\OneToMany(mappedBy: 'ticketEvent', targetEntity: CartItem::class)]
+    #[Groups([
+        'admin:get',
+    ])]
+    private Collection $cartItems;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
     }
 
     public function getEvent(): ?Event
@@ -168,6 +175,36 @@ class TicketEvent
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CartItem>
+     */
+    public function getCartItems(): Collection
+    {
+        return $this->cartItems;
+    }
+
+    public function addCartItem(CartItem $cartItem): self
+    {
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems->add($cartItem);
+            $cartItem->setTicketEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(CartItem $cartItem): self
+    {
+        if ($this->cartItems->removeElement($cartItem)) {
+            // set the owning side to null (unless already changed)
+            if ($cartItem->getTicketEvent() === $this) {
+                $cartItem->setTicketEvent(null);
+            }
+        }
 
         return $this;
     }

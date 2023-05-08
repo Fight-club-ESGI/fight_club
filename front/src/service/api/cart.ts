@@ -1,22 +1,14 @@
 import { client, clientWithoutAuth } from "..";
-import type { CartInterface } from "../../interfaces/responseAPI";
+import type { CartInterface, CartItemInterface } from "../../interfaces/responseAPI";
 
-const namespace = '/orders';
+const cartURL = '/carts';
+const cartItemURL = '/cart_items';
 
 class Cart {
 
-    async _getCarts(): Promise<CartInterface[]> {
+    async _getCart(): Promise<CartInterface> {
         try {
-            const res = await client.get(namespace);
-            return res.data;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async _getCart(id: string): Promise<CartInterface> {
-        try {
-            const uri = `${namespace}/${id}`;
+            const uri = `/my-cart`;
             const res = await client.get(uri);
             return res.data;
         } catch (error) {
@@ -26,7 +18,7 @@ class Cart {
 
     async _addToCart(payload: { productId: string, quantity: number }): Promise<CartInterface> {
         try {
-            const uri = `${namespace}/add`;
+            const uri = `${cartItemURL}`;
             const res = await client.post(uri, payload);
             return res.data;
         } catch (error) {
@@ -34,18 +26,9 @@ class Cart {
         }
     }
 
-    async _createCart(payload: CartInterface): Promise<CartInterface> {
+    async _removeFromCart(payload: CartItemInterface): Promise<CartInterface> {
         try {
-            const res = await client.post(namespace, payload);
-            return res.data;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async _upadateCart(payload: CartInterface): Promise<CartInterface> {
-        try {
-            const uri = `${namespace}/${payload.id}`
+            const uri = `${cartItemURL}/${payload.id}`
             const res = await client.patch(uri, payload);
             return res.data;
         } catch (error) {
@@ -53,10 +36,15 @@ class Cart {
         }
     }
 
-    async _deleteCart(id: string): Promise<void> {
+    async _clearCart(): Promise<void> {
         try {
-            const uri = `${namespace}/${id}`;
-            const res = await client.delete(uri);
+            const cart = await this._getCart();
+            const payload = {
+                ...cart,
+                cartItems: []
+            }
+            const uri = `${cartURL}/${cart.id}`;
+            const res = await client.patch(uri, payload);
             return res.data;
         } catch (error) {
             throw error;
