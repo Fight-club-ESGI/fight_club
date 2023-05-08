@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useTicketStore } from '@/stores/tickets';
+import { createToast } from 'mosha-vue-toastify';
+import { defineProps, defineEmits } from 'vue';
+import TicketEventCard from './TicketEventCard.vue';
 const props = defineProps({
     display: {
         type: String,
@@ -47,25 +50,7 @@ const ticketCategoryColor = (name: string) => {
     </div>
     <div v-else class="grid grid-cols-3 gap-3">
         <div v-for="te of ticketEvent" :key="te.id">
-            <v-card>
-                <v-card-title>
-                    <span class="font-bold">Ticket category: </span>
-                    <span>{{ te.ticketCategory.name }}</span>
-                </v-card-title>
-                <v-card-text>
-                    <span class="font-bold">Price: </span>
-                    <span>{{ te.price }} €</span>
-                </v-card-text>
-                <v-card-text>
-                    <span class="font-bold">Max quantity: </span>
-                    <span>{{ te.maxQuantity }}</span>
-                </v-card-text>
-                <v-card-actions>
-                    <v-text-field placeholder="Quantity" type="number" min="1" max="10" step="1"
-                        density="compact"></v-text-field>
-                    <v-btn color="primary" text>Add to cart</v-btn>
-                </v-card-actions>
-            </v-card>
+            <TicketEventCard :ticketEvent="te" />
         </div>
     </div>
 </template>

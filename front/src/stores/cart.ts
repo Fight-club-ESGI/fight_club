@@ -1,35 +1,18 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ComputedRef, computed, ref } from "vue";
 import { cartService } from "../service/api";
-import { CartInterface } from "@/interfaces/responseAPI";
-import { ITicketEvent } from "@/interfaces/event";
+import { CartInterface, CartItemInterface } from "@/interfaces/responseAPI";
 
 export const useCartStore = defineStore('cart', () => {
 
     const cart = ref<CartInterface>();
 
-    const cartHistory = ref<Array<CartInterface>>([
-        {
-            id: null,
-            amount: null,
-            status: null,
-            wallet: null,
-            type: null,
-            stripe_ref: null,
-            createdAt: null,
-            updatedAt: null
-        }
-    ]);
+    const cartItems: ComputedRef<CartItemInterface[]> = computed(() => {
+        if (cart.value === undefined) return [];
+        return cart.value.cartItems;
+    });
 
-    async function getCartHistory() {
-        try {
-            cartHistory.value = await cartService._cartHistory();
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async function addToCart(payload: Array<ITicketEvent>) {
+    async function addToCart(payload: { productId: string, quantity: number }) {
         try {
             cart.value = await cartService._addToCart(payload);
         } catch (error) {
@@ -37,21 +20,22 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
-    async function transactionConfirmation(transaction_id: string) {
+    async function removeFromCart(payload: CartItemInterface) {
         try {
-            cart.value = await cartService._confirmation(transaction_id);
-
-            if (cartHistory) {
-
-                let idx = cartHistory.value.findIndex(transaction => transaction.id === cart.value.id)
-                if (idx !== -1) {
-                    cartHistory.value[idx] = cart.value;
-                }
-            }
+            cart.value = await cartService._removeFromCart(payload);
         } catch (error) {
             throw error;
         }
     }
 
-    return { cart, cartHistory, getCartHistory, transactionConfirmation }
+    async function clearCart() {
+        try {
+            await cartService._clearCart();
+            cart.value = undefined;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    return { cart, cartItems, addToCart, removeFromCart, clearCart };
 });
