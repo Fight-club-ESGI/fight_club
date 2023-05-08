@@ -91,6 +91,10 @@ class Bet
     ])]
     private ?BetStatusEnum $status = BetStatusEnum::PENDING;
 
+    #[ORM\OneToOne(inversedBy: 'bet', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?WalletTransaction $wallet_transaction = null;
+
     public function getFight(): ?Fight
     {
         return $this->fight;
@@ -147,6 +151,18 @@ class Bet
     public function setStatus(BetStatusEnum $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getWalletTransaction(): ?WalletTransaction
+    {
+        return $this->wallet_transaction;
+    }
+
+    public function setWalletTransaction(?WalletTransaction $wallet_transaction): self
+    {
+        $this->wallet_transaction = $wallet_transaction;
 
         return $this;
     }

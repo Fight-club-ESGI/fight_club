@@ -62,6 +62,7 @@ class BetCreateWalletPayment extends AbstractController
         }
 
         $bet->setStatus(BetStatusEnum::PENDING);
+        $bet->setWalletTransaction($walletTransaction);
 
         $this->entityManager->persist($bet);
         $this->entityManager->flush();

@@ -30,13 +30,12 @@ class BetCreateDirectPayment  extends AbstractController
 
     public function __invoke(Request $request, Bet $bet): Response
     {
-        /*if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getStartTimestamp()->getTimestamp()) {
-            if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getEndTimestamp()->getTimestamp()) {
-                return new Response('the event already finished, you cannot bet anymore', 200);
-            } else {
-                return new Response('the event already started, you cannot bet anymore', 200);
-            }
-        }*/
+        if ($_SERVER['REQUEST_TIME'] > $bet->getFight()->getEvent()->getTimeEnd()->getTimestamp()) {
+            return new Response('the event already finished, you cannot bet anymore', 400);
+        } else if ($_SERVER['REQUEST_TIME'] > $bet->getFight()->getEvent()->getTimeStart()->getTimestamp()) {
+            return new Response('the event already started, you cannot bet anymore', 400);
+        }
+
 
         if (!($bet->getBetOn()->getId() === $bet->getFight()->getFighterB()->getId()) && !($bet->getBetOn()->getId() === $bet->getFight()->getFighterA()->getId())) {
             return new Response('user don\'t belong to this fight', 200);
@@ -52,8 +51,14 @@ class BetCreateDirectPayment  extends AbstractController
         );
 
         $bet->setStatus(BetStatusEnum::PENDING);
+        $bet->setWalletTransaction($this->checkoutService->getWalletTransaction());
 
         $this->entityManager->persist($bet);
+        $this->entityManager->flush();
+
+        $this->checkoutService->getWalletTransaction()->setBet($bet);
+
+        $this->entityManager->persist($this->checkoutService->getWalletTransaction());
         $this->entityManager->flush();
 
         return new Response($checkout_session->url, 200, ["Content-Type" => "application/json"]);

@@ -14,6 +14,7 @@ use Stripe\StripeClient;
 class CheckoutService
 {
     private StripeClient $stripe;
+    private WalletTransaction $walletTransaction;
 
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
@@ -22,7 +23,7 @@ class CheckoutService
 
     public function checkout(User $user, float $amount, WalletTransactionTypeEnum $type, array $params = [], int $quantity = 1, bool $default_confirmation_url = true): Session
     {
-        $walletTransaction = $this->recordWalletTransaction($user->getWallet(), $amount, WalletTransactionStatusEnum::PENDING, $type);
+        $this->walletTransaction = $this->recordWalletTransaction($user->getWallet(), $amount, WalletTransactionStatusEnum::PENDING, $type);
 
         #todo change url
         $params['line_items'] = [];
@@ -33,7 +34,7 @@ class CheckoutService
         $params['mode'] = 'payment';
 
         if ($default_confirmation_url) {
-            $confirmationUrl = $_ENV['FRONT_URL'] . "/checkout/confirmation?transaction_id=". $walletTransaction->getId();;
+            $confirmationUrl = $_ENV['FRONT_URL'] . "/checkout/confirmation?transaction_id=". $this->walletTransaction->getId();;
             $params['success_url'] = $confirmationUrl;
             $params['cancel_url'] = $confirmationUrl;
         }
@@ -43,8 +44,8 @@ class CheckoutService
 
         $checkout_session = $this->stripe->checkout->sessions->create($params);
 
-        $walletTransaction->setStripeRef($checkout_session->id);
-        $this->entityManager->persist($walletTransaction);
+        $this->walletTransaction->setStripeRef($checkout_session->id);
+        $this->entityManager->persist($this->walletTransaction);
         $this->entityManager->flush();
 
         return $checkout_session;
@@ -93,5 +94,10 @@ class CheckoutService
     public function getStripe(): StripeClient
     {
         return $this->stripe;
+    }
+
+    public function getWalletTransaction(): WalletTransaction
+    {
+        return $this->walletTransaction;
     }
 }
