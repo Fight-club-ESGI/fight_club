@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -18,7 +19,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new Post(
             security: "is_granted('ROLE_ADMIN')"
-        )
+        ),
+        new Get()
     ]
 )]
 class Fight
@@ -35,7 +37,7 @@ class Fight
     #[MaxDepth(1)]
     private ?Event $event = null;
 
-    #[ORM\ManyToOne(inversedBy: 'fighterA')]
+    #[ORM\ManyToOne(inversedBy: 'fightsA')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',
@@ -44,7 +46,7 @@ class Fight
     #[MaxDepth(1)]
     private ?Fighter $fighterA = null;
 
-    #[ORM\ManyToOne(inversedBy: 'fighterB')]
+    #[ORM\ManyToOne(inversedBy: 'fightsB')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',

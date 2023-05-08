@@ -25,7 +25,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new GetCollection(
             normalizationContext: ['groups' => ['tickets:get', 'additional:get', 'events:get']],
-            name: 'event_tickets'
         ),
         new Get(
             normalizationContext: ['groups' => ['events:get']],
@@ -33,10 +32,11 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         new Get(
             uriTemplate: 'events/{id}/ticket_event',
             controller: GetTicketEventByEventId::class,
-            normalizationContext: ['groups' => ['event:ticket:get']]
+            normalizationContext: ['groups' => ['event:ticket:get']],
+            name: 'event_tickets'
         ),
         new Post(
-            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            normalizationContext: ['groups' => ['tickets:get']],
             denormalizationContext: ['groups' => ['tickets:post']],
             security: 'is_granted("ROLE_ADMIN")',
         ),
@@ -59,9 +59,10 @@ class Event
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[Groups([
         'admin:get',
+        'admin:post',
         'tickets:get',
         'events:get',
-        'admin:patch'
+        'admin:patch',
     ])]
     #[MaxDepth(1)]
     private ?FightCategory $fightCategory = null;
@@ -97,7 +98,7 @@ class Event
     ])]
     private ?string $locationLink = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[Groups([
         'admin:get',
         'tickets:get',
@@ -107,7 +108,7 @@ class Event
     ])]
     private ?\DateTimeInterface $timeStart = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[Groups([
         'admin:get',
         'tickets:get',
@@ -165,7 +166,7 @@ class Event
     private Collection $fights;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: TicketEvent::class)]
-    #[MaxDepth(3)]
+    #[MaxDepth(1)]
     #[Groups([
         'admin:get',
         'tickets:get',

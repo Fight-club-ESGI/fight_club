@@ -19,15 +19,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BetCreateDirectPayment  extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private CheckoutService $checkout;
-
-    public function __construct(CheckoutService $checkoutService, EntityManagerInterface $entityManager) {
-        $this->entityManager = $entityManager;
-        $this->checkout = $checkoutService;
+    public function __construct(
+        private readonly CheckoutService $checkoutService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly Security $security,
+        private readonly UserRepository $userRepository,
+        private readonly FightRepository $fightRepository
+    ) {
     }
 
-    public function __invoke(Request $request, Security $security, UserRepository $userRepository, FightRepository $fightRepository, Bet $bet): Response
+    public function __invoke(Request $request, Bet $bet): Response
     {
         /*if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getStartTimestamp()->getTimestamp()) {
             if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getEndTimestamp()->getTimestamp()) {
@@ -41,10 +42,10 @@ class BetCreateDirectPayment  extends AbstractController
             return new Response('user don\'t belong to this fight', 200);
         }
 
-        $user = $userRepository->find($security->getUser()->getId());
-        $bet->setBetUser($user);
+        $user = $this->userRepository->find($this->security->getUser()->getId());
+        $bet->setBettor($user);
 
-        $checkout_session = $this->checkout->checkout(
+        $checkout_session = $this->checkoutService->checkout(
             $user,
             $bet->getAmount(),
             WalletTransactionTypeEnum::BET,
