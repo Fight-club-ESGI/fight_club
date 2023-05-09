@@ -8,6 +8,7 @@
                 <v-list class="flex bg-transparent text-white">
                     <v-list-item><router-link :to="{ name: 'fighters' }">Fighters</router-link></v-list-item>
                     <v-list-item><router-link :to="{ name: 'events' }">Events</router-link></v-list-item>
+                    <v-list-item><router-link :to="{ name: 'bets' }">Bets</router-link></v-list-item>
                 </v-list>
                 <v-spacer />
                 <v-list v-if="!isConnected" class="flex bg-transparent text-white">

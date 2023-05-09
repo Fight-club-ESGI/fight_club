@@ -89,6 +89,10 @@ class WalletTransaction
     ])]
     private ?string $stripe_ref = null;
 
+    #[ORM\OneToOne(mappedBy: 'wallet_transaction', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Bet $bet = null;
+
     public function getWallet(): ?Wallet
     {
         return $this->wallet;
@@ -157,6 +161,28 @@ class WalletTransaction
     public function setStripeRef(string $stripe_ref): self
     {
         $this->stripe_ref = $stripe_ref;
+
+        return $this;
+    }
+
+    public function getBet(): ?Bet
+    {
+        return $this->bet;
+    }
+
+    public function setBet(?Bet $bet): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($bet === null && $this->bet !== null) {
+            $this->bet->setWalletTransaction(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($bet !== null && $bet->getWalletTransaction() !== $this) {
+            $bet->setWalletTransaction($this);
+        }
+
+        $this->bet = $bet;
 
         return $this;
     }

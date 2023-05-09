@@ -22,53 +22,63 @@ use Symfony\Bundle\SecurityBundle\Security;
 #[AsController]
 class FightValidation extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager) {
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly UserRepository $userRepository,
+        private readonly Security $security
+
+    ) {
     }
 
-    public function __invoke(Request $request, UserRepository $userRepository, Security $security, string $fight_id, FightRepository $fightRepository): Response
+    public function __invoke(Request $request, Fight $fight): Response
     {
-        $fight = $fightRepository->find($fight_id);
         if ($fight->isWinnerValidation()) {
-            return new Response('This fight is already validated', 200, ["Content-type" => "application/json"]);
+            return new Response('This fight is already validated', 400, ["Content-type" => "application/json"]);
         }
 
         if (is_null($fight->getAdminValidatorA())) {
-            $fight->setAdminValidatorA($userRepository->find($security->getUser()->getId()));
-        } else if (is_null($fight->getAdminValidatorB()) && ($fight->getAdminValidatorA()->getId() !== $security->getUser()->getId())) {
-            $fight->setAdminValidatorB($userRepository->find($security->getUser()->getId()));
-        } else if ($fight->getAdminValidatorB()->getId() === $security->getUser()->getId()) {
-            return new Response('Another admin should validate this fight', 200, ["Content-Type" => "application/json"]);
+            $fight->setAdminValidatorA($this->userRepository->find($this->security->getUser()->getId()));
+        } else if (is_null($fight->getAdminValidatorB()) && ($fight->getAdminValidatorA()->getId() !== $this->security->getUser()->getId())) {
+            $fight->setAdminValidatorB($this->userRepository->find($this->security->getUser()->getId()));
+        } else if ($fight->getAdminValidatorA()->getId() === $this->security->getUser()->getId()) {
+            return new Response('Another admin should validate this fight', 400, ["Content-Type" => "application/json"]);
         }
 
         $this->entityManager->persist($fight);
         $this->entityManager->flush();
 
         if (!is_null($fight->getAdminValidatorA()) && !is_null($fight->getAdminValidatorB())) {
-            $fight->setWinnerValidation(true);
+            $fight->setWinnerValidation(false);
             $this->entityManager->persist($fight);
             $this->entityManager->flush();
 
             $fightBets = $fight->getBets();
+
             foreach ( $fightBets as $bet ) {
-                if ($bet->getBetOn() === $fight->getWinner() && $fight->isWinnerValidation()){
-                    $fight_odds = new FightOddsService($fight);
-                    $amount = $bet->getAmount() + ($bet->getAmount() * $fight_odds->winnerOdds());
+                if ($bet->getBetOn() === $fight->getWinner()){
+                    if($bet->getWalletTransaction()->getStatus() === WalletTransactionStatusEnum::ACCEPTED) {
 
-                    $wallet = $bet->getBetUser()->getWallet();
-                    $wallet->setAmount($bet->getBetUser()->getWallet()->getAmount() + $amount);
-                    $this->entityManager->persist($wallet);
-                    $this->entityManager->flush();
+                        $fight_odds = new FightOddsService($fight);
+                        $amount = $bet->getAmount() + ($bet->getAmount() * $fight_odds->winnerOdds());
 
-                    $transaction = new WalletTransaction();
-                    $transaction->setWallet($wallet);
-                    $transaction->setAmount($amount);
-                    $transaction->setType(WalletTransactionTypeEnum::DEPOSIT);
-                    $transaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
-                    $transaction->setTransaction("bet gain");
-                    $this->entityManager->persist($transaction);
-                    $this->entityManager->flush();
+                        $wallet = $bet->getBettor()->getWallet();
+                        $wallet->setAmount($bet->getBettor()->getWallet()->getAmount() + $amount);
+                        $this->entityManager->persist($wallet);
+                        $this->entityManager->flush();
 
-                    $bet->setStatus(BetStatusEnum::WIN);
+                        $transaction = new WalletTransaction();
+                        $transaction->setWallet($wallet);
+                        $transaction->setAmount($amount);
+                        $transaction->setType(WalletTransactionTypeEnum::DEPOSIT);
+                        $transaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+                        $transaction->setTransaction("bet gain");
+                        $this->entityManager->persist($transaction);
+                        $this->entityManager->flush();
+
+                        $bet->setStatus(BetStatusEnum::WIN);
+                    } else {
+                        $bet->setStatus(BetStatusEnum::REJECTED);
+                    }
                 } else {
                     $bet->setStatus(BetStatusEnum::LOSE);
                 }

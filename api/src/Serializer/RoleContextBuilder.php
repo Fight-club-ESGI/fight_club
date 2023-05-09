@@ -47,7 +47,6 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                 $context['groups'][] = $this->selfRequestMethodGroup($request->getMethod(), $normalization);
             }
         }
-
         return $context;
     }
 

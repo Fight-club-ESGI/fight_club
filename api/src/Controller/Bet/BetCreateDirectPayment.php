@@ -19,40 +19,46 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BetCreateDirectPayment  extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private CheckoutService $checkout;
-
-    public function __construct(CheckoutService $checkoutService, EntityManagerInterface $entityManager) {
-        $this->entityManager = $entityManager;
-        $this->checkout = $checkoutService;
+    public function __construct(
+        private readonly CheckoutService $checkoutService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly Security $security,
+        private readonly UserRepository $userRepository,
+        private readonly FightRepository $fightRepository
+    ) {
     }
 
-    public function __invoke(Request $request, Security $security, UserRepository $userRepository, FightRepository $fightRepository, Bet $bet): Response
+    public function __invoke(Request $request, Bet $bet): Response
     {
-        /*if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getStartTimestamp()->getTimestamp()) {
-            if ($_SERVER['REQUEST_TIME'] > $fightBet->getFight()->getEvent()->getEndTimestamp()->getTimestamp()) {
-                return new Response('the event already finished, you cannot bet anymore', 200);
-            } else {
-                return new Response('the event already started, you cannot bet anymore', 200);
-            }
-        }*/
+        if ($_SERVER['REQUEST_TIME'] > $bet->getFight()->getEvent()->getTimeEnd()->getTimestamp()) {
+            return new Response('the event already finished, you cannot bet anymore', 400);
+        } else if ($_SERVER['REQUEST_TIME'] > $bet->getFight()->getEvent()->getTimeStart()->getTimestamp()) {
+            return new Response('the event already started, you cannot bet anymore', 400);
+        }
+
 
         if (!($bet->getBetOn()->getId() === $bet->getFight()->getFighterB()->getId()) && !($bet->getBetOn()->getId() === $bet->getFight()->getFighterA()->getId())) {
             return new Response('user don\'t belong to this fight', 200);
         }
 
-        $user = $userRepository->find($security->getUser()->getId());
-        $bet->setBetUser($user);
+        $user = $this->userRepository->find($this->security->getUser()->getId());
+        $bet->setBettor($user);
 
-        $checkout_session = $this->checkout->checkout(
+        $checkout_session = $this->checkoutService->checkout(
             $user,
             $bet->getAmount(),
             WalletTransactionTypeEnum::BET,
         );
 
         $bet->setStatus(BetStatusEnum::PENDING);
+        $bet->setWalletTransaction($this->checkoutService->getWalletTransaction());
 
         $this->entityManager->persist($bet);
+        $this->entityManager->flush();
+
+        $this->checkoutService->getWalletTransaction()->setBet($bet);
+
+        $this->entityManager->persist($this->checkoutService->getWalletTransaction());
         $this->entityManager->flush();
 
         return new Response($checkout_session->url, 200, ["Content-Type" => "application/json"]);
