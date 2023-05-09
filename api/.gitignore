@@ -24,3 +24,5 @@
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 /public/uploads
+
+/api/migrations/
