@@ -77,7 +77,7 @@ const submit = async () => {
     try {
         const { valid } = await form.value.validate();
         if (valid) {
-            const payload: ITicketEvent = {
+            const payload = {
                 price: price.value,
                 maxQuantity: maxQuantity.value,
                 event: '/events/' + eventId.value,
