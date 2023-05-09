@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { eventService } from "../service/api";
+import { eventService, ticketService } from "../service/api";
 import { ref } from "vue"
 import { EventI } from "../interfaces/payload";
 
