@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -29,6 +30,15 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['ticket:event:get_collection']],
+        ),
+        new Patch(
+            normalizationContext: ['groups' => ['ticket:event:get']],
+            denormalizationContext: ['groups' => ['ticket:event:patch']],
+            security: 'is_granted("ROLE_ADMIN")',
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
         )
     ]
 )]
@@ -66,7 +76,8 @@ class TicketEvent
         'admin:post',
         'ticket:event:post',
         'ticket:event:get',
-        'event:ticket:get'
+        'event:ticket:get',
+        'ticket:event:patch'
     ])]
     private ?int $maxQuantity = null;
 
@@ -89,9 +100,16 @@ class TicketEvent
     ])]
     private ?float $price = null;
 
+    #[ORM\OneToMany(mappedBy: 'ticketEvent', targetEntity: CartItem::class)]
+    #[Groups([
+        'admin:get',
+    ])]
+    private Collection $cartItems;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
     }
 
     public function getEvent(): ?Event
@@ -168,6 +186,36 @@ class TicketEvent
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CartItem>
+     */
+    public function getCartItems(): Collection
+    {
+        return $this->cartItems;
+    }
+
+    public function addCartItem(CartItem $cartItem): self
+    {
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems->add($cartItem);
+            $cartItem->setTicketEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(CartItem $cartItem): self
+    {
+        if ($this->cartItems->removeElement($cartItem)) {
+            // set the owning side to null (unless already changed)
+            if ($cartItem->getTicketEvent() === $this) {
+                $cartItem->setTicketEvent(null);
+            }
+        }
 
         return $this;
     }

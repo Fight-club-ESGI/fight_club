@@ -3,6 +3,7 @@
 namespace App\EventSubscriber\User;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
+use App\Entity\Cart;
 use App\Entity\User;
 use App\Entity\Wallet;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +17,8 @@ class UserRegisterSubscriber implements EventSubscriberInterface
 {
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager) {
+    public function __construct(EntityManagerInterface $entityManager)
+    {
         $this->entityManager = $entityManager;
     }
 
@@ -24,6 +26,7 @@ class UserRegisterSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::VIEW => ['createUserWallet', EventPriorities::POST_VALIDATE],
+            KernelEvents::VIEW => ['createUserCart', EventPriorities::POST_VALIDATE],
         ];
     }
 
@@ -42,6 +45,23 @@ class UserRegisterSubscriber implements EventSubscriberInterface
         $wallet->setAmount(0);
 
         $this->entityManager->persist($wallet);
+        $this->entityManager->flush();
+    }
+
+    public function createUserCart(ViewEvent $event)
+    {
+        $user = $event->getControllerResult();
+        $method = $event->getRequest()->getMethod();
+
+        if (!$user instanceof User || Request::METHOD_POST !== $method) {
+            return;
+            //throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+        }
+
+        $cart = new Cart();
+        $cart->setUser($user);
+
+        $this->entityManager->persist($cart);
         $this->entityManager->flush();
     }
 }

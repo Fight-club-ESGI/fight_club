@@ -1,30 +1,31 @@
-import Home from '@/views/Home.vue';
-import Fighters from '@/views/fight/Fighters.vue';
-import FighterDetails from '@/views/fight/FighterDetails.vue';
-import BetOnAFight from '@/views/bet/BetOnAFight.vue';
-import Event from '@/views/event/Event.vue';
-import EventDetails from '@/views/event/EventDetails.vue';
-import Login from '@/views/session/Login.vue';
-import Signup from '@/views/session/Signup.vue';
-import Deposit from '@/views/user/Deposit.vue';
-import Sponsorship from '@/views/admin/Sponsorship.vue';
-import FightersAdmin from '@/views/admin/Fighters.vue';
-import AdminView from '@/views/admin/AdminView.vue';
-import ProfileView from '@/views/user/Profile.vue';
-import EventDetailsAdmin from '@/views/admin/EventDetails.vue';
-import UserBetsHistory from '@/views/bet/UserBetsHistory.vue';
-import UserTicketsHistory from '@/views/ticketing/UserTicketsHistory.vue';
-import Wallet from '@/views/wallet/Wallet.vue';
-import Ticketing from '@/views/ticketing/Ticketing.vue';
-import FailedPayment from '@/views/checkout/FailedPayment.vue';
-import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
 import ActivateStatus from '@/views/user/ActivateStatus.vue';
-import ResetPassword from '@/views/session/ResetPassword.vue';
-import ValidateResetPassword from '@/views/session/ValidateResetPassword.vue';
-import Session from '@/views/session/Session.vue';
-import InvalidToken from '@/views/InvalidToken.vue';
-import CheckoutConfirmation from "@/views/checkout/Confirmation.vue";
+import AdminView from "@/views/admin/AdminView.vue"
 import BecomeVIP from "@/views/sponsor/BecomeVIP.vue";
+import BetOnAFight from '@/views/bet/BetOnAFight.vue';
+import Cart from "@/views/cart/Cart.vue";
+import CheckoutConfirmation from "@/views/checkout/Confirmation.vue";
+import Deposit from "@/views/user/Deposit.vue"
+import Event from "@/views/event/Event.vue"
+import EventDetails from "@/views/event/EventDetails.vue"
+import EventDetailsAdmin from "@/views/admin/EventDetails.vue";
+import FailedPayment from '@/views/checkout/FailedPayment.vue';
+import Fighters from "@/views/fight/Fighters.vue"
+import FighterDetails from "@/views/fight/FighterDetails.vue"
+import FightersAdmin from "@/views/admin/Fighters.vue"
+import Home from "@/views/Home.vue"
+import InvalidToken from '@/views/InvalidToken.vue';
+import Login from "@/views/session/Login.vue"
+import ProfileView from "@/views/user/Profile.vue";
+import ResetPassword from '@/views/session/ResetPassword.vue';
+import Session from '@/views/session/Session.vue';
+import Signup from "@/views/session/Signup.vue"
+import Sponsorship from "@/views/admin/Sponsorship.vue"
+import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
+import Ticketing from '@/views/ticketing/Ticketing.vue';
+import UserBetsHistory from "@/views/bet/UserBetsHistory.vue";
+import UserTicketsHistory from "@/views/ticketing/UserTicketsHistory.vue";
+import ValidateResetPassword from '@/views/session/ValidateResetPassword.vue';
+import Wallet from "@/views/wallet/Wallet.vue";
 
 export default [
     {
@@ -104,6 +105,18 @@ export default [
         component: Wallet,
         name: 'user-wallet',
         meta: { requiresAuth: false, requiresAdmin: false },
+    },
+    {
+        path: '/cart',
+        component: Cart,
+        name: 'user-cart',
+        meta: { requiresAuth: false, requiresAdmin: false }
+    },
+    {
+        path: '/cart',
+        component: Cart,
+        name: 'user-cart',
+        meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
         path: '/checkout/confirmation',

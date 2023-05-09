@@ -1,10 +1,11 @@
 <script lang="ts" setup>
+import { ITicketEvent } from '@/interfaces/event';
 import { useTicketStore } from '@/stores/tickets';
 import { storeToRefs } from 'pinia';
 import { watch, Ref, ref, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 const ticketStore = useTicketStore();
-const { ticketEvent } = storeToRefs(ticketStore)
+const { ticketsEvent } = storeToRefs(ticketStore)
 const { updateTicketEvent } = ticketStore;
 const route = useRoute();
 const props = defineProps({
@@ -23,10 +24,12 @@ const save = async () => {
     try {
         if (selectedItem?.value) {
             const payload = {
-                eventId: route.params.id?.toString(),
-                ticketCategoryId: selectedItem.value.id.id,
-                maxQuantity: tickets.value
+                id: selectedItem.value.id.id,
+                maxQuantity: Number(tickets.value),
+                event: '/events/' + route.params.id?.toString(),
+                ticketCategory: '/ticket_categories/' + selectedItem.value.id.ticketCategory.id
             }
+
             await updateTicketEvent(payload);
         }
     } catch (error) {
@@ -44,7 +47,7 @@ const save = async () => {
         <v-btn variant="outlined" color="primary" @click="save">Save</v-btn>
     </div>
     <div v-else>
-        <v-alert :text="ticketEvent.length > 0 ? 'Select a type of ticket to edit it' : 'Create a ticket category'"
+        <v-alert :text="ticketsEvent.length > 0 ? 'Select a type of ticket to edit it' : 'Create a ticket category'"
             variant="outlined"></v-alert>
     </div>
 </template>

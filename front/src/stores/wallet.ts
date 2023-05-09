@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { walletService } from "../service/api";
-import {WalletInterface} from "@/interfaces/responseAPI";
+import { WalletInterface } from "@/interfaces/responseAPI";
 
 export const useWalletStore = defineStore('wallet', () => {
 

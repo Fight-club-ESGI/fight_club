@@ -94,7 +94,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             controller: ChangePassword::class,
             security: "is_granted('ROLE_USER')",
             name: 'validate-reset-password',
-        ),
+        )
     ]
 )]
 #[Vich\Uploadable]
@@ -120,8 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:get_collection',
         'admin:post',
         'admin:patch',
-        'user:self:get',
-        'user:post'
+        'user:self:get'
     ])]
     private array $roles = [];
 
@@ -174,6 +173,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:self:get'
     ])]
     private ?string $VIPToken = null;
+
+    #[ORM\OneToOne(mappedBy: '_user', cascade: ['persist', 'remove'])]
+    private ?Cart $cart = null;
 
     public function __construct()
     {
@@ -387,6 +389,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVIPToken(?string $VIPToken): self
     {
         $this->VIPToken = $VIPToken;
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(Cart $cart): self
+    {
+        // set the owning side of the relation if necessary
+        if ($cart->getUser() !== $this) {
+            $cart->setUser($this);
+        }
+
+        $this->cart = $cart;
+
         return $this;
     }
 }
