@@ -1,3 +1,4 @@
+import { debug } from "console";
 import { client, clientWithoutAuth } from "..";
 import type { CartInterface, CartItemInterface } from "../../interfaces/responseAPI";
 
@@ -16,10 +17,45 @@ class Cart {
         }
     }
 
-    async _addToCart(payload: { productId: string, quantity: number }): Promise<CartInterface> {
+    async _addToCart(payload: { cart: string, ticketEvent: string, quantity: number }): Promise<CartItemInterface> {
         try {
+
+            const cart = await this._getCart();
+            const cartItem = cart.cartItems.find(item => item.ticketEvent.id === payload.ticketEvent);
+            if (cartItem) {
+                const uri = `${cartItemURL}/${cartItem.id}`;
+                const data = {
+                    quantity: cartItem.quantity + payload.quantity
+                }
+                const res = await client.patch(uri, data);
+                return res.data;
+            }
+
             const uri = `${cartItemURL}`;
-            const res = await client.post(uri, payload);
+            const data = {
+                cart: `/carts/${payload.cart}`,
+                ticketEvent: `/ticket_events/${payload.ticketEvent}`,
+                quantity: payload.quantity
+            }
+            const res = await client.post(uri, data);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _updateCartItem(payload: CartItemInterface): Promise<CartItemInterface> {
+        try {
+            console.log(payload);
+            const cart = await this._getCart();
+            const uri = `${cartItemURL}/${payload.id}`;
+            const data = {
+                cart: `/carts/${cart.id}`,
+                ticketEvent: `/ticket_events/${payload.ticketEvent.id}`,
+                quantity: Number(payload.quantity)
+            }
+            console.log(data);
+            const res = await client.patch(uri, data);
             return res.data;
         } catch (error) {
             throw error;
@@ -29,14 +65,16 @@ class Cart {
     async _removeFromCart(payload: CartItemInterface): Promise<CartInterface> {
         try {
             const uri = `${cartItemURL}/${payload.id}`
-            const res = await client.patch(uri, payload);
-            return res.data;
+            const res = await client.delete(uri);
+
+            const cart = await this._getCart();
+            return cart;
         } catch (error) {
             throw error;
         }
     }
 
-    async _clearCart(): Promise<void> {
+    async _clearCart(): Promise<CartInterface> {
         try {
             const cart = await this._getCart();
             const payload = {
