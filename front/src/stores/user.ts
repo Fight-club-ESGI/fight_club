@@ -6,12 +6,17 @@ import type { userInterface } from '@/interfaces/responseAPI';
 import { token, refreshToken } from '@/service';
 import { useRouter } from "vue-router"
 import jwt_decode from 'jwt-decode';
-import {WalletInterface} from "@/interfaces/responseAPI";
+import { WalletInterface } from "@/interfaces/responseAPI";
+import { useCartStore } from './cart';
 
 export const useUserStore = defineStore('user', () => {
     const router = useRouter();
 
+    const cartStore = useCartStore();
+    const { getCart } = cartStore;
+
     const { _signin, _signup, _getSelfUser, _getUsers, _signinWithToken, _checkTokenValidity, _changePassword, _resetPassword, _validateResetPassword, _updateUser } = userService;
+
 
     const user = ref<userInterface>({
         id: null,
@@ -26,7 +31,13 @@ export const useUserStore = defineStore('user', () => {
             amount: null,
             createdAt: null,
             updatedAt: null,
-        }
+        },
+        cart: {
+            id: null,
+            cartItems: [],
+            createdAt: null,
+            updatedAt: null,
+        },
     });
 
     const users = ref<userInterface[]>([]);
@@ -60,6 +71,7 @@ export const useUserStore = defineStore('user', () => {
             refreshToken.value = res.refresh_token;
             const self = await _getSelfUser();
             user.value = self;
+            await getCart();
         } catch (error) {
             throw error;
         }
@@ -79,6 +91,7 @@ export const useUserStore = defineStore('user', () => {
             token.value = res.token;
             const self = await _getSelfUser();
             user.value = self;
+            await getCart();
         } catch (error) {
             throw error;
         }

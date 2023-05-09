@@ -11,8 +11,15 @@
                 value="tickets"></v-list-item>
             <v-list-item :to="{ name: 'user-bets-history' }" exact prepend-icon="mdi-checkbox-marked" title="My bets"
                 value="bets"></v-list-item>
-            <v-list-item :to="{ name: 'user-cart' }" exact prepend-icon="mdi-cart" title="My cart"
-                value="cart"></v-list-item>
+            <v-list-item :to="{ name: 'user-cart' }" exact title="My cart" value="cart">
+                <template #prepend>
+                    <div class="pr-8">
+                        <v-badge color="red" :content="cartTotalItems">
+                            <v-icon>mdi-cart</v-icon>
+                        </v-badge>
+                    </div>
+                </template>
+            </v-list-item>
             <div v-if="isAdmin">
                 <div class="px-4 py-2">Admin</div>
                 <v-divider />
@@ -34,6 +41,7 @@ import { storeToRefs } from 'pinia';
 import { defineComponent, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useRoute } from "vue-router";
+import { useCartStore } from '@/stores/cart';
 
 export default defineComponent({
     props: {
@@ -51,8 +59,10 @@ export default defineComponent({
         const logoutUser = () => {
             logout();
         };
+        const cartStore = useCartStore();
+        const { cartTotalItems } = storeToRefs(cartStore);
 
-        return { user, isAdmin, logoutUser, route };
+        return { user, isAdmin, logoutUser, route, cartTotalItems };
     },
 });
 </script>

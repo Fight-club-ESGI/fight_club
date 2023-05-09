@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useTicketStore } from '@/stores/tickets';
-import { createToast } from 'mosha-vue-toastify';
 import { defineProps, defineEmits } from 'vue';
 import TicketEventCard from './TicketEventCard.vue';
 const props = defineProps({
@@ -25,7 +24,6 @@ const ticketCategoryColor = (name: string) => {
 
     return colors[name];
 }
-
 </script>
 
 <template>

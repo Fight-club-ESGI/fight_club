@@ -3,11 +3,14 @@
 import { ITicketEvent } from '@/interfaces/event';
 import { useCartStore } from '@/stores/cart';
 import { createToast } from 'mosha-vue-toastify';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 import { PropType } from 'vue';
 import { ref } from 'vue';
 
 const cartStore = useCartStore()
 const { addToCart } = cartStore;
+const { cart } = storeToRefs(cartStore);
 const quantity = ref<number>(1);
 
 const props = defineProps({
@@ -17,12 +20,21 @@ const props = defineProps({
     }
 })
 
-const addCart = (productId: string) => {
-    addToCart({ productId, quantity: quantity.value })
-    createToast('Ticket added to cart', {
-        type: 'success',
-        position: 'bottom-right'
-    });
+const addCart = async (ticketEvent: string) => {
+    try {
+
+        await addToCart({ cart: cart.value?.id, ticketEvent, quantity: quantity.value })
+        createToast('Ticket added to cart', {
+            type: 'success',
+            position: 'bottom-right'
+        });
+    }
+    catch {
+        createToast('Error while adding ticket to cart', {
+            type: 'danger',
+            position: 'bottom-right'
+        });
+    }
 }
 </script>
 

@@ -27,10 +27,10 @@ export interface CartInterface {
 }
 
 export interface CartItemInterface {
-  id: string | null
+  id: string
   cart: string | null
   ticketEvent: ITicketEvent
-  quantity: number | null
+  quantity: number
   createdAt: string | null
   updatedAt: string | null
 }

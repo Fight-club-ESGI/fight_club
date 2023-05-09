@@ -18,10 +18,11 @@ export default defineComponent({
         const { isConnected } = storeToRefs(userStore);
 
         onMounted(async () => {
+
             if (refreshToken.value) {
                 try {
                     await signinWithToken(refreshToken.value);
-                } catch (error) {}
+                } catch (error) { }
             }
         });
 
@@ -31,18 +32,14 @@ export default defineComponent({
 </script>
 
 <template>
-    <v-app
-        app
-        class="h-screen"
-    >
+    <v-app app class="h-screen">
         <HomeHeader v-if="!route.meta?.hideHeader" @toggleNavigationDrawer="display = !display"></HomeHeader>
 
         <NavigationDrawer
             v-if="isConnected && route.name !== 'activate-status' && route.name !== 'login' && route.name !== 'signup' && route.name !== 'home'"
-            :display="display"
-        />
+            :display="display" />
         <!-- Do not put padding on the v-main because it will break the website -->
-        <v-main class="h-full">
+        <v-main class="h-full overflow-auto">
             <router-view />
         </v-main>
     </v-app>

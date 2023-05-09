@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -16,12 +18,25 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new Post(
-            security: '(is_granted("ROLE_USER") and object.cart._user == user) or is_granted("ROLE_ADMIN")',
+            security: 'is_granted("ROLE_USER") or is_granted("ROLE_ADMIN")',
             denormalizationContext: ['groups' => ['cart:item:post']],
+            normalizationContext: ['groups' => ['cart:item:get']],
         ),
         new Get(
-            security: '(is_granted("ROLE_USER") and object.cart._user == user) or is_granted("ROLE_ADMIN")',
+            security: 'is_granted("ROLE_USER") or is_granted("ROLE_ADMIN")',
             normalizationContext: ['groups' => ['cart:item:get']],
+        ),
+        new Patch(
+            security: 'is_granted("ROLE_USER") or is_granted("ROLE_ADMIN")',
+            denormalizationContext: ['groups' => ['cart:item:patch']],
+            normalizationContext: ['groups' => ['cart:item:get']],
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
+        ),
+        new Delete(
+            security: 'is_granted("ROLE_USER") or is_granted("ROLE_ADMIN")',
         )
     ]
 )]
@@ -44,15 +59,18 @@ class CartItem
     #[MaxDepth(1)]
     #[Groups([
         'cart:item:post',
-        'cart:item:get'
+        'cart:item:get',
+        'cart:item:patch',
+        'cart:get',
     ])]
     private ?TicketEvent $ticketEvent = null;
 
     #[ORM\Column]
-    #[MaxDepth(1)]
     #[Groups([
         'cart:item:post',
-        'cart:item:get'
+        'cart:item:get',
+        'cart:item:patch',
+        'cart:get',
     ])]
     private ?int $quantity = null;
 
