@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia';
 import { useTicketStore } from '@/stores/tickets';
 const ticketStore = useTicketStore()
-const { ticketEvent } = storeToRefs(ticketStore);
+const { ticketsEvent } = storeToRefs(ticketStore);
 const emit = defineEmits(['selectedItem']);
 const ticketCategoryColor = (name: string) => {
 
@@ -20,20 +20,21 @@ const ticketCategoryColor = (name: string) => {
 </script>
 
 <template>
-    <v-list v-if="ticketEvent.length > 0" density="compact" :lines="false" class="max-h-96 overflow-auto"
+    <v-list v-if="ticketsEvent.length > 0" density="compact" :lines="false" class="max-h-96 overflow-auto"
         @click:select="emit('selectedItem', $event)">
-        <v-list-item v-for="te of ticketEvent" :value="te">
+        <v-list-item v-for="ticketEvent of ticketsEvent" :value="ticketEvent">
 
             <template v-slot:append>
-                <v-chip :color="ticketCategoryColor(te.ticketCategory.name)">{{ te.ticketCategory.name }}</v-chip>
+                <v-chip :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{ ticketEvent.ticketCategory.name
+                }}</v-chip>
             </template>
 
             <v-list-item-title class="font-bold pl-2">
-                {{ te.price }} €
+                {{ ticketEvent.price }} €
             </v-list-item-title>
 
             <v-list-item-subtitle>
-                {{ te.maxQuantity }} tickets
+                {{ ticketEvent.maxQuantity }} tickets
             </v-list-item-subtitle>
         </v-list-item>
     </v-list>

@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -29,6 +30,15 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['ticket:event:get_collection']],
+        ),
+        new Patch(
+            normalizationContext: ['groups' => ['ticket:event:get']],
+            denormalizationContext: ['groups' => ['ticket:event:patch']],
+            security: 'is_granted("ROLE_ADMIN")',
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
         )
     ]
 )]
@@ -66,7 +76,8 @@ class TicketEvent
         'admin:post',
         'ticket:event:post',
         'ticket:event:get',
-        'event:ticket:get'
+        'event:ticket:get',
+        'ticket:event:patch'
     ])]
     private ?int $maxQuantity = null;
 

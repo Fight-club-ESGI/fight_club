@@ -7,7 +7,6 @@ const ticketEventNamespace = '/ticket_events';
 export interface ITicket {
     id: string
     price: number
-    availability: boolean,
     event: string
     ticketCategory: ITicketCategory
 }
@@ -63,7 +62,7 @@ class Ticket {
         }
     }
 
-    async _getTicketsEvent(id: string): Promise<ITicketCategory[]> {
+    async _getTicketsEvent(id: string): Promise<ITicketEvent[]> {
         try {
             const uri = `/events/${id}/ticket_event`;
             const res = await client.get(uri);
@@ -93,9 +92,9 @@ class Ticket {
         }
     }
 
-    async _updateTicketEvent(payload: { eventId: string, ticketCategoryId: string, maxQuantity: number }) {
+    async _updateTicketEvent(payload: ITicketEvent) {
         try {
-            const uri = `/events/${payload.eventId}/tickets_event/${payload.ticketCategoryId}`;
+            const uri = `${ticketEventNamespace}/${payload.id}`;
             const res = await client.patch(uri, payload);
             return res.data;
         } catch (error) {
