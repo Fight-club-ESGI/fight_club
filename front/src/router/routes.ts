@@ -113,6 +113,12 @@ export default [
         meta: { requiresAuth: false, requiresAdmin: false }
     },
     {
+        path: '/cart',
+        component: Cart,
+        name: 'user-cart',
+        meta: { requiresAuth: false, requiresAdmin: false }
+    },
+    {
         path: '/checkout/confirmation',
         name: 'checkout-confirmation',
         component: CheckoutConfirmation,
