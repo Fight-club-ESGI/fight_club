@@ -10,6 +10,7 @@ use App\Controller\Fight\FightValidation;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightRepository;
+use App\Service\Fight\FightOddsService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -115,6 +116,12 @@ class Fight
         'admin:post',
     ])]
     private Collection $bets;
+
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
+    private array $odds;
 
     public function __construct()
     {
@@ -245,5 +252,10 @@ class Fight
         }
 
         return $this;
+    }
+
+    public function getOdds(): array
+    {
+        return (new FightOddsService($this))->odd();
     }
 }
