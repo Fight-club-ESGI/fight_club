@@ -26,7 +26,6 @@ class FightValidation extends AbstractController
         private readonly EntityManagerInterface $entityManager,
         private readonly UserRepository $userRepository,
         private readonly Security $security
-
     ) {
     }
 
@@ -48,18 +47,38 @@ class FightValidation extends AbstractController
         $this->entityManager->flush();
 
         if (!is_null($fight->getAdminValidatorA()) && !is_null($fight->getAdminValidatorB())) {
-            $fight->setWinnerValidation(false);
+            $fight->setWinnerValidation(true);
             $this->entityManager->persist($fight);
             $this->entityManager->flush();
 
             $fightBets = $fight->getBets();
 
-            foreach ( $fightBets as $bet ) {
-                if ($bet->getBetOn() === $fight->getWinner()){
-                    if($bet->getWalletTransaction()->getStatus() === WalletTransactionStatusEnum::ACCEPTED) {
+            $totalAmountBetted = $fightBets->reduce(function ($carry, $entity) {
+                if ($entity->getWalletTransaction()->getStatus() === WalletTransactionStatusEnum::ACCEPTED) {
+                    return $carry + $entity->getAmount();
+                }
 
-                        $fight_odds = new FightOddsService($fight);
-                        $amount = $bet->getAmount() + ($bet->getAmount() * $fight_odds->winnerOdds());
+                return $carry;
+            });
+
+            $totalAmountWinnerBetted = $fightBets->reduce(function ($carry, $entity) use ($fight) {
+                if ($entity->getWalletTransaction()->getStatus() === WalletTransactionStatusEnum::ACCEPTED && $entity->getBetOn() === $fight->getWinner()) {
+                    return $carry + $entity->getAmount();
+                }
+
+                return $carry;
+            });
+
+            foreach ( $fightBets as $bet ) {
+                if ($bet->getStatus() !== BetStatusEnum::PENDING) break;
+                if ($bet->getBetOn() === $fight->getWinner() && $fight->isWinnerValidation()){
+                    if($bet->getWalletTransaction()->getStatus() === WalletTransactionStatusEnum::ACCEPTED) {
+                        $percentageBetted = $bet->getAmount() / $totalAmountWinnerBetted;
+                        $gain = floor($totalAmountBetted * $percentageBetted);
+
+                        $commission = ceil($gain * 0.05);
+
+                        $amount = $gain - $commission;
 
                         $wallet = $bet->getBettor()->getWallet();
                         $wallet->setAmount($bet->getBettor()->getWallet()->getAmount() + $amount);

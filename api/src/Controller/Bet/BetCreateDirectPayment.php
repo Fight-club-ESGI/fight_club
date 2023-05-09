@@ -23,8 +23,7 @@ class BetCreateDirectPayment  extends AbstractController
         private readonly CheckoutService $checkoutService,
         private readonly EntityManagerInterface $entityManager,
         private readonly Security $security,
-        private readonly UserRepository $userRepository,
-        private readonly FightRepository $fightRepository
+        private readonly UserRepository $userRepository
     ) {
     }
 

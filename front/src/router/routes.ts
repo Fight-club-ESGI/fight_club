@@ -14,7 +14,7 @@ import ProfileView from '@/views/user/Profile.vue';
 import EventDetailsAdmin from '@/views/admin/EventDetails.vue';
 import UserBetsHistory from '@/views/bet/UserBetsHistory.vue';
 import UserTicketsHistory from '@/views/ticketing/UserTicketsHistory.vue';
-import Wallet from '@/components/profile/Wallet.vue';
+import Wallet from '@/views/wallet/Wallet.vue';
 import Ticketing from '@/views/ticketing/Ticketing.vue';
 import FailedPayment from '@/views/checkout/FailedPayment.vue';
 import SuccessfulPayment from '@/views/checkout/SuccessfulPayment.vue';
