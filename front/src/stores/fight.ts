@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { fightService } from "../service/api/index";
-import { CreateFight, IFight } from "@/interfaces/figth";
+import { CreateFight, IFight, UpdateFight } from "@/interfaces/figth";
 
 export const useFightStore = defineStore('fight', () => {
 
@@ -31,6 +31,7 @@ export const useFightStore = defineStore('fight', () => {
     async function createFight(payload: CreateFight): Promise<IFight> {
         try {
             const res = await fightService._createFight(payload);
+            fights.value.push(res);
             return res;
         } catch (error) {
             throw error;
@@ -55,5 +56,25 @@ export const useFightStore = defineStore('fight', () => {
         }
     }
 
-    return { getFight, getFights, createFight, validateFight, selectWinner, fight, fights }
+    async function removeFight(id: string): Promise<void> {
+        try {
+            const res = await fightService._removeFight(id);
+            fights.value = await fightService._getFights();
+            return res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function updateFight(payload: UpdateFight): Promise<IFight> {
+        try {
+            const res = await fightService._updateFight(payload);
+            fights.value = await fightService._getFights();
+            return res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    return { getFight, getFights, createFight, validateFight, selectWinner, removeFight, updateFight, fight, fights }
 });

@@ -77,10 +77,11 @@ export const useFighterStore = defineStore('fighter', () => {
         }
     }
 
-    async function getFighters() {
+    async function getFighters(): Promise<IFighter[]> {
         try {
             const res = await fighterService._getFighters();
             fighters.value = res;
+            return res;
         } catch (error) {
             throw error;
         }

@@ -37,10 +37,6 @@ export default createVuetify({
         VMenu: {
             location: 'bottom'
         },
-        VSelect: {
-            variant: 'outlined',
-            density: 'compact'
-        },
         VCard: {
             rounded: 'xl',
             flat: true

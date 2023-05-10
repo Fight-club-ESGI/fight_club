@@ -3,6 +3,7 @@ import { IEvent } from "./event"
 import { IUser } from "./user"
 
 interface IFight {
+    id: string
     event: IEvent
     fighterA: IFighter
     fighterB: IFighter
@@ -19,4 +20,10 @@ interface CreateFight {
     fighterB: string
 }
 
-export type { IFight, CreateFight }
+interface UpdateFight {
+    id: string
+    fighterA: string
+    fighterB: string
+}
+
+export type { IFight, CreateFight, UpdateFight }

@@ -51,7 +51,7 @@ onMounted(async () => {
 <template>
     <div>
         <v-breadcrumbs :items="items"></v-breadcrumbs>
-        <v-container>
+        <div class="px-5">
             <v-tabs v-model="tab" align-tabs="center">
                 <v-tab value="one" color="primary">Ticket event</v-tab>
                 <v-tab value="two" color="primary">
@@ -78,6 +78,6 @@ onMounted(async () => {
                     </div>
                 </v-window-item>
             </v-window>
-        </v-container>
+        </div>
     </div>
 </template>
