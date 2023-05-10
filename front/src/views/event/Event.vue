@@ -1,11 +1,17 @@
 <template>
     <div>
-        <v-breadcrumbs :items="items"></v-breadcrumbs>
-        <v-container class="flex flex-col">
+        <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
+        <div class="flex flex-wrap gap-4 mx-10">
             <create-event v-if="isAdmin && route.path.includes('admin')" class="pb-4" />
-            <event v-if="isVIP" :events="VIPevents" :admin="isAdmin" class="pb-4" />
-            <event :events="filteredEvents" :admin="isAdmin" />
-        </v-container>
+            <!--<event v-if="isVIP" :events="VIPevents" :admin="isAdmin" class="pb-4" />
+            <event :events="filteredEvents" :admin="isAdmin" />-->
+            <event
+                v-for="event in events"
+                :key="event.id"
+                :event="event"
+                :admin="isAdmin"
+            />
+        </div>
     </div>
 </template>
 
@@ -37,7 +43,7 @@ const VIPevents = computed(() => {
 
 const filteredEvents = computed(() => events.value.filter((event) => event.vip === false));
 
-const items = [
+const breadcrumbs = [
     {
         title: 'Home',
         to: { name: 'home' }

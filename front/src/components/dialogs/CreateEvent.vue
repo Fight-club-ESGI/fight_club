@@ -2,12 +2,12 @@
     <div>
         <v-dialog v-model="dialog">
             <template v-slot:activator="{ props }">
-                <v-btn color="primary" v-bind="props"> Register an event </v-btn>
+                <v-btn variant="tonal" color="secondary" v-bind="props"> Register an event </v-btn>
             </template>
 
             <v-card>
-                <v-card-title> Register an event </v-card-title>
-                <v-container>
+                <v-card-title>Register an event</v-card-title>
+                <div>
                     <v-form v-model="valid" ref="form">
                         <v-row justify="space-between" class="align-center">
                             <v-col>
@@ -48,7 +48,7 @@
                             <v-col></v-col>
                         </v-row>
                     </v-form>
-                </v-container>
+                </div>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
                         <v-btn color="primary" @click="dialog = false">Cancel</v-btn>

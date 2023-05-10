@@ -1,7 +1,6 @@
 <template>
     <v-app-bar>
         <div class="flex items-center align-middle bg-black/80 fixed w-full text-white px-10 z-5000">
-            <v-app-bar-nav-icon @click="emit('toggleNavigationDrawer')" v-if="isAdmin"></v-app-bar-nav-icon>
             <v-img @click="router.push({ name: 'home' })" class="cursor-pointer" height="100" width="100"
                 src="src/assets/home.png"></v-img>
             <div class="flex w-full">
