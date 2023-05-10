@@ -1,9 +1,9 @@
-import { SigninI, SignupI, TokenI, UserI } from "../../interfaces/payload";
-import { userInterface } from "../../interfaces/responseAPI";
+import { ISignin, ISignup, IToken } from "@/interfaces/security";
+import { userInterface } from "@/interfaces/responseAPI";
 import { client, clientWithoutAuth, token } from "../index";
 class User {
 
-    async _signin(payload: SigninI): Promise<TokenI> {
+    async _signin(payload: ISignin): Promise<IToken> {
         try {
 
             const uri = '/authentication_token'
@@ -15,7 +15,7 @@ class User {
         }
     }
 
-    async _signinWithToken(refreshToken: string): Promise<TokenI> {
+    async _signinWithToken(refreshToken: string): Promise<IToken> {
         try {
             const uri = '/token/refresh'
             const res = await clientWithoutAuth.post(uri, { refresh_token: refreshToken });
@@ -61,7 +61,7 @@ class User {
         }
     }
 
-    async _signup(payload: SignupI): Promise<void> {
+    async _signup(payload: ISignup): Promise<void> {
         try {
             const uri = '/users'
             const res = await clientWithoutAuth.post(uri, payload);

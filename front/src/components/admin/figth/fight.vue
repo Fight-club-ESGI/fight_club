@@ -1,6 +1,7 @@
 <script setup lang=ts>
 import { IFight } from '@/interfaces/figth';
 import { PropType, computed } from 'vue';
+import { Icon } from "@iconify/vue/dist/iconify.js";
 
 const props = defineProps({
     fight: {
@@ -26,6 +27,7 @@ const fullNameFighterB = computed(() => {
             <template #title>{{ fullNameFighterA }} <v-icon
                     :icon="props.fight.fighterA.gender === 'male' ? 'mdi-male' : 'mdi-woman'">
                 </v-icon>
+                <Icon height="30" icon="material-symbols:check-small-rounded" />
             </template>
             <v-card-item>{{ props.fight.fighterA.height }} cm | {{ props.fight.fighterA.weight }} kg | {{
                 props.fight.fighterA.nationality }}</v-card-item>

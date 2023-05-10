@@ -1,4 +1,3 @@
-import { SponsorshipI } from "../../interfaces/payload";
 import { SponsorshipResponseI } from "../../interfaces/responseAPI";
 import { client, clientWithoutAuth } from "../index";
 

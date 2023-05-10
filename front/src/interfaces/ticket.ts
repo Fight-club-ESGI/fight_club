@@ -1,4 +1,4 @@
-export interface ITicket {
+interface ITicket {
     id: string
     price: number
     availability: boolean,
@@ -6,14 +6,14 @@ export interface ITicket {
     ticketCategory: ITicketCategory
 }
 
-export interface ICreateTicket {
+interface ICreateTicket {
     price: number
     availability: boolean,
     event: string
     ticketCategory: string
 }
 
-export interface ITicketCategory {
+interface ITicketCategory {
     id: string
     name: string
     tickets: ITicket[]
@@ -21,6 +21,8 @@ export interface ITicketCategory {
     updatedAt: string
 }
 
-export interface ICreateTicketCategory {
+interface ICreateTicketCategory {
     name: string
 }
+
+export type { ITicket, ICreateTicket, ITicketCategory, ICreateTicketCategory }

@@ -1,4 +1,4 @@
-import { EventI, FighterI, UserI } from "@/interfaces/payload";
+import { IFight, CreateFight } from "@/interfaces/figth";
 import { client } from "..";
 
 const namespace = '/fights';

@@ -1,11 +1,11 @@
 import { client, clientWithoutAuth } from "..";
-import type { EventI } from "../../interfaces/payload";
+import type { IEvent } from "@/interfaces/event";
 
 const namespace = '/events';
 
 class Event {
 
-    async _getEvents(): Promise<EventI[]> {
+    async _getEvents(): Promise<IEvent[]> {
         try {
             const res = await clientWithoutAuth.get(namespace);
             return res.data;
@@ -14,7 +14,7 @@ class Event {
         }
     }
 
-    async _getEvent(id: string): Promise<EventI> {
+    async _getEvent(id: string): Promise<IEvent> {
         try {
             const uri = `${namespace}/${id}`;
             const res = await clientWithoutAuth.get(uri);
@@ -24,7 +24,7 @@ class Event {
         }
     }
 
-    async _createEvent(payload: EventI): Promise<EventI> {
+    async _createEvent(payload: IEvent): Promise<IEvent> {
         try {
             const res = await client.post(namespace, payload);
             return res.data;
@@ -33,7 +33,7 @@ class Event {
         }
     }
 
-    async _upadateEvent(payload: EventI): Promise<EventI> {
+    async _upadateEvent(payload: IEvent): Promise<IEvent> {
         try {
             const uri = `${namespace}/${payload.id}`
             const res = await client.patch(uri, payload);

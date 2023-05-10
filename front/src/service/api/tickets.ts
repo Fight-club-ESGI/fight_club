@@ -1,9 +1,9 @@
 import { client } from "../index";
 import { ITicketEvent } from "@/interfaces/event";
+import { ICreateTicket, ITicket, ICreateTicketCategory, ITicketCategory } from "@/interfaces/ticket";
 const ticketNamespace = '/tickets';
 const ticketCategoryNamespace = '/ticket_categories';
 const ticketEventNamespace = '/ticket_events';
-import { ICreateTicket, ITicket, ICreateTicketCategory, ITicketCategory } from "@/interfaces/ticket";
 
 class Ticket {
 

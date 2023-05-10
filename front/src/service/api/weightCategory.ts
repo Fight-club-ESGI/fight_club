@@ -1,10 +1,10 @@
 import { client } from "../index";
-import { WeightCategoryP, WeightInterface } from "../../interfaces/payload";
+import { CreateWeightCategory, IWeightCategory } from "@/interfaces/payload";
 const namespace = "/weight_categories";
 
 class WeightCategory {
 
-    _getCategories = async (): Promise<WeightCategory[]> => {
+    _getCategories = async (): Promise<IWeightCategory[]> => {
         try {
             const uri = namespace;
             const res = await client.get(uri);
@@ -14,7 +14,7 @@ class WeightCategory {
         }
     }
 
-    _postCategory = async (payload: WeightCategoryP): Promise<WeightCategory> => {
+    _postCategory = async (payload: CreateWeightCategory): Promise<IWeightCategory> => {
         try {
             const uri = namespace;
             const res = await client.post(uri, payload);
@@ -24,7 +24,7 @@ class WeightCategory {
         }
     }
 
-    _updateCategory = async (category: WeightInterface): Promise<WeightCategory> => {
+    _updateCategory = async (category: Partial<IWeightCategory>): Promise<IWeightCategory> => {
         try {
             const uri = `${namespace}/${category.id}`;
             const res = await client.put(uri, category);

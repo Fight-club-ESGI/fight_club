@@ -4,7 +4,7 @@ export interface IFighter {
     lastname: string
     height: number
     weight: number
-    nationality: string | null
-    gender: string | null
+    nationality: string
+    gender: string
     birthdate: string
 }

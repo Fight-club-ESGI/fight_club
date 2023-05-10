@@ -1,20 +1,16 @@
 <template>
     <div class="bg-white rounded my-4">
         <div class="flex p-3 items-center">
-            <div
-                v-if="bet.status === 'won'"
-                class="p-2 w-20 text-center bg-green-500 rounded text-white mr-3 font-bold">
+            <div v-if="bet.status === 'won'" class="p-2 w-20 text-center bg-green-500 rounded text-white mr-3 font-bold">
                 Win
             </div>
-            <div
-                v-if="bet.status === 'finished'"
-                class="p-2 w-20 text-center bg-red-500 rounded text-white mr-3">
+            <div v-if="bet.status === 'finished'" class="p-2 w-20 text-center bg-red-500 rounded text-white mr-3">
                 Lose
             </div>
             <div class="text-neutral-400">
                 Event ----
             </div>
-            <v-spacer/>
+            <v-spacer />
             <div>
                 date of event
             </div>
@@ -28,10 +24,7 @@
             </div>
             <div class="w-full bg-secondary rounded relative">
                 <span class="absolute right-0 p-2">
-                    <Icon
-                        height="30"
-                        icon="material-symbols:check-small-rounded"
-                    />
+                    <Icon height="30" icon="material-symbols:check-small-rounded" />
                 </span>
                 <div class="p-5 text-center font-bold">Fighter 1</div>
                 <v-divider />
@@ -54,15 +47,9 @@
             <span>Date of bet</span>
             <v-spacer />
             <span>Référence - UUID</span>
-            <v-btn
-                icon
-                size="30"
-                class="rounded text-neutral-400 hover:bg-neutral-200 active:bg-neutral-400 active:text-white"
-                color="white"
-            >
-                <Icon
-                    icon="material-symbols:content-copy-outline-rounded"
-                />
+            <v-btn icon size="30"
+                class="rounded text-neutral-400 hover:bg-neutral-200 active:bg-neutral-400 active:text-white" color="white">
+                <Icon icon="material-symbols:content-copy-outline-rounded" />
             </v-btn>
         </div>
     </div>
@@ -71,7 +58,7 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon';
 import { formatNumber } from '@/service/helpers';
-import {Icon} from "@iconify/vue/dist/iconify.js";
+import { Icon } from "@iconify/vue/dist/iconify.js";
 defineProps({
     bet: {
         type: Object,

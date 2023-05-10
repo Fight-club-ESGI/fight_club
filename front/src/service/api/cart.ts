@@ -1,5 +1,4 @@
-import { debug } from "console";
-import { client, clientWithoutAuth } from "..";
+import { client } from "..";
 import type { CartInterface, CartItemInterface } from "../../interfaces/responseAPI";
 
 const cartURL = '/carts';

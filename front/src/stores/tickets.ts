@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { ticketService } from "../service/api/index";
-import { ITicket, ITicketCategory, ICreateTicket } from "@/service/api/tickets";
+import { ITicket, ITicketCategory, ICreateTicket } from "@/interfaces/ticket";
 import { ITicketEvent } from "@/interfaces/event";
 
 export const useTicketStore = defineStore('ticket', () => {

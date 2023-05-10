@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { fightService } from "../service/api/index";
-import { CreateFight, IFight } from "@/service/api/fight";
+import { CreateFight, IFight } from "@/interfaces/figth";
 
 export const useFightStore = defineStore('fight', () => {
 
