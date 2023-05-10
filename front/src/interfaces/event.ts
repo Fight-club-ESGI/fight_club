@@ -1,5 +1,5 @@
-import { IFight } from "@/service/api/fight";
-import { ITicket, ITicketCategory } from "@/service/api/tickets";
+import { ITicket, ITicketCategory } from "./ticket";
+import { IFight } from "./figth";
 
 export interface IEvent {
     id: string

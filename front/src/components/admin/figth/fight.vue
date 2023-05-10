@@ -1,5 +1,5 @@
 <script setup lang=ts>
-import { IFight } from '@/service/api/fight';
+import { IFight } from '@/interfaces/figth';
 import { PropType, computed } from 'vue';
 
 const props = defineProps({

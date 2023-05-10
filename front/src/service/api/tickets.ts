@@ -3,32 +3,7 @@ import { ITicketEvent } from "@/interfaces/event";
 const ticketNamespace = '/tickets';
 const ticketCategoryNamespace = '/ticket_categories';
 const ticketEventNamespace = '/ticket_events';
-
-export interface ITicket {
-    id: string
-    price: number
-    event: string
-    ticketCategory: ITicketCategory
-}
-
-export interface ICreateTicket {
-    price: number
-    availability: boolean,
-    event: string
-    ticketCategory: string
-}
-
-export interface ITicketCategory {
-    id: string
-    name: string
-    tickets: ITicket[]
-    createdAt: string
-    updatedAt: string
-}
-
-export interface ICreateTicketCategory {
-    name: string
-}
+import { ICreateTicket, ITicket, ICreateTicketCategory, ITicketCategory } from "@/interfaces/ticket";
 
 class Ticket {
 

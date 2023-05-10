@@ -1,3 +1,5 @@
+import { IFighter } from "./fighter";
+
 export interface SigninI {
     email: string;
     password: string;
@@ -9,65 +11,16 @@ export interface SignupI {
     password: string;
 }
 
-export interface UserI {
-    id?: string;
-    email: string;
-    username: string;
-    roles: string[];
-    emailValidated: boolean;
-}
-
 export interface TokenI {
     token: string;
     refresh_token: string;
 }
 
-export interface FighterI {
-    id?: string;
-    firstname: string;
-    lastname: string;
-    height: number;
-    weight: number;
-    nationality: string | null;
-    gender: string | null;
-    birthdate: string;
-}
-
-export interface EventI {
-    id?: string;
-    name: string;
-    location: string;
-    description: string;
-    imageFile: File | null;
-    imageName: string;
-    imageSize: string;
-    capacity: number;
-    category: string;
-    fights: FightI[];
-    locationLink: string;
-    timeStart: string;
-    timeEnd: string;
-    ticketEvents: [];
-}
-export interface FightI {
-    id: string;
-    fighterA: FighterI;
-    fighterB: FighterI;
-    ratingFighterA: number;
-    ratingFighterB: number;
-    ratingNullMatch: number;
-    eventId: string;
-    winner: FighterI;
-    looser: FighterI;
-    startTimestamp: string;
-    endTimestamp: string;
-}
-
 export interface FightBetI {
     id: string;
     fightId: string;
-    fighterA: FighterI;
-    fighterB: FighterI;
+    fighterA: IFighter;
+    fighterB: IFighter;
     expectedWinner: string;
     rating: number;
 }

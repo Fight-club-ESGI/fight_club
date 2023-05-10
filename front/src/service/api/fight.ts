@@ -3,23 +3,6 @@ import { client } from "..";
 
 const namespace = '/fights';
 
-export interface IFight {
-    event: EventI
-    fighterA: FighterI
-    fighterB: FighterI
-    winner: FighterI
-    loser: FighterI
-    winnerValidation: boolean
-    adminValidatorA: UserI
-    adminValidatorB: UserI
-}
-
-export interface CreateFight {
-    event: string
-    fighterA: string
-    fighterB: string
-}
-
 class Fight {
 
     async _getFight(fightId: string): Promise<IFight> {
