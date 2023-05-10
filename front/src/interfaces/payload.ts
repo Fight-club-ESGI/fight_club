@@ -38,7 +38,7 @@ export interface EventI {
     name: string;
     location: string;
     description: string;
-    imageFile: File|null;
+    imageFile: File | null;
     imageName: string;
     imageSize: string;
     capacity: number;

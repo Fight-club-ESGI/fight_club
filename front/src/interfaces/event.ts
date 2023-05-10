@@ -1,7 +1,7 @@
+import { IFight } from "@/service/api/fight";
 import { ITicket, ITicketCategory } from "@/service/api/tickets";
-import { FightI } from "./payload";
 
-interface IEvent {
+export interface IEvent {
     id: string
     name: string
     location: string
@@ -10,10 +10,14 @@ interface IEvent {
     capacity: number
     vip: boolean
     category: string
-    fight: FightI[]
     locationLink: string
-    startTimestamp: string
-    endTimestamp: string
+    timeStart: string
+    timeEnd: string
+    imageFile: File | null
+    imageName: string
+    imageSize: string
+    ticketEvents: []
+    fights: IFight[]
 }
 
 export interface ITicketEvent {

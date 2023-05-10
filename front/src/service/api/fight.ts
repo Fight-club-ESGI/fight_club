@@ -1,10 +1,28 @@
+import { EventI, FighterI, UserI } from "@/interfaces/payload";
 import { client } from "..";
 
 const namespace = '/fights';
 
+export interface IFight {
+    event: EventI
+    fighterA: FighterI
+    fighterB: FighterI
+    winner: FighterI
+    loser: FighterI
+    winnerValidation: boolean
+    adminValidatorA: UserI
+    adminValidatorB: UserI
+}
+
+export interface CreateFight {
+    event: string
+    fighterA: string
+    fighterB: string
+}
+
 class Fight {
 
-    async _getFight(fightId: string): Promise<{}> {
+    async _getFight(fightId: string): Promise<IFight> {
         try {
             const uri = `${namespace}/${fightId}`
             const res = await client.get(uri);
@@ -14,7 +32,7 @@ class Fight {
         }
     }
 
-    async _getFights(): Promise<[]> {
+    async _getFights(): Promise<IFight[]> {
         try {
             const res = await client.get(namespace);
             return res.data;
@@ -23,9 +41,14 @@ class Fight {
         }
     }
 
-    async _createFight(payload: { event: string, fighterA: string, fighterB: string, winnerValidation: boolean }): Promise<string> {
+    async _createFight(payload: CreateFight): Promise<IFight> {
         try {
-            const res = await client.post(namespace, payload);
+            const data = {
+                event: `/events/${payload.event}`,
+                fighterA: `/fighters/${payload.fighterA}`,
+                fighterB: `/fighters/${payload.fighterB}`,
+            }
+            const res = await client.post(namespace, data);
             return res.data;
         } catch (error) {
             throw error;

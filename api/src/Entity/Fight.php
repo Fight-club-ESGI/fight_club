@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Controller\Fight\FightChooseWinner;
 use App\Controller\Fight\FightValidation;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightRepository;
@@ -39,7 +40,14 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             read: false,
             name: 'fight_winner'
         ),
-        new Get()
+        new GetCollection(
+            normalizationContext: ["groups" => ['fights:get']],
+            name: "get_figths"
+        ),
+        new Get(
+            normalizationContext: ["groups" => ['fights:get']],
+            name: "get_figth",
+        )
     ]
 )]
 class Fight
@@ -50,6 +58,7 @@ class Fight
     #[ORM\ManyToOne(inversedBy: 'fights')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
     ])]
@@ -59,6 +68,7 @@ class Fight
     #[ORM\ManyToOne(inversedBy: 'fightsA')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
     ])]
@@ -68,6 +78,7 @@ class Fight
     #[ORM\ManyToOne(inversedBy: 'fightsB')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
     ])]
@@ -76,6 +87,7 @@ class Fight
 
     #[ORM\ManyToOne(inversedBy: 'winners')]
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
     ])]
@@ -84,28 +96,32 @@ class Fight
 
     #[ORM\ManyToOne(inversedBy: 'losers')]
     #[Groups([
+        'fights:get',
         'admin:get',
-        'admin:post',
+        'admin:post'
     ])]
     #[MaxDepth(1)]
     private ?Fighter $loser = null;
 
     #[ORM\Column(options: ['default' => false])]
     #[Groups([
-        'admin:get',
+        'fights:get',
+        'admin:get'
     ])]
     private ?bool $winnerValidation = false;
 
     #[ORM\ManyToOne]
     #[Groups([
-        'admin:get',
+        'fights:get',
+        'admin:get'
     ])]
     #[MaxDepth(1)]
     private ?User $adminValidatorA = null;
 
     #[ORM\ManyToOne]
     #[Groups([
-        'admin:get',
+        'fights:get',
+        'admin:get'
     ])]
     #[MaxDepth(1)]
     private ?User $adminValidatorB = null;
@@ -113,7 +129,7 @@ class Fight
     #[ORM\OneToMany(mappedBy: 'fight', targetEntity: Bet::class)]
     #[Groups([
         'admin:get',
-        'admin:post',
+        'admin:post'
     ])]
     private Collection $bets;
 

@@ -160,7 +160,6 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
     #[Groups([
         'admin:get',
-        'tickets:get',
         'admin:patch'
     ])]
     private Collection $fights;

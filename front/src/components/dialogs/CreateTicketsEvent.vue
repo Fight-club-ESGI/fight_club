@@ -2,7 +2,7 @@
     <div>
         <v-dialog v-model="dialog" style="width: 50%">
             <template v-slot:activator="{ props }">
-                <v-btn color="primary" v-bind="props"> Create ticket event</v-btn>
+                <v-btn color="primary" variant="tonal" v-bind="props"> Create ticket event</v-btn>
             </template>
 
             <v-card class="pa-4">

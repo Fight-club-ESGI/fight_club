@@ -1,13 +1,14 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { fightService } from "../service/api/index";
+import { CreateFight, IFight } from "@/service/api/fight";
 
 export const useFightStore = defineStore('fight', () => {
 
-    const fight = ref();
-    const fights = ref([]);
+    const fight = ref<IFight>();
+    const fights = ref<IFight[]>([]);
 
-    async function getFight(fightId: string): Promise<{}> {
+    async function getFight(fightId: string): Promise<IFight> {
         try {
             const res = await fightService._getFight(fightId);
             fight.value = res;
@@ -17,7 +18,7 @@ export const useFightStore = defineStore('fight', () => {
         }
     }
 
-    async function getFights(): Promise<{}> {
+    async function getFights(): Promise<IFight[]> {
         try {
             const res = await fightService._getFights();
             fights.value = res;
@@ -27,7 +28,7 @@ export const useFightStore = defineStore('fight', () => {
         }
     }
 
-    async function createFight(payload: { event: string, fighterA: string, fighterB: string, winnerValidation: boolean }): Promise<string> {
+    async function createFight(payload: CreateFight): Promise<IFight> {
         try {
             const res = await fightService._createFight(payload);
             return res;
@@ -35,7 +36,7 @@ export const useFightStore = defineStore('fight', () => {
             throw error;
         }
     }
-    
+
     async function validateFight(fightId: string): Promise<string> {
         try {
             const res = await fightService._validateFight(fightId);
