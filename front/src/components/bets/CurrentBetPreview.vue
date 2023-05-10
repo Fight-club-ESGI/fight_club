@@ -46,17 +46,19 @@
                 </v-row>
             </v-col>
         </v-row>
-        <div class="z-10 bg-white overflow-y-auto sticky bottom-0">
+        <div class="z-10 bg-white sticky bottom-0">
             <v-divider></v-divider>
-            <v-row no-gutters justify="space-between" class="pa-2" align="center">
-                <v-col cols="auto">
-                    <p v-if="currentBet.bets.length > 0">
-                        Rating<span style="border-radius: 15px" class="text-xl ma-2 py-2 px-4 bg-primary">{{
-                            formatNumber(calculateTotalRating(currentBet))
-                        }}</span>
-                    </p>
+            <v-row no-gutters justify="space-between" class="mt-2 pa-2" align="center">
+                <v-col cols="12" sm="auto">
+                    <div class="mb-6">
+                        <p v-if="currentBet.bets.length > 0">
+                            Rating<span style="border-radius: 15px" class="text-xl ma-2 py-2 px-4 bg-primary">{{
+                                formatNumber(calculateTotalRating(currentBet))
+                            }}</span>
+                        </p>
+                    </div>
                 </v-col>
-                <v-col cols="auto">
+                <v-col cols="12" sm="auto">
                     <v-text-field v-if="currentBet.bets.length > 0" label="Bet" type="number" v-model="amount" />
                 </v-col>
             </v-row>

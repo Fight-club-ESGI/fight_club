@@ -25,7 +25,8 @@
                                 props.fight.ratingFighterA,
                             )
                         "
-                        class="mx-2"
+                        size="small"
+                        class="py-1 mx-0 mx-sm-2"
                         :color="
                             isThereABetOnTheFighter(
                                 props.fight.id,
@@ -36,24 +37,25 @@
                                 : 'primary'
                         "
                         :min-height="50"
-                        :min-width="140"
+                        :min-width="$vuetify.display.name === 'xs' ? 0 : 140"
                         rounded="false"
                     >
                         <div>
-                            <p>{{ props.fight.fighterA.firstname }} {{ props.fight.fighterA.lastname }}</p>
+                            <p class="xs: text-xs sm:text-base">{{ props.fight.fighterA.firstname }} {{ props.fight.fighterA.lastname }}</p>
                             <p>{{ formatNumber(props.fight.ratingFighterA) }}</p>
                         </div>
                     </v-btn>
                     <v-btn
                         @click="bet(props.fight.id, currentBet, 'Null', props.fight.ratingNullMatch)"
-                        class="mx-2"
+                        size="small"
+                        class="py-1 mx-0 mx-sm-2"
                         :color="isThereABetOnTheFighter(props.fight.id, currentBet, 'Null') ? 'secondary' : 'primary'"
                         :min-height="50"
-                        :min-width="140"
+                        :min-width="$vuetify.display.name === 'xs' ? 0 : 140"
                         rounded="false"
                     >
                         <div>
-                            <p>Null</p>
+                            <p class="xs: text-xs sm:text-base">Null</p>
                             <p>{{ formatNumber(props.fight.ratingNullMatch) }}</p>
                         </div>
                     </v-btn>
@@ -66,7 +68,8 @@
                                 props.fight.ratingFighterB,
                             )
                         "
-                        class="mx-2"
+                        size="small"
+                        class="py-1 mx-0 mx-sm-2"
                         :color="
                             isThereABetOnTheFighter(
                                 props.fight.id,
@@ -77,11 +80,11 @@
                                 : 'primary'
                         "
                         :min-height="50"
-                        :min-width="140"
+                        :min-width="$vuetify.display.name === 'xs' ? 0 : 140"
                         rounded="false"
                     >
                         <div>
-                            <p>{{ props.fight.fighterB.firstname }} {{ props.fight.fighterB.lastname }}</p>
+                            <p class="xs: text-xs sm:text-base">{{ props.fight.fighterB.firstname }} {{ props.fight.fighterB.lastname }}</p>
                             <p>{{ formatNumber(props.fight.ratingFighterB) }}</p>
                         </div>
                     </v-btn>
