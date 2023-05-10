@@ -1,4 +1,7 @@
-export function formatNumber(price: number = 0): string {
+export function formatNumber(price: number | string): string {
+    if (typeof price === 'string') {
+        return parseInt(price).toFixed(2).replace('.', ',');
+    }
     return price.toFixed(2).replace('.', ',');
 }
 

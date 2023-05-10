@@ -126,7 +126,9 @@ function bet(fightId: string, currentBet: CurrentBetI, expectedWinner: string, r
 
 function removeToCurrentBetStore(fightId: string, currentBet: CurrentBetI) {
     const objWithIdIndex = currentBet.bets.findIndex((e: FightBetI) => e.fightId === fightId);
-    currentBet.bets = currentBet.bets.splice(objWithIdIndex, 1);
+    if (objWithIdIndex > -1) {
+        currentBet.bets.splice(objWithIdIndex, 1);
+    }
     betStore.$patch((state) => {
         state.currentBet;
     });
