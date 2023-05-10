@@ -2,7 +2,15 @@
     <div>
         <v-dialog v-model="dialog">
             <template v-slot:activator="{ props }">
-                <v-btn variant="tonal" color="secondary" v-bind="props"> Register an event </v-btn>
+                <!--<v-btn variant="tonal" color="secondary" v-bind="props"> Register an event </v-btn>-->
+                <v-card
+                    v-bind="props"
+                    class="flex cursor-pointer w-92 h-92 relative bg-neutral-600 text-white items-center"
+                >
+                    <p class="text-center w-full text-2xl font-weight-bold">
+                        New event
+                    </p>
+                </v-card>
             </template>
 
             <v-card>

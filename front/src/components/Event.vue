@@ -4,7 +4,10 @@
         class="cursor-pointer w-92 h-92 relative bg-neutral-800 text-white"
     >
         <div class="absolute bg-white z-10 m-5 rounded-lg h-16 w-16 flex items-center">
-            <div class="flex flex-col text-center mx-auto font-bold">
+            <div
+                v-if="new Date() > timeStart"
+                class="flex flex-col text-center mx-auto font-bold"
+            >
                 <p>
                     {{ timeStart?.toLocaleDateString('en-GB', {day: '2-digit'}) }}
                 </p>
@@ -35,8 +38,8 @@
         <div class="pa-5 h-1/2 flex flex-column relative overflow-auto">
             <v-menu v-if="admin && pathIncludeAdmin">
                 <template v-slot:activator="{ props }">
-                    <v-btn class="absolute right-[20px]" color="primary" v-bind="props" icon="mdi-dots-horizontal"
-                        size="x-small" />
+                    <v-btn class="absolute right-[20px]" color="transparent" v-bind="props" icon="mdi-dots-horizontal"
+                        size="x-medium" />
                 </template>
                 <v-list>
                     <v-list-item value="update-event"> <update-event :event="event" /></v-list-item>
@@ -48,9 +51,9 @@
                 <span class="italic">{{ event.description }}</span> @{{ event.location }}
             </p>
             <div class="mt-auto flex">
-                <div class="flex align-center gap-2">
+                <div class="flex align-center gap-2 bg-neutral-600 p-2 rounded-lg">
                     <v-icon icon="mdi-account-multiple"></v-icon>
-                    <p class="text-primary text-lg font-bold">{{ event.capacity }}</p>
+                    <p class="text-sm font-bold">{{ event.capacity }}</p>
                 </div>
             </div>
         </div>
@@ -62,10 +65,11 @@ import {useRoute, useRouter} from "vue-router";
 import {PropType, ref} from "vue";
 import {useEventStore} from "@/stores/event";
 import {Icon} from "@iconify/vue";
+import UpdateEvent from '@/components/dialogs/UpdateEvent.vue';
 
 const props = defineProps({
     event: {type: Object as PropType<Event>, required: true},
-    admin: {type: Boolean, default: false}
+    admin: {type: Boolean, default: false},
 })
 
 const router = useRouter()

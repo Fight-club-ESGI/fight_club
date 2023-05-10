@@ -3,8 +3,6 @@
         <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
         <div class="flex flex-wrap gap-4 mx-10">
             <create-event v-if="isAdmin && route.path.includes('admin')" class="pb-4" />
-            <!--<event v-if="isVIP" :events="VIPevents" :admin="isAdmin" class="pb-4" />
-            <event :events="filteredEvents" :admin="isAdmin" />-->
             <event
                 v-for="event in events"
                 :key="event.id"
@@ -36,12 +34,6 @@ onMounted(async () => {
         await getEvents();
     } catch (error) { }
 });
-
-const VIPevents = computed(() => {
-    return events.value.filter((event) => event.vip === true);
-});
-
-const filteredEvents = computed(() => events.value.filter((event) => event.vip === false));
 
 const breadcrumbs = [
     {
