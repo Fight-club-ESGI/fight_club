@@ -22,7 +22,7 @@ export default defineComponent({
 
 <template>
     <div class="bg-neutral-800 text-white">
-        <div class="h-screen w-screen pb-20">
+        <div class="h-screen pb-20">
             <div class="flex-column px-80 py-14">
                 <p class="text-7xl font-extrabold text-center my-6">
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Enjoy</span>

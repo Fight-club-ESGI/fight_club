@@ -96,7 +96,7 @@ class User {
     async _updateUser(payload: UpdateUser): Promise<userInterface> {
         try {
             const uri = `/users/${payload.id}`;
-            const res = await client.put(uri, payload);
+            const res = await client.patch(uri, payload);
             return res.data;
         } catch (error) {
             throw error;
