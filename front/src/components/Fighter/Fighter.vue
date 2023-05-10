@@ -1,11 +1,7 @@
 <template>
     <div @click="goToFighterDetails()" class="border rounded-md cursor-pointer">
-        <v-img
-            :src="`https://xsgames.co/randomusers/avatar.php?g=${fighter.gender === 'male' ? 'male' : 'female'}`"
-            height="200"
-            :contain="false"
-            class="rounded-t-md"
-        />
+        <v-img :src="`https://xsgames.co/randomusers/avatar.php?g=${fighter.gender === 'male' ? 'male' : 'female'}`"
+            height="200" :contain="false" class="rounded-t-md" />
         <div class="pa-3">
             <h3>Name: {{ fighterName }}</h3>
             <div>Nationality: {{ fighter.nationality }}</div>
@@ -17,15 +13,16 @@
 <script lang="ts">
 import { defineComponent, toRefs, PropType, computed } from 'vue';
 import CreateFighter from '@/components/dialogs/CreateFighter.vue';
-import { FighterI } from '@/interfaces/payload';
+import { IFighter } from '@/interfaces/fighter';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
     components: { CreateFighter },
     props: {
         fighter: {
-            type: Object as PropType<FighterI>,
-            default: () => {},
+            type: Object as PropType<IFighter>,
+            required: true,
+            default: () => { },
         },
     },
     setup(props) {

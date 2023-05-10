@@ -72,7 +72,7 @@
 import { defineComponent, ref, computed, reactive } from 'vue';
 import nationalityJson from '@/data/nationality.json';
 import { createToast } from 'mosha-vue-toastify';
-import { FighterI } from '@/interfaces/payload';
+import { CreateFighter, IFighter } from '@/interfaces/fighter';
 import { useFighterStore } from '@/stores/fighter';
 
 export default defineComponent({
@@ -84,7 +84,7 @@ export default defineComponent({
         const dialog = ref<boolean>(false);
         const valid = ref<boolean>(false);
 
-        const fighter = reactive<FighterI>({
+        const fighter = reactive<CreateFighter>({
             gender: '',
             firstname: '',
             lastname: '',

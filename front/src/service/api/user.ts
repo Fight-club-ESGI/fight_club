@@ -1,6 +1,7 @@
 import { ISignin, ISignup, IToken } from "@/interfaces/security";
 import { userInterface } from "@/interfaces/responseAPI";
 import { client, clientWithoutAuth, token } from "../index";
+import { UpdateUser } from "@/interfaces/user";
 class User {
 
     async _signin(payload: ISignin): Promise<IToken> {
@@ -92,7 +93,7 @@ class User {
     }
 
 
-    async _updateUser(payload: { id: string }): Promise<userInterface> {
+    async _updateUser(payload: UpdateUser): Promise<userInterface> {
         try {
             const uri = `/users/${payload.id}`;
             const res = await client.put(uri, payload);

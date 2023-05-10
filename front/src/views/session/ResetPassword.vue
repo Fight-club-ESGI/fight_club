@@ -1,20 +1,15 @@
 <template>
-    <v-form
-        class="w-full px-12 xl:w-2/3 mx-auto"
-        ref="form" v-model="valid"
-        lazy-validation
-    >
+    <v-form class="w-full px-12 xl:w-2/3 mx-auto" ref="form" v-model="valid" lazy-validation>
         <p class="text-center font-weight-bold">Reset password</p>
         <v-text-field v-model="email" :rules="emailRules" label="E-mail" required class="my-4"></v-text-field>
         <v-btn block color="primary" @click="validate"> Change your password </v-btn>
         <v-divider class="my-3"></v-divider>
         <div class="flex text-caption mb-4">
-            <div class=""><router-link :to="{ name: 'login' }" >Already got an account?</router-link></div>
-            <v-spacer/>
-            <div class="text-center"><router-link :to="{ name: 'register' }" >Not registered yet?</router-link></div>
-        </div>    
+            <div class=""><router-link :to="{ name: 'login' }">Already got an account?</router-link></div>
+            <v-spacer />
+            <div class="text-center"><router-link :to="{ name: 'register' }">Not registered yet?</router-link></div>
+        </div>
     </v-form>
-
 </template>
 
 <script lang="ts" setup>
@@ -36,7 +31,7 @@ async function validate() {
     if (valid) {
         try {
             await resetPassword({ email: email.value });
-            createToast('Check your email to reset your password', { type: "success", position: "bottom-right"});
+            createToast('Check your email to reset your password', { type: "success", position: "bottom-right" });
         } catch (err) {
             console.error(err)
         }
@@ -44,5 +39,4 @@ async function validate() {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

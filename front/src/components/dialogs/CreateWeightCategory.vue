@@ -11,25 +11,18 @@
                     <v-form v-model="valid" ref="form">
                         <v-row justify="space-between" class="align-center">
                             <v-col>
-                                <v-text-field v-model="category.name" :rules="[rules.required]" placeholder="Name" label="Name" />
+                                <v-text-field v-model="category.name" :rules="[rules.required]" placeholder="Name"
+                                    label="Name" />
                             </v-col>
                             <v-col>
-                                <v-text-field
-                                    v-model.number="category.minWeight"
-                                    :rules="[rules.required, rules.positiveValue]"
-                                    placeholder="minimal weight requirement"
-                                    label="Minimal weight"
-                                    type="number"
-                                />
+                                <v-text-field v-model.number="category.minWeight"
+                                    :rules="[rules.required, rules.positiveValue]" placeholder="minimal weight requirement"
+                                    label="Minimal weight" type="number" />
                             </v-col>
                             <v-col>
-                                <v-text-field
-                                    v-model.number="category.maxWeight"
+                                <v-text-field v-model.number="category.maxWeight"
                                     :rules="[rules.required, rules.positiveValue, rules.higherThanMinimal]"
-                                    placeholder="maximal weight"
-                                    label="Maximal weight"
-                                    type="number"
-                                />
+                                    placeholder="maximal weight" label="Maximal weight" type="number" />
                             </v-col>
                         </v-row>
                     </v-form>
@@ -47,7 +40,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
-import { WeightCategoryI } from '@/interfaces/payload';
+import { CreateWeightCategory } from '@/interfaces/payload';
 import { useCategoryStore } from '@/stores/category';
 
 export default defineComponent({
@@ -59,10 +52,10 @@ export default defineComponent({
         const dialog = ref<boolean>(false);
         const valid = ref<boolean>(false);
 
-        const category = reactive<WeightCategoryI>({
+        const category = reactive<CreateWeightCategory>({
             name: '',
-            minWeight: '',
-            maxWeight: '',
+            minWeight: 0,
+            maxWeight: 0
         });
 
         const rules = {
@@ -78,7 +71,7 @@ export default defineComponent({
                     await postCategory(category);
                     dialog.value = false;
                     category.name = '';
-                    (category.minWeight = ''), (category.maxWeight = '');
+                    (category.minWeight = 0), (category.maxWeight = 0);
                 }
             } catch (error: any) {
                 createToast(error, { position: 'bottom-right', type: 'danger' });

@@ -6,6 +6,7 @@ import type { userInterface } from '@/interfaces/responseAPI';
 import { token, refreshToken } from '@/service';
 import { useRouter } from "vue-router"
 import { useCartStore } from './cart';
+import { UpdateUser } from '@/interfaces/user';
 
 export const useUserStore = defineStore('user', () => {
     const router = useRouter();
@@ -127,7 +128,7 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    async function updateUser(payload: { id: string, username: string }) {
+    async function updateUser(payload: UpdateUser) {
         try {
             const res = await _updateUser(payload);
             user.value = res;

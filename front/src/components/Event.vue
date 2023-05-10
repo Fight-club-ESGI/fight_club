@@ -50,12 +50,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute, useRouter } from "vue-router";
 import { PropType, ref, watch } from "vue";
 import { useEventStore } from "@/stores/event";
 import { Icon } from "@iconify/vue";
+import { useRouter, useRoute } from 'vue-router';
+import { IEvent } from '@/interfaces/event';
 import UpdateEvent from '@/components/dialogs/UpdateEvent.vue';
-import { IEvent } from "@/interfaces/event"
 
 const props = defineProps({
     event: { type: Object as PropType<IEvent>, required: true },

@@ -1,5 +1,5 @@
 import { client, clientWithoutAuth } from "..";
-import { IFighter } from "@/interfaces/fighter";
+import { CreateFighter, IFighter } from "@/interfaces/fighter";
 
 const namespace = '/fighters';
 
@@ -24,7 +24,7 @@ class Fighter {
         }
     }
 
-    async _createFighter(payload: IFighter): Promise<IFighter> {
+    async _createFighter(payload: CreateFighter): Promise<IFighter> {
         try {
             const res = await client.post(namespace, payload);
             return res.data;

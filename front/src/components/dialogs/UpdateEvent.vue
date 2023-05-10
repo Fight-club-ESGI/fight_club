@@ -62,10 +62,10 @@
 import { ref } from 'vue';
 import { useEventStore } from '@/stores/event';
 import { PropType } from 'vue';
-import { EventI } from '@/interfaces/payload';
 import { IEvent } from '@/interfaces/event';
 const eventStore = useEventStore();
 const { updateEvent } = eventStore;
+
 const props = defineProps({
     event: Object as PropType<IEvent>
 });
@@ -77,7 +77,7 @@ const valid = ref<boolean>(false);
 
 const saveEvent = async () => {
     try {
-        const { ticketEvents, fights, ...payload } = event.value;
+        const { ...payload } = event.value;
         await updateEvent(payload);
         dialog.value = false;
     } catch (error) {

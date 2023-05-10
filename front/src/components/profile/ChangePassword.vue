@@ -1,27 +1,12 @@
 <template>
     <div class="p-5">
         <v-form v-model="valid" ref="form">
-            <v-text-field
-                v-model="oldPassword"
-                :rules="[rules.required]"
-                type="password"
-                placeholder="Old Password"
-                label="Old Password"
-            />
-            <v-text-field
-                v-model="newPassword"
-                :rules="[rules.required, rules.minLength]"
-                type="password"
-                placeholder="New Password"
-                label="New Password"
-            />
-            <v-text-field
-                v-model="confirmPassword"
-                :rules="[rules.required, rules.minLength, rules.samePassword]"
-                type="password"
-                placeholder="Confirm Password"
-                label="Confirm Password"
-            />
+            <v-text-field v-model="oldPassword" :rules="[rules.required]" type="password" placeholder="Old Password"
+                label="Old Password" />
+            <v-text-field v-model="newPassword" :rules="[rules.required, rules.minLength]" type="password"
+                placeholder="New Password" label="New Password" />
+            <v-text-field v-model="confirmPassword" :rules="[rules.required, rules.minLength, rules.samePassword]"
+                type="password" placeholder="Confirm Password" label="Confirm Password" />
         </v-form>
         <div class="w-full">
             <v-btn class="w-1/3 mx-3 bg-red-100" color="primary" @click="validate()">Confirm</v-btn>

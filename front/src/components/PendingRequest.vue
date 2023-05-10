@@ -39,13 +39,13 @@ export default {
                 await acceptRequest(id);
                 await getPendingSponsorships();
                 await getAcceptedSponsorships();
-            } catch (e) {}
+            } catch (e) { }
         };
 
         onMounted(async () => {
             try {
                 await getPendingSponsorships();
-            } catch (e) {}
+            } catch (e) { }
         });
 
         return { pendingSponsorships, tableHeaders, setVIP };

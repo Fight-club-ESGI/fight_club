@@ -46,12 +46,12 @@ export interface SponsorshipResponseI {
 }
 
 export interface WalletTransactionInterface {
-    id: string | null
-    amount: number | null
-    status: string | null
-    wallet: string | null
-    type: string | null
-    stripe_ref: string | null
-    createdAt: string | null
-    updatedAt: string | null
+    id: string
+    amount: number
+    status: string
+    wallet: string
+    type: string
+    stripe_ref: string
+    createdAt: string
+    updatedAt: string
 }

@@ -11,3 +11,8 @@ export interface CreateUser {
     username: string
     roles: string[]
 }
+
+export interface UpdateUser {
+    id: string
+    username: string
+}

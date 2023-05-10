@@ -1,5 +1,5 @@
 import { client, clientWithoutAuth } from "..";
-import type { IEvent } from "@/interfaces/event";
+import type { CreateEvent, IEvent } from "@/interfaces/event";
 
 const namespace = '/events';
 
@@ -24,7 +24,7 @@ class Event {
         }
     }
 
-    async _createEvent(payload: IEvent): Promise<IEvent> {
+    async _createEvent(payload: CreateEvent): Promise<IEvent> {
         try {
             const res = await client.post(namespace, payload);
             return res.data;

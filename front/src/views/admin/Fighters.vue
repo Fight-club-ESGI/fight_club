@@ -10,7 +10,7 @@
 
             <v-window v-model="tab">
                 <v-window-item value="fighters">
-                    <div class="flex grid grid-cols-4 gap-4 mt-3">
+                    <div class="grid grid-cols-4 gap-4 mt-3">
                         <div class="col-span-1">
                             <create-fighter class="flex justify-start pb-2" />
                             <fighter-filter class="sticky top-[64px]" />

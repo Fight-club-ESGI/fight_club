@@ -1,6 +1,6 @@
 import { client } from "../index";
 import { ITicketEvent } from "@/interfaces/event";
-import { ICreateTicket, ITicket, ICreateTicketCategory, ITicketCategory } from "@/interfaces/ticket";
+import { ICreateTicket, ITicket, ICreateTicketCategory, ITicketCategory, ICreateTicketEvent } from "@/interfaces/ticket";
 const ticketNamespace = '/tickets';
 const ticketCategoryNamespace = '/ticket_categories';
 const ticketEventNamespace = '/ticket_events';
@@ -57,7 +57,7 @@ class Ticket {
         }
     }
 
-    async _createTicketEvent(payload: ITicketEvent): Promise<any> {
+    async _createTicketEvent(payload: ICreateTicketEvent): Promise<ITicketEvent> {
         try {
             const uri = `${ticketEventNamespace}`;
             const res = await client.post(uri, payload);

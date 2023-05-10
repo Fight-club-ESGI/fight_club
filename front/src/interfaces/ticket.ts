@@ -25,4 +25,11 @@ interface ICreateTicketCategory {
     name: string
 }
 
-export type { ITicket, ICreateTicket, ITicketCategory, ICreateTicketCategory }
+interface ICreateTicketEvent {
+    price: number
+    event: string
+    maxQuantity: number
+    ticketCategory: string
+}
+
+export type { ITicket, ICreateTicket, ITicketCategory, ICreateTicketCategory, ICreateTicketEvent }

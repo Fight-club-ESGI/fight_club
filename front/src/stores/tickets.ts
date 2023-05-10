@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { ticketService } from "../service/api/index";
-import { ITicket, ITicketCategory, ICreateTicket } from "@/interfaces/ticket";
+import { ITicket, ITicketCategory, ICreateTicket, ICreateTicketEvent } from "@/interfaces/ticket";
 import { ITicketEvent } from "@/interfaces/event";
 
 export const useTicketStore = defineStore('ticket', () => {
@@ -31,7 +31,7 @@ export const useTicketStore = defineStore('ticket', () => {
         }
     }
 
-    async function createTicketEvent(payload: ITicketEvent) {
+    async function createTicketEvent(payload: ICreateTicketEvent) {
         try {
             const res: ITicketEvent = await ticketService._createTicketEvent(payload);
             ticketsEvent.value.push(res);

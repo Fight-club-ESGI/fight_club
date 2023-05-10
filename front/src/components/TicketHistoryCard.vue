@@ -15,7 +15,8 @@
             </v-col>
         </v-row>
         <v-divider class="my-2"></v-divider>
-        <p class="mb-1 text-grey-darken-1">Ref {{ ticket.ref }} - {{ DateTime.fromISO(ticket.purchaseDate, { locale: 'en' }).toFormat('ff') }}</p>
+        <p class="mb-1 text-grey-darken-1">Ref {{ ticket.ref }} -
+            {{ DateTime.fromISO(ticket.purchaseDate, { locale: 'en' }).toFormat('ff') }}</p>
     </v-card>
 </template>
 
@@ -36,13 +37,14 @@ defineProps({
 .v-btn {
     text-transform: none;
 }
+
 .custom-rating {
     color: white;
     background: rgb(var(--v-theme-primary));
     border-radius: 5px;
 }
+
 .custom-result {
     background: rgb(var(--v-theme-lightgray));
     border-radius: 5px;
-}
-</style>
+}</style>

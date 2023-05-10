@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { IFighter } from "@/interfaces/fighter";
+import { CreateFighter, IFighter } from "@/interfaces/fighter";
 import { ref, computed, ComputedRef, Ref } from "vue";
 import { fighterService } from "../service/api/index";
 
@@ -59,7 +59,7 @@ export const useFighterStore = defineStore('fighter', () => {
         filter.value = f;
     }
 
-    async function createFighter(payload: IFighter) {
+    async function createFighter(payload: CreateFighter) {
         try {
             const res = await fighterService._createFighter(payload);
             fighters.value.push(res);

@@ -14,7 +14,7 @@ const becomeVIP = async () => {
         await validateEmail(token as string);
         router.push({ name: 'home' });
     } catch (error) {
-        
+
     }
 }
 </script>
@@ -26,13 +26,13 @@ const becomeVIP = async () => {
             <!-- <div
                 class="h-1/2 w-1/2 flex items-center bg-no-repeat bg-cover bg-right opacity-75"
                 style="background-image: url('../src/assets/invalidToken.svg');"
-            >  -->            
+            >  -->
             <p class="text-5xl font-extrabold text-center my-6">
                 Become VIP by clicking the button bellow
-            </p> 
+            </p>
             <div class="mx-auto w-1/4">
                 <v-btn @click="becomeVIP()" block>VIP</v-btn>
             </div>
         </div>
-    </div>  
+    </div>
 </template>

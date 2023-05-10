@@ -8,3 +8,13 @@ export interface IFighter {
     gender: string
     birthdate: string
 }
+
+export interface CreateFighter {
+    firstname: string
+    lastname: string
+    height: number
+    weight: number
+    nationality: string
+    gender: string
+    birthdate: string
+}

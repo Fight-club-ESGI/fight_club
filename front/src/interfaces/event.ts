@@ -28,3 +28,19 @@ export interface ITicketEvent {
     id: string
     tickets: ITicket[]
 }
+
+export interface CreateEvent {
+    name: string
+    location: string
+    description: string
+    image: string
+    capacity: number
+    vip: boolean
+    category: string
+    locationLink: string
+    timeStart: string
+    timeEnd: string
+    imageFile: File | null
+    imageName: string
+    imageSize: string
+}

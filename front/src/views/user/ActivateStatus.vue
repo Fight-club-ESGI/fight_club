@@ -24,9 +24,9 @@ export default defineComponent({
 
         const activateVIPStatus = async () => {
             try {
-                await validateEmail(route.params.id);
+                await validateEmail(route.params.id.toString());
                 await router.push({ name: 'home' });
-            } catch (e) {}
+            } catch (e) { }
         };
 
         return { activateVIPStatus };
