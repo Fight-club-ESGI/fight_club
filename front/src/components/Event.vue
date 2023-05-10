@@ -5,7 +5,7 @@
     >
         <div class="absolute bg-white z-10 m-5 rounded-lg h-16 w-16 flex items-center">
             <div
-                v-if="new Date() > timeStart"
+                v-if="timeStart > new Date()"
                 class="flex flex-col text-center mx-auto font-bold"
             >
                 <p>
@@ -14,6 +14,12 @@
                 <p>
                     {{ timeStart?.toLocaleDateString('en-GB', {month: 'long'}) }}
                 </p>
+            </div>
+            <div
+                v-else
+                class="flex flex-col text-center mx-auto font-bold"
+            >
+                Passed
             </div>
         </div>
         <div
@@ -48,8 +54,9 @@
             </v-menu>
             <p class="text-2xl font-bold pb-5">{{ event.name }}</p>
             <p class="truncate overflow-hidden">
-                <span class="italic">{{ event.description }}</span> @{{ event.location }}
+                <span class="italic">{{ event.description }}</span>
             </p>
+            <p class="text-sm font-bold">{{ event.location }}</p>
             <div class="mt-auto flex">
                 <div class="flex align-center gap-2 bg-neutral-600 p-2 rounded-lg">
                     <v-icon icon="mdi-account-multiple"></v-icon>
@@ -62,7 +69,7 @@
 
 <script lang="ts" setup>
 import {useRoute, useRouter} from "vue-router";
-import {PropType, ref} from "vue";
+import {PropType, ref, watch} from "vue";
 import {useEventStore} from "@/stores/event";
 import {Icon} from "@iconify/vue";
 import UpdateEvent from '@/components/dialogs/UpdateEvent.vue';
@@ -82,6 +89,11 @@ const eventNavigation = ref(route.path.includes('admin') ? 'event-details-admin'
 const pathIncludeAdmin = ref(route.path.includes('admin'))
 
 const timeStart = ref(new Date(props.event.timeStart))
+
+watch(props.event, async (newValue, oldValue) => {
+    timeStart.value = new Date(props.event.timeStart)
+})
+
 const deleteE = async (eventId: string) => {
     try {
         await deleteEvent(eventId);
