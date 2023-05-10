@@ -48,18 +48,24 @@
         </v-row>
         <div class="z-10 bg-white overflow-y-auto sticky bottom-0">
             <v-divider></v-divider>
-            <v-row no-gutters justify="space-between" class="pa-2">
-                <v-col cols="12">
-                    <v-text-field v-if="currentBet.bets.length > 0" label="Bet" type="number" v-model="amount" />
+            <v-row no-gutters justify="space-between" class="pa-2" align="center">
+                <v-col cols="auto">
+                    <p v-if="currentBet.bets.length > 0">
+                        Rating<span style="border-radius: 15px" class="text-xl ma-2 py-2 px-4 bg-primary">{{
+                            formatNumber(calculateTotalRating(currentBet))
+                        }}</span>
+                    </p>
                 </v-col>
                 <v-col cols="auto">
-                    <p class="font-weight-bold">Bet</p>
+                    <v-text-field v-if="currentBet.bets.length > 0" label="Bet" type="number" v-model="amount" />
+                </v-col>
+            </v-row>
+            <v-row no-gutters justify="space-between" class="pa-2">
+                <v-col cols="auto">
                     <p class="font-weight-bold">Possible gains</p>
                 </v-col>
                 <v-col cols="auto">
                     <div class="font-weight-bold">
-                        <p v-if="amount && currentBet.bets.length > 0">{{ formatNumber(amount) }} €</p>
-                        <p v-else>{{ formatNumber(0) }} €</p>
                         <p v-if="amount && currentBet.bets.length > 0">{{ formatNumber(amount * calculateTotalRating(currentBet)) }} €</p>
                         <p v-else>{{ formatNumber(0) }} €</p>
                     </div>
