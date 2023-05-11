@@ -5,35 +5,22 @@
                 <span v-bind="props"> Update </span>
             </template>
 
-            <v-card v-if="category">
-                <v-card-title> Update category </v-card-title>
-                <v-container>
-                    <v-form v-model="valid" ref="form">
-                        <v-row justify="space-between" class="align-center">
-                            <v-col>
-                                <v-text-field v-model="category.name" :rules="[rules.required]" placeholder="Name" label="Name" />
-                            </v-col>
-                            <v-col>
-                                <v-text-field
-                                    v-model.number="category.minWeight"
-                                    :rules="[rules.required, rules.positiveValue]"
-                                    placeholder="minimal weight requirement"
-                                    label="Minimal weight"
-                                    type="number"
-                                />
-                            </v-col>
-                            <v-col>
-                                <v-text-field
-                                    v-model.number="category.maxWeight"
-                                    :rules="[rules.required, rules.positiveValue, rules.higherThanMinimal]"
-                                    placeholder="maximal weight"
-                                    label="Maximal weight"
-                                    type="number"
-                                />
-                            </v-col>
-                        </v-row>
+            <v-card v-if="category" class="text-center">
+                <v-card-title class="font-bold p-10"> Update category </v-card-title>
+                <div class="w-full flex px-10">
+                    <v-form v-model="valid" ref="form" class="flex flex-col w-full">
+
+                        <v-text-field v-model="category.name" :rules="[rules.required]" placeholder="Name" label="Name" />
+
+                        <v-text-field v-model.number="category.minWeight" :rules="[rules.required, rules.positiveValue]"
+                            placeholder="minimal weight requirement" label="Minimal weight" type="number" />
+
+                        <v-text-field v-model.number="category.maxWeight"
+                            :rules="[rules.required, rules.positiveValue, rules.higherThanMinimal]"
+                            placeholder="maximal weight" label="Maximal weight" type="number" />
+
                     </v-form>
-                </v-container>
+                </div>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
                         <v-btn color="primary" @click="dialog = false">Cancel</v-btn>
@@ -48,13 +35,14 @@
 <script lang="ts">
 import { defineComponent, ref, PropType } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
-import { WeightCategory } from '@/interfaces/payload';
+import { IWeightCategory } from '@/interfaces/payload';
 import { useCategoryStore } from '@/stores/category';
 
 export default defineComponent({
     props: {
         category: {
-            type: Object as PropType<WeightCategory>,
+            type: Object as PropType<IWeightCategory>,
+            required: true
         },
     },
     setup(props) {

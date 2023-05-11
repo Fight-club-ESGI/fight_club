@@ -66,6 +66,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             security: "is_granted('ROLE_USER')"
         ),
         new Patch(
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
             normalizationContext: ['groups' => ['user:get']],
             denormalizationContext: ['groups' => ['user:patch']],
             security: 'is_granted("ROLE_ADMIN") or object === user',

@@ -1,10 +1,11 @@
+import { IFight, CreateFight, UpdateFight } from "@/interfaces/figth";
 import { client } from "..";
 
 const namespace = '/fights';
 
 class Fight {
 
-    async _getFight(fightId: string): Promise<{}> {
+    async _getFight(fightId: string): Promise<IFight> {
         try {
             const uri = `${namespace}/${fightId}`
             const res = await client.get(uri);
@@ -14,7 +15,7 @@ class Fight {
         }
     }
 
-    async _getFights(): Promise<[]> {
+    async _getFights(): Promise<IFight[]> {
         try {
             const res = await client.get(namespace);
             return res.data;
@@ -23,9 +24,14 @@ class Fight {
         }
     }
 
-    async _createFight(payload: { event: string, fighterA: string, fighterB: string, winnerValidation: boolean }): Promise<string> {
+    async _createFight(payload: CreateFight): Promise<IFight> {
         try {
-            const res = await client.post(namespace, payload);
+            const data = {
+                event: `/events/${payload.event}`,
+                fighterA: `/fighters/${payload.fighterA}`,
+                fighterB: `/fighters/${payload.fighterB}`,
+            }
+            const res = await client.post(namespace, data);
             return res.data;
         } catch (error) {
             throw error;
@@ -46,6 +52,30 @@ class Fight {
         try {
             const uri = `${namespace}/${payload.fightId}/winner`;
             const res = await client.post(uri, { winner_id: payload.winnerId });
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _removeFight(id: string): Promise<void> {
+        try {
+            const uri = `${namespace}/${id}`;
+            const res = await client.delete(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _updateFight(payload: UpdateFight): Promise<IFight> {
+        try {
+            const uri = `${namespace}/${payload.id}`;
+            const data = {
+                fighterA: `/fighters/${payload.fighterA}`,
+                fighterB: `/fighters/${payload.fighterB}`,
+            }
+            const res = await client.patch(uri, data);
             return res.data;
         } catch (error) {
             throw error;

@@ -1,34 +1,9 @@
 import { client } from "../index";
 import { ITicketEvent } from "@/interfaces/event";
+import { ICreateTicket, ITicket, ICreateTicketCategory, ITicketCategory, ICreateTicketEvent } from "@/interfaces/ticket";
 const ticketNamespace = '/tickets';
 const ticketCategoryNamespace = '/ticket_categories';
 const ticketEventNamespace = '/ticket_events';
-
-export interface ITicket {
-    id: string
-    price: number
-    event: string
-    ticketCategory: ITicketCategory
-}
-
-export interface ICreateTicket {
-    price: number
-    availability: boolean,
-    event: string
-    ticketCategory: string
-}
-
-export interface ITicketCategory {
-    id: string
-    name: string
-    tickets: ITicket[]
-    createdAt: string
-    updatedAt: string
-}
-
-export interface ICreateTicketCategory {
-    name: string
-}
 
 class Ticket {
 
@@ -82,7 +57,7 @@ class Ticket {
         }
     }
 
-    async _createTicketEvent(payload: ITicketEvent): Promise<any> {
+    async _createTicketEvent(payload: ICreateTicketEvent): Promise<ITicketEvent> {
         try {
             const uri = `${ticketEventNamespace}`;
             const res = await client.post(uri, payload);

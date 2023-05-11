@@ -1,6 +1,7 @@
 import { createVuetify, ThemeDefinition } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
 const myCustomLightTheme: ThemeDefinition = {
     dark: false,
@@ -12,7 +13,7 @@ const myCustomLightTheme: ThemeDefinition = {
         'primary-darken-1': '#CC0029',
         secondary: '#38405F',
         'secondary-darken-1': '#2D344D',
-        lightgray: '#e8e8e8',
+        lightgray: '#213547',
         error: '#B00020',
         info: '#2196F3',
         success: '#4CAF50',
@@ -29,16 +30,8 @@ export default createVuetify({
             variant: 'flat',
             rounded: 'xl'
         },
-        VTextField: {
-            // variant: 'outlined',
-            // density: 'compact'
-        },
         VMenu: {
             location: 'bottom'
-        },
-        VSelect: {
-            variant: 'outlined',
-            density: 'compact'
         },
         VCard: {
             rounded: 'xl',
@@ -49,6 +42,6 @@ export default createVuetify({
         defaultTheme: 'myCustomLightTheme',
         themes: {
             myCustomLightTheme,
-        }   
+        }
     }
 })

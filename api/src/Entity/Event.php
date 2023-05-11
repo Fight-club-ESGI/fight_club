@@ -153,15 +153,12 @@ class Event
     #[Groups([
         'admin:get',
         'tickets:get',
-        'admin:patch'
     ])]
     private Collection $tickets;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
     #[Groups([
         'admin:get',
-        'tickets:get',
-        'admin:patch'
     ])]
     private Collection $fights;
 
@@ -173,7 +170,6 @@ class Event
         'ticket:category:post',
         'events:get',
         'event:ticket:get',
-        'admin:patch'
     ])]
     private Collection $ticketEvents;
 

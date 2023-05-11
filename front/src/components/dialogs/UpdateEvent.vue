@@ -32,14 +32,14 @@
                                     hint="If no image is provided, a default template" />
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="event.timeStart" :rules="[rules.required]" type="date"
+                                <v-text-field v-model="event.timeStart.split('T')[0]" :rules="[rules.required]" type="date"
                                     placeholder="Start event" label="Start event" />
                             </v-col>
                         </v-row>
                         <v-row class="align-center">
                             <v-col>
-                                <v-text-field v-model="event.timeEnd" :rules="[rules.required]" type="date"
-                                    placeholder="End event" label="End event" />
+                                <v-text-field v-model="event.timeEnd.split('T')[0]" :rules="[rules.required]" type="date"
+                                    placeholder=" End event" label="End event" />
                             </v-col>
                             <v-col>
                                 <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
@@ -62,11 +62,12 @@
 import { ref } from 'vue';
 import { useEventStore } from '@/stores/event';
 import { PropType } from 'vue';
-import { EventI } from '@/interfaces/payload';
+import { IEvent } from '@/interfaces/event';
 const eventStore = useEventStore();
 const { updateEvent } = eventStore;
+
 const props = defineProps({
-    event: Object as PropType<EventI>
+    event: Object as PropType<IEvent>
 });
 
 const event = ref({ ...props.event });
@@ -76,7 +77,7 @@ const valid = ref<boolean>(false);
 
 const saveEvent = async () => {
     try {
-        const { ticketEvents, fights, ...payload } = event.value;
+        const { ticketEvents, ...payload } = event.value;
         await updateEvent(payload);
         dialog.value = false;
     } catch (error) {

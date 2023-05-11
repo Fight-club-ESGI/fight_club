@@ -22,33 +22,29 @@
     </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { useSponsorshipStore } from '../stores/sponsorship';
 import { onMounted } from 'vue';
-export default {
-    setup() {
-        const tableHeaders = ['Username', 'Email', 'Status'];
 
-        const sponsorshipStore = useSponsorshipStore();
-        const { getAcceptedSponsorships, acceptRequest, removeSponsorship, getPendingSponsorships } = sponsorshipStore;
-        const { acceptedSponsorships } = storeToRefs(sponsorshipStore);
+const tableHeaders = ['Username', 'Email', 'Status'];
 
-        const removeVIP = async (id: string) => {
-            try {
-                await removeSponsorship(id);
-                await getPendingSponsorships();
-                await getAcceptedSponsorships();
-            } catch (e) {}
-        };
+const sponsorshipStore = useSponsorshipStore();
+const { getAcceptedSponsorships, removeSponsorship, getPendingSponsorships } = sponsorshipStore;
+const { acceptedSponsorships } = storeToRefs(sponsorshipStore);
 
-        onMounted(async () => {
-            try {
-                await getAcceptedSponsorships();
-            } catch (e) {}
-        });
-
-        return { acceptedSponsorships, tableHeaders, removeVIP };
-    },
+const removeVIP = async (id: string) => {
+    try {
+        await removeSponsorship(id);
+        await getPendingSponsorships();
+        await getAcceptedSponsorships();
+    } catch (e) { }
 };
+
+onMounted(async () => {
+    try {
+        await getAcceptedSponsorships();
+    } catch (e) { }
+});
+
 </script>

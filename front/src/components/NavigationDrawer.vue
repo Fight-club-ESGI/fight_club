@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer class="h-full shadow" :rail="display" permanent>
         <v-list class="flex-column relative h-full" density="compact" nav>
-            <v-list-item :prepend-avatar="`https://xsgames.co/randomusers/assets/avatars/pixel/43.jpg`"
+            <v-list-item v-if="user" :prepend-avatar="`https://xsgames.co/randomusers/assets/avatars/pixel/43.jpg`"
                 append-icon="mdi-gear" :title="user.username" :subtitle="user.email" :to="{ name: 'user-profile' }" nav
                 class="py-2" />
             <v-divider></v-divider>

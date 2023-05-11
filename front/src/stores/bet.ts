@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
-import { FightBetI, CurrentBetI } from '../interfaces/payload';
+import { FightBetI, CurrentBetI } from '@/interfaces/bet';
 import { ref } from 'vue';
 import { betService } from '../service/api';
-// import { setCurrentBetToLocalStorage, getCurrentBetFromLocalStorage } from '../service/bets';
 
 export const useBetStore = defineStore('bet', () => {
     const bet = ref<FightBetI>();

@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent, ref} from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import AdminView from '@/views/admin/AdminView.vue';
@@ -8,7 +8,7 @@ import EventSlider from "@/components/home/EventSlider.vue";
 import HomeFooter from "@/components/HomeFooter.vue";
 
 export default defineComponent({
-    components: {HomeFooter, EventSlider, AdminView },
+    components: { HomeFooter, EventSlider, AdminView },
     setup() {
         const userStore = useUserStore();
         const { isAdmin } = storeToRefs(userStore);
@@ -22,46 +22,29 @@ export default defineComponent({
 
 <template>
     <div class="bg-neutral-800 text-white">
-        <div class="h-screen w-screen pb-20">
+        <div class="h-screen pb-20">
             <div class="flex-column px-80 py-14">
                 <p class="text-7xl font-extrabold text-center my-6">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Enjoy</span> Your Favorite Fight at The Best <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Event</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Enjoy</span>
+                    Your Favorite Fight at The Best <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Event</span>
                 </p>
-                <p class="text-xl mx-auto text-center w-2/3">Thunderous Knockout is a platform that provides fight event tickets from world-famous fighters for you. Come on, get your tickets now before they run out.</p>
+                <p class="text-xl mx-auto text-center w-2/3">Thunderous Knockout is a platform that provides fight event
+                    tickets from world-famous fighters for you. Come on, get your tickets now before they run out.</p>
                 <div class="mx-auto w-1/6 py-10">
                     <v-btn block>Get tickets</v-btn>
                 </div>
             </div>
 
-            <v-sheet
-                class="w-full bg-transparent"
-            >
-                <v-slide-group
-                    v-model="carouselModel"
-                    class="pa-4"
-                    center-active
-                    show-arrows
-                >
-                    <v-slide-group-item
-                        v-for="n in 15"
-                        :key="n"
-                        v-slot="{ isSelected, toggle }"
-                    >
-                        <v-card
-                            :color="isSelected ? 'primary' : 'grey-lighten-1'"
-                            class="ma-4"
-                            height="200"
-                            width="400"
-                            @click="toggle"
-                        >
+            <v-sheet class="w-full bg-transparent">
+                <v-slide-group v-model="carouselModel" class="pa-4" center-active show-arrows>
+                    <v-slide-group-item v-for="n in 15" :key="n" v-slot="{ isSelected, toggle }">
+                        <v-card :color="isSelected ? 'primary' : 'grey-lighten-1'" class="ma-4" height="200" width="400"
+                            @click="toggle">
                             <div class="d-flex fill-height align-center justify-center">
                                 <v-scale-transition>
-                                    <v-icon
-                                        v-if="isSelected"
-                                        color="white"
-                                        size="48"
-                                        icon="mdi-close-circle-outline"
-                                    ></v-icon>
+                                    <v-icon v-if="isSelected" color="white" size="48"
+                                        icon="mdi-close-circle-outline"></v-icon>
                                 </v-scale-transition>
                             </div>
                         </v-card>
@@ -74,34 +57,16 @@ export default defineComponent({
                 <p class="text-5xl font-bold mb-10">
                     Popular Martial Arts
                 </p>
-                <v-sheet
-                    class="w-full"
-                    elevation="8"
-                >
-                    <v-slide-group
-                        v-model="categoryCarouselModel"
-                        selected-class="bg-success"
-                        show-arrows
-                    >
-                        <v-slide-group-item
-                            v-for="n in 15"
-                            :key="n"
-                            v-slot="{ isSelected, toggle, selectedClass }"
-                            class="skew-x-12"
-                        >
-                            <v-card
-                                :class="[selectedClass, n % 2 ? 'bg-red-100': null]"
-                                class="h-[400px] w-[300px] rounded-none skew-x-12"
-                                @click="toggle"
-                            >
+                <v-sheet class="w-full" elevation="8">
+                    <v-slide-group v-model="categoryCarouselModel" selected-class="bg-success" show-arrows>
+                        <v-slide-group-item v-for="n in 15" :key="n" v-slot="{ isSelected, toggle, selectedClass }"
+                            class="skew-x-12">
+                            <v-card :class="[selectedClass, n % 2 ? 'bg-red-100' : null]"
+                                class="h-[400px] w-[300px] rounded-none skew-x-12" @click="toggle">
                                 <div class="d-flex fill-height align-center justify-center">
                                     <v-scale-transition>
-                                        <v-icon
-                                            v-if="isSelected"
-                                            color="white"
-                                            size="48"
-                                            icon="mdi-close-circle-outline"
-                                        ></v-icon>
+                                        <v-icon v-if="isSelected" color="white" size="48"
+                                            icon="mdi-close-circle-outline"></v-icon>
                                     </v-scale-transition>
                                 </div>
                             </v-card>
@@ -135,11 +100,7 @@ export default defineComponent({
                     Coming Schedule
                 </p>
                 <div class="flex space-x-4">
-                    <v-card
-                        v-for="n in 3"
-                        class="w-1/3 rounded-none bg-transparent"
-                        :key="n"
-                    >
+                    <v-card v-for="n in 3" class="w-1/3 rounded-none bg-transparent" :key="n">
                         <v-img class="h-[300px] bg-red-100" />
                         <v-card-title class="font-bold text-2xl">
                             # Title 1
@@ -157,9 +118,13 @@ export default defineComponent({
             </div>
             <div class="border py-10 px-46 h-72 bg-gradient-to-r from-purple-600/40 to-blue-600/40 backdrop-blur-sm">
                 <p class="text-5xl font-bold mb-10 text-center my-6">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Don't Miss</span> Updates From <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Thunderous Knockout</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Don't
+                        Miss</span> Updates From <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600">Thunderous
+                        Knockout</span>
                 </p>
-                <p class="text-center">We will send you our updates, news, announcement, and more to your email. Let us know your email address by fill the form below so that you will receive email from us.</p>
+                <p class="text-center">We will send you our updates, news, announcement, and more to your email. Let us know
+                    your email address by fill the form below so that you will receive email from us.</p>
                 <v-input value="s" />
             </div>
             <home-footer />
@@ -188,6 +153,7 @@ export default defineComponent({
     color: white;
     margin-bottom: 24px;
 }
+
 .custom-h2 {
     font-size: 24px;
     color: white;

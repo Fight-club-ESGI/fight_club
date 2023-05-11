@@ -14,7 +14,7 @@ const { ticketsEvent } = storeToRefs(ticketStore);
 const emit = defineEmits(['selectedItem']);
 const ticketCategoryColor = (name: string) => {
 
-    const colors = {
+    const colors: { [key: string]: string } = {
         "GOLD": "amber-darken-3",
         "SILVER": "blue-grey-lighten-1",
         "VIP": "light-blue-darken-2",

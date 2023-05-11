@@ -3,24 +3,13 @@
         <div class="w-1/2">
             <h1 class="text-2xl font-bold pb-5 text-center">Reset Password</h1>
             <v-form v-model="valid" ref="form">
-                <v-text-field
-                    v-model="newPassword"
-                    :rules="[rules.required, rules.minLength]"
-                    prepend-icon="mdi-lock-outline"
-                    type="password"
-                    placeholder="New Password"
-                    label="New Password"
-                />
-                <v-text-field
-                    v-model="confirmPassword"
-                    :rules="[rules.required, rules.minLength, rules.samePassword]"
-                    prepend-icon="mdi-lock-outline"
-                    type="password"
-                    placeholder="Confirm Password"
-                    label="Confirm Password"
-                />
+                <v-text-field v-model="newPassword" :rules="[rules.required, rules.minLength]"
+                    prepend-icon="mdi-lock-outline" type="password" placeholder="New Password" label="New Password" />
+                <v-text-field v-model="confirmPassword" :rules="[rules.required, rules.minLength, rules.samePassword]"
+                    prepend-icon="mdi-lock-outline" type="password" placeholder="Confirm Password"
+                    label="Confirm Password" />
                 <v-btn block color="primary" @click="validate">Confirm</v-btn>
-            </v-form>       
+            </v-form>
         </div>
     </div>
 </template>

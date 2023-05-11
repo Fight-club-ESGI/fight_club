@@ -5,18 +5,10 @@
                 <v-row justify="center" class="pt-4">
                     <v-col cols="10">
                         <v-form v-model="valid" ref="form">
-                            <v-text-field
-                                autofocus
-                                v-model="email"
-                                @keydown.enter.prevent="submit"
+                            <v-text-field autofocus v-model="email" @keydown.enter.prevent="submit"
                                 hint="Press enter to send the invitation"
-                                placeholder="Enter the mail that you want to be sponsored"
-                                type="email"
-                                :rules="rules.email"
-                                append-icon="mdi-send"
-                                @click:append="submit"
-                                lazy-validation
-                            >
+                                placeholder="Enter the mail that you want to be sponsored" type="email" :rules="rules.email"
+                                append-icon="mdi-send" @click:append="submit" lazy-validation>
                             </v-text-field>
                         </v-form>
                     </v-col>
@@ -36,7 +28,6 @@ import { defineComponent, ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '../stores/user';
 import { useSponsorshipStore } from '../stores/sponsorship';
-import { SponsorshipI } from '../interfaces/payload';
 import { createToast } from 'mosha-vue-toastify';
 import PendingRequest from '@/components/PendingRequest.vue';
 import AcceptedRequest from '@/components/AcceptedRequest.vue';
@@ -61,7 +52,7 @@ export default defineComponent({
         onMounted(async () => {
             try {
                 await getUsers();
-            } catch (error) {}
+            } catch (error) { }
         });
 
         const submit = async (event: any) => {
