@@ -51,12 +51,15 @@ const remove = async (id: string) => {
                 <p>VS</p>
                 <p class="text-lg font-semibold">{{ fullNameFighterB }}</p>
             </div>
-            <v-card-actions>
-                <update-fight :fight-id="props.fight.id"></update-fight>
-                <v-btn @click="remove(fight.id)" color="primary" variant="tonal" class="elevation-2 flex-1">
-                    <Icon icon="material-symbols:delete-rounded" height="1rem" />
-                </v-btn>
-            </v-card-actions>
+            <div>
+
+                <v-card-actions>
+                    <update-fight :fight-id="props.fight.id"></update-fight>
+                    <v-btn @click="remove(fight.id)" color="primary" variant="tonal" class="elevation-2 flex-1">
+                        <Icon icon="material-symbols:delete-rounded" height="1rem" />
+                    </v-btn>
+                </v-card-actions>
+            </div>
         </div>
     </v-card>
 </template>

@@ -1,63 +1,48 @@
 <template>
     <div>
-        <v-dialog v-model="dialog" max-width="50%">
+        <v-dialog v-model="dialog" class="w-2/3">
             <template v-slot:activator="{ props }">
-                <v-btn color="primary" v-bind="props"> Register a fighter </v-btn>
+                <v-btn color="primary" v-bind="props" variant="tonal"> Register a fighter </v-btn>
             </template>
 
-            <v-card>
-                <v-card-title> Register a fighter </v-card-title>
-                <v-container>
-                    <v-form v-model="valid" ref="form">
-                        <v-row justify="space-between" class="align-center">
-                            <v-col>
-                                <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname"
-                                    label="Firstname" />
-                            </v-col>
-                            <v-col>
-                                <v-text-field v-model="fighter.lastname" :rules="[rules.required]" placeholder="Lastname"
-                                    label="Lastname" />
-                            </v-col>
-                            <v-col>
-                                <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date"
-                                    label="Birthday" />
-                            </v-col>
-                        </v-row>
-                        <v-row class="align-center">
-                            <v-col>
-                                <v-autocomplete v-model="fighter.nationality" :items="nationalityJson" solo
-                                    :rules="[rules.required]" variant="outlined" label="Nationality"
-                                    placeholder="Nationality" density="compact" color="secondary"
-                                    style="max-height: 450px" />
-                            </v-col>
-                            <v-col>
-                                <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1"
-                                    color="primary" track-color="secondary" thumb-label="always">
-                                    <template v-slot:thumb-label="{ modelValue }">
-                                        {{ modelValue }}
-                                    </template>
-                                </v-slider>
-                            </v-col>
-                            <v-col>
-                                <v-select v-model="fighter.gender" :rules="[rules.required]" label="Gender"
-                                    placeholder="Gender" :items="['male', 'female']" color="secondary" />
-                            </v-col>
-                        </v-row>
-                        <v-row class="align-center">
-                            <v-col cols="4">
-                                <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number"
-                                    max="400" min="52" label="Weight">
-                                    <template v-slot:details>
-                                        <div v-if="division">
-                                            Category:
-                                            <span :style="{ color: division.color }">{{ division.name }}</span>
-                                        </div>
-                                    </template>
-                                </v-text-field>
-                            </v-col>
-                        </v-row>
+            <v-card class="text-center">
+                <v-card-title class="font-bold p-10"> Register a fighter </v-card-title>
+                <div class="w-full flex px-10">
+                    <v-form v-model="valid" ref="form" class="flex flex-col w-full">
+
+                        <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname"
+                            label="Firstname" />
+
+                        <v-text-field v-model="fighter.lastname" :rules="[rules.required]" placeholder="Lastname"
+                            label="Lastname" />
+
+                        <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date" label="Birthday" />
+
+                        <v-autocomplete v-model="fighter.nationality" :items="nationalityJson" :rules="[rules.required]"
+                            label="Nationality" placeholder="Nationality" color="secondary" style="max-height: 450px" />
+
+                        <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1" color="primary"
+                            track-color="secondary" thumb-label="always">
+                            <template v-slot:thumb-label="{ modelValue }">
+                                {{ modelValue }}
+                            </template>
+                        </v-slider>
+
+                        <v-select v-model="fighter.gender" :rules="[rules.required]" label="Gender" placeholder="Gender"
+                            :items="['male', 'female']" color="secondary" />
+
+                        <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number" max="400"
+                            min="52" label="Weight">
+                            <template v-slot:details>
+                                <div v-if="division">
+                                    Category:
+                                    <span :style="{ color: division.color }">{{ division.name }}</span>
+                                </div>
+                            </template>
+                        </v-text-field>
+
                     </v-form>
-                </v-container>
+                </div>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
                         <v-btn color="primary" @click="dialog = false">Cancel</v-btn>

@@ -27,7 +27,7 @@ class WeightCategory {
     _updateCategory = async (category: Partial<IWeightCategory>): Promise<IWeightCategory> => {
         try {
             const uri = `${namespace}/${category.id}`;
-            const res = await client.put(uri, category);
+            const res = await client.patch(uri, category);
             return res.data;
         } catch (error) {
             throw error;

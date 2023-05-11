@@ -2,31 +2,25 @@
     <div>
         <v-dialog v-model="dialog" max-width="50%">
             <template v-slot:activator="{ props }">
-                <v-btn color="primary" v-bind="props"> Create a category </v-btn>
+                <v-btn color="primary" v-bind="props" variant="tonal"> Create a category </v-btn>
             </template>
 
-            <v-card>
-                <v-card-title> Create a category </v-card-title>
-                <v-container>
-                    <v-form v-model="valid" ref="form">
-                        <v-row justify="space-between" class="align-center">
-                            <v-col>
-                                <v-text-field v-model="category.name" :rules="[rules.required]" placeholder="Name"
-                                    label="Name" />
-                            </v-col>
-                            <v-col>
-                                <v-text-field v-model.number="category.minWeight"
-                                    :rules="[rules.required, rules.positiveValue]" placeholder="minimal weight requirement"
-                                    label="Minimal weight" type="number" />
-                            </v-col>
-                            <v-col>
-                                <v-text-field v-model.number="category.maxWeight"
-                                    :rules="[rules.required, rules.positiveValue, rules.higherThanMinimal]"
-                                    placeholder="maximal weight" label="Maximal weight" type="number" />
-                            </v-col>
-                        </v-row>
+            <v-card class="text-center">
+                <v-card-title class="font-bold p-10"> Create a category </v-card-title>
+                <div class="w-full flex px-10">
+                    <v-form v-model="valid" ref="form" class="flex flex-col w-full">
+
+                        <v-text-field v-model="category.name" :rules="[rules.required]" placeholder="Name" label="Name" />
+
+                        <v-text-field v-model.number="category.minWeight" :rules="[rules.required, rules.positiveValue]"
+                            placeholder="minimal weight requirement" label="Minimal weight" type="number" />
+
+                        <v-text-field v-model.number="category.maxWeight"
+                            :rules="[rules.required, rules.positiveValue, rules.higherThanMinimal]"
+                            placeholder="maximal weight" label="Maximal weight" type="number" />
+
                     </v-form>
-                </v-container>
+                </div>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
                         <v-btn color="primary" @click="dialog = false">Cancel</v-btn>

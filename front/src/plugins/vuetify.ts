@@ -30,10 +30,6 @@ export default createVuetify({
             variant: 'flat',
             rounded: 'xl'
         },
-        VTextField: {
-            // variant: 'outlined',
-            // density: 'compact'
-        },
         VMenu: {
             location: 'bottom'
         },

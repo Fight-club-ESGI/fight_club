@@ -77,7 +77,7 @@ const valid = ref<boolean>(false);
 
 const saveEvent = async () => {
     try {
-        const { ...payload } = event.value;
+        const { ticketEvents, ...payload } = event.value;
         await updateEvent(payload);
         dialog.value = false;
     } catch (error) {

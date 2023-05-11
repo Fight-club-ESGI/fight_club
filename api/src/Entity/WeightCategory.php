@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -23,7 +24,15 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => ['wallet:category:get']],
             denormalizationContext: ['groups' => []],
             security: "is_granted('ROLE_ADMIN')"
-        )
+        ),
+        new Patch(
+            inputFormats: [
+                'json' => ['application/json']
+            ],
+            normalizationContext: ["groups" => ['wallet:category:get']],
+            denormalizationContext: ["groups" => []],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
     ]
 )]
 class WeightCategory
