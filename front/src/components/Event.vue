@@ -1,6 +1,6 @@
 <template>
     <v-card @click="router.push({ name: eventNavigation, params: { id: event.id } })"
-        class="cursor-pointer w-92 h-92 relative bg-neutral-800 text-white">
+        class="cursor-pointer h-92 relative bg-neutral-800 text-white">
         <div class="absolute bg-white z-10 m-5 rounded-lg h-16 w-16 flex items-center">
             <div v-if="timeStart > new Date()" class="flex flex-col text-center mx-auto font-bold">
                 <p>
