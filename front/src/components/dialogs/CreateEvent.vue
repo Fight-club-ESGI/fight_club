@@ -20,7 +20,7 @@
                 <div class="w-full flex px-10">
                     <v-form class="flex flex-col w-full" v-model="valid" ref="form">
                         <div>
-                            <v-text-field type="file" label="Image"></v-text-field>
+                            <v-file-input type="file" accept="image/*" v-model="file" label="File input" @change="uploadFile" />
                             <v-text-field v-model="event.name" :rules="[rules.required]" placeholder="Name"
                                           label="Name" />
                             <v-text-field v-model="event.description" :rules="[rules.required]" type="text"
@@ -53,55 +53,82 @@
         </v-dialog>
     </div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, ref, computed, reactive } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { EventI } from '@/interfaces/payload';
 import Event from '@/components/Event.vue';
 import { useEventStore } from '@/stores/event';
 
-export default defineComponent({
-    components: {Event},
-    setup() {
-        const eventStore = useEventStore();
-        const { createEvent } = eventStore;
+const eventStore = useEventStore();
+const { createEvent } = eventStore;
 
-        const form = ref();
-        const dialog = ref<boolean>(false);
-        const valid = ref<boolean>(false);
+const form = ref();
+const dialog = ref<boolean>(false);
+const valid = ref<boolean>(false);
 
-        const event = reactive<EventI>({
-            name: '',
-            location: '',
-            description: '',
-            image: '',
-            capacity: 0,
-            category: null,
-            locationLink: '',
-            timeStart: '',
-            timeEnd: '',
-            fight: [],
-            vip: false,
-        });
+const file = ref();
+const image = ref();
 
-        const rules = {
-            required: (value: any) => !!value || 'Required.',
-            capacity: (value: any) => value > 0 || 'Capacity must be 1 or higher',
-        };
-
-        const submit = async () => {
-            try {
-                const { valid } = await form.value.validate();
-                if (valid) {
-                    await createEvent(event);
-                    dialog.value = false;
-                }
-            } catch (error: any) {
-                createToast(error, { position: 'bottom-right', type: 'danger' });
-            }
-        };
-
-        return { dialog, valid, rules, submit, form, event };
-    },
+const event = reactive<EventI>({
+    name: '',
+    location: '',
+    description: '',
+    image: '',
+    capacity: 0,
+    category: null,
+    locationLink: '',
+    timeStart: '',
+    timeEnd: '',
+    fight: [],
+    vip: false,
+    imageFile: null,
+    imageName: '',
+    imageSize: '',
 });
+
+const rules = {
+    required: (value: any) => !!value || 'Required.',
+    capacity: (value: any) => value > 0 || 'Capacity must be 1 or higher',
+};
+
+const submit = async () => {
+    try {
+        const { valid } = await form.value.validate();
+        if (valid) {
+            await createEvent(event);
+            dialog.value = false;
+        }
+    } catch (error: any) {
+        createToast(error, { position: 'bottom-right', type: 'danger' });
+    }
+};
+
+const generateURL = (file: File) => {
+    let fileSrc = URL.createObjectURL(file);
+    setTimeout(() => {
+        URL.revokeObjectURL(fileSrc);
+    }, 1000);
+    return fileSrc;
+}
+
+const uploadFile = async () => {
+    try {
+        console.log(file.value[0])
+        image.value = file.value[0];
+
+        console.log(image.value)
+        //uploaded_image.value = URL.createObjectURL(image.value);
+
+        const formData = new FormData();
+
+        if (image.value) formData.append("imageFile", image.value);
+
+        console.log(formData)
+
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 </script>
