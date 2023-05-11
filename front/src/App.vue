@@ -33,11 +33,11 @@ export default defineComponent({
 
 <template>
     <v-app app class="h-screen">
-        <HomeHeader v-if="!route.meta?.hideHeader" @toggleNavigationDrawer="display = !display"></HomeHeader>
+        <HomeHeader v-if="!route.meta?.hideHeader"></HomeHeader>
 
         <NavigationDrawer
             v-if="isConnected && route.name !== 'activate-status' && route.name !== 'login' && route.name !== 'signup' && route.name !== 'home'"
-            :display="display" />
+        />
         <!-- Do not put padding on the v-main because it will break the website -->
         <v-main class="h-full overflow-auto">
             <router-view />

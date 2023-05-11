@@ -38,7 +38,9 @@ export interface EventI {
     name: string;
     location: string;
     description: string;
-    image: string;
+    imageFile: File|null;
+    imageName: string;
+    imageSize: string;
     capacity: number;
     category: string;
     fights: FightI[];
