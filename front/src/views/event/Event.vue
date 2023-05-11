@@ -1,20 +1,16 @@
 <template>
     <div>
         <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
-        <div class="flex flex-wrap gap-4 mx-10">
+        <v-switch v-model="vipEvents" color="primary" label="VIP events" class="flex pl-4"></v-switch>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 px-4">
             <create-event v-if="isAdmin && route.path.includes('admin')" class="pb-4" />
-            <event
-                v-for="event in events"
-                :key="event.id"
-                :event="event"
-                :admin="isAdmin"
-            />
+            <event v-for="event in filteredVipEvents" :key="event.id" :event="event" :admin="isAdmin" />
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, computed } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '@/stores/event';
 import { useRoute } from 'vue-router';
@@ -24,16 +20,21 @@ import CreateEvent from '@/components/dialogs/CreateEvent.vue';
 
 const route = useRoute();
 const userStore = useUserStore();
-const { isVIP, isAdmin } = storeToRefs(userStore);
+const { isAdmin } = storeToRefs(userStore);
 const eventStore = useEventStore();
 const { getEvents } = eventStore;
 const { events } = storeToRefs(eventStore);
+const vipEvents = ref<boolean>(false)
 
 onMounted(async () => {
     try {
         await getEvents();
     } catch (error) { }
 });
+
+const filteredVipEvents = computed(() => {
+    return events.value.filter(e => vipEvents.value ? e.vip : e)
+})
 
 const breadcrumbs = [
     {

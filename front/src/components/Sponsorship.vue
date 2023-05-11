@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div class="px-10">
         <v-card>
             <v-container>
                 <v-row justify="center" class="pt-4">
@@ -15,13 +15,11 @@
                 </v-row>
             </v-container>
         </v-card>
-        <div class="pt-3">
-            <pending-request />
+        <div class="flex gap-x-4 pt-3">
+            <pending-request class="flex-1" />
+            <accepted-request class="flex-1" />
         </div>
-        <div class="pt-3">
-            <accepted-request />
-        </div>
-    </v-container>
+    </div>
 </template>
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';

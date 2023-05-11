@@ -62,10 +62,10 @@ onMounted(async () => {
             </v-tabs>
             <v-window v-model="tab">
                 <v-window-item value="one">
-                    <div class="bg-white rounded-lg pa-5">
+                    <div class="pa-5">
                         <create-tickets></create-tickets>
 
-                        <div class="flex gap-x-2 pa-2">
+                        <div class="flex gap-x-2 py-2">
                             <ticket-list class="w-1/2" @selected-item="($event) => item = $event"></ticket-list>
                             <ticket-event-editing :selectedItem="item" class="w-1/2"></ticket-event-editing>
                         </div>

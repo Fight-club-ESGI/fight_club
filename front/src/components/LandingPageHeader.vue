@@ -2,7 +2,7 @@
     <v-app-bar elevation="0" border flat>
         <div class="flex items-center align-middle bg-background fixed w-full text-white px-10 z-5000">
             <v-img @click="router.push({ name: 'home' })" class="cursor-pointer" height="36" width="36"
-                src="src/assets/gloves.png"></v-img>
+                :src="appLogo"></v-img>
             <div class="flex w-full pl-5">
                 <ul class="flex gap-x-4">
                     <li class="text-lightgray hover:text-primary/90 transition ease-in-out delay-150 hover:text-primary/80">
@@ -71,6 +71,7 @@
     </v-app-bar>
 </template>
 <script lang="ts" setup>
+import appLogo from '../assets/gloves.png';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
