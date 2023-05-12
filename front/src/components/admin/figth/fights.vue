@@ -3,10 +3,12 @@ import CreateFight from '@/components/dialogs/CreateFight.vue';
 import fight from './fight.vue';
 import { onMounted } from 'vue';
 import { useFightStore } from '@/stores/fight';
+import { useEventStore } from '@/stores/event';
 import { storeToRefs } from 'pinia';
 const fightStore = useFightStore();
 const { createFight, getFights } = fightStore;
-const { fights } = storeToRefs(fightStore);
+const eventStore = useEventStore();
+const { fights } = storeToRefs(eventStore);
 
 onMounted(async () => {
     try {

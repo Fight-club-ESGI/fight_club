@@ -61,6 +61,7 @@ class Fighter
         'admin:get',
         'admin:post',
         'fighter:get',
+        'events:get',
         'fighter:post'
     ])]
     private ?string $firstname = null;
