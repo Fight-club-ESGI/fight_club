@@ -33,7 +33,9 @@ class WalletDepositCheckout extends AbstractController
         );
 
         return new Response(
-             json_encode(["url" => $checkout_session->url]), 200, ["Content-Type" => "application/json"]
+            json_encode(["url" => $checkout_session->url]),
+            200,
+            ["Content-Type" => "application/json"]
         );
     }
 }
