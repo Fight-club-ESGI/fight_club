@@ -92,37 +92,31 @@ export default [
         path: '/bets',
         component: UserBetsHistory,
         name: 'user-bets-history',
-        meta: { requiresAuth: false, requiresAdmin: false },
+        meta: { requiresAuth: true, requiresAdmin: false },
     },
     {
         path: '/tickets',
         component: UserTicketsHistory,
         name: 'user-tickets-history',
-        meta: { requiresAuth: false, requiresAdmin: false },
+        meta: { requiresAuth: true, requiresAdmin: false },
     },
     {
         path: '/wallet',
         component: Wallet,
         name: 'user-wallet',
-        meta: { requiresAuth: false, requiresAdmin: false },
+        meta: { requiresAuth: true, requiresAdmin: false },
     },
     {
         path: '/cart',
         component: Cart,
         name: 'user-cart',
-        meta: { requiresAuth: false, requiresAdmin: false }
-    },
-    {
-        path: '/cart',
-        component: Cart,
-        name: 'user-cart',
-        meta: { requiresAuth: false, requiresAdmin: false }
+        meta: { requiresAuth: true, requiresAdmin: false }
     },
     {
         path: '/checkout/confirmation',
         name: 'checkout-confirmation',
         component: CheckoutConfirmation,
-        meta: { requiresAuth: false, requiresAdmin: false }
+        meta: { requiresAuth: true, requiresAdmin: false }
     },
     {
         path: '/fighters',
@@ -136,12 +130,12 @@ export default [
         name: 'fighter-details',
         meta: { requiresAuth: false, requiresAdmin: false },
     },
-    {
-        path: '/bets',
-        component: BetOnAFight,
-        name: 'bets',
-        meta: { requiresAuth: false, requiresAdmin: false },
-    },
+    // {
+    //     path: '/bets',
+    //     component: BetOnAFight,
+    //     name: 'bets',
+    //     meta: { requiresAuth: false, requiresAdmin: false },
+    // },
     {
         path: '/events',
         component: Event,
@@ -181,22 +175,16 @@ export default [
         ],
     },
     {
-        path: '/signup',
-        component: Signup,
-        name: 'signup',
-        meta: { requiresAuth: false, requiresAdmin: false },
-    },
-    {
         path: '/deposit',
         component: Deposit,
         name: 'deposit',
-        meta: { requiresAuth: false, requiresAdmin: false },
+        meta: { requiresAuth: true, requiresAdmin: false },
     },
     {
         path: '/ticketing',
         component: Ticketing,
         name: 'ticketing',
-        meta: { requiresAuth: false, requiresAdmin: false },
+        meta: { requiresAuth: true, requiresAdmin: false },
     },
     {
         path: '/failed-payment',

@@ -21,57 +21,51 @@
         </div>
     </div>
 </template>
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '../stores/user';
 import { useSponsorshipStore } from '../stores/sponsorship';
 import { createToast } from 'mosha-vue-toastify';
 import PendingRequest from '@/components/PendingRequest.vue';
 import AcceptedRequest from '@/components/AcceptedRequest.vue';
-export default defineComponent({
-    components: { PendingRequest, AcceptedRequest },
-    setup() {
-        const userStore = useUserStore();
-        const { getUsers } = userStore;
-        const { users, user } = storeToRefs(userStore);
 
-        const sponsorshipStore = useSponsorshipStore();
-        const { sendSponsoLink } = sponsorshipStore;
+const userStore = useUserStore();
+const { getUsers } = userStore;
+const { user } = storeToRefs(userStore);
 
-        const email = ref<string>('');
-        const valid = ref<boolean>();
-        const form = ref();
+const sponsorshipStore = useSponsorshipStore();
+const { sendSponsoLink } = sponsorshipStore;
 
-        const rules = {
-            email: [(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid'],
-        };
+const email = ref<string>('');
+const valid = ref<boolean>();
+const form = ref();
 
-        onMounted(async () => {
-            try {
-                await getUsers();
-            } catch (error) { }
-        });
+const rules = {
+    email: [(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid'],
+};
 
-        const submit = async (event: any) => {
-            const { valid } = await form.value.validate();
-            if (valid) {
-                try {
-                    const payload = {
-                        sponsorId: user.value.id,
-                        sponsoredEmail: email.value,
-                    };
-                    await sendSponsoLink(payload);
-                } catch {
-                    createToast('Error while sending sponsorship link', { type: 'danger', position: 'bottom-right' });
-                }
-                email.value = '';
-                event.target.blur();
-                form.value.reset();
-            }
-        };
-
-        return { email, submit, valid, rules, form, users };
-    },
+onMounted(async () => {
+    try {
+        await getUsers();
+    } catch (error) { }
 });
+
+const submit = async (event: any) => {
+    const { valid } = await form.value.validate();
+    if (valid) {
+        try {
+            const payload = {
+                sponsorId: user.value.id,
+                sponsoredEmail: email.value,
+            };
+            await sendSponsoLink(payload);
+        } catch {
+            createToast('Error while sending sponsorship link', { type: 'danger', position: 'bottom-right' });
+        }
+        email.value = '';
+        event.target.blur();
+        form.value.reset();
+    }
+};
 </script>

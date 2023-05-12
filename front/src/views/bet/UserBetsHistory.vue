@@ -1,8 +1,6 @@
 <template>
     <div class="flex flex-col h-full">
-        <div class="h-1/12 p-4 font-bold text-2xl">
-            <v-breadcrumbs :items="items"></v-breadcrumbs>
-        </div>
+        <v-breadcrumbs :items="items"></v-breadcrumbs>
         <div class="h-11/12">
             <v-tabs v-model="tab" color="secondary" align-tabs="center">
                 <v-tab value="all" class="normal-case">All</v-tab>
