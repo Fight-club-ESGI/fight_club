@@ -15,17 +15,12 @@
                     </li>
                 </ul>
                 <v-spacer />
-                <v-list v-if="!isConnected" class="flex bg-transparent text-white">
+                <v-list v-if="!isConnected" class="flex bg-transparent text-lightgray">
                     <v-list-item @click="router.push({ name: 'login' })">Sign In</v-list-item>
-                    <v-list-item @click="router.push({ name: 'signup' })">Register</v-list-item>
+                    <v-list-item @click="router.push({ name: 'register' })">Register</v-list-item>
                 </v-list>
                 <v-list v-else class="flex items-center bg-transparent">
                     <!-- <v-list-item @click="router.push({ name: 'user-profile' })">Access to my Platform</v-list-item> -->
-                    <v-badge color="red" :content="0">
-                        <v-btn color="primary" variant="text" @click="router.push({ name: 'user-cart' })">
-                            <v-icon color="lightgray">mdi-cart</v-icon>
-                        </v-btn>
-                    </v-badge>
                     <v-menu open-on-hover v-if="isAdmin">
                         <template v-slot:activator="{ props }">
                             <v-btn color="primary" v-bind="props">
@@ -49,7 +44,7 @@
                     <v-menu open-on-hover>
                         <template v-slot:activator="{ props }">
                             <v-btn color="primary" v-bind="props" class="">
-                                Profile
+                                {{ user.email }}
                             </v-btn>
                         </template>
 
@@ -66,6 +61,10 @@
                         </div>
                     </v-menu>
                 </v-list>
+                <v-badge v-if="isConnected" color="secondary" :content="cartTotalItems" offset-y="10"
+                    class="flex items-center">
+                    <v-btn color="lightgray" variant="text" icon="mdi-cart" @click="router.push({ name: 'user-cart' })" />
+                </v-badge>
             </div>
         </div>
     </v-app-bar>
@@ -77,11 +76,14 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { Icon } from '@iconify/vue';
+import { useCartStore } from '@/stores/cart';
 
 const router = useRouter();
 
+const cartStore = useCartStore();
+const { cartTotalItems } = storeToRefs(cartStore)
 const userStore = useUserStore();
-const { isConnected, isAdmin } = storeToRefs(userStore);
+const { isConnected, isAdmin, user } = storeToRefs(userStore);
 const { logout } = userStore;
 
 const userMenu = [
@@ -98,7 +100,7 @@ const userMenu = [
     {
         value: 'Bets',
         icon: 'material-symbols:check-box',
-        to: 'bets'
+        to: 'user-bets-history'
     },
     {
         value: 'Tickets',

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
@@ -6,22 +6,19 @@ import AdminView from '@/views/admin/AdminView.vue';
 import imageUrl from '@/assets/boxing.jpg';
 import EventSlider from "@/components/home/EventSlider.vue";
 import HomeFooter from "@/components/HomeFooter.vue";
+import { useRouter } from 'vue-router';
 
-export default defineComponent({
-    components: { HomeFooter, EventSlider, AdminView },
-    setup() {
-        const userStore = useUserStore();
-        const { isAdmin } = storeToRefs(userStore);
-        const carouselModel = ref(null);
-        const categoryCarouselModel = ref(null);
+const router = useRouter();
+const userStore = useUserStore();
+const { isAdmin } = storeToRefs(userStore);
+const carouselModel = ref(null);
+const categoryCarouselModel = ref(null);
 
-        return { isAdmin, imageUrl, carouselModel, categoryCarouselModel };
-    },
-});
+
 </script>
 
 <template>
-    <div class="bg-neutral-800 text-white">
+    <div class="bg-background text-lightgray">
         <div class="h-screen pb-20">
             <div class="flex-column px-80 py-14">
                 <p class="text-7xl font-extrabold text-center my-6">
@@ -32,7 +29,7 @@ export default defineComponent({
                 <p class="text-xl mx-auto text-center w-2/3">Thunderous Knockout is a platform that provides fight event
                     tickets from world-famous fighters for you. Come on, get your tickets now before they run out.</p>
                 <div class="mx-auto w-1/6 py-10">
-                    <v-btn block>Get tickets</v-btn>
+                    <v-btn @click="router.push({ name: 'events' })" variant="tonal" block>events</v-btn>
                 </div>
             </div>
 
