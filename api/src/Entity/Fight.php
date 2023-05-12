@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Controller\Fight\FightChooseWinner;
 use App\Controller\Fight\FightValidation;
-use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightRepository;
@@ -25,7 +24,12 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new Post(
-            security: "is_granted('ROLE_ADMIN')"
+            uriTemplate: '/fights',
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: "admin only",
+            normalizationContext: ['groups' => ['fights:get']],
+            denormalizationContext: ['groups' => ['fights:post']],
+            name: 'fights',
         ),
         new Post(
             uriTemplate: "/fights/{fight}/validation",
@@ -125,26 +129,35 @@ class Fight
     ])]
     private ?bool $winnerValidation = false;
 
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column]
     #[Groups([
+        'fights:get',
+        'fights:post',
         'admin:get',
+        'admin:post'
     ])]
     #[MaxDepth(1)]
-    private ?number $ratingFighterA;
+    private ?float $ratingFighterA = 0;
 
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column]
     #[Groups([
+        'fights:get',
+        'fights:post',
         'admin:get',
+        'admin:post'
     ])]
     #[MaxDepth(1)]
-    private ?number $ratingFighterB;
+    private ?float $ratingFighterB = 0;
 
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column]
     #[Groups([
+        'fights:get',
+        'fights:post',
         'admin:get',
+        'admin:post'
     ])]
     #[MaxDepth(1)]
-    private ?number $ratingNullMatch;
+    private ?float $ratingNullMatch = 0;
 
     #[ORM\ManyToOne]
     #[Groups([
@@ -252,36 +265,36 @@ class Fight
         return $this;
     }
 
-    public function getRatingFighterA(): ?User
+    public function getRatingFighterA(): ?float
     {
         return $this->ratingFighterA;
     }
 
-    public function setRatingFighterA(?User $ratingFighterA): self
+    public function setRatingFighterA(?float $ratingFighterA): self
     {
         $this->ratingFighterA = $ratingFighterA;
 
         return $this;
     }
 
-    public function getRatingFighterB(): ?User
+    public function getRatingFighterB(): ?float
     {
         return $this->ratingFighterB;
     }
 
-    public function setRatingFighterB(?User $ratingFighterB): self
+    public function setRatingFighterB(?float $ratingFighterB): self
     {
         $this->ratingFighterB = $ratingFighterB;
 
         return $this;
     }
 
-    public function getRatingNullMatch(): ?User
+    public function getRatingNullMatch(): ?float
     {
         return $this->ratingNullMatch;
     }
 
-    public function setRatingNullMatch(?User $ratingNullMatch): self
+    public function setRatingNullMatch(?float $ratingNullMatch): self
     {
         $this->ratingNullMatch = $ratingNullMatch;
 
