@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Controller\Fight\FightChooseWinner;
 use App\Controller\Fight\FightValidation;
@@ -74,6 +75,7 @@ class Fight
         'fights:get',
         'admin:get',
         'admin:post',
+        'fights:get'
     ])]
     #[MaxDepth(1)]
     private ?Event $event = null;
@@ -122,6 +124,27 @@ class Fight
         'admin:get'
     ])]
     private ?bool $winnerValidation = false;
+
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+    ])]
+    #[MaxDepth(1)]
+    private ?number $ratingFighterA;
+
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+    ])]
+    #[MaxDepth(1)]
+    private ?number $ratingFighterB;
+
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'admin:get',
+    ])]
+    #[MaxDepth(1)]
+    private ?number $ratingNullMatch;
 
     #[ORM\ManyToOne]
     #[Groups([
@@ -225,6 +248,42 @@ class Fight
     public function setWinnerValidation(bool $winnerValidation): self
     {
         $this->winnerValidation = $winnerValidation;
+
+        return $this;
+    }
+
+    public function getRatingFighterA(): ?User
+    {
+        return $this->ratingFighterA;
+    }
+
+    public function setRatingFighterA(?User $ratingFighterA): self
+    {
+        $this->ratingFighterA = $ratingFighterA;
+
+        return $this;
+    }
+
+    public function getRatingFighterB(): ?User
+    {
+        return $this->ratingFighterB;
+    }
+
+    public function setRatingFighterB(?User $ratingFighterB): self
+    {
+        $this->ratingFighterB = $ratingFighterB;
+
+        return $this;
+    }
+
+    public function getRatingNullMatch(): ?User
+    {
+        return $this->ratingNullMatch;
+    }
+
+    public function setRatingNullMatch(?User $ratingNullMatch): self
+    {
+        $this->ratingNullMatch = $ratingNullMatch;
 
         return $this;
     }

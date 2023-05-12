@@ -15,7 +15,7 @@
                     </v-dialog>
                 </div>
                 <div v-else>
-                    <CurrentBetPreview class="mt-4 fixed top-18 right-18 w-110 h-8/10 overflow-y-auto" />
+                    <CurrentBetPreview class="mt-4 fixed top-18 right-18 w-110 max-h-8/10 overflow-y-auto" />
                 </div>
             </v-col>
         </v-row>
@@ -23,9 +23,22 @@
 </template>
 
 <script setup lang="ts">
-import fights from '@/mocks/fights.json';
+// import fights from '@/mocks/fights.json';
 import BetOnAFightCard from '@/components/bets/BetOnFightCard.vue';
 import CurrentBetPreview from '@/components/bets/CurrentBetPreview.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useFightStore } from '@/stores/fight';
+import { storeToRefs } from 'pinia';
+
+const fightStore = useFightStore();
+const { fights } = storeToRefs(fightStore);
+const { getFights } = fightStore;
+
+onMounted(async () => {
+    try {
+        await getFights();
+    } catch (error) {}
+});
+
 const showCurrentBetPreview = ref<boolean>(false);
 </script>

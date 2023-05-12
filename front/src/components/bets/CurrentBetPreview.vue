@@ -1,49 +1,45 @@
 <template>
     <v-card class="ma-0 pa-0" color="white">
-        <v-row no-gutters justify="center">
-            <v-row no-gutters justify="space-between" class="z-10 bg-white sticky top-0">
-                <v-col cols="auto">
-                    <p class="pa-4">My bet ({{ currentBet.bets.length }} selected)</p>
-                    <p class="px-4 pb-1" v-if="currentBet.bets.length === 1">Simple bet</p>
-                    <p class="px-4 pb-1" v-else-if="currentBet.bets.length > 1">Combined bet</p>
-                </v-col>
-                <v-col cols="auto">
-                    <v-icon class="ma-4" v-if="currentBet.bets.length > 0" @click="betStore.$resetCurrentBet">mdi-delete</v-icon>
-                </v-col>
-                <v-divider></v-divider>
-            </v-row>
-            <v-col cols="12">
-                <div v-if="currentBet">
-                    <div v-for="bet in currentBet.bets.sort((a, b) => a.id - b.id)" class="custom-div">
-                        <v-row no-gutters justify="space-between">
-                            <v-col cols="10">
-                                <p class="font-weight-bold">
-                                    {{ constructFullName(bet.fighterA?.firstname, bet.fighterA?.lastname) }} -
-                                    {{ constructFullName(bet.fighterB?.firstname, bet.fighterB?.lastname) }}
-                                </p>
-                            </v-col>
-                            <v-col cols="auto">
-                                <v-icon @click="removeToCurrentBetStore(bet.id, currentBet)">mdi-close</v-icon>
-                            </v-col>
-                        </v-row>
-
-                        <p>Result of the fight :</p>
-                        <p class="font-weight-bold">{{ bet.expectedWinner }}</p>
-                        <v-row no-gutters justify="space-between">
-                            <v-col cols="2">
-                                <p>Rating</p>
-                                <p class="font-weight-bold text-xl">{{ formatNumber(bet.rating) }}</p>
-                            </v-col>
-                        </v-row>
-                    </div>
-                </div>
-                <v-row v-else style="height: 300px" align="center" no-gutters>
-                    <v-col cols="12">
-                        <div class="text-center">
-                            <p class="font-weight-bold">Add your first bet !</p>
-                        </div>
+        <v-row no-gutters justify="space-between" class="z-10 bg-white sticky top-0">
+            <v-col cols="auto">
+                <p class="pa-4">My bet ({{ currentBet.bets.length }} selected)</p>
+                <p class="px-4 pb-1" v-if="currentBet.bets.length === 1">Simple bet</p>
+                <p class="px-4 pb-1" v-else-if="currentBet.bets.length > 1">Combined bet</p>
+            </v-col>
+            <v-col cols="auto">
+                <v-icon class="ma-4" v-if="currentBet.bets.length > 0" @click="betStore.$resetCurrentBet">mdi-delete</v-icon>
+            </v-col>
+            <v-divider></v-divider>
+        </v-row>
+        <div v-if="currentBet">
+            <div v-for="bet in currentBet.bets.sort((a, b) => a.id - b.id)" class="custom-div">
+                <v-row no-gutters justify="space-between">
+                    <v-col cols="10">
+                        <p class="font-weight-bold">
+                            {{ constructFullName(bet.fighterA?.firstname, bet.fighterA?.lastname) }} -
+                            {{ constructFullName(bet.fighterB?.firstname, bet.fighterB?.lastname) }}
+                        </p>
+                    </v-col>
+                    <v-col cols="auto">
+                        <v-icon @click="removeToCurrentBetStore(bet.id, currentBet)">mdi-close</v-icon>
                     </v-col>
                 </v-row>
+
+                <p>Result of the fight :</p>
+                <p class="font-weight-bold">{{ bet.expectedWinner }}</p>
+                <v-row no-gutters justify="space-between">
+                    <v-col cols="2">
+                        <p>Rating</p>
+                        <p class="font-weight-bold text-xl">{{ formatNumber(bet.rating) }}</p>
+                    </v-col>
+                </v-row>
+            </div>
+        </div>
+        <v-row v-else style="height: 300px" align="center" no-gutters>
+            <v-col cols="12">
+                <div class="text-center">
+                    <p class="font-weight-bold">Add your first bet !</p>
+                </div>
             </v-col>
         </v-row>
         <div class="z-10 bg-white sticky bottom-0">
