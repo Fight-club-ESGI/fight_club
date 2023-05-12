@@ -11,6 +11,10 @@ const props = defineProps({
     fight: {
         type: Object as PropType<IFight>,
         required: true
+    },
+    readOnly: {
+        type: Boolean as PropType<boolean>,
+        required: true
     }
 });
 
@@ -54,8 +58,9 @@ const remove = async (id: string) => {
             <div>
 
                 <v-card-actions>
-                    <update-fight :fight-id="props.fight.id"></update-fight>
-                    <v-btn @click="remove(fight.id)" color="primary" variant="tonal" class="elevation-2 flex-1">
+                    <update-fight :fight-id="props.fight.id" :disabled="readOnly"></update-fight>
+                    <v-btn @click="remove(fight.id)" :disabled="readOnly" color="primary" variant="tonal"
+                        class="elevation-2 flex-1">
                         <Icon icon="material-symbols:delete-rounded" height="1rem" />
                     </v-btn>
                 </v-card-actions>

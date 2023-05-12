@@ -1,13 +1,17 @@
 <script lang="ts" setup>
 import { ITicketEvent } from '@/interfaces/event';
+import { useEventStore } from '@/stores/event';
 import { useTicketStore } from '@/stores/tickets';
 import { storeToRefs } from 'pinia';
 import { watch, Ref, ref, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 const ticketStore = useTicketStore();
-const { ticketsEvent } = storeToRefs(ticketStore)
+const { ticketsEvent } = storeToRefs(ticketStore);
+const eventStore = useEventStore();
+const { event } = storeToRefs(eventStore);
 const { updateTicketEvent } = ticketStore;
 const route = useRoute();
+
 const props = defineProps({
     selectedItem: Object
 });
@@ -47,7 +51,8 @@ const save = async () => {
         <v-btn variant="outlined" color="primary" @click="save">Save</v-btn>
     </div>
     <div v-else>
-        <v-alert :text="ticketsEvent.length > 0 ? 'Select a type of ticket to edit it' : 'Create a ticket category'"
+        <v-alert v-if="event && new Date(event.timeStart) > new Date()"
+            :text="ticketsEvent.length > 0 ? 'Select a type of ticket to edit it' : 'Create a ticket category'"
             variant="outlined"></v-alert>
     </div>
 </template>

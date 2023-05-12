@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useTicketStore } from '@/stores/tickets';
+import { PropType } from 'vue';
 const ticketStore = useTicketStore()
 const { ticketsEvent } = storeToRefs(ticketStore);
 const emit = defineEmits(['selectedItem']);
+const props = defineProps({
+    readOnly: {
+        type: Boolean as PropType<boolean>
+    }
+});
+
 const ticketCategoryColor = (name: string) => {
 
     const colors = {
@@ -20,8 +27,8 @@ const ticketCategoryColor = (name: string) => {
 </script>
 
 <template>
-    <v-list v-if="ticketsEvent.length > 0" density="compact" :lines="false" class="max-h-96 overflow-auto"
-        @click:select="emit('selectedItem', $event)">
+    <v-list v-if="ticketsEvent.length > 0" density="compact" :disabled="readOnly" :lines="false"
+        class="max-h-96 overflow-auto" @click:select="readOnly ? '' : emit('selectedItem', $event)">
         <v-list-item v-for="ticketEvent of ticketsEvent" :value="ticketEvent">
 
             <template v-slot:append>
