@@ -62,11 +62,14 @@ onMounted(async () => {
             </v-tabs>
             <v-window v-model="tab">
                 <v-window-item value="one">
-                    <div class="pa-5">
-                        <create-tickets></create-tickets>
-
+                    <div v-if="event" class="pa-5">
+                        <create-tickets v-if="new Date(event.timeStart) > new Date()"></create-tickets>
+                        <div v-else class="text-lightgray font-bold">
+                            <i>The start date of the event has passed, tickets are in readonly mode</i>
+                        </div>
                         <div class="flex gap-x-2 py-2">
-                            <ticket-list class="w-1/2" @selected-item="($event) => item = $event"></ticket-list>
+                            <ticket-list class="w-1/2" @selected-item="($event) => item = $event"
+                                :readOnly="!(new Date(event.timeStart) > new Date())"></ticket-list>
                             <ticket-event-editing :selectedItem="item" class="w-1/2"></ticket-event-editing>
                         </div>
                     </div>
