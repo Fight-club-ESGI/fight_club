@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => ['tickets:get', 'additional:get', 'events:get']],
         ),
         new Get(
-            normalizationContext: ['groups' => ['events:get']],
+            normalizationContext: ['groups' => ['events:get', 'fights:get', 'fighter:get']],
         ),
         new Get(
             uriTemplate: 'events/{id}/ticket_event',
@@ -159,6 +159,7 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
     #[Groups([
         'admin:get',
+        'events:get'
     ])]
     private Collection $fights;
 

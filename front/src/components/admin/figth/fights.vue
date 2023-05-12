@@ -7,9 +7,8 @@ import { useEventStore } from '@/stores/event';
 import { storeToRefs } from 'pinia';
 const fightStore = useFightStore();
 const { createFight, getFights } = fightStore;
-const { fights } = storeToRefs(fightStore);
 const eventStore = useEventStore();
-const { event } = storeToRefs(eventStore);
+const { fights, event } = storeToRefs(eventStore);
 
 onMounted(async () => {
     try {
