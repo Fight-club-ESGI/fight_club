@@ -91,6 +91,7 @@ class CheckoutService
         }
     }
 
+<<<<<<< HEAD
     public function refund(WalletTransaction $walletTransaction, $amount): void
     {
         $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
@@ -101,6 +102,8 @@ class CheckoutService
         $this->entityManager->flush();
     }
 
+=======
+>>>>>>> 74d71ed (Timeout cart)
     public function orderConfirmation(WalletTransaction $walletTransaction): void
     {
         if ($walletTransaction->getStripeRef() !== null) {
