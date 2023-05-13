@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "vitest",
-    "coverage": "vitest run --coverage",
+    "test": "playwright test --project=chromium",
+    "test-html-report": "playwright test --browser=all --reporter=html",
+    "test-json-report": "PLAYWRIGHT_JSON_OUTPUT_NAME=results.json playwright test --browser=chromium --reporter=json",
     "dev": "vite --port 5173 --strictPort --host",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
