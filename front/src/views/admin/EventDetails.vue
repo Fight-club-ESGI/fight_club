@@ -55,7 +55,6 @@ onMounted(async () => {
             <v-tabs v-model="tab" align-tabs="center">
                 <v-tab value="one" color="primary">Ticket event</v-tab>
                 <v-tab value="two" color="primary">
-                    <v-icon>mdi-lock-outline</v-icon>
                     Fights
                 </v-tab>
 

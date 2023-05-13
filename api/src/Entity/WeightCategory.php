@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
                 'json' => ['application/json']
             ],
             normalizationContext: ["groups" => ['wallet:category:get']],
-            denormalizationContext: ["groups" => []],
+            denormalizationContext: ["groups" => ['wallet:category:patch']],
             security: "is_granted('ROLE_ADMIN')"
         ),
     ]
@@ -44,7 +44,8 @@ class WeightCategory
     #[Groups([
         'admin:get',
         'admin:post',
-        'wallet:category:get'
+        'wallet:category:get',
+        'wallet:category:patch'
     ])]
     private ?int $minWeight = null;
 
@@ -52,7 +53,8 @@ class WeightCategory
     #[Groups([
         'admin:get',
         'admin:post',
-        'wallet:category:get'
+        'wallet:category:get',
+        'wallet:category:patch'
     ])]
     private ?int $maxWeight = null;
 
@@ -60,7 +62,8 @@ class WeightCategory
     #[Groups([
         'admin:get',
         'admin:post',
-        'wallet:category:get'
+        'wallet:category:get',
+        'wallet:category:patch'
     ])]
     private ?string $name = null;
 
@@ -69,7 +72,8 @@ class WeightCategory
     #[Groups([
         'admin:get',
         'admin:post',
-        'wallet:category:get'
+        'wallet:category:get',
+        'wallet:category:patch'
     ])]
     #[MaxDepth(1)]
     private ?FightCategory $fightCategory = null;

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { ticketService } from "../service/api/index";
 import { ITicket, ITicketCategory, ICreateTicket, ICreateTicketEvent } from "@/interfaces/ticket";
-import { ITicketEvent } from "@/interfaces/event";
+import { ITicketEvent, UpdateTicketEvent } from "@/interfaces/event";
 
 export const useTicketStore = defineStore('ticket', () => {
 
@@ -58,9 +58,12 @@ export const useTicketStore = defineStore('ticket', () => {
         }
     }
 
-    async function updateTicketEvent(payload: ITicketEvent) {
+    async function updateTicketEvent(payload: UpdateTicketEvent): Promise<ITicketEvent> {
         try {
             const res = await ticketService._updateTicketEvent(payload);
+            const eventId = payload.event.split('/')[2]
+            await getTicketsEvent(eventId)
+            return res;
         } catch (err) {
             throw err;
         }

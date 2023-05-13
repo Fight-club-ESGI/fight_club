@@ -29,6 +29,14 @@ export interface ITicketEvent {
     tickets: ITicket[]
 }
 
+export interface UpdateTicketEvent {
+    event: string
+    ticketCategory: string
+    price: number
+    maxQuantity: number
+    id: string
+}
+
 export interface CreateEvent {
     name: string
     location: string

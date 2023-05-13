@@ -4,7 +4,9 @@ import { useTicketStore } from '@/stores/tickets';
 import { PropType } from 'vue';
 const ticketStore = useTicketStore()
 const { ticketsEvent } = storeToRefs(ticketStore);
+
 const emit = defineEmits(['selectedItem']);
+
 const props = defineProps({
     readOnly: {
         type: Boolean as PropType<boolean>
@@ -13,7 +15,7 @@ const props = defineProps({
 
 const ticketCategoryColor = (name: string) => {
 
-    const colors = {
+    const colors: { [key: string]: string } = {
         "GOLD": "amber-darken-3",
         "SILVER": "blue-grey-lighten-1",
         "VIP": "light-blue-darken-2",
