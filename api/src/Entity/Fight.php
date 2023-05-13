@@ -38,8 +38,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             inputFormats: [
                 'json' => ['application/json']
             ],
-            normalizationContext: ["groups" => ['fights:get']],
-            denormalizationContext: ["groups" => ['fights:post']],
+            normalizationContext: ["groups" => ['fights:get', 'fighter:get']],
+            denormalizationContext: ["groups" => ['fights:post', 'fighter:patch']],
             security: "is_granted('ROLE_ADMIN')"
         ),
         new Post(
@@ -84,6 +84,8 @@ class Fight
         'fights:get',
         'admin:get',
         'admin:post',
+        'fighter:get',
+        'fighter:patch'
     ])]
     #[MaxDepth(1)]
     private ?Fighter $fighterA = null;
@@ -94,6 +96,8 @@ class Fight
         'fights:get',
         'admin:get',
         'admin:post',
+        'fighter:get',
+        'fighter:patch'
     ])]
     #[MaxDepth(1)]
     private ?Fighter $fighterB = null;

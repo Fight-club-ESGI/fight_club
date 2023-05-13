@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ITicketEvent } from '@/interfaces/event';
+import { ITicketEvent, UpdateTicketEvent } from '@/interfaces/event';
 import { useEventStore } from '@/stores/event';
 import { useTicketStore } from '@/stores/tickets';
 import { storeToRefs } from 'pinia';
@@ -17,21 +17,25 @@ const props = defineProps({
 });
 
 const tickets = ref(0);
+const ticketsPrice = ref(0);
+
 const { selectedItem } = toRefs(props);
 
 watch(() => selectedItem, () => {
     tickets.value = selectedItem?.value?.id.maxQuantity;
+    ticketsPrice.value = selectedItem?.value?.id.price;
 }, { deep: true, immediate: true });
 
 
 const save = async () => {
     try {
         if (selectedItem?.value) {
-            const payload = {
+            const payload: UpdateTicketEvent = {
                 id: selectedItem.value.id.id,
                 maxQuantity: Number(tickets.value),
                 event: '/events/' + route.params.id?.toString(),
-                ticketCategory: '/ticket_categories/' + selectedItem.value.id.ticketCategory.id
+                ticketCategory: '/ticket_categories/' + selectedItem.value.id.ticketCategory.id,
+                price: ticketsPrice.value
             }
 
             await updateTicketEvent(payload);
@@ -44,11 +48,15 @@ const save = async () => {
 
 <template>
     <div v-if="props.selectedItem">
-        <div>
+        <div class="flex gap-x-4">
             <v-text-field type="number" variant="outlined" :min="props.selectedItem.id.maxQuantity"
-                label="Number of tickets" v-model="tickets" />
+                label="Number of tickets" v-model="tickets" density="compact" />
+            <v-text-field type="number" variant="outlined" label="Price" density="compact" v-model.number="ticketsPrice"
+                append-inner-icon="mdi-euro" />
         </div>
-        <v-btn variant="outlined" color="primary" @click="save">Save</v-btn>
+        <div class="flex justify-end">
+            <v-btn variant="text" color="primary" @click="save">Save</v-btn>
+        </div>
     </div>
     <div v-else>
         <v-alert v-if="event && new Date(event.timeStart) > new Date()"

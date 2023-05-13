@@ -1,5 +1,5 @@
 import { client } from "../index";
-import { ITicketEvent } from "@/interfaces/event";
+import { ITicketEvent, UpdateTicketEvent } from "@/interfaces/event";
 import { ICreateTicket, ITicket, ICreateTicketCategory, ITicketCategory, ICreateTicketEvent } from "@/interfaces/ticket";
 const ticketNamespace = '/tickets';
 const ticketCategoryNamespace = '/ticket_categories';
@@ -67,7 +67,7 @@ class Ticket {
         }
     }
 
-    async _updateTicketEvent(payload: ITicketEvent) {
+    async _updateTicketEvent(payload: UpdateTicketEvent) {
         try {
             const uri = `${ticketEventNamespace}/${payload.id}`;
             const res = await client.patch(uri, payload);

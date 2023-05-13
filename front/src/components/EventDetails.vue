@@ -11,7 +11,7 @@
                 <div><i>{{ event.location }}</i></div>
                 <div class="">
                     {{
-                        new Date(event.timeEnd).toLocaleString('en-GB', {
+                        new Date(event.timeStart).toLocaleString('en-GB', {
                             year: 'numeric',
                             month: 'long',
                             day: '2-digit',

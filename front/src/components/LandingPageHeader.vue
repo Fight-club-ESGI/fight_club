@@ -23,8 +23,8 @@
                     <!-- <v-list-item @click="router.push({ name: 'user-profile' })">Access to my Platform</v-list-item> -->
                     <v-menu open-on-hover v-if="isAdmin">
                         <template v-slot:activator="{ props }">
-                            <v-btn color="primary" v-bind="props">
-                                Admin
+                            <v-btn color="amber-lighten-1" v-bind="props" icon="mdi-shield" variant="text">
+                                <Icon icon="eos-icons:admin-outlined" class="text-2xl text-amber-500" />
                             </v-btn>
                         </template>
 
@@ -33,9 +33,6 @@
                                 <li v-for="item in adminMenu" @click="router.push({ name: item.to })"
                                     class="p-2 flex items-center hover:bg-slate-100 gap-x-2">
                                     <Icon :icon="item.icon" /> {{ item.value }}
-                                </li>
-                                <li @click="logout()" class="p-2 flex items-center hover:bg-slate-100 gap-x-2">
-                                    <Icon icon="material-symbols:logout" />Logout
                                 </li>
                             </ul>
                         </div>
@@ -110,11 +107,6 @@ const userMenu = [
 ];
 
 const adminMenu = [
-    {
-        value: 'Account',
-        icon: 'mdi:user',
-        to: 'user-profile',
-    },
     {
         value: 'Events',
         icon: 'mdi-calendar',

@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" class="w-2/3">
         <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" color="primary" variant="tonal" :disabled="disabled" class="elevation-2 flex-1">
+            <v-btn v-bind="props" color="secondary" variant="tonal" :disabled="disabled" class="elevation-2 flex-1">
                 <Icon icon="material-symbols:edit" height="1rem" />
             </v-btn>
         </template>
