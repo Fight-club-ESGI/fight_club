@@ -12,7 +12,7 @@
 
             <v-card class="text-center">
                 <v-card-title class="font-bold p-10">
-                    Register an event {{event.imageFile}}
+                    Register an event {{ event.imageFile }}
                 </v-card-title>
                 <div class="w-full flex px-10">
                     <v-form class="flex flex-col w-full" v-model="valid" ref="form">
