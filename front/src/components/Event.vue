@@ -19,7 +19,7 @@
                 <Icon height="30" class="text-yellow-300" icon="game-icons:cut-diamond" />
             </div>
         </div>
-        <div style="background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')"
+        <div :style="event.imageName ? `background-image: url('${event.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
             class="h-1/2 bg-cover bg-center">
             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
         </div>

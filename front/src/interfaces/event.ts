@@ -41,14 +41,13 @@ export interface CreateEvent {
     name: string
     location: string
     description: string
-    image: string
     capacity: number
     vip: boolean
     category: string
     locationLink: string
     timeStart: string
     timeEnd: string
-    imageFile: File | null
+    imageFile: Blob | string
     imageName: string
     imageSize: string
 }

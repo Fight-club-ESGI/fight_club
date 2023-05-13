@@ -12,15 +12,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 trait VichUploadTrait
 {
     #[Vich\UploadableField(mapping: "images", fileNameProperty: "imageName", size: "imageSize")]
-    #[Groups(['additional:post'])]
+    #[Groups(['additional:post', 'additional:patch'])]
     private ?File $imageFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['additional:get'])]
     private ?string $imageName = null;
 
-    #[Groups(['additional:get'])]
     #[ORM\Column(type: TYPES::INTEGER, nullable: true)]
+    #[Groups(['additional:get'])]
     private ?int $imageSize = null;
 
     /**
@@ -56,7 +56,7 @@ trait VichUploadTrait
      */
     public function getImageName(): ?string
     {
-        return $this->imageName;
+        return $this->imageName ? $_ENV['SERVER_URL'].'/uploads/images/'.$this->imageName : null;
     }
 
     /**

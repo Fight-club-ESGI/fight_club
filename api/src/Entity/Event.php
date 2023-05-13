@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\Event\CreateEvent;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -19,12 +20,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ApiResource(
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['tickets:get', 'additional:get', 'events:get']],
+            normalizationContext: ['groups' => ['tickets:get', 'events:get']],
         ),
         new Get(
             normalizationContext: ['groups' => ['events:get', 'fights:get', 'fighter:get']],
@@ -36,9 +38,10 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             name: 'event_tickets'
         ),
         new Post(
+            controller: CreateEvent::class,
             normalizationContext: ['groups' => ['tickets:get']],
             denormalizationContext: ['groups' => ['tickets:post']],
-            security: 'is_granted("ROLE_ADMIN")',
+            deserialize: false
         ),
         new Delete(),
         new Patch(
@@ -50,6 +53,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         )
     ]
 )]
+#[Vich\Uploadable]
 class Event
 {
     use EntityIdTrait;
@@ -270,7 +274,7 @@ class Event
         return $this->capacity;
     }
 
-    public function setCapacity(?int $capacity): self
+    public function setCapacity(null|int|string $capacity): self
     {
         $this->capacity = $capacity;
 
