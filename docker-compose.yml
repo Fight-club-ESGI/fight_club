@@ -68,7 +68,6 @@ services:
     env_file: 
       - ./front/.env
     restart: always
-    user: "node"
     stdin_open: true
     tty: true
     ports:
