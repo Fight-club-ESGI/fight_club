@@ -238,7 +238,7 @@ class TicketEvent
 
     public function setIsActive(bool $isActive)
     {
-        $this->setIsActive = $isActive;
+        $this->isActive = $isActive;
         return $this;
     }
 
