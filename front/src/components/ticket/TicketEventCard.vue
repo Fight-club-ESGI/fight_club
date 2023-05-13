@@ -37,7 +37,7 @@ const addCart = async (ticketEvent: string) => {
 </script>
 
 <template>
-    <v-card>
+    <v-card :disabled="new Date() > new Date(ticketEvent.event.timeEnd)">
         <v-card-title>
             <span class="font-bold">Ticket category: </span>
             <span>{{ props.ticketEvent.ticketCategory.name }}</span>
@@ -47,14 +47,24 @@ const addCart = async (ticketEvent: string) => {
             <span>{{ props.ticketEvent.price }} €</span>
         </v-card-text>
         <v-card-text>
-            <span class="font-bold">Max quantity: </span>
-            <span>{{ props.ticketEvent.maxQuantity }}</span>
+            <div v-if="new Date() > new Date(ticketEvent.event.timeEnd)">
+                <span class="font-bold">Sold : </span>
+                <span>{{ props.ticketEvent.tickets.length }} / {{ props.ticketEvent.maxQuantity }}</span>
+            </div>
+            <div v-else>
+                <span class="font-bold">Available : </span>
+                <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} / {{
+                    props.ticketEvent.maxQuantity
+                }}</span>
+            </div>
         </v-card-text>
-        <v-card-actions>
-            <v-text-field v-model.number="quantity" placeholder="Quantity" type="number" min="1" max="10" step="1"
-                density="compact"></v-text-field>
-            <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" class="ml-auto" variant="tonal">Add to
-                cart</v-btn>
-        </v-card-actions>
+        <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd)">
+            <v-card-actions>
+                <v-text-field v-model.number="quantity" placeholder="Quantity" type="number" min="1" max="10" step="1"
+                    density="compact"></v-text-field>
+                <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" class="ml-auto" variant="tonal">Add to
+                    cart</v-btn>
+            </v-card-actions>
+        </div>
     </v-card>
 </template>
