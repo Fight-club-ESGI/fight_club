@@ -44,8 +44,10 @@ class Cart {
     }
 
     async _updateCartItem(payload: CartItemInterface): Promise<CartItemInterface> {
+
+
         try {
-            console.log(payload);
+            payload.quantity = Math.min(10, Math.max(1, Number(payload.quantity)));
             const cart = await this._getCart();
             const uri = `${cartItemURL}/${payload.id}`;
             const data = {
@@ -53,7 +55,6 @@ class Cart {
                 ticketEvent: `/ticket_events/${payload.ticketEvent.id}`,
                 quantity: Number(payload.quantity)
             }
-            console.log(data);
             const res = await client.patch(uri, data);
             return res.data;
         } catch (error) {
