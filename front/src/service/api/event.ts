@@ -1,4 +1,4 @@
-import { client, clientWithoutAuth } from "..";
+import { client, clientWithoutAuth, clientFormData } from "..";
 import type { CreateEvent, IEvent } from "@/interfaces/event";
 
 const namespace = '/events';
@@ -26,7 +26,7 @@ class Event {
 
     async _createEvent(payload: CreateEvent): Promise<IEvent> {
         try {
-            const res = await client.post(namespace, payload);
+            const res = await clientFormData.post(namespace, payload);
             return res.data;
         } catch (error) {
             throw error;

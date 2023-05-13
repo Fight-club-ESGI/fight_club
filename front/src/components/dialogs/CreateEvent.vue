@@ -12,7 +12,7 @@
 
             <v-card class="text-center">
                 <v-card-title class="font-bold p-10">
-                    Register an event
+                    Register an event {{event.imageFile}}
                 </v-card-title>
                 <div class="w-full flex px-10">
                     <v-form class="flex flex-col w-full" v-model="valid" ref="form">
@@ -36,7 +36,7 @@
                         </div>
                     </v-form>
                     <div class="flex w-full">
-                        <event class="mx-auto text-left" :event="event" />
+                        <event class="mx-auto text-left w-92" :event="event" />
                     </div>
                 </div>
                 <v-card-actions class="justify-end">
@@ -67,14 +67,13 @@ const event = reactive<CreateEvent>({
     name: '',
     location: '',
     description: '',
-    image: '',
     category: '',
     capacity: 0,
     locationLink: '',
     timeStart: '',
     timeEnd: '',
     vip: false,
-    imageFile: null,
+    imageFile: '',
     imageName: '',
     imageSize: '',
 });
@@ -88,7 +87,18 @@ const submit = async () => {
     try {
         const { valid } = await form.value.validate();
         if (valid) {
-            await createEvent(event);
+            const formData = new FormData();
+            formData.append('name', event.name)
+            formData.append('location', event.location);
+            formData.append('description', event.description);
+            formData.append('category', event.category);
+            formData.append('capacity', event.capacity.toString());
+            formData.append('locationLink', event.locationLink);
+            formData.append('timeStart', event.timeStart);
+            formData.append('timeEnd', event.timeEnd);
+            formData.append('imageFile', event.imageFile);
+            formData.append('vip', event.vip.toString());
+            await createEvent(formData);
             dialog.value = false;
         }
     } catch (error: any) {
@@ -104,20 +114,11 @@ const generateURL = (file: File) => {
     return fileSrc;
 }
 
-const uploadFile = async () => {
+const uploadFile = async (e) => {
     try {
-        console.log(file.value[0])
-        image.value = file.value[0];
-
-        console.log(image.value)
-        //uploaded_image.value = URL.createObjectURL(image.value);
-
-        const formData = new FormData();
-
-        if (image.value) formData.append("imageFile", image.value);
-
-        console.log(formData)
-
+        image.value = e.target.files[0]
+        event.imageFile = image.value
+        event.imageName = generateURL(image.value);
     } catch (e) {
         console.log(e);
     }
