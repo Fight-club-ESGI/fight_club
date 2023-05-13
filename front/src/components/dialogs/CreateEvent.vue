@@ -106,17 +106,13 @@ const generateURL = (file: File) => {
 
 const uploadFile = async () => {
     try {
-        console.log(file.value[0])
         image.value = file.value[0];
 
-        console.log(image.value)
         //uploaded_image.value = URL.createObjectURL(image.value);
 
         const formData = new FormData();
 
         if (image.value) formData.append("imageFile", image.value);
-
-        console.log(formData)
 
     } catch (e) {
         console.log(e);
