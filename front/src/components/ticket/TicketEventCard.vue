@@ -61,7 +61,11 @@ const addCart = async (ticketEvent: string) => {
                 }}</span>
             </div>
         </v-card-text>
+<<<<<<< HEAD
         <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
+=======
+        <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd)">
+>>>>>>> ca1cbefd0f7b21f9fa4a04b2247d3751a5ebec63
             <v-card-actions>
                 <v-text-field v-model.number="quantity" placeholder="Quantity" type="number" min="1" max="10" step="1"
                     density="compact"></v-text-field>

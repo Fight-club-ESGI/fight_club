@@ -80,6 +80,7 @@ const updateItem = async (item: CartItemInterface) => {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     item.quantity = Math.min(10, Math.max(1, Number(item.quantity)));
 
 =======
@@ -88,6 +89,10 @@ const updateItem = async (item: CartItemInterface) => {
     item.quantity = Math.min(10, Math.max(1, Number(item.quantity)));
 
 >>>>>>> a55c75f (CartItem limit)
+=======
+    item.quantity = Math.min(10, Math.max(1, Number(item.quantity)));
+
+>>>>>>> ca1cbefd0f7b21f9fa4a04b2247d3751a5ebec63
     if (timeout !== null) {
         clearTimeout(timeout);
     }
