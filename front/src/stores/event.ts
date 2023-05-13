@@ -7,6 +7,12 @@ export const useEventStore = defineStore('event', () => {
     const event = ref<IEvent>();
     const events = ref<IEvent[]>([]);
 
+    const incomingEvents = computed(() => {
+        return events.value.filter(e => new Date(e.timeStart) > new Date()).sort(function (a: IEvent, b: IEvent) {
+            return new Date(a.timeStart) - new Date(b.timeStart);
+        })
+    });
+
     const fights = computed(() => {
         return event.value?.fights;
     });
@@ -56,5 +62,5 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    return { createEvent, getEvent, getEvents, updateEvent, deleteEvent, events, event, fights }
+    return { createEvent, getEvent, getEvents, updateEvent, deleteEvent, events, event, fights, incomingEvents }
 });
