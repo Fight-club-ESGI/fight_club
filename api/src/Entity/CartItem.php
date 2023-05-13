@@ -13,6 +13,7 @@ use App\Repository\CartItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CartItemRepository::class)]
 #[ApiResource(
@@ -66,6 +67,11 @@ class CartItem
     private ?TicketEvent $ticketEvent = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 1,
+        max: 10,
+        notInRangeMessage: 'You can only order between {{ min }} and {{ max }} tickets',
+    )]
     #[Groups([
         'cart:item:post',
         'cart:item:get',
@@ -108,5 +114,15 @@ class CartItem
         $this->quantity = $quantity;
 
         return $this;
+    }
+
+    public function getTotalPrice(): ?float
+    {
+        return $this->getTicketEvent()->getPrice() * $this->getQuantity();
+    }
+
+    public function getTotalQuantity(): ?int
+    {
+        return $this->getQuantity();
     }
 }
