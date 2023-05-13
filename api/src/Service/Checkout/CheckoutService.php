@@ -91,6 +91,16 @@ class CheckoutService
         }
     }
 
+    public function refund(WalletTransaction $walletTransaction, $amount): void
+    {
+        $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+        $walletTransaction->setType(WalletTransactionTypeEnum::REFUND);
+        $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + $amount);
+
+        $this->entityManager->persist($walletTransaction);
+        $this->entityManager->flush();
+    }
+
     public function orderConfirmation(WalletTransaction $walletTransaction): void
     {
         if ($walletTransaction->getStripeRef() !== null) {

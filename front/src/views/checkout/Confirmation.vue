@@ -20,7 +20,7 @@
             <p class="text-3xl font-bold p-4">Payment pending</p>
         </div>
         <div>
-            <v-btn :to="{ name: 'user-wallet' }">
+            <v-btn :to="{ name: 'user-wallet' }" variant="tonal">
                 Back to wallet
             </v-btn>
         </div>
