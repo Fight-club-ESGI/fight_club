@@ -91,6 +91,7 @@ class CheckoutService
         }
     }
 
+<<<<<<< HEAD
     public function refund(WalletTransaction $walletTransaction, $amount): void
     {
         $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
@@ -101,6 +102,8 @@ class CheckoutService
         $this->entityManager->flush();
     }
 
+=======
+>>>>>>> a55c75f4462c39ad481b5ebc3386c4ba0d16eabf
     public function orderConfirmation(WalletTransaction $walletTransaction): void
     {
         if ($walletTransaction->getStripeRef() !== null) {
