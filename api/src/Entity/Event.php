@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\Fight\PostFight;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -36,6 +37,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             name: 'event_tickets'
         ),
         new Post(
+            uriTemplate: 'fights',
+            controller: PostFight::class,
             normalizationContext: ['groups' => ['tickets:get']],
             denormalizationContext: ['groups' => ['tickets:post']],
             security: 'is_granted("ROLE_ADMIN")',
