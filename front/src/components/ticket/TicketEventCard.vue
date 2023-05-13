@@ -2,13 +2,16 @@
 
 import { ITicketEvent } from '@/interfaces/event';
 import { useCartStore } from '@/stores/cart';
+import { useUserStore } from '@/stores/user';
 import { createToast } from 'mosha-vue-toastify';
 import { storeToRefs } from 'pinia';
 import { PropType } from 'vue';
 import { ref } from 'vue';
 
 const cartStore = useCartStore()
+const userStore = useUserStore()
 const { addToCart } = cartStore;
+const { isConnected } = storeToRefs(userStore);
 const { cart } = storeToRefs(cartStore);
 const quantity = ref<number>(1);
 
@@ -58,7 +61,7 @@ const addCart = async (ticketEvent: string) => {
                 }}</span>
             </div>
         </v-card-text>
-        <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd)">
+        <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
             <v-card-actions>
                 <v-text-field v-model.number="quantity" placeholder="Quantity" type="number" min="1" max="10" step="1"
                     density="compact"></v-text-field>
