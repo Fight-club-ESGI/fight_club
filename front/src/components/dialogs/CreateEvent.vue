@@ -118,20 +118,9 @@ const generateURL = (file: File) => {
 
 const uploadFile = async (e) => {
     try {
-<<<<<<< HEAD
         image.value = e.target.files[0]
         event.imageFile = image.value
         event.imageName = generateURL(image.value);
-=======
-        image.value = file.value[0];
-
-        //uploaded_image.value = URL.createObjectURL(image.value);
-
-        const formData = new FormData();
-
-        if (image.value) formData.append("imageFile", image.value);
-
->>>>>>> e07b411 (CartItem limit)
     } catch (e) {
         console.log(e);
     }
