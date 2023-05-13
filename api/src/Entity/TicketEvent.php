@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\Ticket\TicketEventPatchController;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TicketEventRepository;
@@ -16,6 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Faker\Core\Number;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 
 #[ORM\Entity(repositoryClass: TicketEventRepository::class)]
 #[ApiResource(
@@ -32,13 +35,15 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => ['ticket:event:get_collection']],
         ),
         new Patch(
-            normalizationContext: ['groups' => ['ticket:event:get']],
-            denormalizationContext: ['groups' => ['ticket:event:patch']],
-            security: 'is_granted("ROLE_ADMIN")',
+            uriTemplate: 'ticket_events/{id}',
             inputFormats: [
                 'multipart' => ['multipart/form-data'],
                 'json' => ['application/json']
             ],
+            controller: TicketEventPatchController::class,
+            normalizationContext: ['groups' => ['ticket:event:get']],
+            denormalizationContext: ['groups' => ['ticket:event:patch']],
+            security: 'is_granted("ROLE_ADMIN")',
         )
     ]
 )]
@@ -96,7 +101,7 @@ class TicketEvent
         'admin:post',
         'ticket:event:post',
         'ticket:event:get',
-        'event:ticket:get'
+        'event:ticket:get',
     ])]
     private ?float $price = null;
 
@@ -105,6 +110,17 @@ class TicketEvent
         'admin:get',
     ])]
     private Collection $cartItems;
+
+    #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+        'ticket:event:post',
+        'ticket:event:get',
+        'event:ticket:get',
+        'ticket:event:patch'
+    ])]
+    private bool $isActive = true;
 
     public function __construct()
     {
@@ -218,5 +234,16 @@ class TicketEvent
         }
 
         return $this;
+    }
+
+    public function setIsActive(bool $isActive)
+    {
+        $this->setIsActive = $isActive;
+        return $this;
+    }
+
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

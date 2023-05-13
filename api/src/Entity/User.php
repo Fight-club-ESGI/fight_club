@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\User\Role\ChangeUserRole;
-use App\Controller\User\UserMe;
 use App\Controller\User\ResetPasswordController;
 use App\Controller\User\ValidateResetPasswordController;
 use App\Entity\Trait\EntityIdTrait;
