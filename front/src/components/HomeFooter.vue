@@ -77,10 +77,8 @@
     </v-footer>
 </template>
 
-<script>
-export default {
-    name: "HomeFooter"
-}
+<script setup lang="ts">
+
 </script>
 
 <style scoped></style>

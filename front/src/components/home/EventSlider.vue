@@ -18,16 +18,12 @@
     </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { ref } from 'vue'
-export default {
-    name: "EventSlider",
-    setup() {
-        const carouselModel = ref(null);
 
-        return { carouselModel }
-    }
-}
+const carouselModel = ref(null);
+
+
 </script>
 
 <style scoped></style>
