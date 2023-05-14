@@ -5,6 +5,7 @@ import { useCartStore } from '@/stores/cart';
 import { useUserStore } from '@/stores/user';
 import { createToast } from 'mosha-vue-toastify';
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 import { PropType } from 'vue';
 import { ref } from 'vue';
 
@@ -22,7 +23,46 @@ const props = defineProps({
     }
 })
 
+const canAddToCart = computed(() => {
+
+    let cartQuantity = cart.value?.cartItems.reduce((acc, item) => {
+        if (item.ticketEvent && item.ticketEvent.id == props.ticketEvent.id) {
+            return acc + item.quantity;
+        }
+        return acc;
+    }, 0) || 0;
+
+    if (props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity < quantity.value)
+        return false;
+
+    return true;
+});
+
 const addCart = async (ticketEvent: string) => {
+
+    if (!canAddToCart) {
+        createToast('Not enough tickets available', {
+            type: 'danger',
+            position: 'bottom-right'
+        });
+        return;
+    }
+
+    let cartQuantity = cart.value?.cartItems.reduce((acc, item) => {
+        if (item.ticketEvent && item.ticketEvent.id == ticketEvent) {
+            return acc + item.quantity;
+        }
+        return acc;
+    }, 0) || 0;
+
+    if (props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity < quantity.value) {
+        createToast('Not enough tickets available', {
+            type: 'danger',
+            position: 'bottom-right'
+        });
+        return;
+    }
+
     try {
         await addToCart({ cart: cart.value?.id, ticketEvent, quantity: quantity.value })
         createToast('Ticket added to cart', {
@@ -69,7 +109,8 @@ const checkNumber = () => {
             <v-card-actions>
                 <v-text-field v-model.number="quantity" placeholder="Quantity" @input="checkNumber" type="number" min="1"
                     max="10" step="1" density="compact"></v-text-field>
-                <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" class="ml-auto" variant="tonal">Add to
+                <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" :disabled="!canAddToCart" class="ml-auto"
+                    variant="tonal">Add to
                     cart</v-btn>
             </v-card-actions>
         </div>
