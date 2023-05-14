@@ -14,3 +14,7 @@ api_platform:
         html: ['text/html']
         multipart: ['multipart/form-data']
         jsonapi: ['application/vnd.api+json']
+    patch_formats:
+        json: [ 'application/merge-patch+json' ]
+        jsonapi: [ 'application/vnd.api+json' ]
+        multipart: [ 'multipart/form-data' ]

@@ -18,12 +18,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
 
     public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array
     {
-
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
-
-
-        dump($request);
-        dump($normalization);
 
         $resourceClass = $context['resource_class'] ?? null;
 
