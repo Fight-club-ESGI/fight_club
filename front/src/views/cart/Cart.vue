@@ -49,9 +49,31 @@
                             </div>
                         </div>
                         <div class="w-1/2">
-                            <v-btn block class="rounded" color="secondary" @click="checkout()"
+                            <<<<<<< HEAD <v-btn block class="rounded" color="secondary" @click="checkout()"
                                 :disabled="cartTotalItems === 0">Go to
                                 checkout</v-btn>
+                                =======
+                                <v-menu open-on-hover>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn color="primary" v-bind="props" class="" variant="tonal">
+                                            Pay
+                                        </v-btn>
+                                    </template>
+
+                                    <div class="bg-white rounded-lg elevation-2 mt-2">
+                                        <ul class="py-2 px-2 text-lightgray text-small font-normal cursor-pointer">
+                                            <li @click="check_out('stripe')"
+                                                class="p-2 flex items-center hover:bg-slate-100 gap-x-2">
+                                                with Stripe
+                                            </li>
+                                            <li @click="check_out('wallet')"
+                                                class="p-2 flex items-center hover:bg-slate-100 gap-x-2">
+                                                with my Wallet
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </v-menu>
+                                >>>>>>> 808ddb6 (Checkout workflow)
                         </div>
                     </div>
                 </div>
@@ -68,7 +90,7 @@ import { storeToRefs } from 'pinia';
 
 const cartStore = useCartStore();
 const { cartTotalItems, cartItems, cartTotalPrice } = storeToRefs(cartStore);
-const { getCart, removeFromCart, updateCartItem } = cartStore;
+const { getCart, removeFromCart, updateCartItem, checkout } = cartStore;
 
 let timeout: ReturnType<typeof setTimeout> | null
 
@@ -95,9 +117,23 @@ const updateItem = async (item: CartItemInterface) => {
     }, 500);
 }
 
-const checkout = () => {
+const check_out = async (type: string) => {
+    try {
+        await checkout(type);
 
+        createToast('Checkout successful', {
+            type: 'success',
+            position: 'bottom-right'
+        });
+    }
+    catch {
+        createToast('Error while checking out', {
+            type: 'danger',
+            position: 'bottom-right'
+        });
+    }
 }
+
 
 const items = [
     {

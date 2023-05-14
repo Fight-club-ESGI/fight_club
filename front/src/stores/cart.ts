@@ -80,5 +80,14 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
-    return { cart, cartItems, cartTotalItems, cartTotalPrice, getCart, addToCart, updateCartItem, removeFromCart, clearCart };
+    async function checkout(type: string) {
+        try {
+            const res = await cartService._checkout(type);
+            cart.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    return { cart, cartItems, cartTotalItems, cartTotalPrice, getCart, addToCart, updateCartItem, removeFromCart, clearCart, checkout };
 });
