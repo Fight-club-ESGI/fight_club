@@ -16,7 +16,7 @@ jobs:
     - name: Install dependencies
       run: | 
         cd front/
-        npm i
+        npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
