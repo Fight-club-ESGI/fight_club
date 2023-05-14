@@ -2,6 +2,7 @@
 
 namespace App\Controller\Cart;
 
+use ApiPlatform\OpenApi\Model\Response;
 use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\Order;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 #[AsController]
 class CartCheckout extends AbstractController
 {
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CheckoutService $checkoutService,
@@ -54,6 +56,8 @@ class CartCheckout extends AbstractController
         }
 
         return $cart;
+
+        in_array($type, ['wallet', 'stripe']) || throw $this->createNotFoundException('Type not found');
     }
 
     private function payWithWallet(Cart $cart, int $totalPrice): void
