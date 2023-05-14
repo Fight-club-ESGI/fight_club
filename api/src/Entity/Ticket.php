@@ -66,7 +66,8 @@ class Ticket
     ])]
     private ?string $reference = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->setReference();
     }
 
@@ -102,7 +103,7 @@ class Ticket
     public function setReference(string|null $reference = null): self
     {
         if (is_null($this->reference) && is_null($reference)) {
-            $this->reference = sprintf('T-%s-%s', date('Ymd'), bin2hex(random_bytes(3)));
+            $this->reference = sprintf('T-%s-%s', date('Ymd'), strtoupper(bin2hex(random_bytes(3))));
         } else {
             $this->reference = $reference;
         }
