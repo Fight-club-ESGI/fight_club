@@ -21,21 +21,25 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new Patch(
             denormalizationContext: ['groups' => ['cart:patch']],
-            security: 'is_granted("ROLE_USER") and object.getUser() == user'
+            security: 'is_granted("ROLE_USER") and object.getUser() === user'
         ),
         new Get(
             normalizationContext: ['groups' => ['cart:get']],
-            security: 'is_granted("ROLE_USER") and object.getUser() == user'
+            security: 'is_granted("ROLE_USER") and object.getUser() === user'
         ),
         new Get(
             uriTemplate: '/my-cart',
             normalizationContext: ['groups' => ['cart:get']],
+            security: 'is_granted("ROLE_USER") and object.getUser() === user',
             securityMessage: 'You need to be connected',
+            read: true,
             name: 'self_cart'
         ),
         new Post(
-            uriTemplate: '/carts/{cart}/checkout',
+            uriTemplate: '/carts/{id}/checkout',
             controller: CartCheckout::class,
+            read: false,
+            name: 'cart_checkout',
         )
     ]
 )]
