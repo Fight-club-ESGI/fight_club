@@ -22,7 +22,45 @@
                             @click:prepend="decrement(item)" outlined density="compact" class="w-40"
                             hide-details></v-text-field>
 
+<<<<<<< HEAD
                         <v-icon @click="removeItem(item)" class="text-red-500">mdi-delete</v-icon>
+=======
+                    <div class="flex space-x-4">
+                        <div class="w-1/2">
+                            <div class="flex flex-col p-5">
+                                <div class="flex flex-row justify-between">
+                                    <div class="font-bold text-xl">Total items</div>
+                                    <div class="font-bold text-xl">{{ cartTotalItems }}</div>
+                                </div>
+                                <div class="flex flex-row justify-between">
+                                    <div class="font-bold text-xl">Total price</div>
+                                    <div class="font-bold text-xl">{{ cartTotalPrice.toFixed(2) }}€</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/2">
+                            <v-menu open-on-hover>
+                                <template v-slot:activator="{ props }">
+                                    <v-btn color="primary" v-bind="props" class="" variant="tonal">
+                                        Pay
+                                    </v-btn>
+                                </template>
+
+                                <div class="bg-white rounded-lg elevation-2 mt-2">
+                                    <ul class="py-2 px-2 text-lightgray text-small font-normal cursor-pointer">
+                                        <li @click="check_out('stripe')"
+                                            class="p-2 flex items-center hover:bg-slate-100 gap-x-2">
+                                            with Stripe
+                                        </li>
+                                        <li @click="check_out('wallet')"
+                                            class="p-2 flex items-center hover:bg-slate-100 gap-x-2">
+                                            with my Wallet
+                                        </li>
+                                    </ul>
+                                </div>
+                            </v-menu>
+                        </div>
+>>>>>>> 2722605 (Fix HEAD)
                     </div>
                 </div>
             </div>
