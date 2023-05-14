@@ -12,7 +12,7 @@
 
             <v-card class="text-center">
                 <v-card-title class="font-bold p-10">
-                    Register an event {{event.imageFile}}
+                    Register an event {{ event.imageFile }}
                 </v-card-title>
                 <div class="w-full flex px-10">
                     <v-form class="flex flex-col w-full" v-model="valid" ref="form">
@@ -48,7 +48,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { defineComponent, ref, computed, reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateEvent } from '@/interfaces/event';
 import { useEventStore } from '@/stores/event';
@@ -114,7 +114,7 @@ const generateURL = (file: File) => {
     return fileSrc;
 }
 
-const uploadFile = async (e) => {
+const uploadFile = async (e: any) => {
     try {
         image.value = e.target.files[0]
         event.imageFile = image.value

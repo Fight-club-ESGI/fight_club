@@ -1,7 +1,6 @@
 import ActivateStatus from '@/views/user/ActivateStatus.vue';
 import AdminView from "@/views/admin/AdminView.vue"
 import BecomeVIP from "@/views/sponsor/BecomeVIP.vue";
-import BetOnAFight from '@/views/bet/BetOnAFight.vue';
 import Cart from "@/views/cart/Cart.vue";
 import CheckoutConfirmation from "@/views/checkout/Confirmation.vue";
 import Deposit from "@/views/user/Deposit.vue"
