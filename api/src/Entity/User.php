@@ -178,6 +178,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $VIPToken = null;
 
     #[ORM\OneToOne(mappedBy: '_user', cascade: ['persist', 'remove'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
     private ?Cart $cart = null;
 
     public function __construct()
