@@ -77,17 +77,7 @@ const removeItem = async (item: CartItemInterface) => {
 }
 
 const updateItem = async (item: CartItemInterface) => {
-
-<<<<<<< HEAD
-<<<<<<< HEAD
     item.quantity = Math.min(10, Math.max(1, Number(item.quantity)));
-
-=======
->>>>>>> 74d71ed (Timeout cart)
-=======
-    item.quantity = Math.min(10, Math.max(1, Number(item.quantity)));
-
->>>>>>> a55c75f (CartItem limit)
     if (timeout !== null) {
         clearTimeout(timeout);
     }
