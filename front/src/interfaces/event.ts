@@ -18,6 +18,7 @@ export interface IEvent {
     imageSize: string
     ticketEvents: []
     fights: IFight[]
+    display: boolean
 }
 
 export interface ITicketEvent {
@@ -50,4 +51,5 @@ export interface CreateEvent {
     imageFile: Blob | string
     imageName: string
     imageSize: string
+    display: boolean
 }

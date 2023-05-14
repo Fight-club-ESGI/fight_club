@@ -12,7 +12,7 @@
 
             <v-card class="text-center">
                 <v-card-title class="font-bold p-10">
-                    Register an event {{event.imageFile}}
+                    Register an event
                 </v-card-title>
                 <div class="w-full flex px-10">
                     <v-form class="flex flex-col w-full" v-model="valid" ref="form">
@@ -32,11 +32,14 @@
                                 placeholder="Start event" label="Start event" />
                             <v-text-field v-model="event.timeEnd" :rules="[rules.required]" type="date"
                                 placeholder="End event" label="End event" />
-                            <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
+                            <div class="flex">
+                                <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
+                                <v-checkbox v-model="event.display" variant="primary" label="Display" />
+                            </div>
                         </div>
                     </v-form>
                     <div class="flex w-full">
-                        <event class="mx-auto text-left w-92" :event="event" />
+                        <event class="mx-auto text-left w-92" :event="event" :admin="admin" :preview="true" />
                     </div>
                 </div>
                 <v-card-actions class="justify-end">
@@ -48,11 +51,15 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { defineComponent, ref, computed, reactive } from 'vue';
+import { ref, reactive, defineProps } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateEvent } from '@/interfaces/event';
 import { useEventStore } from '@/stores/event';
 import Event from '../Event.vue';
+
+const props = defineProps({
+    admin: {type: Boolean, required: true}
+});
 
 const eventStore = useEventStore();
 const { createEvent } = eventStore;
@@ -76,6 +83,7 @@ const event = reactive<CreateEvent>({
     imageFile: '',
     imageName: '',
     imageSize: '',
+    display: false,
 });
 
 const rules = {
@@ -98,6 +106,7 @@ const submit = async () => {
             formData.append('timeEnd', event.timeEnd);
             formData.append('imageFile', event.imageFile);
             formData.append('vip', event.vip.toString());
+            formData.append('display', event.display.toString());
             await createEvent(formData);
             dialog.value = false;
         }
@@ -114,7 +123,7 @@ const generateURL = (file: File) => {
     return fileSrc;
 }
 
-const uploadFile = async (e) => {
+const uploadFile = async (e: any) => {
     try {
         image.value = e.target.files[0]
         event.imageFile = image.value
