@@ -15,7 +15,9 @@ jobs:
         node-version: 16
     - name: Install dependencies
       run: | 
-        cd ./front && npm ci
+        pwd
+        cd front/
+        npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
