@@ -2,6 +2,7 @@
 
 namespace App\Service\Checkout;
 
+use App\Entity\Order;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Entity\WalletTransaction;
@@ -88,6 +89,19 @@ class CheckoutService
                 case WalletTransactionStatusEnum::CANCELLED:
                     break;
             }
+        }
+    }
+
+    public function payment(WalletTransaction $walletTransaction): void
+    {
+        $wallet = $walletTransaction->getWallet();
+
+        if ($walletTransaction->getStatus() === WalletTransactionStatusEnum::PENDING) {
+            $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+            $wallet->setAmount($wallet->getAmount() - $walletTransaction->getAmount());
+
+            $this->entityManager->persist($walletTransaction);
+            $this->entityManager->flush();
         }
     }
 
