@@ -29,7 +29,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             uriTemplate: '/my-cart',
             normalizationContext: ['groups' => ['cart:get']],
             securityMessage: 'You need to be connected',
-            // security: 'is_granted("ROLE_USER") and object.getUser() == user',
             name: 'self_cart'
         )
     ]
