@@ -92,8 +92,13 @@ class Cart {
     async _checkout(type: string): Promise<CartInterface> {
         try {
             const cart = await this._getCart();
+<<<<<<< HEAD
             const uri = `${cartURL}/${cart.id}/checkout/${type}`;
             const res = await client.post(uri);
+=======
+            const uri = `${cartURL}/${cart.id}/checkout`;
+            const res = await client.post(uri, { type });
+>>>>>>> 535601e (Fix merge issues)
             return res.data;
         } catch (error) {
             throw error;
