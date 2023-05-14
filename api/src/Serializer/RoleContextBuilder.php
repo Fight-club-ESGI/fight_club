@@ -18,7 +18,12 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
 
     public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array
     {
+
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
+
+
+        dump($request);
+        dump($normalization);
 
         $resourceClass = $context['resource_class'] ?? null;
 
@@ -47,6 +52,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                 $context['groups'][] = $this->selfRequestMethodGroup($request->getMethod(), $normalization);
             }
         }
+
         return $context;
     }
 
@@ -54,6 +60,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
         if($normalization) {
             return 'admin:get';
         } else {
+
             return match ($method) {
                 'POST' => 'admin:post',
                 'PATCH' => 'admin:patch',

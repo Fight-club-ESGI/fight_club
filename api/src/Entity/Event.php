@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\Event\CreateEvent;
+use App\Controller\Fighter\UpdateFighter;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -39,16 +40,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Post(
             controller: CreateEvent::class,
-            normalizationContext: ['groups' => ['tickets:get']],
-            denormalizationContext: ['groups' => ['tickets:post']],
+            security: 'is_granted("ROLE_ADMIN")',
             deserialize: false
         ),
         new Delete(),
         new Patch(
-            inputFormats: [
-                'json' => ['application/json']
-            ],
-            normalizationContext: ['groups' => ['events:get']],
+            controller: UpdateFighter::class,
             security: 'is_granted("ROLE_ADMIN")',
         )
     ]
@@ -274,7 +271,7 @@ class Event
         return $this->capacity;
     }
 
-    public function setCapacity(null|int|string $capacity): self
+    public function setCapacity(?int $capacity): self
     {
         $this->capacity = $capacity;
 

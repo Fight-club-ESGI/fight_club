@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\User;
+namespace App\Controller\Fighter;
 
 use ApiPlatform\Validator\ValidatorInterface;
-use App\Entity\User;
+use App\Entity\Fighter;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
-class CreateUser extends AbstractController
+class CreateFighter extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -20,9 +20,9 @@ class CreateUser extends AbstractController
     {
     }
 
-    public function __invoke(Request $request): User
+    public function __invoke(Request $request): Fighter
     {
-        $event = new User();
+        $event = new Fighter();
 
         $propertiesToSet = $request->request->all();
 
@@ -37,7 +37,11 @@ class CreateUser extends AbstractController
 
             if (method_exists($event, $setterMethodName)) {
                 switch ($propertyName) {
-                    case 'tokenDate':
+                    case 'height':
+                    case 'weight':
+                        $propertyValue = intval($propertyValue);
+                        break;
+                    case 'birthdate':
                         $propertyValue = date_timestamp_set(new DateTime, strtotime($propertyValue));
                         break;
                 }
