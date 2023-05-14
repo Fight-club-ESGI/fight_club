@@ -88,6 +88,17 @@ class Cart {
             throw error;
         }
     }
+
+    async _checkout(type: string): Promise<CartInterface> {
+        try {
+            const cart = await this._getCart();
+            const uri = `${cartURL}/${cart.id}/checkout`;
+            const res = await client.post(uri, { type });
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const cartService = new Cart();
