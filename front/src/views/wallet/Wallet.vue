@@ -1,6 +1,6 @@
 <template>
     <v-breadcrumbs :items="items"></v-breadcrumbs>
-    <div class="flex h-full space-x-5 p-5">
+    <div class="flex h-full space-x-5 px-5 pb-5">
         <div class="flex flex-col h-full w-1/4 rounded ">
             <div class="flex font-bold text-2xl h-1/12 items-center">Your wallet funds</div>
             <div class="h-11/12">
@@ -24,7 +24,7 @@
             <div class="flex text-2xl h-1/12 font-bold items-center">Transaction history</div>
             <div class="w-full h-11/12 overflow-auto rounded bg-neutral-100">
                 <div>
-                    <div class="flex p-3 flex space-x-5 items-center" v-for="transaction in walletTransactionHistory"
+                    <div class="flex p-3 space-x-5 items-center" v-for="transaction in walletTransactionHistory"
                         :key="transaction.id">
                         <div class="w-40 font-bold text-center">
                             {{ transaction.type }}

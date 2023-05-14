@@ -1,35 +1,9 @@
 import { client } from "../index";
-import { ITicketEvent } from "@/interfaces/event";
+import { ITicketEvent, UpdateTicketEvent } from "@/interfaces/event";
+import { ICreateTicket, ITicket, ICreateTicketCategory, ITicketCategory, ICreateTicketEvent } from "@/interfaces/ticket";
 const ticketNamespace = '/tickets';
 const ticketCategoryNamespace = '/ticket_categories';
 const ticketEventNamespace = '/ticket_events';
-
-export interface ITicket {
-    id: string
-    price: number
-    availability: boolean,
-    event: string
-    ticketCategory: ITicketCategory
-}
-
-export interface ICreateTicket {
-    price: number
-    availability: boolean,
-    event: string
-    ticketCategory: string
-}
-
-export interface ITicketCategory {
-    id: string
-    name: string
-    tickets: ITicket[]
-    createdAt: string
-    updatedAt: string
-}
-
-export interface ICreateTicketCategory {
-    name: string
-}
 
 class Ticket {
 
@@ -63,7 +37,7 @@ class Ticket {
         }
     }
 
-    async _getTicketsEvent(id: string): Promise<ITicketCategory[]> {
+    async _getTicketsEvent(id: string): Promise<ITicketEvent[]> {
         try {
             const uri = `/events/${id}/ticket_event`;
             const res = await client.get(uri);
@@ -83,7 +57,7 @@ class Ticket {
         }
     }
 
-    async _createTicketEvent(payload: ITicketEvent): Promise<any> {
+    async _createTicketEvent(payload: ICreateTicketEvent): Promise<ITicketEvent> {
         try {
             const uri = `${ticketEventNamespace}`;
             const res = await client.post(uri, payload);
@@ -93,9 +67,9 @@ class Ticket {
         }
     }
 
-    async _updateTicketEvent(payload: { eventId: string, ticketCategoryId: string, maxQuantity: number }) {
+    async _updateTicketEvent(payload: UpdateTicketEvent) {
         try {
-            const uri = `/events/${payload.eventId}/tickets_event/${payload.ticketCategoryId}`;
+            const uri = `${ticketEventNamespace}/${payload.id}`;
             const res = await client.patch(uri, payload);
             return res.data;
         } catch (error) {

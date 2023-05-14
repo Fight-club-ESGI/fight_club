@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -28,6 +29,9 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         ),
         new GetCollection(
             normalizationContext: ["groups" => ["fight:category:get"]]
+        ),
+        new Patch(
+            security: "is_granted('ROLE_ADMIN')"
         )
     ]
 )]
@@ -40,6 +44,7 @@ class FightCategory
     #[Groups([
         'admin:get',
         'admin:post',
+        'admin:patch',
     ])]
     private ?string $name = null;
 

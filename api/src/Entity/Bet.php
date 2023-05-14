@@ -6,6 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Controller\Bet\BetCreateDirectPayment;
+use App\Controller\Bet\BetCreateWalletPayment;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Enum\Bet\BetStatusEnum;
@@ -24,9 +26,17 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => []]
         ),
         new Post(
+            uriTemplate: 'bets/payment/direct',
+            controller: BetCreateDirectPayment::class,
             normalizationContext: ['groups' => ['bet:get']],
             denormalizationContext: ['groups' => ['bet:post']]
         ),
+        new Post(
+            uriTemplate: 'bets/payment/wallet',
+            controller: BetCreateWalletPayment::class,
+            normalizationContext: ['groups' => ['bet:get']],
+            denormalizationContext: ['groups' => ['bet:post']]
+        )
     ]
 )]
 class Bet
@@ -38,7 +48,9 @@ class Bet
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',
+        'admin:post',
         'bet:get',
+        'bet:post',
     ])]
     #[MaxDepth(1)]
     private ?Fight $fight = null;
@@ -47,10 +59,12 @@ class Bet
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'admin:get',
+        'admin:post',
         'bet:get',
+        'bet:post',
     ])]
     #[MaxDepth(1)]
-    private ?User $betOn = null;
+    private ?Fighter $betOn = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -64,9 +78,11 @@ class Bet
     #[ORM\Column]
     #[Groups([
         'admin:get',
+        'admin:post',
         'bet:get',
+        'bet:post',
     ])]
-    private ?float $amount = 0.00;
+    private ?int $amount = 0;
 
     #[ORM\Column(length: 255)]
     #[Groups([
@@ -74,6 +90,10 @@ class Bet
         'bet:get',
     ])]
     private ?BetStatusEnum $status = BetStatusEnum::PENDING;
+
+    #[ORM\OneToOne(inversedBy: 'bet', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?WalletTransaction $wallet_transaction = null;
 
     public function getFight(): ?Fight
     {
@@ -87,12 +107,12 @@ class Bet
         return $this;
     }
 
-    public function getBetOn(): ?User
+    public function getBetOn(): ?Fighter
     {
         return $this->betOn;
     }
 
-    public function setBetOn(?User $betOn): self
+    public function setBetOn(?Fighter $betOn): self
     {
         $this->betOn = $betOn;
 
@@ -111,12 +131,12 @@ class Bet
         return $this;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(float $amount): self
+    public function setAmount(int $amount): self
     {
         $this->amount = $amount;
 
@@ -131,6 +151,18 @@ class Bet
     public function setStatus(BetStatusEnum $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getWalletTransaction(): ?WalletTransaction
+    {
+        return $this->wallet_transaction;
+    }
+
+    public function setWalletTransaction(?WalletTransaction $wallet_transaction): self
+    {
+        $this->wallet_transaction = $wallet_transaction;
 
         return $this;
     }

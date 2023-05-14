@@ -4,34 +4,56 @@ namespace App\Service\Fight;
 
 use App\Entity\Bet;
 use App\Entity\Fight;
+use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class FightOddsService
 {
     private Fight $fight;
-    private ArrayCollection $fighterAOddsArray;
-    private int $fighterAOdds;
-    private ArrayCollection $fighterBOddsArray;
-    private int $fighterBOdds;
+    #private ArrayCollection $fighterAOddsArray;
+    private float $fighterAOdds;
+    #private ArrayCollection $fighterBOddsArray;
+    private float $fighterBOdds;
 
     public function __construct(Fight $fight) {
         $this->fight = $fight;
 
-        $this->fighterAOddsArray = $this->fight->getBets()->filter(function (Bet $fight_bet) {
+        $totalAmountBetted = $this->fight->getBets()->reduce(function ($carry, $entity) {
+            if ($entity->getWalletTransaction()->getStatus() === WalletTransactionStatusEnum::ACCEPTED) {
+                return $carry + $entity->getAmount();
+            }
+
+            return $carry;
+        });
+
+        $totalAmountBettedOnFighterA = $this->fight->getBets()->reduce(function ($carry, $entity) {
+            if ($entity->getWalletTransaction()->getStatus() === WalletTransactionStatusEnum::ACCEPTED && $entity->getBetOn() === $this->fight->getFighterA()) {
+                return $carry + $entity->getAmount();
+            }
+
+            return $carry;
+        });
+
+        $totalAmountBettedOnFighterB = $this->fight->getBets()->reduce(function ($carry, $entity) {
+            if ($entity->getWalletTransaction()->getStatus() === WalletTransactionStatusEnum::ACCEPTED && $entity->getBetOn() === $this->fight->getFighterB()) {
+                return $carry + $entity->getAmount();
+            }
+
+            return $carry;
+        });
+
+        if ($totalAmountBettedOnFighterA && $totalAmountBetted && $totalAmountBettedOnFighterB) {
+            $this->fighterAOdds = 1 / ( $totalAmountBettedOnFighterA / $totalAmountBetted );
+            $this->fighterBOdds = 1 / ( $totalAmountBettedOnFighterB / $totalAmountBetted );
+        }
+
+        /*$this->fighterAOddsArray = $this->fight->getBets()->filter(function (Bet $fight_bet) {
             return $fight_bet->getBetOn() === $this->fight->getFighterA();
         });
 
         $this->fighterBOddsArray = $this->fight->getBets()->filter(function (Bet $fight_bet) {
             return $fight_bet->getBetOn() === $this->fight->getFighterB();
-        });
-
-        if (count($this->fighterAOddsArray) >= count($this->fighterBOddsArray)) {
-            $this->fighterAOdds = count($this->fighterAOddsArray) ?: 1  / count($this->fighterBOddsArray) ?: 1;
-            $this->fighterBOdds = 1;
-        } else {
-            $this->fighterBOdds = count($this->fighterBOddsArray) ?: 1 / count($this->fighterAOddsArray) ?: 1;
-            $this->fighterAOdds = 1;
-        }
+        });*/
     }
 
     public function odd() {
@@ -39,15 +61,5 @@ class FightOddsService
             "fighterAOdds" => $this->fighterAOdds,
             "fighterBOdds" => $this->fighterBOdds
         ];
-    }
-
-    public function winnerOdds() {
-        if ($this->fight->getWinner()->getId() === $this->fight->getFighterA()->getId()) {
-            return $this->fighterAOdds / $this->fighterBOdds;
-        } else if ($this->fight->getWinner()->getId() === $this->fight->getFighterB()->getId()) {
-            return $this->fighterBOdds / $this->fighterAOdds;
-        } else {
-            return 'no winner';
-        }
     }
 }

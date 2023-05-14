@@ -2,7 +2,7 @@
     <div>
         <v-dialog v-model="dialog" style="width: 50%">
             <template v-slot:activator="{ props }">
-                <v-btn color="primary" v-bind="props"> Create ticket event</v-btn>
+                <v-btn color="primary" variant="tonal" v-bind="props"> Create ticket event</v-btn>
             </template>
 
             <v-card class="pa-4">
@@ -38,7 +38,6 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
-import { ITicketEvent } from '@/service/api/tickets';
 import { useTicketStore } from '@/stores/tickets';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
@@ -77,7 +76,7 @@ const submit = async () => {
     try {
         const { valid } = await form.value.validate();
         if (valid) {
-            const payload: ITicketEvent = {
+            const payload = {
                 price: price.value,
                 maxQuantity: maxQuantity.value,
                 event: '/events/' + eventId.value,

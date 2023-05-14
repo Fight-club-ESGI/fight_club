@@ -39,38 +39,34 @@
     <v-alert v-else variant="outlined">Create a fighter first</v-alert>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, PropType, toRefs, ref } from 'vue';
-import { FighterI } from '@/interfaces/payload';
+import { IFighter } from '@/interfaces/fighter';
 import { useRouter } from 'vue-router';
 import { useFighterStore } from '@/stores/fighter';
 import UpdateFighter from '../dialogs/UpdateFighter.vue';
-export default defineComponent({
-    components: { UpdateFighter },
-    props: {
-        fighters: {
-            type: Array as PropType<FighterI[]>,
-        },
+const props = defineProps({
+    fighters: {
+        type: Array as PropType<IFighter[]>,
+        required: true
     },
-    setup(props) {
-        const { fighters } = toRefs(props);
-        const router = useRouter();
-        const fighterStore = useFighterStore();
-        const { deleteFighter } = fighterStore;
+})
 
-        const goToFighterDetails = (fighter) => {
-            router.push({ name: 'fighter-details', params: { id: fighter.value.id } });
-        };
+const { fighters } = toRefs(props);
+const router = useRouter();
+const fighterStore = useFighterStore();
+const { deleteFighter } = fighterStore;
 
-        const remove = async (fighterId: string) => {
-            try {
-                await deleteFighter(fighterId);
-            } catch (error) { }
-        };
+const goToFighterDetails = (fighter: IFighter) => {
+    router.push({ name: 'fighter-details', params: { id: fighter.id } });
+};
 
-        return { fighters, remove };
-    },
-});
+const remove = async (fighterId: string) => {
+    try {
+        await deleteFighter(fighterId);
+    } catch (error) { }
+};
+
 </script>
 
 <style scoped>

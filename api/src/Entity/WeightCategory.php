@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -23,7 +24,15 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => ['wallet:category:get']],
             denormalizationContext: ['groups' => []],
             security: "is_granted('ROLE_ADMIN')"
-        )
+        ),
+        new Patch(
+            inputFormats: [
+                'json' => ['application/json']
+            ],
+            normalizationContext: ["groups" => ['wallet:category:get']],
+            denormalizationContext: ["groups" => ['wallet:category:patch']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
     ]
 )]
 class WeightCategory
@@ -35,7 +44,8 @@ class WeightCategory
     #[Groups([
         'admin:get',
         'admin:post',
-        'wallet:category:get'
+        'wallet:category:get',
+        'wallet:category:patch'
     ])]
     private ?int $minWeight = null;
 
@@ -43,7 +53,8 @@ class WeightCategory
     #[Groups([
         'admin:get',
         'admin:post',
-        'wallet:category:get'
+        'wallet:category:get',
+        'wallet:category:patch'
     ])]
     private ?int $maxWeight = null;
 
@@ -51,7 +62,8 @@ class WeightCategory
     #[Groups([
         'admin:get',
         'admin:post',
-        'wallet:category:get'
+        'wallet:category:get',
+        'wallet:category:patch'
     ])]
     private ?string $name = null;
 
@@ -60,7 +72,8 @@ class WeightCategory
     #[Groups([
         'admin:get',
         'admin:post',
-        'wallet:category:get'
+        'wallet:category:get',
+        'wallet:category:patch'
     ])]
     #[MaxDepth(1)]
     private ?FightCategory $fightCategory = null;

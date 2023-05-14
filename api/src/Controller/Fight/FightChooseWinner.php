@@ -19,21 +19,22 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 class FightChooseWinner extends AbstractController
 {
 
-    public function __construct(private readonly EntityManagerInterface $entityManager) {
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly FighterRepository $fighterRepository
+    ) {
     }
 
-    public function __invoke(Request $request, Security $security, string $fight_id, FightRepository $fightRepository, FighterRepository $fighterRepository): Response
+    public function __invoke(Request $request, Fight $fight): Response
     {
-        $fight = $fightRepository->find($fight_id);
-
         $parameters = json_decode($request->getContent(), true);
-        $fight->setWinner($fighterRepository->find($parameters['winner_id']));
+        $fight->setWinner($this->fighterRepository->find($parameters['winner_id']));
 
         if($fight->isWinnerValidation()) {
-            return new Response('Winner as already be validated', 200, ["Content-Type" => "application:json"]);
+            return new Response('Winner as already be validated', 400, ["Content-Type" => "application:json"]);
         }
 
-        if (($fight->getWinner()->getId() === $fight->getFighterA()) || ($fight->getWinner()->getId() === $fight->getFighterB()->getId())) {
+        if (($fight->getWinner()->getId() === $fight->getFighterA()->getId()) || ($fight->getWinner()->getId() === $fight->getFighterB()->getId())) {
             if ($fight->getWinner() === $fight->getLoser()) {
                 return new Response('Winner and Loser cannot be the same person');
             }

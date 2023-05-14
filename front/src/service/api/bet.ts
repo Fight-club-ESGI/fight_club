@@ -1,5 +1,5 @@
 import { client } from "../index";
-import type { FightBetI } from "../../interfaces/payload";
+import type { FightBetI } from "@/interfaces/bet";
 
 const namespace = '/fightbets';
 

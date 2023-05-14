@@ -15,7 +15,7 @@
                 <template #append>
                     <v-menu>
                         <template v-slot:activator="{ props }">
-                            <v-btn color="primary" v-bind="props" icon="mdi-dots-horizontal"></v-btn>
+                            <v-btn color="primary" size="small" v-bind="props" icon="mdi-dots-horizontal"></v-btn>
                         </template>
 
                         <v-list>
@@ -34,39 +34,34 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { useCategoryStore } from '@/stores/category';
 import { createToast } from 'mosha-vue-toastify';
 import { defineComponent, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import CreateWeightCategory from '@/components/dialogs/CreateWeightCategory.vue';
 import UpdateCategory from '@/components/dialogs/UpdateCategory.vue';
-import { WeightInterface } from '../interfaces/payload';
+import { IWeightCategory } from '@/interfaces/payload';
 
-export default defineComponent({
-    components: { CreateWeightCategory, UpdateCategory },
-    setup() {
-        const categoryStore = useCategoryStore();
-        const { getCategories, deleteCategory } = categoryStore;
-        const { categories }: WeightInterface = storeToRefs(categoryStore);
+const categoryStore = useCategoryStore();
+const { getCategories, deleteCategory } = categoryStore;
+const { categories } = storeToRefs(categoryStore);
 
-        onMounted(async () => {
-            try {
-                await getCategories();
-            } catch (error) {
-                createToast('Error while getting categories', { type: 'danger', position: 'bottom-right' });
-            }
-        });
-
-        const remove = async (category: WeightInterface) => {
-            try {
-                await deleteCategory(category.id);
-            } catch (error) {
-                createToast(error, { type: 'danger', position: 'bottom-right' });
-            }
-        };
-
-        return { categories, remove };
-    },
+onMounted(async () => {
+    try {
+        await getCategories();
+    } catch (error) {
+        createToast('Error while getting categories', { type: 'danger', position: 'bottom-right' });
+    }
 });
+
+const remove = async (category: IWeightCategory) => {
+    try {
+        await deleteCategory(category.id);
+    } catch (error) {
+        // @ts-ignore
+        createToast(error, { type: 'danger', position: 'bottom-right' });
+    }
+};
+
 </script>

@@ -1,11 +1,11 @@
 import { client, clientWithoutAuth } from "..";
-import { FighterI } from "../../interfaces/payload";
+import { CreateFighter, IFighter } from "@/interfaces/fighter";
 
 const namespace = '/fighters';
 
 class Fighter {
 
-    async _getFighters(): Promise<FighterI[]> {
+    async _getFighters(): Promise<IFighter[]> {
         try {
             const res = await clientWithoutAuth.get(namespace);
             return res.data;
@@ -14,7 +14,7 @@ class Fighter {
         }
     }
 
-    async _getFighter(id: string): Promise<FighterI> {
+    async _getFighter(id: string): Promise<IFighter> {
         try {
             const uri = `${namespace}/${id}`;
             const res = await clientWithoutAuth.get(uri);
@@ -24,7 +24,7 @@ class Fighter {
         }
     }
 
-    async _createFighter(payload: FighterI): Promise<FighterI> {
+    async _createFighter(payload: CreateFighter): Promise<IFighter> {
         try {
             const res = await client.post(namespace, payload);
             return res.data;
@@ -33,7 +33,7 @@ class Fighter {
         }
     }
 
-    async _upadateFighter(payload: FighterI): Promise<FighterI> {
+    async _upadateFighter(payload: IFighter): Promise<IFighter> {
         try {
             const uri = `${namespace}/${payload.id}`;
             const res = await client.patch(uri, payload);

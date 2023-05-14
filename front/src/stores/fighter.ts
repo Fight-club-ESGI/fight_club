@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import { FighterI } from "../interfaces/payload";
+import { CreateFighter, IFighter } from "@/interfaces/fighter";
 import { ref, computed, ComputedRef, Ref } from "vue";
 import { fighterService } from "../service/api/index";
 
 export const useFighterStore = defineStore('fighter', () => {
 
-    const fighter = ref<FighterI>();
-    const fighters = ref<FighterI[]>([]);
+    const fighter = ref<IFighter>();
+    const fighters = ref<IFighter[]>([]);
 
     interface FighterFilter {
         divisionClass: string[],
@@ -22,7 +22,7 @@ export const useFighterStore = defineStore('fighter', () => {
         gender: [],
     });
 
-    const filteredFighters: ComputedRef<FighterI[]> = computed(() => {
+    const filteredFighters: ComputedRef<IFighter[]> = computed(() => {
         let res = fighters.value;
         res = res.filter((fighter) => {
             if (filter.value.gender.includes(fighter.gender) || filter.value.gender.length === 0) {
@@ -59,7 +59,7 @@ export const useFighterStore = defineStore('fighter', () => {
         filter.value = f;
     }
 
-    async function createFighter(payload: FighterI) {
+    async function createFighter(payload: CreateFighter) {
         try {
             const res = await fighterService._createFighter(payload);
             fighters.value.push(res);
@@ -77,16 +77,17 @@ export const useFighterStore = defineStore('fighter', () => {
         }
     }
 
-    async function getFighters() {
+    async function getFighters(): Promise<IFighter[]> {
         try {
             const res = await fighterService._getFighters();
             fighters.value = res;
+            return res;
         } catch (error) {
             throw error;
         }
     }
 
-    async function updateFighter(payload: FighterI) {
+    async function updateFighter(payload: IFighter) {
         try {
             const res = await fighterService._upadateFighter(payload);
             const fighterToUpdate = fighters.value.findIndex(fighter => fighter.id === payload.id);

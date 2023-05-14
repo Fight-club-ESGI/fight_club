@@ -11,7 +11,7 @@
                 <div><i>{{ event.location }}</i></div>
                 <div class="">
                     {{
-                        new Date(event.timeEnd).toLocaleString('en-GB', {
+                        new Date(event.timeStart).toLocaleString('en-GB', {
                             year: 'numeric',
                             month: 'long',
                             day: '2-digit',
@@ -22,12 +22,16 @@
                     <v-icon icon="mdi-account-multiple"></v-icon>
                     <p class="text-primary text-lg font-bold">{{ event.capacity }}</p>
                 </div>
-                <v-btn color="primary" class="mt-auto">Buy tickets</v-btn>
             </div>
         </div>
         <v-divider />
         <h4 class="text-2xl font-bold pt-3">Event details</h4>
         <div>{{ event.description }}</div>
+        <h4 class="text-2xl font-bold pt-3">Tickets</h4>
+        <!-- <div v-if="event.ticketEvents.length === 0">No tickets</div> -->
+        <ticket-list display="grid" @selected-item="($event) => item = $event"></ticket-list>
+
+
     </div>
     <div v-else>
         No event found
@@ -38,11 +42,15 @@ import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '../stores/event';
+import { useTicketStore } from '../stores/tickets';
+import TicketList from '@/components/ticket/TicketList.vue';
 
 const route = useRoute();
 
 const eventStore = useEventStore();
+const ticketStore = useTicketStore();
 const { getEvent } = eventStore;
+const { getTicketsEvent } = ticketStore;
 const { event } = storeToRefs(eventStore);
 
 const eventId = computed(() => route.params.id.toString());
@@ -50,6 +58,7 @@ const eventId = computed(() => route.params.id.toString());
 onMounted(async () => {
     try {
         await getEvent(eventId.value);
+        await getTicketsEvent(eventId.value);
     } catch (error) {
         console.error(error)
     }

@@ -1,7 +1,7 @@
-import { ITicket, ITicketCategory } from "@/service/api/tickets";
-import { FightI } from "./payload";
+import { ITicket, ITicketCategory } from "./ticket";
+import { IFight } from "./figth";
 
-interface IEvent {
+export interface IEvent {
     id: string
     name: string
     location: string
@@ -10,10 +10,14 @@ interface IEvent {
     capacity: number
     vip: boolean
     category: string
-    fight: FightI[]
     locationLink: string
-    startTimestamp: string
-    endTimestamp: string
+    timeStart: string
+    timeEnd: string
+    imageFile: File | null
+    imageName: string
+    imageSize: string
+    ticketEvents: []
+    fights: IFight[]
 }
 
 export interface ITicketEvent {
@@ -23,4 +27,27 @@ export interface ITicketEvent {
     maxQuantity: number
     id: string
     tickets: ITicket[]
+}
+
+export interface UpdateTicketEvent {
+    event: string
+    ticketCategory: string
+    price: number
+    maxQuantity: number
+    id: string
+}
+
+export interface CreateEvent {
+    name: string
+    location: string
+    description: string
+    capacity: number
+    vip: boolean
+    category: string
+    locationLink: string
+    timeStart: string
+    timeEnd: string
+    imageFile: Blob | string
+    imageName: string
+    imageSize: string
 }

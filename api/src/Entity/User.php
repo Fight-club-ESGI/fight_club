@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\User\Role\ChangeUserRole;
-use App\Controller\User\UserMe;
 use App\Controller\User\ResetPasswordController;
 use App\Controller\User\ValidateResetPasswordController;
 use App\Entity\Trait\EntityIdTrait;
@@ -66,6 +65,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             security: "is_granted('ROLE_USER')"
         ),
         new Patch(
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
             normalizationContext: ['groups' => ['user:get']],
             denormalizationContext: ['groups' => ['user:patch']],
             security: 'is_granted("ROLE_ADMIN") or object === user',
@@ -94,7 +97,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             controller: ChangePassword::class,
             security: "is_granted('ROLE_USER')",
             name: 'validate-reset-password',
-        ),
+        )
     ]
 )]
 #[Vich\Uploadable]
@@ -120,8 +123,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:get_collection',
         'admin:post',
         'admin:patch',
-        'user:self:get',
-        'user:post'
+        'user:self:get'
     ])]
     private array $roles = [];
 
@@ -174,6 +176,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:self:get'
     ])]
     private ?string $VIPToken = null;
+
+    #[ORM\OneToOne(mappedBy: '_user', cascade: ['persist', 'remove'])]
+    private ?Cart $cart = null;
 
     public function __construct()
     {
@@ -387,6 +392,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVIPToken(?string $VIPToken): self
     {
         $this->VIPToken = $VIPToken;
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(Cart $cart): self
+    {
+        // set the owning side of the relation if necessary
+        if ($cart->getUser() !== $this) {
+            $cart->setUser($this);
+        }
+
+        $this->cart = $cart;
+
         return $this;
     }
 }

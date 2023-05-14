@@ -61,6 +61,7 @@ class Fighter
         'admin:get',
         'admin:post',
         'fighter:get',
+        'events:get',
         'fighter:post'
     ])]
     private ?string $firstname = null;
@@ -124,15 +125,37 @@ class Fighter
         'admin:get',
         'admin:post'
     ])]
-    #[MaxDepth(2)]
+    #[MaxDepth(1)]
     private ?FightCategory $fightCategory = null;
+
+    #[ORM\OneToMany(mappedBy: 'winner', targetEntity: Fight::class)]
+    #[Groups([
+        'admin:get'
+    ])]
+    #[MaxDepth(1)]
+    private Collection $winners;
+
+    #[ORM\OneToMany(mappedBy: 'loser', targetEntity: Fight::class)]
+    #[Groups([
+        'admin:get'
+    ])]
+    #[MaxDepth(1)]
+    private Collection $losers;
 
     #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
     #[Groups([
         'admin:get'
     ])]
+
     #[MaxDepth(2)]
-    private Collection $fights;
+    private Collection $fightsA;
+
+    #[ORM\OneToMany(mappedBy: 'fighterB', targetEntity: Fight::class)]
+    #[Groups([
+        'admin:get'
+    ])]
+    #[MaxDepth(2)]
+    private Collection $fightsB;
 
     public function getFirstname(): ?string
     {

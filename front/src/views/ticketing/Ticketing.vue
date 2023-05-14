@@ -9,25 +9,20 @@
                     </v-col>
                     <v-col cols="8">
                         <v-row no-gutters justify="end" align="center">
-                            <v-btn
-                                icon="mdi-minus"
-                                :disabled="ticket.quantity < 1"
-                                class="mr-3"
-                                size="30"
-                                @click="ticket.quantity--"
-                                color="primary"
-                            ></v-btn>
+                            <v-btn icon="mdi-minus" :disabled="ticket.quantity < 1" class="mr-3" size="30"
+                                @click="ticket.quantity--" color="primary"></v-btn>
                             <div class="custom-price text-right">{{ ticket.quantity }} x {{ ticket.price }} €</div>
-                            <v-btn icon="mdi-plus" class="ml-3" size="30" @click="ticket.quantity++" color="primary"></v-btn>
+                            <v-btn icon="mdi-plus" class="ml-3" size="30" @click="ticket.quantity++"
+                                color="primary"></v-btn>
                         </v-row>
                     </v-col>
                 </v-row>
                 <v-divider class="my-6"></v-divider>
                 <v-row no-gutters justify="space-between">
                     <v-col cols="6">Total price</v-col>
-                    <v-col cols="6"
-                        ><p class="custom-total text-right">{{ total }} €</p></v-col
-                    >
+                    <v-col cols="6">
+                        <p class="custom-total text-right">{{ total }} €</p>
+                    </v-col>
                 </v-row>
                 <v-row no-gutters justify="center" class="my-6">
                     <v-btn color="primary">Next step</v-btn>
@@ -72,6 +67,7 @@ const tickets = reactive([
     font-style: italic;
     font-weight: bold;
 }
+
 .custom-total {
     font-size: 36px;
     font-style: italic;

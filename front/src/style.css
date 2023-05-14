@@ -16,7 +16,7 @@
 }
 
 .router-link-active {
-  @apply text-contrast font-semibold;
+  @apply font-medium text-primary border-b border-primary;
 }
 
 body {

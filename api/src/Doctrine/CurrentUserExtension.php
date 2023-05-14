@@ -40,7 +40,7 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
         #}
         $user = $this->security->getUser();
 
-        switch($resourceClass) {
+        switch ($resourceClass) {
             case User::class:
                 $rootAlias = $queryBuilder->getRootAliases()[0];
                 $queryBuilder->andWhere(sprintf('%s.id = :current_user', $rootAlias));
@@ -55,6 +55,12 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
                 $rootAlias = $queryBuilder->getRootAliases()[0];
                 $queryBuilder->andWhere(sprintf('%s.wallet = :wallet', $rootAlias));
                 $queryBuilder->setParameter('wallet', $user->getWallet()->getId());
+                $queryBuilder->orderBy(sprintf('%s.createdAt', $rootAlias), 'DESC');
+                break;
+            case Cart::class:
+                $rootAlias = $queryBuilder->getRootAliases()[0];
+                $queryBuilder->andWhere(sprintf('%s.cart = :cart', $rootAlias));
+                $queryBuilder->setParameter('wallet', $user->getCart()->getId());
                 $queryBuilder->orderBy(sprintf('%s.createdAt', $rootAlias), 'DESC');
                 break;
             default:

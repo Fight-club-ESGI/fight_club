@@ -5,7 +5,9 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\Ticket\TicketEventPatchController;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TicketEventRepository;
@@ -15,6 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Faker\Core\Number;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 
 #[ORM\Entity(repositoryClass: TicketEventRepository::class)]
 #[ApiResource(
@@ -29,6 +33,17 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['ticket:event:get_collection']],
+        ),
+        new Patch(
+            uriTemplate: 'ticket_events/{id}',
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
+            controller: TicketEventPatchController::class,
+            normalizationContext: ['groups' => ['ticket:event:get']],
+            denormalizationContext: ['groups' => ['ticket:event:patch']],
+            security: 'is_granted("ROLE_ADMIN")',
         )
     ]
 )]
@@ -66,7 +81,8 @@ class TicketEvent
         'admin:post',
         'ticket:event:post',
         'ticket:event:get',
-        'event:ticket:get'
+        'event:ticket:get',
+        'ticket:event:patch'
     ])]
     private ?int $maxQuantity = null;
 
@@ -85,13 +101,31 @@ class TicketEvent
         'admin:post',
         'ticket:event:post',
         'ticket:event:get',
-        'event:ticket:get'
+        'event:ticket:get',
     ])]
     private ?float $price = null;
+
+    #[ORM\OneToMany(mappedBy: 'ticketEvent', targetEntity: CartItem::class)]
+    #[Groups([
+        'admin:get',
+    ])]
+    private Collection $cartItems;
+
+    #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+        'ticket:event:post',
+        'ticket:event:get',
+        'event:ticket:get',
+        'ticket:event:patch'
+    ])]
+    private bool $isActive = true;
 
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
     }
 
     public function getEvent(): ?Event
@@ -170,5 +204,46 @@ class TicketEvent
         $this->price = $price;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, CartItem>
+     */
+    public function getCartItems(): Collection
+    {
+        return $this->cartItems;
+    }
+
+    public function addCartItem(CartItem $cartItem): self
+    {
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems->add($cartItem);
+            $cartItem->setTicketEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(CartItem $cartItem): self
+    {
+        if ($this->cartItems->removeElement($cartItem)) {
+            // set the owning side to null (unless already changed)
+            if ($cartItem->getTicketEvent() === $this) {
+                $cartItem->setTicketEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function setIsActive(bool $isActive)
+    {
+        $this->setIsActive = $isActive;
+        return $this;
+    }
+
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

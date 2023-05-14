@@ -1,17 +1,17 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { ticketService } from "../service/api/index";
-import { ITicket, ITicketCategory, ICreateTicket } from "@/service/api/tickets";
-import { ITicketEvent } from "@/interfaces/event";
+import { ITicket, ITicketCategory, ICreateTicket, ICreateTicketEvent } from "@/interfaces/ticket";
+import { ITicketEvent, UpdateTicketEvent } from "@/interfaces/event";
 
 export const useTicketStore = defineStore('ticket', () => {
 
     const tickets = ref<ITicket[]>([]);
-    const ticketEvent = ref<ITicketEvent[]>([]);
+    const ticketsEvent = ref<ITicketEvent[]>([]);
     const ticketCategories = ref<ITicketCategory[]>([]);
 
     const ticketsNumber = computed(() => tickets.value.length);
-    const availableTickets = computed(() => tickets.value.map(t => t.availability === true).length);
+    const availableTickets = computed(() => ticketsEvent.value.filter((ticketEvent: ITicketEvent) => ticketEvent.tickets.length < ticketEvent.maxQuantity));
 
     async function getTickets(eventId: string) {
         try {
@@ -31,10 +31,10 @@ export const useTicketStore = defineStore('ticket', () => {
         }
     }
 
-    async function createTicketEvent(payload: ITicketEvent) {
+    async function createTicketEvent(payload: ICreateTicketEvent) {
         try {
-            const res: ITicket = await ticketService._createTicketEvent(payload);
-            ticketEvent.value.push(res);
+            const res: ITicketEvent = await ticketService._createTicketEvent(payload);
+            ticketsEvent.value.push(res);
         } catch (err) {
             throw err;
         }
@@ -52,20 +52,22 @@ export const useTicketStore = defineStore('ticket', () => {
     async function getTicketsEvent(eventId: string) {
         try {
             const res = await ticketService._getTicketsEvent(eventId);
-            ticketEvent.value = res;
+            ticketsEvent.value = res;
         } catch (err) {
             throw err;
         }
     }
 
-    async function updateTicketEvent(payload: { eventId: string, ticketCategoryId: string, maxQuantity: number }) {
+    async function updateTicketEvent(payload: UpdateTicketEvent): Promise<ITicketEvent> {
         try {
             const res = await ticketService._updateTicketEvent(payload);
-
-        } catch {
-            throw error;
+            const eventId = payload.event.split('/')[2]
+            await getTicketsEvent(eventId)
+            return res;
+        } catch (err) {
+            throw err;
         }
     }
 
-    return { tickets, ticketCategories, ticketEvent, getTickets, updateTicketEvent, createTicket, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
+    return { tickets, ticketCategories, ticketsEvent, getTickets, updateTicketEvent, createTicket, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
 });

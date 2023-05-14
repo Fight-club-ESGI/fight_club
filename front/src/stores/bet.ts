@@ -1,14 +1,27 @@
-import { defineStore } from "pinia";
-import { FightBetI } from "../interfaces/payload";
-import { ref } from "vue";
-import { betService } from "../service/api";
+import { defineStore } from 'pinia';
+import { FightBetI, CurrentBetI } from '@/interfaces/bet';
+import { ref } from 'vue';
+import { betService } from '../service/api';
 
 export const useBetStore = defineStore('bet', () => {
-
     const bet = ref<FightBetI>();
     const bets = ref<FightBetI[]>([]);
 
-    async function betWallet(payload: { fight: string, betOn: string, amount: number }) {
+    const currentBet = ref<CurrentBetI>({
+        id: '',
+        bets: [],
+        amount: 0,
+    });
+
+    function $resetCurrentBet() {
+        currentBet.value = {
+            id: '',
+            bets: [],
+            amount: 0,
+        };
+    }
+
+    async function betWallet(payload: { fight: string; betOn: string; amount: number }) {
         try {
             const res = await betService._betWallet(payload);
             return res;
@@ -17,7 +30,7 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    async function betDirect(payload: { fight: string, betOn: string, amount: number }) {
+    async function betDirect(payload: { fight: string; betOn: string; amount: number }) {
         try {
             const res = await betService._betDirect(payload);
             return res;
@@ -25,6 +38,16 @@ export const useBetStore = defineStore('bet', () => {
             throw error;
         }
     }
+
+    // async function setCurrentBet(bet: CurrentBetI[]) {
+    //     try {
+    //         const res = setCurrentBetToLocalStorage(bet);
+    //         currentBet.value = bet;
+    //         return res;
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 
     async function createBet(payload: FightBetI) {
         try {
@@ -35,7 +58,7 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    async function getBet(payload: { id: string, betId: string }) {
+    async function getBet(payload: { id: string; betId: string }) {
         try {
             const res = await betService._getBet(payload);
             bet.value = res;
@@ -53,5 +76,5 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    return { betWallet, betDirect, createBet, getBet, getBets, bet, bets }
+    return { currentBet, $resetCurrentBet, betWallet, betDirect, createBet, getBet, getBets, bet, bets };
 });

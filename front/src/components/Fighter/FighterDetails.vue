@@ -29,11 +29,11 @@ export default defineComponent({
         const { getFighter } = fighterStore;
         const { fighter } = storeToRefs(fighterStore);
 
-        const fighterId = computed(() => route.params.id);
+        const fighterId = computed(() => route.params.id.toString()).value;
 
         onMounted(async () => {
             try {
-                await getFighter(fighterId.value);
+                await getFighter(fighterId);
             } catch (error) {
                 createToast('Error while fetching fighter', {
                     position: 'bottom-right',

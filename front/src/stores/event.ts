@@ -1,13 +1,23 @@
 import { defineStore } from "pinia";
-import { eventService } from "../service/api";
-import { ref } from "vue"
-import { EventI } from "../interfaces/payload";
+import { eventService, ticketService } from "../service/api";
+import { ref, computed } from "vue"
+import { CreateEvent, IEvent } from "@/interfaces/event";
 
 export const useEventStore = defineStore('event', () => {
-    const event = ref<EventI>();
-    const events = ref<EventI[]>([]);
+    const event = ref<IEvent>();
+    const events = ref<IEvent[]>([]);
 
-    async function createEvent(payload: EventI) {
+    const incomingEvents = computed(() => {
+        return events.value.filter(e => new Date(e.timeStart) > new Date()).sort(function (a: IEvent, b: IEvent) {
+            return new Date(a.timeStart) - new Date(b.timeStart);
+        })
+    });
+
+    const fights = computed(() => {
+        return event.value?.fights;
+    });
+
+    async function createEvent(payload: CreateEvent) {
         try {
             const res = await eventService._createEvent(payload);
             events.value.push(res);
@@ -34,7 +44,7 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    async function updateEvent(payload: EventI) {
+    async function updateEvent(payload: IEvent) {
         try {
             const res = await eventService._upadateEvent(payload);
             events.value.splice(events.value.findIndex(e => e.id === res.id), 1, res);
@@ -52,5 +62,5 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    return { createEvent, getEvent, getEvents, updateEvent, deleteEvent, events, event }
+    return { createEvent, getEvent, getEvents, updateEvent, deleteEvent, events, event, fights, incomingEvents }
 });

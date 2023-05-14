@@ -2,16 +2,18 @@
     <div>
         <v-breadcrumbs :items="items"></v-breadcrumbs>
 
-        <v-container>
-            <div class="flex grid grid-cols-4 gap-4">
+        <div class="px-10">
+            <div class="grid grid-cols-4 gap-4">
                 <fighter-filter class="col-span-1 sticky top-[64px]" />
-                <div v-if="fighters" class="col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" no-gutters>
+                <div v-if="fighters"
+                    class="col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+                    no-gutters>
                     <div v-for="fighter in filteredFighters" :key="fighter.id">
                         <fighter :fighter="fighter"></fighter>
                     </div>
                 </div>
             </div>
-        </v-container>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>

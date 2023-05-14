@@ -10,18 +10,19 @@
                 </div>
                 <v-row no-gutters justify="space-between">
                     <div class="my-1">Seat {{ ticket.placeSeat }} - {{ ticket.category }}</div>
-                    <div class="my-1 text-right font-weight-bold">{{ formatMoney(ticket.price) }} €</div>
+                    <div class="my-1 text-right font-weight-bold">{{ formatNumber(ticket.price) }} €</div>
                 </v-row>
             </v-col>
         </v-row>
         <v-divider class="my-2"></v-divider>
-        <p class="mb-1 text-grey-darken-1">Ref {{ ticket.ref }} - {{ DateTime.fromISO(ticket.purchaseDate, { locale: 'en' }).toFormat('ff') }}</p>
+        <p class="mb-1 text-grey-darken-1">Ref {{ ticket.ref }} -
+            {{ DateTime.fromISO(ticket.purchaseDate, { locale: 'en' }).toFormat('ff') }}</p>
     </v-card>
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import { formatMoney } from '@/service/helpers';
+import { formatNumber } from '@/service/helpers';
 defineProps({
     ticket: {
         type: Object,
@@ -36,13 +37,14 @@ defineProps({
 .v-btn {
     text-transform: none;
 }
+
 .custom-rating {
     color: white;
     background: rgb(var(--v-theme-primary));
     border-radius: 5px;
 }
+
 .custom-result {
     background: rgb(var(--v-theme-lightgray));
     border-radius: 5px;
-}
-</style>
+}</style>

@@ -1,49 +1,29 @@
 <template>
-    <v-form 
-        class="w-full px-12 xl:w-2/3 mx-auto text-white"
-        ref="form" v-model="valid"
-        lazy-validation>
+    <v-form class="w-full px-12 xl:w-2/3 mx-auto text-white" ref="form" v-model="valid" lazy-validation>
         <p class="text-center font-weight-bold">Register</p>
 
-        <v-text-field
-            v-model="username"
-            :rules="usernameRules"
-            autocomplete="username"
-            :counter="10"
-            label="Username"
-            required
-            class="my-4"
-        ></v-text-field>
+        <v-text-field v-model="username" :rules="usernameRules" autocomplete="username" :counter="10" label="Username"
+            required class="my-4"></v-text-field>
 
         <v-text-field v-model="email" :rules="emailRules" label="E-mail" required class="my-4"></v-text-field>
 
-        <v-text-field
-            v-model="password"
-            label="Password"
-            type="password"
-            autocomplete="current-password"
-            required
-            class="my-4"
-        ></v-text-field>
+        <v-text-field v-model="password" label="Password" type="password" autocomplete="current-password" required
+            class="my-4"></v-text-field>
 
-        <v-switch
-            v-model="checkbox"
-            :rules="[(v) => !!v || 'You must agree to continue!']"
+        <v-switch v-model="checkbox" :rules="[(v) => !!v || 'You must agree to continue!']"
             label="I certify that I am over 18 years old. I have read and accept the Terms and Conditions and the Privacy Policy."
-            color="primary"
-            required
-            class="my-4"
-        ></v-switch>
+            color="primary" required class="my-4"></v-switch>
 
         <v-btn block color="primary" @click="validate"> Validate </v-btn>
         <v-divider class="my-3"></v-divider>
-        <div class="text-center"><router-link :to="{ name: 'login' }" class="custom-link">Already registered?</router-link></div>
+        <div class="text-center"><router-link :to="{ name: 'login' }" class="custom-link">Already registered?</router-link>
+        </div>
     </v-form>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { SignupI } from '@/interfaces/payload';
+import { ISignup } from '@/interfaces/security';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 
@@ -68,7 +48,7 @@ async function validate() {
 
     if (valid) {
         try {
-            const payload: SignupI = {
+            const payload: ISignup = {
                 username: username.value,
                 password: password.value,
                 email: email.value,
@@ -82,5 +62,4 @@ async function validate() {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

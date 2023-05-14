@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { walletTransactionService } from "../service/api";
-import {WalletTransactionInterface} from "@/interfaces/responseAPI";
+import { WalletTransactionInterface } from "@/interfaces/responseAPI";
 
 export const useWalletTransactionStore = defineStore('wallet_transaction', () => {
 
@@ -51,7 +51,7 @@ export const useWalletTransactionStore = defineStore('wallet_transaction', () =>
         try {
             walletTransaction.value = await walletTransactionService._confirmation(transaction_id);
 
-            if ( walletTransactionHistory ) {
+            if (walletTransactionHistory) {
 
                 let idx = walletTransactionHistory.value.findIndex(transaction => transaction.id === walletTransaction.value.id)
                 if (idx !== -1) {

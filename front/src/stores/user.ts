@@ -1,33 +1,24 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { userService } from '../service/api';
-import type { SigninI, SignupI } from '@/interfaces/payload';
+import type { ISignin, ISignup } from '@/interfaces/security';
 import type { userInterface } from '@/interfaces/responseAPI';
 import { token, refreshToken } from '@/service';
 import { useRouter } from "vue-router"
-import jwt_decode from 'jwt-decode';
-import {WalletInterface} from "@/interfaces/responseAPI";
+import { useCartStore } from './cart';
+import { UpdateUser } from '@/interfaces/user';
 
 export const useUserStore = defineStore('user', () => {
     const router = useRouter();
 
+    const cartStore = useCartStore();
+    const { getCart } = cartStore;
+
     const { _signin, _signup, _getSelfUser, _getUsers, _signinWithToken, _checkTokenValidity, _changePassword, _resetPassword, _validateResetPassword, _updateUser } = userService;
 
-    const user = ref<userInterface>({
-        id: null,
-        username: null,
-        roles: null,
-        email: null,
-        sponsorshipAsSponsor: [],
-        createdAt: null,
-        updatedAt: null,
-        wallet: {
-            id: null,
-            amount: null,
-            createdAt: null,
-            updatedAt: null,
-        }
-    });
+
+    const user = ref<userInterface | undefined>()
+
 
     const users = ref<userInterface[]>([]);
 
@@ -53,19 +44,20 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    async function signin(payload: SigninI) {
+    async function signin(payload: ISignin) {
         try {
             const res = await _signin(payload);
             token.value = res.token;
             refreshToken.value = res.refresh_token;
             const self = await _getSelfUser();
             user.value = self;
+            await getCart();
         } catch (error) {
             throw error;
         }
     }
 
-    async function signup(payload: SignupI) {
+    async function signup(payload: ISignup) {
         try {
             const res = await _signup(payload);
         } catch (error) {
@@ -79,6 +71,7 @@ export const useUserStore = defineStore('user', () => {
             token.value = res.token;
             const self = await _getSelfUser();
             user.value = self;
+            await getCart();
         } catch (error) {
             throw error;
         }
@@ -118,21 +111,7 @@ export const useUserStore = defineStore('user', () => {
 
     async function logout() {
         try {
-            user.value = {
-                id: null,
-                username: null,
-                roles: null,
-                email: null,
-                sponsorshipAsSponsor: [],
-                createdAt: null,
-                updatedAt: null,
-                wallet: {
-                    id: null,
-                    amount: null,
-                    createdAt: null,
-                    updatedAt: null,
-                }
-            };
+            user.value = undefined;
             router.push({ name: 'login' });
             token.value = "";
             refreshToken.value = "";
@@ -149,7 +128,7 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    async function updateUser(payload: { id: string, username: string }) {
+    async function updateUser(payload: UpdateUser) {
         try {
             const res = await _updateUser(payload);
             user.value = res;

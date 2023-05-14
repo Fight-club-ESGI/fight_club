@@ -6,9 +6,9 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
+use App\Controller\Event\CreateEvent;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -20,26 +20,28 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ApiResource(
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['tickets:get', 'additional:get', 'events:get']],
-            name: 'event_tickets'
+            normalizationContext: ['groups' => ['tickets:get', 'events:get']],
         ),
         new Get(
-            normalizationContext: ['groups' => ['events:get']],
+            normalizationContext: ['groups' => ['events:get', 'fights:get', 'fighter:get']],
         ),
         new Get(
             uriTemplate: 'events/{id}/ticket_event',
             controller: GetTicketEventByEventId::class,
-            normalizationContext: ['groups' => ['event:ticket:get']]
+            normalizationContext: ['groups' => ['event:ticket:get']],
+            name: 'event_tickets'
         ),
         new Post(
-            normalizationContext: ['groups' => ['tickets:get', 'additional:get']],
+            controller: CreateEvent::class,
+            normalizationContext: ['groups' => ['tickets:get']],
             denormalizationContext: ['groups' => ['tickets:post']],
-            security: 'is_granted("ROLE_ADMIN")',
+            deserialize: false
         ),
         new Delete(),
         new Patch(
@@ -51,6 +53,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         )
     ]
 )]
+#[Vich\Uploadable]
 class Event
 {
     use EntityIdTrait;
@@ -60,9 +63,10 @@ class Event
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[Groups([
         'admin:get',
+        'admin:post',
         'tickets:get',
         'events:get',
-        'admin:patch'
+        'admin:patch',
     ])]
     #[MaxDepth(1)]
     private ?FightCategory $fightCategory = null;
@@ -98,7 +102,7 @@ class Event
     ])]
     private ?string $locationLink = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[Groups([
         'admin:get',
         'tickets:get',
@@ -108,7 +112,7 @@ class Event
     ])]
     private ?\DateTimeInterface $timeStart = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[Groups([
         'admin:get',
         'tickets:get',
@@ -153,27 +157,24 @@ class Event
     #[Groups([
         'admin:get',
         'tickets:get',
-        'admin:patch'
     ])]
     private Collection $tickets;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
     #[Groups([
         'admin:get',
-        'tickets:get',
-        'admin:patch'
+        'events:get'
     ])]
     private Collection $fights;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: TicketEvent::class)]
-    #[MaxDepth(3)]
+    #[MaxDepth(1)]
     #[Groups([
         'admin:get',
         'tickets:get',
         'ticket:category:post',
         'events:get',
         'event:ticket:get',
-        'admin:patch'
     ])]
     private Collection $ticketEvents;
 
@@ -273,7 +274,7 @@ class Event
         return $this->capacity;
     }
 
-    public function setCapacity(?int $capacity): self
+    public function setCapacity(null|int|string $capacity): self
     {
         $this->capacity = $capacity;
 

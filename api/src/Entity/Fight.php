@@ -3,10 +3,18 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\Fight\FightChooseWinner;
+use App\Controller\Fight\FightValidation;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\Fight\PostFight;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightRepository;
+use App\Service\Fight\FightOddsService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +25,44 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new Post(
+            uriTemplate: 'fights',
+            controller: PostFight::class,
             security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(
+            uriTemplate: "/fights/{fight}/validation",
+            controller: FightValidation::class,
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: "admin only",
+            read: false,
+            name: 'fight_wallet',
+        ),
+        new Patch(
+            inputFormats: [
+                'json' => ['application/json']
+            ],
+            normalizationContext: ["groups" => ['fights:get', 'fighter:get']],
+            denormalizationContext: ["groups" => ['fights:post', 'fighter:patch']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(
+            uriTemplate: "/fights/{fight}/winner",
+            controller: FightChooseWinner::class,
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: "admin only",
+            read: false,
+            name: 'fight_winner'
+        ),
+        new GetCollection(
+            normalizationContext: ["groups" => ['fights:get']],
+            name: "get_fights"
+        ),
+        new Get(
+            normalizationContext: ["groups" => ['fights:get']],
+            name: "get_fight",
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')",
         )
     ]
 )]
@@ -29,32 +74,40 @@ class Fight
     #[ORM\ManyToOne(inversedBy: 'fights')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
     ])]
     #[MaxDepth(1)]
     private ?Event $event = null;
 
-    #[ORM\ManyToOne(inversedBy: 'fighterA')]
+    #[ORM\ManyToOne(inversedBy: 'fightsA')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
+        'fighter:get',
+        'fighter:patch'
     ])]
     #[MaxDepth(1)]
     private ?Fighter $fighterA = null;
 
-    #[ORM\ManyToOne(inversedBy: 'fighterB')]
+    #[ORM\ManyToOne(inversedBy: 'fightsB')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
+        'fighter:get',
+        'fighter:patch'
     ])]
     #[MaxDepth(1)]
     private ?Fighter $fighterB = null;
 
     #[ORM\ManyToOne(inversedBy: 'winners')]
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
     ])]
@@ -63,28 +116,32 @@ class Fight
 
     #[ORM\ManyToOne(inversedBy: 'losers')]
     #[Groups([
+        'fights:get',
         'admin:get',
-        'admin:post',
+        'admin:post'
     ])]
     #[MaxDepth(1)]
     private ?Fighter $loser = null;
 
     #[ORM\Column(options: ['default' => false])]
     #[Groups([
-        'admin:get',
+        'fights:get',
+        'admin:get'
     ])]
     private ?bool $winnerValidation = false;
 
     #[ORM\ManyToOne]
     #[Groups([
-        'admin:get',
+        'fights:get',
+        'admin:get'
     ])]
     #[MaxDepth(1)]
     private ?User $adminValidatorA = null;
 
     #[ORM\ManyToOne]
     #[Groups([
-        'admin:get',
+        'fights:get',
+        'admin:get'
     ])]
     #[MaxDepth(1)]
     private ?User $adminValidatorB = null;
@@ -92,9 +149,15 @@ class Fight
     #[ORM\OneToMany(mappedBy: 'fight', targetEntity: Bet::class)]
     #[Groups([
         'admin:get',
-        'admin:post',
+        'admin:post'
     ])]
     private Collection $bets;
+
+    #[Groups([
+        'admin:get',
+        'admin:post',
+    ])]
+    private array $odds;
 
     public function __construct()
     {
@@ -225,5 +288,10 @@ class Fight
         }
 
         return $this;
+    }
+
+    public function getOdds(): array
+    {
+        return (new FightOddsService($this))->odd();
     }
 }
