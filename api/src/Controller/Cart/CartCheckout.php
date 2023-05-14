@@ -59,10 +59,10 @@ class CartCheckout extends AbstractController
 
         switch ($type) {
             case 'wallet':
-                $this->checkoutService->checkoutWallet($cart);
+                $this->payWithWallet($cart, $totalPrice);
                 break;
             case 'stripe':
-                $this->checkoutService->checkoutStripe($cart);
+                $this->payWithStripe($cart, $totalPrice);
                 break;
         }
 
