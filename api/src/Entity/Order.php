@@ -59,15 +59,9 @@ class Order
     use EntityIdTrait;
     use TimestampableTrait;
 
-    #[ORM\OneToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups([
-        'admin:get',
-        'admin:post',
-        'order:post'
-    ])]
-    #[MaxDepth(1)]
-    private ?User $customer = null;
+    private ?User $_user = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
@@ -76,20 +70,6 @@ class Order
         'order:post'
     ])]
     private ?OrderStatusEnum $status = OrderStatusEnum::PENDING;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([
-        'admin:get',
-        'admin:post'
-    ])]
-    private ?OrderPaymentTypeEnum $paymentType = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([
-        'admin:get',
-        'admin:post'
-    ])]
-    private ?string $stripe = null;
 
     #[ORM\OneToMany(mappedBy: '_order', targetEntity: Ticket::class)]
     #[Groups([
@@ -104,19 +84,22 @@ class Order
     ])]
     private ?float $price = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?WalletTransaction $walletTransaction = null;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
     }
 
-    public function getCustomer(): ?User
+    public function getUser(): ?User
     {
-        return $this->customer;
+        return $this->_user;
     }
 
-    public function setCustomer(User $customer): self
+    public function setUser(?User $_user): self
     {
-        $this->customer = $customer;
+        $this->_user = $_user;
 
         return $this;
     }
@@ -129,30 +112,6 @@ class Order
     public function setStatus(OrderStatusEnum $status): self
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getPaymentType(): ?OrderPaymentTypeEnum
-    {
-        return $this->paymentType;
-    }
-
-    public function setPaymentType(OrderPaymentTypeEnum $paymentType): self
-    {
-        $this->paymentType = $paymentType;
-
-        return $this;
-    }
-
-    public function getStripe(): ?string
-    {
-        return $this->stripe;
-    }
-
-    public function setStripe(?string $stripe): self
-    {
-        $this->stripe = $stripe;
 
         return $this;
     }
@@ -195,6 +154,18 @@ class Order
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getWalletTransaction(): ?WalletTransaction
+    {
+        return $this->walletTransaction;
+    }
+
+    public function setWalletTransaction(?WalletTransaction $walletTransaction): self
+    {
+        $this->walletTransaction = $walletTransaction;
 
         return $this;
     }

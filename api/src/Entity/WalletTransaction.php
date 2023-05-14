@@ -99,6 +99,10 @@ class WalletTransaction
     #[ORM\JoinColumn(nullable: true)]
     private ?Bet $bet = null;
 
+    #[ORM\OneToOne(mappedBy: 'order', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Order $order = null;
+
     public function getWallet(): ?Wallet
     {
         return $this->wallet;
@@ -189,6 +193,22 @@ class WalletTransaction
         }
 
         $this->bet = $bet;
+
+        return $this;
+    }
+
+    public function getOrder(): ?Order
+    {
+        return $this->order;
+    }
+
+    public function setOrder(Order $order): self
+    {
+        if ($order->getWalletTransaction() !== $this) {
+            $order->setWalletTransaction($this);
+        }
+
+        $this->order = $order;
 
         return $this;
     }
