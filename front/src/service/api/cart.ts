@@ -24,7 +24,7 @@ class Cart {
             if (cartItem) {
                 const uri = `${cartItemURL}/${cartItem.id}`;
                 const data = {
-                    quantity: cartItem.quantity + payload.quantity
+                    quantity: Math.min(10, cartItem.quantity + payload.quantity)
                 }
                 const res = await client.patch(uri, data);
                 return res.data;
