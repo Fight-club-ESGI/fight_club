@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\Cart\CartCheckout;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\CartRepository;
@@ -30,6 +32,10 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => ['cart:get']],
             securityMessage: 'You need to be connected',
             name: 'self_cart'
+        ),
+        new Post(
+            uriTemplate: '/carts/{cart}/checkout',
+            controller: CartCheckout::class,
         )
     ]
 )]
