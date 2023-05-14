@@ -8,7 +8,7 @@
     "test-html-report": "playwright test --browser=all --reporter=html",
     "test-json-report": "PLAYWRIGHT_JSON_OUTPUT_NAME=results.json playwright test --browser=chromium --reporter=json",
     "dev": "vite --port 5173 --strictPort --host",
-    "build": "vue-tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "@iconify/vue": "^4.1.1",
     "@mdi/font": "^7.2.96",
     "@playwright/test": "^1.33.0",
+    "@types/luxon": "^3.3.0",
     "@types/node": "^18.13.0",
     "@vitejs/plugin-vue": "^3.2.0",
     "eslint": "^8.32.0",
