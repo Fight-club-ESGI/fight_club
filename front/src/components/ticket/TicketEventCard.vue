@@ -37,6 +37,10 @@ const addCart = async (ticketEvent: string) => {
         });
     }
 }
+
+const checkNumber = () => {
+    quantity.value = Math.min(10, Math.max(1, Number(quantity.value)));
+}
 </script>
 
 <template>
@@ -63,8 +67,8 @@ const addCart = async (ticketEvent: string) => {
         </v-card-text>
         <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
             <v-card-actions>
-                <v-text-field v-model.number="quantity" placeholder="Quantity" type="number" min="1" max="10" step="1"
-                    density="compact"></v-text-field>
+                <v-text-field v-model.number="quantity" placeholder="Quantity" @input="checkNumber" type="number" min="1"
+                    max="10" step="1" density="compact"></v-text-field>
                 <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" class="ml-auto" variant="tonal">Add to
                     cart</v-btn>
             </v-card-actions>
