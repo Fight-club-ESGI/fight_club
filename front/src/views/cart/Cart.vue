@@ -49,7 +49,9 @@
                             </div>
                         </div>
                         <div class="w-1/2">
-                            <v-btn block class="rounded" color="secondary" @click="">Go to checkout</v-btn>
+                            <v-btn block class="rounded" color="secondary" @click="checkout()"
+                                :disabled="cartTotalItems === 0">Go to
+                                checkout</v-btn>
                         </div>
                     </div>
                 </div>
@@ -68,23 +70,34 @@ const cartStore = useCartStore();
 const { cartTotalItems, cartItems, cartTotalPrice } = storeToRefs(cartStore);
 const { getCart, removeFromCart, updateCartItem } = cartStore;
 
+let timeout: ReturnType<typeof setTimeout> | null
+
 const removeItem = async (item: CartItemInterface) => {
     await removeFromCart(item);
 }
 
 const updateItem = async (item: CartItemInterface) => {
-    try {
-        await updateCartItem(item);
+    item.quantity = Math.min(10, Math.max(1, Number(item.quantity)));
+    if (timeout !== null) {
+        clearTimeout(timeout);
     }
-    catch {
-        await getCart();
-        createToast('Error while updating cart', {
-            type: 'danger',
-            position: 'bottom-right'
-        });
-    }
+
+    timeout = setTimeout(async () => {
+        try {
+            await updateCartItem(item);
+        } catch {
+            await getCart();
+            createToast('Error while updating cart', {
+                type: 'danger',
+                position: 'bottom-right'
+            });
+        }
+    }, 500);
 }
 
+const checkout = () => {
+
+}
 
 const items = [
     {

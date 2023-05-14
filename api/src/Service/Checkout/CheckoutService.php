@@ -34,7 +34,7 @@ class CheckoutService
         $params['mode'] = 'payment';
 
         if ($default_confirmation_url) {
-            $confirmationUrl = $_ENV['FRONT_URL'] . "/checkout/confirmation?transaction_id=". $this->walletTransaction->getId();;
+            $confirmationUrl = $_ENV['FRONT_URL'] . "/checkout/confirmation?transaction_id=" . $this->walletTransaction->getId();
             $params['success_url'] = $confirmationUrl;
             $params['cancel_url'] = $confirmationUrl;
         }
@@ -71,8 +71,43 @@ class CheckoutService
         if ($walletTransaction->getStripeRef() !== null) {
             $transaction = $this->stripe->checkout->sessions->retrieve($walletTransaction->getStripeRef(), []);
 
-            switch($walletTransaction->getStatus()) {
-                case WalletTransactionStatusEnum::PENDING :
+            switch ($walletTransaction->getStatus()) {
+                case WalletTransactionStatusEnum::PENDING:
+                    if ($transaction->payment_status === 'paid') {
+                        $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+                        $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + floatval($transaction->amount_total / 100));
+                    } else {
+                        $walletTransaction->setStatus(WalletTransactionStatusEnum::REJECTED);
+                    }
+
+                    $this->entityManager->persist($walletTransaction);
+                    $this->entityManager->flush();
+                    break;
+                case WalletTransactionStatusEnum::REJECTED:
+                case WalletTransactionStatusEnum::ACCEPTED:
+                case WalletTransactionStatusEnum::CANCELLED:
+                    break;
+            }
+        }
+    }
+
+    public function refund(WalletTransaction $walletTransaction, $amount): void
+    {
+        $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+        $walletTransaction->setType(WalletTransactionTypeEnum::REFUND);
+        $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + $amount);
+
+        $this->entityManager->persist($walletTransaction);
+        $this->entityManager->flush();
+    }
+
+    public function orderConfirmation(WalletTransaction $walletTransaction): void
+    {
+        if ($walletTransaction->getStripeRef() !== null) {
+            $transaction = $this->stripe->checkout->sessions->retrieve($walletTransaction->getStripeRef(), []);
+
+            switch ($walletTransaction->getStatus()) {
+                case WalletTransactionStatusEnum::PENDING:
                     if ($transaction->payment_status === 'paid') {
                         $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
                         $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + floatval($transaction->amount_total / 100));
