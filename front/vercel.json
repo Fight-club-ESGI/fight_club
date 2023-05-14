@@ -1,5 +1,1 @@
-{
-    "builds": [
-      { "src": "deploy.sh", "use": "@vercel/static-build" }
-    ]
-}
+{}

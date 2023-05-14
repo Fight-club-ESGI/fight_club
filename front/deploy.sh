@@ -1,2 +1,3 @@
 #!/bin/bash
-vercel --prod --test "vercel-playwright ./.github/workflows/playwright.yaml"
+vercel --prod "vercel-playwright /.github/workflows/playwright.yml"
+
