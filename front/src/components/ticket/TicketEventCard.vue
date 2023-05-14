@@ -23,7 +23,7 @@ const props = defineProps({
     }
 })
 
-const canAddToCart = computed(() => {
+const cartQuantity = computed(() => {
 
     let cartQuantity = cart.value?.cartItems.reduce((acc, item) => {
         if (item.ticketEvent && item.ticketEvent.id == props.ticketEvent.id) {
@@ -32,30 +32,28 @@ const canAddToCart = computed(() => {
         return acc;
     }, 0) || 0;
 
-    if (props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity < quantity.value)
+    return cartQuantity;
+
+});
+
+const canAddToCart = computed(() => {
+
+    if (maxCanAddToCart.value < quantity.value)
         return false;
 
     return true;
+
+});
+
+const maxCanAddToCart = computed(() => {
+
+    return props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity.value;
+
 });
 
 const addCart = async (ticketEvent: string) => {
 
-    if (!canAddToCart) {
-        createToast('Not enough tickets available', {
-            type: 'danger',
-            position: 'bottom-right'
-        });
-        return;
-    }
-
-    let cartQuantity = cart.value?.cartItems.reduce((acc, item) => {
-        if (item.ticketEvent && item.ticketEvent.id == ticketEvent) {
-            return acc + item.quantity;
-        }
-        return acc;
-    }, 0) || 0;
-
-    if (props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity < quantity.value) {
+    if (!canAddToCart.value) {
         createToast('Not enough tickets available', {
             type: 'danger',
             position: 'bottom-right'
@@ -79,7 +77,7 @@ const addCart = async (ticketEvent: string) => {
 }
 
 const checkNumber = () => {
-    quantity.value = Math.min(10, Math.max(1, Number(quantity.value)));
+    quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value)));
 }
 </script>
 
@@ -102,7 +100,7 @@ const checkNumber = () => {
                 <span class="font-bold">Available : </span>
                 <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} / {{
                     props.ticketEvent.maxQuantity
-                }}</span>
+                }} <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span></span>
             </div>
         </v-card-text>
         <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
