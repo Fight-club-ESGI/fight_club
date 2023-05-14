@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set working directory
-      run: cd front/
+      run: ls
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
