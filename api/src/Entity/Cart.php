@@ -40,8 +40,10 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             name: 'self_cart'
         ),
         new Post(
-            uriTemplate: '/carts/{cart}/checkout',
+            uriTemplate: '/carts/{id}/checkout',
             controller: CartCheckout::class,
+            read: false,
+            name: 'cart_checkout',
         )
     ]
 )]
