@@ -15,7 +15,7 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: |
-            cd /front    
+            cd front/    
             npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
