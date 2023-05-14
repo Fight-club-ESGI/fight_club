@@ -22,6 +22,10 @@ const props = defineProps({
 })
 
 const cartQuantity = computed(() => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> d1f5c63 (Front safety limit)
     let cartQuantity = cart.value?.cartItems.reduce((acc, item) => {
         if (item.ticketEvent && item.ticketEvent.id == props.ticketEvent.id) {
             return acc + item.quantity;
@@ -30,13 +34,29 @@ const cartQuantity = computed(() => {
     }, 0) || 0;
 
     return cartQuantity;
+<<<<<<< HEAD
 });
 
 const canAddToCart = computed(() => {
     if (maxCanAddToCart.value < quantity.value || maxCanAddToCart.value <= 0)
+=======
+
+});
+
+const canAddToCart = computed(() => {
+
+    if (maxCanAddToCart.value < quantity.value)
+>>>>>>> d1f5c63 (Front safety limit)
         return false;
 
     return true;
+
+});
+
+const maxCanAddToCart = computed(() => {
+
+    return props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity.value;
+
 });
 
 const maxCanAddToCart = computed(() => {
@@ -64,6 +84,10 @@ const maxCanAddToCart = computed(() => {
 });
 
 const addCart = async (ticketEvent: string) => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> d1f5c63 (Front safety limit)
     if (!canAddToCart.value) {
         createToast('Not enough tickets available', {
             type: 'danger',
@@ -90,6 +114,7 @@ const addCart = async (ticketEvent: string) => {
 }
 
 const checkNumber = () => {
+<<<<<<< HEAD
     quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value))) || 1;
 }
 
@@ -101,6 +126,9 @@ const increment = () => {
 const decrement = () => {
     quantity.value--;
     checkNumber();
+=======
+    quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value)));
+>>>>>>> d1f5c63 (Front safety limit)
 }
 </script>
 
@@ -122,9 +150,14 @@ const decrement = () => {
             <div v-else>
                 <span class="font-bold">Available : </span>
                 <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} / {{
+<<<<<<< HEAD
                     props.ticketEvent.maxQuantity }}
                     <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span>
                 </span>
+=======
+                    props.ticketEvent.maxQuantity
+                }} <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span></span>
+>>>>>>> d1f5c63 (Front safety limit)
             </div>
         </v-card-text>
         <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
