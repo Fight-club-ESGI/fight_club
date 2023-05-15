@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Post;
 use App\Controller\Fight\FightChooseWinner;
 use App\Controller\Fight\FightValidation;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\Fight\PostFight;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\FightRepository;
@@ -24,6 +25,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new Post(
+            uriTemplate: 'fights',
+            controller: PostFight::class,
             security: "is_granted('ROLE_ADMIN')"
         ),
         new Post(

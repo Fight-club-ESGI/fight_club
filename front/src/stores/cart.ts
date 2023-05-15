@@ -50,6 +50,7 @@ export const useCartStore = defineStore('cart', () => {
 
     async function updateCartItem(payload: CartItemInterface) {
         try {
+            payload.quantity = Math.max(1, Math.min(10, payload.quantity));
             const cartItem = await cartService._updateCartItem(payload);
             cart.value?.cartItems.forEach((item: CartItemInterface, index: number) => {
                 if (item.id === cartItem.id) {

@@ -28,9 +28,9 @@
                                 type="number" placeholder="Capacity" label="Capacity" />
                             <v-text-field v-model="event.locationLink" placeholder="Location link" label="Location link"
                                 hint="If no image is provided, a default template" />
-                            <v-text-field v-model="event.timeStart" :rules="[rules.required]" type="date"
+                            <v-text-field v-model="event.timeStart" :rules="[rules.required, rules.date]" type="date"
                                 placeholder="Start event" label="Start event" />
-                            <v-text-field v-model="event.timeEnd" :rules="[rules.required]" type="date"
+                            <v-text-field v-model="event.timeEnd" :rules="[rules.required, rules.logicDate]" type="date"
                                 placeholder="End event" label="End event" />
                             <div class="flex">
                                 <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
@@ -89,6 +89,8 @@ const event = reactive<CreateEvent>({
 const rules = {
     required: (value: any) => !!value || 'Required.',
     capacity: (value: any) => value > 0 || 'Capacity must be 1 or higher',
+    date: (value: any) => new Date(value) >= new Date() || 'Date must be in the future',
+    logicDate: (value: any) => event.timeStart <= event.timeEnd || 'End date must be after start date',
 };
 
 const submit = async () => {

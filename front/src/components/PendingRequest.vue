@@ -22,33 +22,30 @@
     </v-card>
 </template>
 
-<script>
+<script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useSponsorshipStore } from '../stores/sponsorship';
 import { onMounted } from 'vue';
-export default {
-    setup() {
-        const tableHeaders = ['Username', 'Email', 'Status'];
 
-        const sponsorshipStore = useSponsorshipStore();
-        const { getPendingSponsorships, acceptRequest, getAcceptedSponsorships } = sponsorshipStore;
-        const { pendingSponsorships } = storeToRefs(sponsorshipStore);
+const tableHeaders = ['Username', 'Email', 'Status'];
 
-        const setVIP = async (id) => {
-            try {
-                await acceptRequest(id);
-                await getPendingSponsorships();
-                await getAcceptedSponsorships();
-            } catch (e) { }
-        };
+const sponsorshipStore = useSponsorshipStore();
+const { getPendingSponsorships, acceptRequest, getAcceptedSponsorships } = sponsorshipStore;
+const { pendingSponsorships } = storeToRefs(sponsorshipStore);
 
-        onMounted(async () => {
-            try {
-                await getPendingSponsorships();
-            } catch (e) { }
-        });
-
-        return { pendingSponsorships, tableHeaders, setVIP };
-    },
+const setVIP = async (id: string) => {
+    try {
+        await acceptRequest(id);
+        await getPendingSponsorships();
+        await getAcceptedSponsorships();
+    } catch (e) { }
 };
+
+onMounted(async () => {
+    try {
+        await getPendingSponsorships();
+    } catch (e) { }
+});
+
+
 </script>

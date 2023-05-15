@@ -56,13 +56,11 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon';
-import { formatNumber } from '@/service/helpers';
 import { Icon } from "@iconify/vue/dist/iconify.js";
 defineProps({
     bet: {
         type: Object,
-        default(rawProps) {
+        default(rawProps: any) {
             return { message: 'hello' };
         },
     },

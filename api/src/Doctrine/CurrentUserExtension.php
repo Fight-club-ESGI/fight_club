@@ -60,8 +60,7 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
             case Cart::class:
                 $rootAlias = $queryBuilder->getRootAliases()[0];
                 $queryBuilder->andWhere(sprintf('%s.cart = :cart', $rootAlias));
-                $queryBuilder->setParameter('wallet', $user->getCart()->getId());
-                $queryBuilder->orderBy(sprintf('%s.createdAt', $rootAlias), 'DESC');
+                $queryBuilder->setParameter('cart', $user->getCart()->getId());
                 break;
             default:
         }

@@ -38,7 +38,6 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
-import { ITicketEvent } from '@/service/api/tickets';
 import { useTicketStore } from '@/stores/tickets';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';

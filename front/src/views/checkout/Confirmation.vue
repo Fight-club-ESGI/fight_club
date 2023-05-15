@@ -20,14 +20,14 @@
             <p class="text-3xl font-bold p-4">Payment pending</p>
         </div>
         <div>
-            <v-btn :to="{ name: 'user-wallet' }">
+            <v-btn :to="{ name: 'user-wallet' }" variant="tonal">
                 Back to wallet
             </v-btn>
         </div>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useWalletTransactionStore } from "@/stores/walletTransaction";

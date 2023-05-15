@@ -1,6 +1,7 @@
 front.code-workspace
-package-lock.json
+# package-lock.json
 node_modules/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+.vercel

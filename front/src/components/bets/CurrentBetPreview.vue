@@ -6,7 +6,8 @@
                     <p class="pa-4">My bet ({{ currentBet.bets.length }} selected)</p>
                 </v-col>
                 <v-col cols="auto">
-                    <v-icon class="ma-4" v-if="currentBet.bets.length > 0" @click="betStore.$resetCurrentBet">mdi-delete</v-icon>
+                    <v-icon class="ma-4" v-if="currentBet.bets.length > 0"
+                        @click="betStore.$resetCurrentBet">mdi-delete</v-icon>
                 </v-col>
                 <v-divider></v-divider>
             </v-row>
@@ -72,7 +73,7 @@ import { ref } from 'vue';
 import { useBetStore } from '@/stores/bet';
 import { storeToRefs } from 'pinia';
 import { formatNumber, constructFullName } from '@/service/helpers';
-import { CurrentBetI, FightBetI } from '@/interfaces/payload';
+import { CurrentBetI, FightBetI } from '@/interfaces/bet';
 
 const betStore = useBetStore();
 const { currentBet } = storeToRefs(betStore);
@@ -91,6 +92,7 @@ function removeToCurrentBetStore(fightId: string, currentBet: CurrentBetI) {
 .v-btn {
     text-transform: none;
 }
+
 .custom-div {
     border: solid;
     border-width: 1px;
