@@ -3,6 +3,7 @@
 namespace App\Controller\Fighter;
 
 use App\Entity\Fighter;
+use App\Enum\Fight\FighterGenderEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,6 +39,17 @@ class UpdateFighter extends AbstractController
                     case 'birthdate':
                         $propertyValue = date_timestamp_set(new DateTime, strtotime($propertyValue));
                         break;
+                    case 'gender':
+                        switch ($propertyValue) {
+                            case 'female':
+                                $propertyValue = FighterGenderEnum::FEMALE;
+                                break;
+                            case 'male':
+                                $propertyValue = FighterGenderEnum::MALE;
+                                break;
+                        }
+                        break;
+
                 }
 
                 $event->$setterMethodName($propertyValue);

@@ -1,5 +1,6 @@
 <template>
     <v-card
+        @click="goToFighterDetails()"
         class="cursor-pointer h-92 relative bg-neutral-800 text-white"
     >
         <div :style="fighter.imageName ? `background-image: url('${fighter.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
@@ -40,19 +41,6 @@
                     <p class="text-sm font-bold">{{ fighter.height }} cm</p>
                 </div>
             </div>
-        </div>
-        <div>
-            <v-card-actions>
-                <div v-if="isAdmin" class="flex flex-1">
-                    <update-fighter :fighter="fighter" />
-                    <v-btn @click="remove(fighter.id)" color="primary" variant="tonal" class="elevation-2 flex-1">
-                        Delete
-                    </v-btn>
-                </div>
-                <v-btn v-else @click="goToFighterDetails()" color="primary" variant="tonal" class="elevation-2 flex-1">
-                    details
-                </v-btn>
-            </v-card-actions>
         </div>
     </v-card>
 </template>

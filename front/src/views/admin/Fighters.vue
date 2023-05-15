@@ -10,7 +10,10 @@
                 <v-window-item value="fighters">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-3">
                         <fighter-filter />
-                        <create-fighter class="flex justify-start pb-2" />
+                        <create-fighter
+                            class="flex justify-start pb-2"
+                            :admin="isAdmin"
+                        />
                         <fighter
                             v-for="fighter in filteredFighters"
                             class="w-full"
