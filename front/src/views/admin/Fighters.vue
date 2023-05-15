@@ -16,7 +16,7 @@
                             class="w-full"
                             :fighter="fighter"
                             :admin="isAdmin"
-                         />
+                        />
                     </div>
                 </v-window-item>
                 <v-window-item value="category"> <fighter-weight-category></fighter-weight-category> </v-window-item>

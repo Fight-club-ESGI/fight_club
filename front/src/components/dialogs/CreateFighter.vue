@@ -81,6 +81,9 @@ export default defineComponent({
             height: 70,
             weight: 70,
             nationality: '',
+            imageFile: '',
+            imageName: '',
+            imageSize: '',
         });
 
         const divisionByWeight = [

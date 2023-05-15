@@ -14,12 +14,18 @@
                 </template>
                 <v-list class="p-0 text-center">
                     <v-list-item value="update-event">
-                        <update-fighter :fighter="fighter" />
+                        <update-fighter :fighter="fighter" :admin="admin"/>
                     </v-list-item>
-                    <v-list-item value="delete-fighter" class="bg-secondary" @click="deleteE(event.id)">Delete</v-list-item>
+                    <v-list-item value="delete-fighter" class="bg-secondary" @click="deleteF(fighter.id)">Delete</v-list-item>
                 </v-list>
             </v-menu>
-            <p class="text-2xl font-bold pb-5">{{ fighterName }}</p>
+            <div class="flex items-center">
+                <p class="text-2xl font-bold">{{ fighterName }}</p>
+                <Icon
+                    class="text-2xl ml-2"
+                    :icon="fighter.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'"
+                />
+            </div>
             <div class="mt-auto flex gap-x-4">
                 <div class="flex align-center gap-2 bg-neutral-600 p-2 rounded-lg">
                     <Icon icon="material-symbols:flag" />

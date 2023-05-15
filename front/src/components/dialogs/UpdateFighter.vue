@@ -5,42 +5,44 @@
         </template>
 
         <v-card class="text-center">
-            <v-card-title class="font-bold p-10"> Update fighter {{ fighter.firstname }}
-                {{ fighter.lastname }}</v-card-title>
+            <v-card-title class="font-bold p-10">
+                Update fighter
+            </v-card-title>
             <div class="w-full flex px-10">
                 <v-form v-model="valid" ref="form" class="flex flex-col w-full">
-
-                    <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname"
-                        label="Firstname" />
-
-                    <v-text-field v-model="fighter.lastname" :rules="[rules.required]" placeholder="Lastname"
-                        label="Lastname" />
-
-                    <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date" label="Birthday" />
-
-                    <v-autocomplete v-model="fighter.nationality" :items="nationalityJson" :rules="[rules.required]"
-                        label="Nationality" placeholder="Nationality" color="secondary" style="max-height: 450px" />
-
-                    <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1" color="primary"
-                        track-color="secondary" thumb-label="always">
-                        <template v-slot:thumb-label="{ modelValue }">
-                            {{ modelValue }}
-                        </template>
-                    </v-slider>
-
-                    <v-select v-model="fighter.gender" :rules="[rules.required]" label="Gender" placeholder="Gender"
-                        :items="['male', 'female']" color="secondary" variant="plain" />
-
-                    <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number" max="400" min="52"
-                        label="Weight">
-                        <template v-slot:details>
-                            <div v-if="division">
-                                Category:
-                                <span :style="{ color: division.color }">{{ division.name }}</span>
-                            </div>
-                        </template>
-                    </v-text-field>
+                    <div>
+                        <v-file-input type="file" accept="image/*" v-model="file" label="File input"
+                                      @change="uploadFile" />
+                        <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname" label="Firstname" />
+                        <v-text-field v-model="fighter.lastname" :rules="[rules .required]" placeholder="Lastname" label="Lastname" />
+                        <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date" label="Birthday" />
+                        <v-autocomplete v-model="fighter.nationality" :items="nationalityJson" :rules="[rules.required]" label="Nationality" placeholder="Nationality" color="secondary" style="max-height: 450px" />
+                        <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1" color="primary" track-color="secondary" thumb-label="always">
+                            <template v-slot:thumb-label="{ modelValue }">
+                                {{ modelValue }}
+                            </template>
+                        </v-slider>
+                        <v-select v-model="fighter.gender" :rules="[rules.required]" label="Gender" placeholder="Gender"
+                                  :items="['male', 'female']" color="secondary" variant="plain" />
+                        <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number" max="400" min="52"
+                                      label="Weight">
+                            <template v-slot:details>
+                                <div v-if="division">
+                                    Category:
+                                    <span :style="{ color: division.color }">{{ division.name }}</span>
+                                </div>
+                            </template>
+                        </v-text-field>
+                    </div>
                 </v-form>
+                <div class="flex w-full">
+                    <fighter
+                        class="w-92 mx-auto text-left"
+                        :fighter="fighter"
+                        :admin="admin"
+                        :preview="true"
+                    />
+                </div>
             </div>
             <v-card-actions>
                 <v-row justify="end" class="px-4">
@@ -52,27 +54,45 @@
     </v-dialog>
 </template>
 <script lang="ts" setup>
-import { ref, computed, PropType } from 'vue';
+import {ref, computed, PropType, reactive} from 'vue';
 import nationalityJson from '@/data/nationality.json';
 import { createToast } from 'mosha-vue-toastify';
 import { IFighter } from '@/interfaces/fighter';
 import { useFighterStore } from '@/stores/fighter';
+import {UpdateFighter} from "@/interfaces/fighter";
+import Fighter from '@/components/Fighter/Fighter.vue';
 
 const props = defineProps({
     fighter: {
         type: Object as PropType<IFighter>,
         required: true
     },
+    admin: {type: Boolean, required: true}
 })
 
-let fighter = ref({ ...props.fighter });
-fighter.value.birthdate = fighter.value.birthdate.substring(0, 10);
+const fighter = reactive<UpdateFighter>({
+    firstname: props.fighter.firstname,
+    lastname: props.fighter.lastname,
+    height: props.fighter.height,
+    weight: props.fighter.weight,
+    nationality: props.fighter.nationality,
+    gender: props.fighter.gender,
+    birthdate: props.fighter.birthdate,
+    imageFile: '',
+    imageName: props.fighter.imageName,
+    imageSize: props.fighter.imageSize,
+});
+fighter.birthdate = fighter.birthdate.substring(0, 10);
+
 const fighterStore = useFighterStore();
 const { updateFighter } = fighterStore;
 
 const form = ref();
 const dialog = ref<boolean>(false);
 const valid = ref<boolean>(false);
+
+const file = ref();
+const image = ref();
 
 const divisionByWeight = [
     {
@@ -151,7 +171,7 @@ const division = computed(() => {
     const closest = divisionByWeight
         .map((division) => division.weight)
         .reduce(function (prev, curr) {
-            return Math.abs(curr - fighter.value.weight) < Math.abs(prev - fighter.value.weight) ? curr : prev;
+            return Math.abs(curr - fighter.weight) < Math.abs(prev - fighter.weight) ? curr : prev;
         });
     return divisionByWeight.find((division) => division.weight === closest);
 });
@@ -165,12 +185,42 @@ const update = async () => {
     try {
         const { valid } = await form.value.validate();
         if (valid) {
-            await updateFighter(fighter.value);
+            const formData = new FormData();
+
+            for (const key in fighter) {
+                const value = fighter[key];
+
+                if (value !== undefined) {
+                    if (key === 'imageFile' && (value === '' || value === 'null')) break
+                    formData.append(key, value);
+                }
+            }
+
+            await updateFighter(formData, props.fighter.id);
+            dialog.value = false;
         }
     } catch (error: any) {
         createToast(error, { position: 'bottom-right', type: 'danger' });
     }
     dialog.value = false;
+};
+
+const generateURL = (file: File) => {
+    let fileSrc = URL.createObjectURL(file);
+    setTimeout(() => {
+        URL.revokeObjectURL(fileSrc);
+    }, 1000);
+    return fileSrc;
+}
+
+const uploadFile = async (e: any) => {
+    try {
+        image.value = e.target.files[0]
+        fighter.imageFile = image.value
+        fighter.imageName = generateURL(image.value);
+    } catch (e) {
+        console.log(e);
+    }
 };
 
 </script>
