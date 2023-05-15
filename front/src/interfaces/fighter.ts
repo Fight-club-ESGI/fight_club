@@ -7,6 +7,9 @@ export interface IFighter {
     nationality: string
     gender: string
     birthdate: string
+    imageFile: File | null
+    imageName: string
+    imageSize: string
 }
 
 export interface CreateFighter {
@@ -17,4 +20,7 @@ export interface CreateFighter {
     nationality: string
     gender: string
     birthdate: string
+    imageFile: Blob | null
+    imageName: string
+    imageSize: string
 }

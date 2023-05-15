@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="h-full bg-red-100">
         <v-list class="sticky top-[64px]">
             <v-list-item @click="clearAll()" prepend-icon="mdi-close">
                 <v-list-item-action class="font-bold">Clear all</v-list-item-action>

@@ -8,7 +8,6 @@
                     </p>
                 </v-card>
             </template>
-
             <v-card class="text-center">
                 <v-card-title class="font-bold p-10">
                     Register an event

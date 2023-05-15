@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" max-width="75%">
         <template v-slot:activator="{ props }">
-            <v-btn color="secondary" v-bind="props" variant="tonal" class="elevation-2 flex-1"> Update </v-btn>
+            <span color="primary" v-bind="props">Update</span>
         </template>
 
         <v-card class="text-center">
