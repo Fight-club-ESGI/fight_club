@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('has title', async ({ page }) => {
-    await page.goto('https://fight-club-eta.vercel.app/');
+    await page.goto(import.meta.env.VITE_TEST_URL);
 
     // Expect a title "to contain" a substring.
     await expect(page).toHaveTitle(/Thunderous Knockout Fighting/);
