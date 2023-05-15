@@ -53,3 +53,19 @@ export interface CreateEvent {
     imageSize: string
     display: boolean
 }
+
+export interface UpdateEvent {
+    name: string
+    location: string
+    description: string
+    capacity: number
+    vip: boolean
+    category: string
+    locationLink: string
+    timeStart: string
+    timeEnd: string
+    imageFile: Blob | string
+    imageName: string
+    imageSize: string
+    display: boolean
+}

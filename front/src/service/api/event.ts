@@ -1,6 +1,5 @@
 import { client, clientWithoutAuth, clientFormData } from "..";
 import type { CreateEvent, IEvent } from "@/interfaces/event";
-import {CreateEventFormData} from "@/interfaces/event";
 
 const namespace = '/events';
 
@@ -34,10 +33,10 @@ class Event {
         }
     }
 
-    async _upadateEvent(payload: IEvent): Promise<IEvent> {
+    async _upadateEvent(payload: FormData, id: string): Promise<IEvent> {
         try {
-            const uri = `${namespace}/${payload.id}`
-            const res = await client.patch(uri, payload);
+            const uri = `${namespace}/${id}`
+            const res = await clientFormData.patch(uri, payload);
             return res.data;
         } catch (error) {
             throw error;

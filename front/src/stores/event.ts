@@ -26,6 +26,15 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
+    async function updateEvent(payload: FormData, id: string) {
+        try {
+            const res = await eventService._upadateEvent(payload, id);
+            events.value.splice(events.value.findIndex(e => e.id === res.id), 1, res);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async function getEvent(id: string) {
         try {
             const res = await eventService._getEvent(id);
@@ -39,15 +48,6 @@ export const useEventStore = defineStore('event', () => {
         try {
             const res = await eventService._getEvents();
             events.value = res;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async function updateEvent(payload: IEvent) {
-        try {
-            const res = await eventService._upadateEvent(payload);
-            events.value.splice(events.value.findIndex(e => e.id === res.id), 1, res);
         } catch (error) {
             throw error;
         }

@@ -40,7 +40,9 @@
                         size="x-medium" />
                 </template>
                 <v-list class="p-0 text-center">
-                    <v-list-item value="update-event"> <update-event :event="event" /></v-list-item>
+                    <v-list-item value="update-event">
+                        <update-event :event="event" :admin="admin" />
+                    </v-list-item>
                     <v-list-item value="delete-fighter" class="bg-secondary" @click="deleteE(event.id)">Delete</v-list-item>
                 </v-list>
             </v-menu>

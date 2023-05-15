@@ -2,7 +2,6 @@
     <div>
         <v-dialog class="w-2/3" v-model="dialog">
             <template v-slot:activator="{ props }">
-                <!--<v-btn variant="tonal" color="secondary" v-bind="props"> Register an event </v-btn>-->
                 <v-card v-bind="props" class="flex cursor-pointer h-92 relative bg-neutral-600 text-white items-center">
                     <p class="text-center w-full text-2xl font-weight-bold">
                         New event
@@ -98,17 +97,17 @@ const submit = async () => {
         const { valid } = await form.value.validate();
         if (valid) {
             const formData = new FormData();
-            formData.append('name', event.name)
-            formData.append('location', event.location);
-            formData.append('description', event.description);
-            formData.append('category', event.category);
-            formData.append('capacity', event.capacity.toString());
-            formData.append('locationLink', event.locationLink);
-            formData.append('timeStart', event.timeStart);
-            formData.append('timeEnd', event.timeEnd);
-            formData.append('imageFile', event.imageFile);
-            formData.append('vip', event.vip.toString());
-            formData.append('display', event.display.toString());
+
+            for (const key in event) {
+                const value = event[key];
+
+                if (value !== '') {
+                    formData.append(key, value);
+                }
+            }
+
+            console.log(formData)
+
             await createEvent(formData);
             dialog.value = false;
         }

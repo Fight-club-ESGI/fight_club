@@ -182,6 +182,13 @@ class Event
     private Collection $ticketEvents;
 
     #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post',
+        'events:get',
+        'event:ticket:get',
+    ])]
     private ?bool $display = false;
 
     public function __construct()
