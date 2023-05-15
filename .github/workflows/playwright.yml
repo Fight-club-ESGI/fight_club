@@ -20,7 +20,7 @@ jobs:
       - name: Install Playwright Browsers
         run: |
             cd front/
-            npx playwright install --with-deps
+            npx playwright install chromium
       - name: Run Playwright tests
         run: |
             cd front/
