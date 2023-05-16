@@ -5,6 +5,8 @@ export const token = useStorage('token', '');
 export const refreshToken = useStorage('refreshToken', '');
 
 const config = computed(() => {
+    console.log(import.meta.env.VITE_BACKEND_URL)
+    console.log(import.meta.env.VITE_PROD)
     return {
         baseURL: import.meta.env.VITE_BACKEND_URL,
         headers: {
