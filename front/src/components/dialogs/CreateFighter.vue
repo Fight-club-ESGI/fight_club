@@ -69,7 +69,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {defineComponent, ref, computed, reactive, PropType, watch } from 'vue';
+import {defineComponent, ref, computed, reactive, PropType, watch} from 'vue';
 import nationalityJson from '@/data/nationality.json';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateFighter, IFighter } from '@/interfaces/fighter';
@@ -87,7 +87,7 @@ const form = ref();
 const dialog = ref<boolean>(false);
 const valid = ref<boolean>(false);
 
-const fighter = reactive<CreateFighter>({
+let fighter = reactive<CreateFighter>({
     gender: '',
     firstname: '',
     lastname: '',
@@ -196,6 +196,22 @@ const rules = {
     weight: (value: number) => (value >= 52 && value <= 400) || 'Weight must be between 52kg and 400kg',
 };
 
+const resetForm = () => {
+    fighter = {
+        gender: '',
+        firstname: '',
+        lastname: '',
+        birthdate: '',
+        height: 70,
+        weight: 70,
+        nationality: '',
+        imageFile: '',
+        imageName: '',
+        imageSize: '',
+    }
+    dialog.value = false;
+}
+
 const submitFighter = async () => {
     try {
         const { valid } = await form.value.validate();
@@ -218,19 +234,6 @@ const submitFighter = async () => {
     }
     dialog.value = false;
 };
-
-const resetForm = () => {
-    fighter = {
-        gender: '',
-        firstname: '',
-        lastname: '',
-        birthdate: '',
-        height: 70,
-        weight: 70,
-        nationality: '',
-    }
-    dialog.value = false;
-}
 
 const generateURL = (file: File) => {
     let fileSrc = URL.createObjectURL(file);

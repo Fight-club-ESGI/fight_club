@@ -112,8 +112,6 @@ const submit = async () => {
                 }
             }
 
-            console.log(formData)
-
             await createEvent(formData);
             dialog.value = false;
         }
@@ -136,6 +134,7 @@ const resetForm = () => {
         imageFile: '',
         imageName: '',
         imageSize: '',
+        display: false,
     }
     dialog.value = false;
 }
