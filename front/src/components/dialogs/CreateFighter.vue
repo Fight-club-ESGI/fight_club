@@ -69,7 +69,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {defineComponent, ref, computed, reactive, watch, PropType} from 'vue';
+import {defineComponent, ref, computed, reactive, PropType, watch} from 'vue';
 import nationalityJson from '@/data/nationality.json';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateFighter, IFighter } from '@/interfaces/fighter';
@@ -211,7 +211,6 @@ const resetForm = () => {
     }
     dialog.value = false;
 }
-
 
 const submitFighter = async () => {
     try {
