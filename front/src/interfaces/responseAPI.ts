@@ -44,6 +44,7 @@ export interface SponsorshipResponseI {
     id: string
     emailValidation: boolean
     sponsorValidation: boolean
+    status: string
 }
 
 export interface WalletTransactionInterface {
