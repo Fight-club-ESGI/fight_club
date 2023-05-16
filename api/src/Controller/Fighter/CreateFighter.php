@@ -4,6 +4,7 @@ namespace App\Controller\Fighter;
 
 use ApiPlatform\Validator\ValidatorInterface;
 use App\Entity\Fighter;
+use App\Enum\Fight\FighterGenderEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,9 +45,22 @@ class CreateFighter extends AbstractController
                     case 'birthdate':
                         $propertyValue = date_timestamp_set(new DateTime, strtotime($propertyValue));
                         break;
+                    case 'gender':
+                        switch ($propertyValue) {
+                            case 'female':
+                                $propertyValue = FighterGenderEnum::FEMALE;
+                                break;
+                            case 'male':
+                                $propertyValue = FighterGenderEnum::MALE;
+                                break;
+                        }
+                        break;
                 }
 
-                $event->$setterMethodName($propertyValue);
+                #todo Ignorer ces deux valeurs adapter le role contexte builder
+                if($propertyName !== 'imageSize' && $propertyName !== 'imageName') {
+                    $event->$setterMethodName($propertyValue);
+                }
             }
         }
 

@@ -21,22 +21,22 @@
                 </v-list>
             </v-menu>
             <div class="flex items-center">
-                <p class="text-2xl font-bold">{{ fighterName }}</p>
+                <div class="text-2xl font-bold w-2/3 truncate">{{ fighterName }}</div>
                 <Icon
                     class="text-2xl ml-2"
                     :icon="fighter.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'"
                 />
             </div>
-            <div class="mt-auto flex gap-x-4">
-                <div class="flex align-center gap-2 bg-neutral-600 p-2 rounded-lg">
+            <div class="mt-auto flex flex-column gap-y-1">
+                <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-lg">
                     <Icon icon="material-symbols:flag" />
                     <p class="text-sm font-bold">{{ fighter.nationality }}</p>
                 </div>
-                <div class="flex align-center gap-2 bg-neutral-600 p-2 rounded-lg">
+                <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-lg">
                     <Icon icon="material-symbols:weight" />
                     <p class="text-sm font-bold">{{ fighter.weight }} kg</p>
                 </div>
-                <div class="flex align-center gap-2 bg-neutral-600 p-2 rounded-lg">
+                <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-lg">
                     <Icon icon="mdi:human-male-height-variant" />
                     <p class="text-sm font-bold">{{ fighter.height }} cm</p>
                 </div>

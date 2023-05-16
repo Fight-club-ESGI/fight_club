@@ -49,10 +49,12 @@ class UpdateFighter extends AbstractController
                                 break;
                         }
                         break;
-
                 }
 
-                $event->$setterMethodName($propertyValue);
+                #todo Ignorer ces deux valeurs adapter le role contexte builder
+                if($propertyName !== 'imageSize' && $propertyName !== 'imageName') {
+                    $event->$setterMethodName($propertyValue);
+                }
             }
         }
 

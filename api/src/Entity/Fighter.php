@@ -44,7 +44,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                 'json' => ['application/json']
             ],
             controller: UpdateFighter::class,
-            security: "is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_ADMIN')",
+            deserialize: false
         ),
         new Delete(
             security: "is_granted('ROLE_ADMIN')"

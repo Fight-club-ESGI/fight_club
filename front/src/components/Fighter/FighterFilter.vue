@@ -1,6 +1,6 @@
 <template>
-    <div class="h-full bg-red-100">
-        <v-list class="sticky top-[64px]">
+    <div class="h-full">
+        <v-list class="sticky top-[64px] h-full rounded-xl">
             <v-list-item @click="clearAll()" prepend-icon="mdi-close">
                 <v-list-item-action class="font-bold">Clear all</v-list-item-action>
             </v-list-item>
