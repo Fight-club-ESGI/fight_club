@@ -60,7 +60,7 @@
                 </div>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
-                        <v-btn color="primary" @click="dialog = false">Cancel</v-btn>
+                        <v-btn color="primary" @click="resetForm()">Cancel</v-btn>
                         <v-btn color="secondary" @click="submitFighter()">Create</v-btn>
                     </v-row>
                 </v-card-actions>
@@ -69,7 +69,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {defineComponent, ref, computed, reactive, PropType} from 'vue';
+import {defineComponent, ref, computed, reactive, PropType, watch } from 'vue';
 import nationalityJson from '@/data/nationality.json';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateFighter, IFighter } from '@/interfaces/fighter';
@@ -102,6 +102,12 @@ const fighter = reactive<CreateFighter>({
 
 const file = ref();
 const image = ref();
+
+watch(dialog, (open: boolean) => {
+    if (!open) {
+        resetForm()
+    }
+})
 
 const divisionByWeight = [
     {
@@ -212,6 +218,19 @@ const submitFighter = async () => {
     }
     dialog.value = false;
 };
+
+const resetForm = () => {
+    fighter = {
+        gender: '',
+        firstname: '',
+        lastname: '',
+        birthdate: '',
+        height: 70,
+        weight: 70,
+        nationality: '',
+    }
+    dialog.value = false;
+}
 
 const generateURL = (file: File) => {
     let fileSrc = URL.createObjectURL(file);

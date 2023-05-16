@@ -32,7 +32,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             uriTemplate: '/sponsorships/{sponsorshipId}/accept-request',
             controller: AcceptRequest::class,
             normalizationContext: ['groups' => ['sponsor:get']],
-            security: 'is_granted("ROLE_VVIP")',
+            security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_VVIP")',
             read: false
         ),
         new Delete(
