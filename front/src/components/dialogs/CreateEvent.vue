@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <v-card-actions class="justify-end">
-                    <v-btn color="primary" @click="dialog = false">Cancel</v-btn>
+                    <v-btn color="primary" @click="resetForm()">Cancel</v-btn>
                     <v-btn color="secondary" @click="submit()">Create</v-btn>
                 </v-card-actions>
             </v-card>
@@ -48,7 +48,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateEvent } from '@/interfaces/event';
 import { useEventStore } from '@/stores/event';
@@ -63,7 +63,8 @@ const valid = ref<boolean>(false);
 
 const file = ref();
 const image = ref();
-const event = reactive<CreateEvent>({
+
+let event = reactive<CreateEvent>({
     name: '',
     location: '',
     description: '',
@@ -77,6 +78,12 @@ const event = reactive<CreateEvent>({
     imageName: '',
     imageSize: '',
 });
+
+watch(dialog, (open: boolean) => {
+    if (!open) {
+        resetForm()
+    }
+})
 
 const rules = {
     required: (value: any) => !!value || 'Required.',
@@ -107,6 +114,24 @@ const submit = async () => {
         createToast(error, { position: 'bottom-right', type: 'danger' });
     }
 };
+
+const resetForm = () => {
+    event = {
+        name: '',
+        location: '',
+        description: '',
+        category: '',
+        capacity: 0,
+        locationLink: '',
+        timeStart: '',
+        timeEnd: '',
+        vip: false,
+        imageFile: '',
+        imageName: '',
+        imageSize: '',
+    }
+    dialog.value = false;
+}
 
 const generateURL = (file: File) => {
     let fileSrc = URL.createObjectURL(file);

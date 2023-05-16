@@ -23,7 +23,7 @@
                 </div>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
-                        <v-btn color="primary" @click="dialog = false">Cancel</v-btn>
+                        <v-btn color="primary" @click="resetForm()">Cancel</v-btn>
                         <v-btn color="secondary" @click="submit()">Create</v-btn>
                     </v-row>
                 </v-card-actions>
@@ -31,48 +31,57 @@
         </v-dialog>
     </div>
 </template>
-<script lang="ts">
-import { defineComponent, ref, computed, reactive } from 'vue';
+<script lang="ts" setup>
+import { watch, ref, reactive } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateWeightCategory } from '@/interfaces/payload';
 import { useCategoryStore } from '@/stores/category';
 
-export default defineComponent({
-    setup() {
-        const categoryStore = useCategoryStore();
-        const { postCategory } = categoryStore;
 
-        const form = ref();
-        const dialog = ref<boolean>(false);
-        const valid = ref<boolean>(false);
+const categoryStore = useCategoryStore();
+const { postCategory } = categoryStore;
 
-        const category = reactive<CreateWeightCategory>({
-            name: '',
-            minWeight: 0,
-            maxWeight: 0
-        });
+const form = ref();
+const dialog = ref<boolean>(false);
+const valid = ref<boolean>(false);
 
-        const rules = {
-            required: (value: any) => !!value || 'Required.',
-            positiveValue: (value: any) => value > 0 || 'Weight cannot be negative',
-            higherThanMinimal: (value: any) => value > category.minWeight || 'Maximal weight need to be superior then minimal weight',
-        };
-
-        const submit = async () => {
-            try {
-                const { valid } = await form.value.validate();
-                if (valid) {
-                    await postCategory(category);
-                    dialog.value = false;
-                    category.name = '';
-                    (category.minWeight = 0), (category.maxWeight = 0);
-                }
-            } catch (error: any) {
-                createToast(error, { position: 'bottom-right', type: 'danger' });
-            }
-        };
-
-        return { dialog, valid, rules, submit, form, category };
-    },
+let category = reactive<CreateWeightCategory>({
+    name: '',
+    minWeight: 0,
+    maxWeight: 0
 });
+
+watch(dialog, (open: boolean) => {
+    if (!open) {
+        resetForm()
+    }
+});
+
+const rules = {
+    required: (value: any) => !!value || 'Required.',
+    positiveValue: (value: any) => value > 0 || 'Weight cannot be negative',
+    higherThanMinimal: (value: any) => value > category.minWeight || 'Maximal weight need to be superior then minimal weight',
+};
+
+const resetForm = () => {
+    category = {
+        name: '',
+        minWeight: 0,
+        maxWeight: 0
+    }
+    dialog.value = false;
+}
+const submit = async () => {
+    try {
+        const { valid } = await form.value.validate();
+        if (valid) {
+            await postCategory(category);
+            dialog.value = false;
+            category.name = '';
+            (category.minWeight = 0), (category.maxWeight = 0);
+        }
+    } catch (error: any) {
+        createToast(error, { position: 'bottom-right', type: 'danger' });
+    }
+};
 </script>
