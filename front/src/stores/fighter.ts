@@ -59,7 +59,7 @@ export const useFighterStore = defineStore('fighter', () => {
         filter.value = f;
     }
 
-    async function createFighter(payload: CreateFighter) {
+    async function createFighter(payload: FormData) {
         try {
             const res = await fighterService._createFighter(payload);
             fighters.value.push(res);
@@ -87,10 +87,10 @@ export const useFighterStore = defineStore('fighter', () => {
         }
     }
 
-    async function updateFighter(payload: IFighter) {
+    async function updateFighter(payload: FormData, id: string) {
         try {
-            const res = await fighterService._upadateFighter(payload);
-            const fighterToUpdate = fighters.value.findIndex(fighter => fighter.id === payload.id);
+            const res = await fighterService._upadateFighter(payload, id);
+            const fighterToUpdate = fighters.value.findIndex(fighter => fighter.id === id);
             fighters.value.splice(fighterToUpdate, 1, res);
             fighter.value = res;
         } catch (error) {

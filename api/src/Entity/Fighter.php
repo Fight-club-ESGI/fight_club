@@ -9,6 +9,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\Fighter\CreateFighter;
+use App\Controller\Fighter\UpdateFighter;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
@@ -32,17 +34,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             normalizationContext: ["groups" => ['fighter:get']],
         ),
         new Post(
-            normalizationContext: ["groups" => ['fighter:get']],
-            denormalizationContext: ["groups" => ['fighter:post']],
-            security: "is_granted('ROLE_ADMIN')"
+            controller: CreateFighter::class,
+            security: "is_granted('ROLE_ADMIN')",
+            deserialize: false
         ),
         new Patch(
             inputFormats: [
+                'multipart' => ['multipart/form-data'],
                 'json' => ['application/json']
             ],
-            normalizationContext: ["groups" => ['fighter:get']],
-            denormalizationContext: ["groups" => ['fighter:post']],
-            security: "is_granted('ROLE_ADMIN')"
+            controller: UpdateFighter::class,
+            security: "is_granted('ROLE_ADMIN')",
+            deserialize: false
         ),
         new Delete(
             security: "is_granted('ROLE_ADMIN')"

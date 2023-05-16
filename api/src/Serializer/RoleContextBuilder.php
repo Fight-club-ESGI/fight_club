@@ -47,6 +47,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                 $context['groups'][] = $this->selfRequestMethodGroup($request->getMethod(), $normalization);
             }
         }
+
         return $context;
     }
 
@@ -54,6 +55,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
         if($normalization) {
             return 'admin:get';
         } else {
+
             return match ($method) {
                 'POST' => 'admin:post',
                 'PATCH' => 'admin:patch',

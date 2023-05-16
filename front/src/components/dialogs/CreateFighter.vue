@@ -2,46 +2,61 @@
     <div>
         <v-dialog v-model="dialog" class="w-2/3">
             <template v-slot:activator="{ props }">
-                <v-btn color="primary" v-bind="props" variant="tonal"> Register a fighter </v-btn>
+                <v-card v-bind="props" class="flex cursor-pointer h-92 w-full relative bg-neutral-600 text-white items-center">
+                    <p class="text-center w-full text-2xl font-weight-bold">
+                        Register a fighter
+                    </p>
+                </v-card>
             </template>
-
             <v-card class="text-center">
-                <v-card-title class="font-bold p-10"> Register a fighter </v-card-title>
+                <v-card-title class="font-bold p-10">
+                    Register a fighter
+                </v-card-title>
                 <div class="w-full flex px-10">
                     <v-form v-model="valid" ref="form" class="flex flex-col w-full">
+                        <div>
+                            <v-file-input type="file" accept="image/*" v-model="file" label="File input"
+                                          @change="uploadFile" />
+                            <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname"
+                                          label="Firstname" />
 
-                        <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname"
-                            label="Firstname" />
+                            <v-text-field v-model="fighter.lastname" :rules="[rules.required]" placeholder="Lastname"
+                                          label="Lastname" />
 
-                        <v-text-field v-model="fighter.lastname" :rules="[rules.required]" placeholder="Lastname"
-                            label="Lastname" />
+                            <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date" label="Birthday" />
 
-                        <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date" label="Birthday" />
+                            <v-autocomplete v-model="fighter.nationality" :items="nationalityJson" :rules="[rules.required]"
+                                            label="Nationality" placeholder="Nationality" color="secondary" style="max-height: 450px" />
 
-                        <v-autocomplete v-model="fighter.nationality" :items="nationalityJson" :rules="[rules.required]"
-                            label="Nationality" placeholder="Nationality" color="secondary" style="max-height: 450px" />
+                            <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1" color="primary"
+                                      track-color="secondary" thumb-label="always">
+                                <template v-slot:thumb-label="{ modelValue }">
+                                    {{ modelValue }}
+                                </template>
+                            </v-slider>
 
-                        <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1" color="primary"
-                            track-color="secondary" thumb-label="always">
-                            <template v-slot:thumb-label="{ modelValue }">
-                                {{ modelValue }}
-                            </template>
-                        </v-slider>
+                            <v-select v-model="fighter.gender" :rules="[rules.required]" label="Gender" placeholder="Gender"
+                                      :items="['male', 'female']" color="secondary" />
 
-                        <v-select v-model="fighter.gender" :rules="[rules.required]" label="Gender" placeholder="Gender"
-                            :items="['male', 'female']" color="secondary" />
-
-                        <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number" max="400"
-                            min="52" label="Weight">
-                            <template v-slot:details>
-                                <div v-if="division">
-                                    Category:
-                                    <span :style="{ color: division.color }">{{ division.name }}</span>
-                                </div>
-                            </template>
-                        </v-text-field>
-
+                            <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number" max="400"
+                                          min="52" label="Weight">
+                                <template v-slot:details>
+                                    <div v-if="division">
+                                        Category:
+                                        <span :style="{ color: division.color }">{{ division.name }}</span>
+                                    </div>
+                                </template>
+                            </v-text-field>
+                        </div>
                     </v-form>
+                    <div class="flex w-full">
+                        <fighter
+                            class="w-92 mx-auto text-left"
+                            :fighter="fighter"
+                            :admin="admin"
+                            :preview="true"
+                        />
+                    </div>
                 </div>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
@@ -54,12 +69,16 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { watch, ref, computed, reactive } from 'vue';
+import {defineComponent, ref, computed, reactive, PropType, watch } from 'vue';
 import nationalityJson from '@/data/nationality.json';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateFighter, IFighter } from '@/interfaces/fighter';
 import { useFighterStore } from '@/stores/fighter';
+import Fighter from '@/components/Fighter/Fighter.vue';
 
+const props = defineProps({
+    admin: {type: Boolean, required: true}
+})
 
 const fighterStore = useFighterStore();
 const { createFighter } = fighterStore;
@@ -68,7 +87,7 @@ const form = ref();
 const dialog = ref<boolean>(false);
 const valid = ref<boolean>(false);
 
-let fighter = reactive<CreateFighter>({
+const fighter = reactive<CreateFighter>({
     gender: '',
     firstname: '',
     lastname: '',
@@ -76,7 +95,13 @@ let fighter = reactive<CreateFighter>({
     height: 70,
     weight: 70,
     nationality: '',
+    imageFile: '',
+    imageName: '',
+    imageSize: '',
 });
+
+const file = ref();
+const image = ref();
 
 watch(dialog, (open: boolean) => {
     if (!open) {
@@ -171,6 +196,29 @@ const rules = {
     weight: (value: number) => (value >= 52 && value <= 400) || 'Weight must be between 52kg and 400kg',
 };
 
+const submitFighter = async () => {
+    try {
+        const { valid } = await form.value.validate();
+        if (valid) {
+            const formData = new FormData();
+
+            for (const key in fighter) {
+                const value = fighter[key];
+
+                if (value !== undefined) {
+                    if (key === 'imageFile' && (value === '' || value === 'null')) break
+                    formData.append(key, value);
+                }
+            }
+
+            await createFighter(formData);
+        }
+    } catch (error: any) {
+        createToast(error, { position: 'bottom-right', type: 'danger' });
+    }
+    dialog.value = false;
+};
+
 const resetForm = () => {
     fighter = {
         gender: '',
@@ -184,15 +232,22 @@ const resetForm = () => {
     dialog.value = false;
 }
 
-const submitFighter = async () => {
+const generateURL = (file: File) => {
+    let fileSrc = URL.createObjectURL(file);
+    setTimeout(() => {
+        URL.revokeObjectURL(fileSrc);
+    }, 1000);
+    return fileSrc;
+}
+
+const uploadFile = async (e: any) => {
     try {
-        const { valid } = await form.value.validate();
-        if (valid) {
-            await createFighter(fighter);
-        }
-    } catch (error: any) {
-        createToast(error, { position: 'bottom-right', type: 'danger' });
+        image.value = e.target.files[0]
+        fighter.imageFile = image.value
+        fighter.imageName = generateURL(image.value);
+    } catch (e) {
+        console.log(e);
     }
-    dialog.value = false;
 };
+
 </script>

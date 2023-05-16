@@ -24,7 +24,7 @@ class Event {
         }
     }
 
-    async _createEvent(payload: CreateEvent): Promise<IEvent> {
+    async _createEvent(payload: FormData): Promise<IEvent> {
         try {
             const res = await clientFormData.post(namespace, payload);
             return res.data;
@@ -33,10 +33,10 @@ class Event {
         }
     }
 
-    async _upadateEvent(payload: IEvent): Promise<IEvent> {
+    async _upadateEvent(payload: FormData, id: string): Promise<IEvent> {
         try {
-            const uri = `${namespace}/${payload.id}`
-            const res = await client.patch(uri, payload);
+            const uri = `${namespace}/${id}`
+            const res = await clientFormData.patch(uri, payload);
             return res.data;
         } catch (error) {
             throw error;

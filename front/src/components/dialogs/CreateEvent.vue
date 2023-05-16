@@ -2,17 +2,15 @@
     <div>
         <v-dialog class="w-2/3" v-model="dialog">
             <template v-slot:activator="{ props }">
-                <!--<v-btn variant="tonal" color="secondary" v-bind="props"> Register an event </v-btn>-->
                 <v-card v-bind="props" class="flex cursor-pointer h-92 relative bg-neutral-600 text-white items-center">
                     <p class="text-center w-full text-2xl font-weight-bold">
                         New event
                     </p>
                 </v-card>
             </template>
-
             <v-card class="text-center">
                 <v-card-title class="font-bold p-10">
-                    Register an event {{ event.imageFile }}
+                    Register an event
                 </v-card-title>
                 <div class="w-full flex px-10">
                     <v-form class="flex flex-col w-full" v-model="valid" ref="form">
@@ -32,11 +30,14 @@
                                 placeholder="Start event" label="Start event" />
                             <v-text-field v-model="event.timeEnd" :rules="[rules.required, rules.logicDate]" type="date"
                                 placeholder="End event" label="End event" />
-                            <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
+                            <div class="flex">
+                                <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
+                                <v-checkbox v-model="event.display" variant="primary" label="Display" />
+                            </div>
                         </div>
                     </v-form>
                     <div class="flex w-full">
-                        <event class="mx-auto text-left w-92" :event="event" />
+                        <event class="mx-auto text-left w-92" :event="event" :admin="admin" :preview="true" />
                     </div>
                 </div>
                 <v-card-actions class="justify-end">
@@ -48,11 +49,15 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive, defineProps, watch } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateEvent } from '@/interfaces/event';
 import { useEventStore } from '@/stores/event';
 import Event from '../Event.vue';
+
+const props = defineProps({
+    admin: {type: Boolean, required: true}
+});
 
 const eventStore = useEventStore();
 const { createEvent } = eventStore;
@@ -77,6 +82,7 @@ let event = reactive<CreateEvent>({
     imageFile: '',
     imageName: '',
     imageSize: '',
+    display: false,
 });
 
 watch(dialog, (open: boolean) => {
@@ -97,16 +103,17 @@ const submit = async () => {
         const { valid } = await form.value.validate();
         if (valid) {
             const formData = new FormData();
-            formData.append('name', event.name)
-            formData.append('location', event.location);
-            formData.append('description', event.description);
-            formData.append('category', event.category);
-            formData.append('capacity', event.capacity.toString());
-            formData.append('locationLink', event.locationLink);
-            formData.append('timeStart', event.timeStart);
-            formData.append('timeEnd', event.timeEnd);
-            formData.append('imageFile', event.imageFile);
-            formData.append('vip', event.vip.toString());
+
+            for (const key in event) {
+                const value = event[key];
+
+                if (value !== '') {
+                    formData.append(key, value);
+                }
+            }
+
+            console.log(formData)
+
             await createEvent(formData);
             dialog.value = false;
         }

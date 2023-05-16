@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\Event\CreateEvent;
+use App\Controller\Event\UpdateEvent;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -39,18 +40,20 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Post(
             controller: CreateEvent::class,
-            normalizationContext: ['groups' => ['tickets:get']],
-            denormalizationContext: ['groups' => ['tickets:post']],
+            security: 'is_granted("ROLE_ADMIN")',
             deserialize: false
         ),
         new Delete(),
         new Patch(
             inputFormats: [
+                'multipart' => ['multipart/form-data'],
                 'json' => ['application/json']
             ],
-            normalizationContext: ['groups' => ['events:get']],
+            controller: UpdateEvent::class,
             security: 'is_granted("ROLE_ADMIN")',
-        )
+            deserialize: false,
+        ),
+
     ]
 )]
 #[Vich\Uploadable]
@@ -78,7 +81,7 @@ class Event
         'tickets:post',
         'events:get',
         'event:ticket:get',
-        'admin:patch'
+        'admin:patch',
     ])]
     private ?string $name = null;
 
@@ -178,6 +181,16 @@ class Event
     ])]
     private Collection $ticketEvents;
 
+    #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post',
+        'events:get',
+        'event:ticket:get',
+    ])]
+    private ?bool $display = false;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
@@ -274,7 +287,7 @@ class Event
         return $this->capacity;
     }
 
-    public function setCapacity(null|int|string $capacity): self
+    public function setCapacity(?int $capacity): self
     {
         $this->capacity = $capacity;
 
@@ -349,6 +362,18 @@ class Event
                 $ticketEvent->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isDisplay(): ?bool
+    {
+        return $this->display;
+    }
+
+    public function setDisplay(bool $display): self
+    {
+        $this->display = $display;
 
         return $this;
     }

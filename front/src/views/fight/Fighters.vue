@@ -7,7 +7,8 @@
                 <fighter-filter class="col-span-1 sticky top-[64px]" />
                 <div v-if="fighters"
                     class="col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
-                    no-gutters>
+                    no-gutters
+                >
                     <div v-for="fighter in filteredFighters" :key="fighter.id">
                         <fighter :fighter="fighter"></fighter>
                     </div>

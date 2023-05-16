@@ -14,9 +14,19 @@
                 Passed
             </div>
         </div>
-        <div v-if="event.vip" class="absolute z-10 rounded-lg h-16 w-16 flex items-center right-0">
-            <div class="flex flex-col text-center mx-auto font-bold">
-                <Icon height="30" class="text-yellow-300" icon="game-icons:cut-diamond" />
+        <div class="absolute z-10 rounded-lg h-16 w-16 flex items-center right-5 gap-2">
+            <div v-if="admin">
+                <div v-if="event.display" class="flex flex-col text-center mx-auto font-bold">
+                    <Icon height="30" class="text-white" icon="ion:eye-outline" />
+                </div>
+                <div v-else class="flex flex-col text-center mx-auto font-bold">
+                    <Icon height="30" class="text-white" icon="ion:eye-off-outline" />
+                </div>
+            </div>
+            <div v-if="event.vip">
+                <div class="flex flex-col text-center mx-auto font-bold">
+                    <Icon height="30" class="text-yellow-300" icon="game-icons:cut-diamond" />
+                </div>
             </div>
         </div>
         <div :style="event.imageName ? `background-image: url('${event.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
@@ -24,14 +34,16 @@
             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
         </div>
         <div class="pa-5 h-1/2 flex flex-column relative overflow-auto">
-            <v-menu v-if="admin && pathIncludeAdmin">
+            <v-menu v-if="admin && pathIncludeAdmin && !preview" >
                 <template v-slot:activator="{ props }">
-                    <v-btn class="absolute right-[20px]" color="transparent" v-bind="props" icon="mdi-dots-horizontal"
+                    <v-btn class="absolute right-4 p-1 rounded" color="transparent" v-bind="props" icon="mdi-dots-horizontal"
                         size="x-medium" />
                 </template>
-                <v-list>
-                    <v-list-item value="update-event"> <update-event :event="event" /></v-list-item>
-                    <v-list-item value="delete-fighter" @click="deleteE(event.id)">Delete</v-list-item>
+                <v-list class="p-0 text-center">
+                    <v-list-item value="update-event">
+                        <update-event :event="event" :admin="admin" />
+                    </v-list-item>
+                    <v-list-item value="delete-fighter" class="bg-secondary" @click="deleteE(event.id)">Delete</v-list-item>
                 </v-list>
             </v-menu>
             <p class="text-2xl font-bold pb-5">{{ event.name }}</p>
@@ -60,6 +72,7 @@ import UpdateEvent from '@/components/dialogs/UpdateEvent.vue';
 const props = defineProps({
     event: { type: Object as PropType<IEvent>, required: true },
     admin: { type: Boolean, default: false },
+    preview: { type: Boolean, default: false },
 })
 
 const router = useRouter()
