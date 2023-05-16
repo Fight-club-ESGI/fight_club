@@ -1,7 +1,7 @@
 <template>
     <div class="h-full w-full flex">
         <div class="h-full w-full hidden md:flex flex items-center bg-no-repeat bg-cover bg-right opacity-75"
-            style="background-image: url('../src/assets/johann-walter-bantz-Clv9DfJLwac-unsplash.jpg');">
+            :style="{ backgroundImage: 'url(' + imageUrl + ')' }">
             <div class="text-center w-full font-bold text-6xl px-20 text-white">
                 Welcome to Thunderous Knockout
             </div>
