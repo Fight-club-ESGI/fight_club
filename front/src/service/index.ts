@@ -6,7 +6,7 @@ export const refreshToken = useStorage('refreshToken', '');
 
 const config = computed(() => {
     return {
-        baseURL: import.meta.env.PROD ? import.meta.env.VITE_BACK_PROD_URL : import.meta.env.VITE_BACKEND_URL,
+        baseURL: import.meta.env.VITE_BACKEND_URL,
         headers: {
             "Content-Type": "application/json",
         }
@@ -15,7 +15,7 @@ const config = computed(() => {
 
 const configFormData = computed(() => {
     return {
-        baseURL: import.meta.env.PROD ? import.meta.env.VITE_BACK_PROD_URL : import.meta.env.VITE_BACKEND_URL,
+        baseURL: import.meta.env.VITE_BACKEND_URL,
         headers: {
             "Content-Type": "multipart/form-data",
         }
