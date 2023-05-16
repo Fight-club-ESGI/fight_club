@@ -19,7 +19,7 @@
                 </div>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
-                        <v-btn color="primary" @click="dialog = false">Cancel</v-btn>
+                        <v-btn color="primary" @click="resetForm()">Cancel</v-btn>
                         <v-btn color="secondary" @click="submit()">Create</v-btn>
                     </v-row>
                 </v-card-actions>
@@ -71,11 +71,26 @@ const rules = {
     required: (value: any) => !!value || 'Required.',
 };
 
-const fight = reactive<CreateFight>({
+let fight = reactive<CreateFight>({
     event: '',
     fighterA: '',
     fighterB: ''
 })
+
+watch(dialog, (open: boolean) => {
+    if (!open) {
+        resetForm()
+    }
+})
+
+const resetForm = () => {
+    fight = {
+        event: '',
+        fighterA: '',
+        fighterB: ''
+    }
+    dialog.value = false;
+}
 
 const submit = async () => {
     try {
@@ -91,4 +106,6 @@ const submit = async () => {
         createToast(error, { position: 'bottom-right', type: 'danger' });
     }
 };
+
+
 </script>

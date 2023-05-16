@@ -26,7 +26,7 @@
                 </v-container>
                 <v-card-actions>
                     <v-row justify="end" class="px-4">
-                        <v-btn color="primary" @click="dialog = false">Cancel</v-btn>
+                        <v-btn color="primary" @click="resetForm()">Cancel</v-btn>
                         <v-btn color="secondary" @click="submit()">Create</v-btn>
                     </v-row>
                 </v-card-actions>
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { useTicketStore } from '@/stores/tickets';
 import { storeToRefs } from 'pinia';
@@ -66,11 +66,24 @@ onMounted(async () => {
     }
 });
 
+watch(dialog, (open: boolean) => {
+    if (!open) {
+        resetForm()
+    }
+})
+
 const rules = {
     required: (value: any) => !!value || 'Required.',
     ticketPrice: (value: any) => value > 0 || 'Ticket must have a valid price',
     ticketPlaces: (value: any) => value > 0 || 'Number of places must be valid',
 };
+
+const resetForm = () => {
+    category.value = '';
+    maxQuantity.value = 1;
+    price.value = 1;
+    dialog.value = false;
+}
 
 const submit = async () => {
     try {

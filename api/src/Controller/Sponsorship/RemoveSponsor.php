@@ -24,6 +24,7 @@ class RemoveSponsor extends AbstractController
             throw new BadRequestException("Entity not found");
         }
 
+        $sponsorship->getSponsored()->setRoles([]);
         $this->entityManager->remove($sponsorship);
         $this->entityManager->flush();
 
