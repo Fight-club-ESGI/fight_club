@@ -35,7 +35,7 @@ class AcceptRequest extends AbstractController
 
             return new Response("Success", 200);
         } else {
-            return new BadRequestException("Failed to set VIP role");
+            throw new BadRequestException("Failed to set VIP role");
         }
     }
 }
