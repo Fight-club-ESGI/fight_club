@@ -58,8 +58,8 @@ class FightOddsService
 
     public function odd() {
         return [
-            "fighterAOdds" => $this->fighterAOdds,
-            "fighterBOdds" => $this->fighterBOdds
+            "fighterAOdds" => $this->fighterAOdds ?? 1,
+            "fighterBOdds" => $this->fighterBOdds ?? 1
         ];
     }
 }

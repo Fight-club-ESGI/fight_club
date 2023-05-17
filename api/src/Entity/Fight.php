@@ -154,6 +154,7 @@ class Fight
     private Collection $bets;
 
     #[Groups([
+        'fights:get',
         'admin:get',
         'admin:post',
     ])]
