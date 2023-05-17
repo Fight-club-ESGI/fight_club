@@ -9,28 +9,25 @@
                         <div v-if="cartTotalItems === 0">
                             <div class="font-bold text-3xl p-6">Your cart is empty</div>
                         </div>
-                        <div v-for="item in cartItems" :key="item.id" class="flex flex-row space-x-5">
-                            <div class="flex flex-col w-full">
-                                <div class="font-bold text-xl">
-                                    {{ item.ticketEvent.event.name }} - {{ item.ticketEvent.ticketCategory.name }} ({{
-                                        item.ticketEvent.price }}€)
-                                </div>
-                                <!-- Quantity input number -->
+                        <div v-for="item in cartItems" :key="item.id" class="flex space-x-5 justify-between items-center">
+                            <div class="font-extrabold">
+                                {{ item.ticketEvent.event.name }}
+                                <span class="text-sm text-gray-400"> | {{
+                                    item.ticketEvent.ticketCategory.name }}
+                                    ({{
+                                        item.ticketEvent.price }}€)</span>
+                            </div>
+                            <!-- Quantity input number -->
 
-                                <div class="flex flex-row space-x-5">
-                                    <div class="w-1/2">
-                                        <v-text-field type="number" label="Quantity" v-model="item.quantity"
-                                            @input="updateItem(item)" min="1" max="10" outlined
-                                            density="compact"></v-text-field>
-                                    </div>
-                                </div>
+                            <div class="flex gap-x-7 justify-self-end">
+                                <v-text-field type="number" v-model="item.quantity" @input="updateItem(item)" min="1"
+                                    append-icon="mdi-plus" @click:append="increment(item)" prepend-icon="mdi-minus"
+                                    @click:prepend="decrement(item)" outlined density="compact" class="w-40"
+                                    hide-details></v-text-field>
 
-                                <!-- End quantity input number -->
-                                <div class="flex flex-row space-x-5">
-                                    <div class="w-1/2">
-                                        <v-btn block class="rounded" @click="removeItem(item)">Remove</v-btn>
-                                    </div>
-                                </div>
+                                <v-btn class="rounded" @click="removeItem(item)">
+                                    <v-icon>mdi-delete</v-icon>
+                                </v-btn>
                             </div>
                         </div>
                     </div>
@@ -85,16 +82,35 @@ import { storeToRefs } from 'pinia';
 
 const cartStore = useCartStore();
 const { cartTotalItems, cartItems, cartTotalPrice } = storeToRefs(cartStore);
-const { getCart, removeFromCart, updateCartItem, checkout } = cartStore;
+const { getCart, removeFromCart, updateCartItem, checkout, clearCart } = cartStore;
 
 let timeout: ReturnType<typeof setTimeout> | null
+
+const increment = (item: CartItemInterface) => {
+    item.quantity = Math.min(maxCanAddToCart(item), Number(item.quantity) + 1);
+    updateItem(item);
+}
+
+const decrement = (item: CartItemInterface) => {
+    item.quantity = Math.max(1, Number(item.quantity) - 1);
+    updateItem(item);
+}
+
+const checkNumber = (item: CartItemInterface) => {
+    item.quantity = Math.min(maxCanAddToCart(item), Math.max(1, Number(item.quantity)));
+}
+
+const maxCanAddToCart = (item: CartItemInterface) => {
+    return item.ticketEvent.maxQuantity - item.ticketEvent.tickets.length;
+
+}
 
 const removeItem = async (item: CartItemInterface) => {
     await removeFromCart(item);
 }
 
 const updateItem = async (item: CartItemInterface) => {
-    item.quantity = Math.min(10, Math.max(1, Number(item.quantity)));
+    checkNumber(item)
     if (timeout !== null) {
         clearTimeout(timeout);
     }
@@ -120,6 +136,8 @@ const check_out = async (type: string) => {
             type: 'success',
             position: 'bottom-right'
         });
+
+        await clearCart();
     }
     catch {
         createToast('Error while checking out', {

@@ -17,8 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Faker\Core\Number;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 
 #[ORM\Entity(repositoryClass: TicketEventRepository::class)]
 #[ApiResource(
