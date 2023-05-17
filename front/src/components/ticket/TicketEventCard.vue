@@ -37,13 +37,6 @@ const canAddToCart = computed(() => {
         return false;
 
     return true;
-
-});
-
-const maxCanAddToCart = computed(() => {
-
-    return props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity.value;
-
 });
 
 const maxCanAddToCart = computed(() => {
@@ -54,6 +47,17 @@ const maxCanAddToCart = computed(() => {
     return max > 0 ? max : 0;
 });
 
+<<<<<<< HEAD
+const maxCanAddToCart = computed(() => {
+    let max = props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity.value;
+
+    checkNumber();
+
+    return max > 0 ? max : 0;
+});
+
+=======
+>>>>>>> dd22191 (Implement Stripe)
 const addCart = async (ticketEvent: string) => {
     if (!canAddToCart.value) {
         createToast('Not enough tickets available', {
