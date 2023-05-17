@@ -9,6 +9,7 @@ use App\Entity\Ticket;
 use App\Entity\TicketEvent;
 use App\Entity\Wallet;
 use App\Entity\WalletTransaction;
+use App\Enum\Order\OrderStatusEnum;
 use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
 use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\CartRepository;
@@ -81,11 +82,11 @@ class CartCheckout extends AbstractController
         $this->entityManager->persist($order);
 
         $walletTransaction = $this->checkoutService->recordWalletTransaction($wallet, $totalPrice, WalletTransactionStatusEnum::PENDING, WalletTransactionTypeEnum::WALLET_PAYMENT);
-        $this->checkoutService->payment($walletTransaction);
+        $this->checkoutService->paymentWallet($walletTransaction);
+        $this->entityManager->flush();
 
         [$createdTickets, $refundTickets] = $this->generateTickets($order, $cart->getCartItems());
 
-        $this->entityManager->flush();
 
         if (count($refundTickets) > 0) {
             $refundPrice = array_reduce($refundTickets, fn (int $carry, $item) => $carry + $item['ticketEvent']->getPrice() * $item['quantity'], 0);
@@ -95,6 +96,35 @@ class CartCheckout extends AbstractController
 
             $this->checkoutService->refund($refundWalletTransaction, $refundPrice);
         }
+
+        $order->setStatus(OrderStatusEnum::SUCCESS);
+        $this->entityManager->persist($order);
+
+        $this->entityManager->flush();
+    }
+
+    private function payWithStripe(Cart $cart, int $totalPrice): void
+    {
+        $user = $this->security->getUser();
+
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+
+        $order = (new Order())
+            ->setUser($user)
+            ->setPrice($totalPrice);
+
+        $this->entityManager->persist($order);
+
+        $this->entityManager->flush();
+
+        [$createdTickets, $refundTickets] = $this->generateTickets($order, $cart->getCartItems());
+
+        $order->setStatus(OrderStatusEnum::SUCCESS);
+        $this->entityManager->persist($order);
+
+        $this->entityManager->flush();
     }
 
     private function generateTickets($order, $cartItems)
@@ -133,8 +163,6 @@ class CartCheckout extends AbstractController
                         'quantity' => $remainingQuantity,
                     ];
                 }
-
-                $this->entityManager->remove($cartItem);
             }
 
             $this->entityManager->flush();
