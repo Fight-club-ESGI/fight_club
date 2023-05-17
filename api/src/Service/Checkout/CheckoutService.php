@@ -22,9 +22,13 @@ class CheckoutService
         $this->stripe = new StripeClient($_ENV['STRIPE_KEY']);
     }
 
-    public function checkout(User $user, float $amount, WalletTransactionTypeEnum $type, array $params = [], int $quantity = 1, bool $default_confirmation_url = true): Session
+    public function checkout(User $user, float $amount, WalletTransactionTypeEnum $type, array $params = [], int $quantity = 1, bool $default_confirmation_url = true, ?Order $order): Session
     {
         $this->walletTransaction = $this->recordWalletTransaction($user->getWallet(), $amount, WalletTransactionStatusEnum::PENDING, $type);
+
+        if ($order) {
+            $this->walletTransaction->setOrder($order);
+        }
 
         #todo change url
         $params['line_items'] = [];
@@ -92,7 +96,7 @@ class CheckoutService
         }
     }
 
-    public function payment(WalletTransaction $walletTransaction): void
+    public function paymentWallet(WalletTransaction $walletTransaction): void
     {
         $wallet = $walletTransaction->getWallet();
 
