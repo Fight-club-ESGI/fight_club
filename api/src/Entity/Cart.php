@@ -20,6 +20,10 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new Patch(
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
             denormalizationContext: ['groups' => ['cart:patch']],
             security: 'is_granted("ROLE_USER") and object.getUser() === user'
         ),
