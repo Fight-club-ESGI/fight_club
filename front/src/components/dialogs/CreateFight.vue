@@ -12,8 +12,12 @@
                 <div class="w-full flex px-10">
                     <v-form class="flex flex-col w-full" v-model="valid" ref="form">
                         <div>
-                            <v-select v-model="fighterA" label="fighter one" :items="fighterItems" />
-                            <v-select v-model="fighterB" label="Against" :items="fighterItems" :disabled="!fighterA" />
+                            <v-select v-model="fighterA" :rules="[rules.required]" label="fighter one"
+                                :items="fighterItems" />
+                            <v-select v-model="fighterB" :rules="[rules.required, rules.sameFighter]" label="Against"
+                                :items="fighterItems" :disabled="!fighterA" />
+                            <v-text-field v-model="fightDate" :rules="[rules.required, rules.date, rules.logicDate]"
+                                type="datetime-local" label="Fight date" />
                         </div>
                     </v-form>
                 </div>
@@ -33,6 +37,7 @@ import { createToast } from 'mosha-vue-toastify';
 import { useFightStore } from '@/stores/fight';
 import { CreateFight } from '@/interfaces/figth';
 import { useFighterStore } from '@/stores/fighter';
+import { useEventStore } from '@/stores/event';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 
@@ -42,13 +47,15 @@ const { getFighters } = fighterStore;
 const { fighters } = storeToRefs(fighterStore)
 const fightStore = useFightStore();
 const { createFight } = fightStore;
-
+const eventStore = useEventStore();
+const { event } = storeToRefs(eventStore);
 
 const form = ref();
 const dialog = ref<boolean>(false);
 const valid = ref<boolean>(false);
 const fighterA = ref<string>('');
 const fighterB = ref<string>('');
+const fightDate = ref<string>('');
 
 onMounted(async () => {
     try {
@@ -69,12 +76,17 @@ const fighterItems = computed(() => {
 
 const rules = {
     required: (value: any) => !!value || 'Required.',
+    date: (value: any) => new Date(value) >= new Date() || 'Date must be in the future',
+    sameFighter: (value: any) => fighterA.value !== fighterB.value || 'The fighter cannot fight him self',
+    logicDate: (value: any) => value >= event.value?.timeStart && value < event.value?.timeEnd
+        || `Fight date must be between ${new Date(event.value?.timeStart).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })} and ${new Date(event.value?.timeEnd).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`,
 };
 
 let fight = reactive<CreateFight>({
     event: '',
     fighterA: '',
-    fighterB: ''
+    fighterB: '',
+    fightDate: ''
 })
 
 watch(dialog, (open: boolean) => {
@@ -87,7 +99,8 @@ const resetForm = () => {
     fight = {
         event: '',
         fighterA: '',
-        fighterB: ''
+        fighterB: '',
+        fightDate: ''
     }
     dialog.value = false;
 }
@@ -99,6 +112,7 @@ const submit = async () => {
             fight.event = route.params.id.toString();
             fight.fighterA = fighterA.value;
             fight.fighterB = fighterB.value;
+            fight.fightDate = fightDate.value;
             await createFight(fight);
             dialog.value = false;
         }

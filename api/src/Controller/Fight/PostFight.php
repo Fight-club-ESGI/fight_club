@@ -7,6 +7,7 @@ use App\Repository\EventRepository;
 use App\Repository\FighterRepository;
 use App\Repository\UserRepository;
 use Carbon\Carbon;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -30,6 +31,7 @@ class PostFight extends AbstractController
         $eventIRI = json_decode($request->getContent())->event;
         $fighterAIRI = json_decode($request->getContent())->fighterA;
         $fighterBIRI = json_decode($request->getContent())->fighterB;
+        $fightDate = json_decode($request->getContent())->fightDate;
 
         if(!$eventIRI or !$fighterAIRI or !$fighterBIRI) {
             throw new BadRequestException();
@@ -55,6 +57,7 @@ class PostFight extends AbstractController
         }
 
         $fight = new Fight();
+        $fight->setFightDate(new DateTime($fightDate));
         $fight->setEvent($event);
         $fight->setFighterA($fighterA);
         $fight->setFighterB($fighterB);

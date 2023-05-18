@@ -12,18 +12,21 @@ interface IFight {
     winnerValidation: boolean
     adminValidatorA: IUser
     adminValidatorB: IUser
+    fightDate: string
 }
 
 interface CreateFight {
     event: string
     fighterA: string
     fighterB: string
+    fightDate: string
 }
 
 interface UpdateFight {
     id: string
     fighterA: string
     fighterB: string
+    fightDate: string
 }
 
 export type { IFight, CreateFight, UpdateFight }
