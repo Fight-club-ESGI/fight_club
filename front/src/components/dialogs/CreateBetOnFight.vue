@@ -151,28 +151,18 @@ const rules = {
 };
 
 const payWallet = async () => {
-    try {
-        if (checkForm()) {
-            createBetWallet(bet)
-            dialog.value = false;
-            resetBet()
-        }
-    } catch (error: any) {
-        console.log(error)
-        console.log('something')
-        createToast(error, { position: 'bottom-right', type: 'danger' });
+    if (checkForm()) {
+        createBetWallet(bet)
+        dialog.value = false;
+        resetBet()
     }
 }
 
 const payDirect = async () => {
-    try {
-        if (checkForm()){
-            createBetDirect(bet)
-            dialog.value = false;
-            resetBet()
-        }
-    } catch (error: any) {
-        createToast(error, { position: 'bottom-right', type: 'danger' });
+    if (checkForm()){
+        createBetDirect(bet)
+        dialog.value = false;
+        resetBet()
     }
 }
 

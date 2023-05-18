@@ -72,6 +72,20 @@
                                 <p>
                                     {{ fight.odds.fighterAOdds }}
                                 </p>
+                                <div class="flex text-white gap-x-2 mx-auto">
+                                    <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
+                                        <Icon icon="material-symbols:flag" />
+                                        <p class="text-sm font-bold">{{ fight.fighterA.nationality }}</p>
+                                    </div>
+                                    <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
+                                        <Icon icon="material-symbols:weight" />
+                                        <p class="text-sm font-bold">{{ fight.fighterA.weight }} kg</p>
+                                    </div>
+                                    <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
+                                        <Icon icon="mdi:human-male-height-variant" />
+                                        <p class="text-sm font-bold">{{ fight.fighterA.height }} cm</p>
+                                    </div>
+                                </div>
                             </div>
                             <v-divider
                                 :thickness="2"
@@ -86,6 +100,20 @@
                                 <p>
                                     {{ fight.odds.fighterBOdds }}
                                 </p>
+                                <div class="flex text-white gap-x-2 mx-auto">
+                                    <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
+                                        <Icon icon="material-symbols:flag" />
+                                        <p class="text-sm font-bold">{{ fight.fighterB.nationality }}</p>
+                                    </div>
+                                    <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
+                                        <Icon icon="material-symbols:weight" />
+                                        <p class="text-sm font-bold">{{ fight.fighterB.weight }} kg</p>
+                                    </div>
+                                    <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
+                                        <Icon icon="mdi:human-male-height-variant" />
+                                        <p class="text-sm font-bold">{{ fight.fighterB.height }} cm</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="mt-2">

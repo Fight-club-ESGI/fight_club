@@ -27,7 +27,6 @@ export const useBetStore = defineStore('bet', () => {
             return await betService._betWallet(payload);
         } catch (error: any) {
             createToast(error.response.data, { position: 'bottom-right', type: 'danger' });
-            throw error;
         }
     }
 
@@ -36,7 +35,6 @@ export const useBetStore = defineStore('bet', () => {
             return await betService._betDirect(payload);
         } catch (error: any) {
             createToast(error.response.data, { position: 'bottom-right', type: 'danger' });
-            throw error;
         }
     }
 
