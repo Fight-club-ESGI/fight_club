@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UpdateFight from "@/components/dialogs/UpdateFight.vue"
-import { IFight } from '@/interfaces/figth';
+import { IFight } from '@/interfaces/fight';
 import { PropType, computed } from 'vue';
 import { Icon } from "@iconify/vue/dist/iconify.js";
 import { useFightStore } from '@/stores/fight';

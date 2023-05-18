@@ -1,4 +1,4 @@
-import { IFight, CreateFight, UpdateFight } from "@/interfaces/figth";
+import { IFight, CreateFight, UpdateFight } from "@/interfaces/fight";
 import { client } from "..";
 
 const namespace = '/fights';

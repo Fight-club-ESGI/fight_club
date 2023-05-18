@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import CreateTickets from '@/components/dialogs/CreateTicketsEvent.vue';
-import fights from '@/components/admin/figth/fights.vue';
+import fights from '@/components/admin/fight/fights.vue';
 import TicketList from '@/components/admin/tickets/TicketList.vue';
 import TicketEventEditing from '@/components/admin/tickets/TicketEventEditing.vue';
 import { onMounted, computed, ref } from 'vue';

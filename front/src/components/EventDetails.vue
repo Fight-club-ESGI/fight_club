@@ -89,12 +89,7 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <v-btn
-                                color="secondary"
-                                class="rounded-md"
-                            >
-                                Bet
-                            </v-btn>
+                            <create-bet-on-fight />
                         </div>
                     </div>
                     <div class="bg-red-100 h-52 w-80 bg-cover bg-center"
@@ -118,6 +113,7 @@ import { useEventStore } from '../stores/event';
 import { useTicketStore } from '../stores/tickets';
 import TicketList from '@/components/ticket/TicketList.vue';
 import {Icon} from "@iconify/vue";
+import CreateBetOnFight from "@/components/dialogs/CreateBetOnFight.vue";
 
 const route = useRoute();
 
