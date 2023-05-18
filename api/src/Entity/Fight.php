@@ -17,6 +17,7 @@ use App\Repository\FightRepository;
 use App\Service\Fight\FightOddsService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
@@ -27,7 +28,9 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         new Post(
             uriTemplate: 'fights',
             controller: PostFight::class,
-            security: "is_granted('ROLE_ADMIN')"
+            normalizationContext: ["groups" => ['fights:get', 'fighter:get']],
+            denormalizationContext: ["groups" => ['fights:post']],
+            security: "is_granted('ROLE_ADMIN')",
         ),
         new Post(
             uriTemplate: "/fights/{fight}/validation",
@@ -75,6 +78,7 @@ class Fight
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'fights:get',
+        'fights:post',
         'admin:get',
         'admin:post',
     ])]
@@ -85,6 +89,7 @@ class Fight
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'fights:get',
+        'fights:post',
         'admin:get',
         'admin:post',
         'fighter:get',
@@ -97,6 +102,7 @@ class Fight
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'fights:get',
+        'fights:post',
         'admin:get',
         'admin:post',
         'fighter:get',
@@ -158,6 +164,15 @@ class Fight
         'admin:post',
     ])]
     private array $odds;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
+    #[ORM\ManyToOne]
+    #[Groups([
+        'fights:get',
+        'fights:post',
+        'admin:get'
+    ])]
+    private ?\DateTimeInterface $fightDate = null;
 
     public function __construct()
     {
@@ -293,5 +308,17 @@ class Fight
     public function getOdds(): array
     {
         return (new FightOddsService($this))->odd();
+    }
+
+    public function getFightDate(): ?\DateTimeInterface
+    {
+        return $this->fightDate;
+    }
+
+    public function setFightDate(\DateTimeInterface $fightDate): self
+    {
+        $this->fightDate = $fightDate;
+
+        return $this;
     }
 }
