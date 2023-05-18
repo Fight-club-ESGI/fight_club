@@ -1,10 +1,7 @@
 <template>
     <div>
         <v-breadcrumbs :items="items"></v-breadcrumbs>
-
-        <v-container>
-            <fighter-details />
-        </v-container>
+        <fighter-details />
     </div>
 </template>
 
