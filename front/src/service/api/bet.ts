@@ -1,13 +1,14 @@
 import { client } from "../index";
 import type { FightBetI } from "@/interfaces/bet";
+import {CreateBetI} from "@/interfaces/bet";
 
-const namespace = '/fightbets';
+const namespace = '/bets';
 
 class Bet {
 
-    async _betWallet(payload: { fight: string, betOn: string, amount: number }) {
+    async _betWallet(payload: CreateBetI) {
         try {
-            const uri = `${namespace}/wallet`;
+            const uri = `${namespace}/payment/wallet`;
             const res = await client.post(uri, payload);
             return res.data;
         } catch (error) {
@@ -15,9 +16,9 @@ class Bet {
         }
     }
 
-    async _betDirect(payload: { fight: string, betOn: string, amount: number }): Promise<string> {
+    async _betDirect(payload: CreateBetI): Promise<string> {
         try {
-            const uri = `${namespace}/direct`;
+            const uri = `${namespace}/payment/direct`;
             const res = await client.post(uri, payload);
             return res.data;
         } catch (error) {
@@ -39,15 +40,6 @@ class Bet {
         try {
             const uri = `${namespace}/${payload.id}/bets/${payload.betId}`;
             const res = await client.get(uri);
-            return res.data;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async _createBet(payload: any): Promise<FightBetI> {
-        try {
-            const res = await client.post(namespace, payload);
             return res.data;
         } catch (error) {
             throw error;

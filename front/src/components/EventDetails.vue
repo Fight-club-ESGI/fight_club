@@ -89,7 +89,9 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <create-bet-on-fight />
+                            <create-bet-on-fight
+                                :fight="fight"
+                            />
                         </div>
                     </div>
                     <div class="bg-red-100 h-52 w-80 bg-cover bg-center"
@@ -109,8 +111,8 @@
 import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { useEventStore } from '../stores/event';
-import { useTicketStore } from '../stores/tickets';
+import { useEventStore } from '@/stores/event';
+import { useTicketStore } from '@/stores/tickets';
 import TicketList from '@/components/ticket/TicketList.vue';
 import {Icon} from "@iconify/vue";
 import CreateBetOnFight from "@/components/dialogs/CreateBetOnFight.vue";

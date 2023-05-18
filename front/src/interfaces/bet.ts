@@ -31,7 +31,7 @@ export interface IBet {
 }
 
 export interface CreateBetI {
-    fight: '',
-    betOn: '',
-    amount: '',
+    fight: string,
+    betOn: string,
+    amount: number,
 }
