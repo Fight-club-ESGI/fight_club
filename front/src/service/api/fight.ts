@@ -26,10 +26,11 @@ class Fight {
 
     async _createFight(payload: CreateFight): Promise<IFight> {
         try {
-            const data = {
+            const data: CreateFight = {
                 event: `/events/${payload.event}`,
                 fighterA: `/fighters/${payload.fighterA}`,
                 fighterB: `/fighters/${payload.fighterB}`,
+                fightDate: payload.fightDate
             }
             const res = await client.post(namespace, data);
             return res.data;
