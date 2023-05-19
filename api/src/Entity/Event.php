@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Elasticsearch\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -27,7 +27,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-#[ApiFilter(DateFilter::class, properties: ['startTime' => 'ASC'])]
 #[ApiResource(
     operations: [
         new GetCollection(
@@ -59,6 +58,17 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
 
     ]
+)]
+#[ApiFilter(
+    DateFilter::class, properties: ['createdAt']
+)]
+// ?order[timeStart]
+#[ApiFilter(
+    OrderFilter::class, properties: ['timeStart' => 'DESC']
+)]
+// ?order[timeStart]=desc
+#[ApiFilter(
+    OrderFilter::class, properties: ['timeStart'], arguments: ['orderParameterName' => 'order']
 )]
 #[Vich\Uploadable]
 class Event

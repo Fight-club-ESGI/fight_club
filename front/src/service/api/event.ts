@@ -5,9 +5,9 @@ const namespace = '/events';
 
 class Event {
 
-    async _getEvents(): Promise<IEvent[]> {
+    async _getEvents(order: string = 'desc', page: number = 1): Promise<IEvent[]> {
         try {
-            const res = await clientWithoutAuth.get(namespace);
+            const res = await clientWithoutAuth.get(`${namespace}?order[timeStart]=${order}&page=${page}`);
             return res.data;
         } catch (error) {
             throw error;

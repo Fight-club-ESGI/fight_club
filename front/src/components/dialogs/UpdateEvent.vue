@@ -86,15 +86,17 @@ const rules = {
 const saveEvent = async () => {
     try {
         const formData = new FormData();
+        console.log(Object.keys(event))
 
-        for (const key in event) {
+
+        Object.keys(event).forEach((key) => {
             const value = event[key];
 
             if (value !== undefined) {
-                if (key === 'imageFile' && (value === '' || value === 'null')) break
+                if (key === 'imageFile' && (value === '' || value === 'null')) return
                 formData.append(key, value);
             }
-        }
+        })
 
         await updateEvent(formData, props.event.id);
         dialog.value = false;

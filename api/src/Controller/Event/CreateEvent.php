@@ -42,6 +42,7 @@ class CreateEvent extends AbstractController
                         $propertyValue = date_timestamp_set(new DateTime, strtotime($propertyValue));
                         break;
                     case 'vip':
+                    case 'display':
                         $propertyValue = filter_var($propertyValue, FILTER_VALIDATE_BOOLEAN);
                         break;
                     case 'capacity':
