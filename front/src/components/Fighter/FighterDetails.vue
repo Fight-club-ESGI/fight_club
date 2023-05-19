@@ -23,21 +23,49 @@
                         }) }})
                     </div>
                 </div>
-                <v-divider vertical></v-divider>
-                <div>
-                    <div>Height: {{ fighter.height }} cm</div>
-                    <div>Weight: {{ fighter.weight }} kg</div>
+                <v-divider :thickness="1" class="border-opacity-100" vertical></v-divider>
+                <div class="flex flex-col gap-y-5">
+                    <div class="flex gap-x-2">
+                        <div class="flex items-center">
+                            <Icon icon="pixelarticons:human-height" /> {{ fighter.height }} cm
+                        </div>
+                        <v-divider vertical :thickness="1" class="border-opacity-100"></v-divider>
+                        <div class="flex items-center">
+                            <Icon icon="material-symbols:weight" /> {{ fighter.weight }} kg
+                        </div>
+                    </div>
+                    <div class="text-lg font-medium">
+                        <span class="text-green-500">{{ fighterWL.win }} W</span> / <span
+                            class="text-red-500">{{ fighterWL.lose }} L</span>
+                    </div>
                 </div>
+
             </div>
         </v-card>
-        <div>
+        <h1 class="text-xl font-medium">Matches history</h1>
+        <div class="flex flex-col gap-y-2">
             <div v-for="matches in fighterHistoryMatches" :key="matches.id"
-                class="border rounded flex bg-gradient-to-r from-red-200 via-transparent to-emerald-200 pa-4">
-                <div class="flex-1">
-                    {{ matches.fighterA }}
+                @click="router.push({ name: 'event-details', params: { id: matches.event.id } })"
+                :class="'cursor-pointer border rounded flex pa-4 ' + (matches.winner === matches.fighterA ? ' bg-gradient-to-r from-emerald-200 via-transparent to-red-200' : ' bg-gradient-to-r from-red-200 via-transparent to-emerald-200')">
+                <div class="flex justify-center flex-1">
+                    <template v-if="typeof matches.fighterA === 'string'">
+                        <span>{{ fighter.firstname + ' ' + fighter.lastname }}</span>
+                    </template>
+                    <template v-else-if="typeof matches.fighterB === 'string'">
+                        <span>{{ fighter.firstname + ' ' + fighter.lastname }}</span>
+                    </template>
                 </div>
-                <div class="flex-1">
-                    {{ matches.fighterB }}
+                <div>
+                    {{ new Date(matches.fightDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) }}
+                    - <span>{{ matches.event.name }}</span>
+                </div>
+                <div class="flex justify-center flex-1">
+                    <template v-if="typeof matches.fighterA === 'object'">
+                        <span>{{ matches.fighterA.firstname + ' ' + matches.fighterA.lastname }}</span>
+                    </template>
+                    <template v-else-if="typeof matches.fighterB === 'object'">
+                        <span>{{ matches.fighterB.firstname + ' ' + matches.fighterB.lastname }}</span>
+                    </template>
                 </div>
             </div>
         </div>
@@ -48,15 +76,16 @@
 import { Icon } from '@iconify/vue';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useFighterStore } from '@/stores/fighter';
 import { createToast } from 'mosha-vue-toastify';
 
 const route = useRoute();
+const router = useRouter();
 const fighterStore = useFighterStore();
 
 const { getFighter } = fighterStore;
-const { fighter, fighterHistoryMatches } = storeToRefs(fighterStore);
+const { fighter, fighterHistoryMatches, fighterWL } = storeToRefs(fighterStore);
 
 const fighterId = computed(() => route.params.id.toString()).value;
 

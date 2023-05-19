@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\Fighter\CreateFighter;
+use App\Controller\Fighter\GetFighter;
 use App\Controller\Fighter\UpdateFighter;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -32,6 +33,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             name: "get_fighters",
         ),
         new Get(
+            controller: GetFighter::class,
             normalizationContext: ["groups" => ['fighter:get', 'fights:get']],
         ),
         new Post(
@@ -163,7 +165,7 @@ class Fighter
     private Collection $fightsB;
 
     #[ORM\ManyToMany(targetEntity: Fight::class, inversedBy: 'fighters')]
-    #[MaxDepth(2)]
+    #[MaxDepth(3)]
     #[Groups([
         'admin:get',
         'admin:post',

@@ -57,7 +57,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             name: 'fight_winner'
         ),
         new GetCollection(
-            normalizationContext: ["groups" => ['fights:get']],
+            normalizationContext: ["groups" => ['fights:get', 'fighter:get']],
             name: "get_fights"
         ),
         new Get(
