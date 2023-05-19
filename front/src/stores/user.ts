@@ -51,7 +51,7 @@ export const useUserStore = defineStore('user', () => {
             refreshToken.value = res.refresh_token;
             const self = await _getSelfUser();
             user.value = self;
-            await getCart();
+            // await getCart();
         } catch (error) {
             throw error;
         }
@@ -71,7 +71,7 @@ export const useUserStore = defineStore('user', () => {
             token.value = res.token;
             const self = await _getSelfUser();
             user.value = self;
-            await getCart();
+            // await getCart();
         } catch (error) {
             throw error;
         }

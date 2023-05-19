@@ -175,6 +175,7 @@ class Fight
     #[Groups([
         'fights:get',
         'fights:post',
+        'fighter:get',
         'admin:get'
     ])]
     private ?\DateTimeInterface $fightDate = null;

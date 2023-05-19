@@ -23,17 +23,24 @@
                         }) }})
                     </div>
                 </div>
-            </div>
-            <div>Height: {{ fighter.height }} cm</div>
-            <div>Weight: {{ fighter.weight }} kg</div>
-            <div class="flex">
-                <v-icon icon="mdi-flag"></v-icon>
-                <p class="italic">{{ fighter.nationality }}</p>
+                <v-divider vertical></v-divider>
+                <div>
+                    <div>Height: {{ fighter.height }} cm</div>
+                    <div>Weight: {{ fighter.weight }} kg</div>
+                </div>
             </div>
         </v-card>
-        <v-card border class="pa-7">
-            <h3></h3>
-        </v-card>
+        <div>
+            <div v-for="matches in fighterHistoryMatches" :key="matches.id"
+                class="border rounded flex bg-gradient-to-r from-red-200 via-transparent to-emerald-200 pa-4">
+                <div class="flex-1">
+                    {{ matches.fighterA }}
+                </div>
+                <div class="flex-1">
+                    {{ matches.fighterB }}
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -49,7 +56,7 @@ const route = useRoute();
 const fighterStore = useFighterStore();
 
 const { getFighter } = fighterStore;
-const { fighter } = storeToRefs(fighterStore);
+const { fighter, fighterHistoryMatches } = storeToRefs(fighterStore);
 
 const fighterId = computed(() => route.params.id.toString()).value;
 

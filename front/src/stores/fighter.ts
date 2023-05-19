@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { CreateFighter, IFighter } from "@/interfaces/fighter";
 import { ref, computed, ComputedRef, Ref } from "vue";
 import { fighterService } from "../service/api/index";
+import { IFight } from "@/interfaces/figth";
 
 export const useFighterStore = defineStore('fighter', () => {
 
@@ -21,6 +22,13 @@ export const useFighterStore = defineStore('fighter', () => {
         search: '',
         gender: [],
     });
+
+    const fighterHistoryMatches: ComputedRef<IFight[]> = computed(() => {
+        return fighter.value.fights.reduce((acc, sum) => {
+            if (sum.winnerValidation) acc.push(sum);
+            return acc;
+        }, [])
+    })
 
     const filteredFighters: ComputedRef<IFighter[]> = computed(() => {
         let res = fighters.value;
@@ -109,5 +117,5 @@ export const useFighterStore = defineStore('fighter', () => {
         }
     }
 
-    return { fighter, fighters, filteredFighters, filter, getFighter, getFighters, updateFighter, createFighter, deleteFighter, updateFilter }
+    return { fighter, fighters, filteredFighters, filter, getFighter, getFighters, fighterHistoryMatches, updateFighter, createFighter, deleteFighter, updateFilter }
 });

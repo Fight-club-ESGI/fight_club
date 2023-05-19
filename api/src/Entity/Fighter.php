@@ -28,11 +28,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         new GetCollection(
-            normalizationContext: ["groups" => ['fighter:get']],
+            normalizationContext: ["groups" => ['fighter:get', 'fights:get']],
             name: "get_fighters",
         ),
         new Get(
-            normalizationContext: ["groups" => ['fighter:get']],
+            normalizationContext: ["groups" => ['fighter:get', 'fights:get']],
         ),
         new Post(
             controller: CreateFighter::class,
@@ -148,17 +148,18 @@ class Fighter
 
     #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
     #[Groups([
-        'admin:get'
+        'admin:get',
+        'fighter:get'
     ])]
-
-    #[MaxDepth(2)]
+    #[MaxDepth(1)]
     private Collection $fightsA;
 
     #[ORM\OneToMany(mappedBy: 'fighterB', targetEntity: Fight::class)]
     #[Groups([
-        'admin:get'
+        'admin:get',
+        'fighter:get'
     ])]
-    #[MaxDepth(2)]
+    #[MaxDepth(1)]
     private Collection $fightsB;
 
     #[ORM\ManyToMany(targetEntity: Fight::class, inversedBy: 'fighters')]
