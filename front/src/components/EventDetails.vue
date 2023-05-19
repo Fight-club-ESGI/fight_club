@@ -62,7 +62,15 @@
                     </div>
                     <div class="flex flex-column flex-grow-1 text-center bg-neutral-100 p-2  text-neutral-700">
                         <div class="font-bold">
-                            18:00 - 20:00
+                            {{
+                                new Date(event.timeStart).toLocaleString('en-GB', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: '2-digit',
+                                    hours: '2-digit',
+                                    minutes: '2-digit',
+                                })
+                            }}
                         </div>
                         <div class="flex h-full items-center">
                             <div class="flex flex-col flex-grow-1 text-2xl w-1/2 gap-y-5">
