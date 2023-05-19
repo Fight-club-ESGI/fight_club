@@ -37,3 +37,4 @@ export interface UpdateFighter {
     imageName: string
     imageSize: string
 }
+

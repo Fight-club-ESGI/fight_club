@@ -1,10 +1,10 @@
 <template>
-    <div>
-        <v-breadcrumbs :items="items"></v-breadcrumbs>
-
-        <v-container>
-            <EventDetails></EventDetails>
-        </v-container>
+    <div class="h-full">
+        <event-details>
+            <template v-slot:breadcrumbs>
+                <v-breadcrumbs :items="items" />
+            </template>
+        </event-details>
     </div>
 </template>
 <script lang="ts" setup>

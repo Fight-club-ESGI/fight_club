@@ -12,6 +12,10 @@ interface IFight {
     winnerValidation: boolean
     adminValidatorA: IUser
     adminValidatorB: IUser
+    odds: {
+        fighterAOdds: Number,
+        fighterBOdds: Number
+    }
     fightDate: string
 }
 

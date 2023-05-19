@@ -25,6 +25,7 @@ import UserBetsHistory from "@/views/bet/UserBetsHistory.vue";
 import UserTicketsHistory from "@/views/ticketing/UserTicketsHistory.vue";
 import ValidateResetPassword from '@/views/session/ValidateResetPassword.vue';
 import Wallet from "@/views/wallet/Wallet.vue";
+import Bets from "@/views/bet/Bets.vue";
 
 export default [
     {
@@ -128,6 +129,12 @@ export default [
         component: FighterDetails,
         name: 'fighter-details',
         meta: { requiresAuth: false, requiresAdmin: false },
+    },
+    {
+        path: '/bets',
+        component: Bets,
+        name: 'bets',
+        meta: { requiresAuth: true, requiresAdmin: false }
     },
     // {
     //     path: '/bets',

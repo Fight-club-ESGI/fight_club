@@ -13,6 +13,10 @@
                         <router-link :to="{ name: 'events' }" class="h-full block px-2 font-medium whitespace-nowrap"
                             style="line-height: calc(64px - 1px)">Events</router-link>
                     </li>
+                    <li class="text-lightgray hover:text-primary/90 transition ease-in-out delay-150 hover:text-primary/80">
+                        <router-link :to="{ name: 'bets' }" class="h-full block px-2 font-medium whitespace-nowrap"
+                            style="line-height: calc(64px - 1px)">Bets</router-link>
+                    </li>
                 </ul>
                 <v-spacer />
                 <v-list v-if="!isConnected" class="flex bg-transparent text-lightgray">

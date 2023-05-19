@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { FightBetI, CurrentBetI } from '@/interfaces/bet';
+import { FightBetI, CurrentBetI, CreateBetI } from '@/interfaces/bet';
 import { ref } from 'vue';
 import { betService } from '../service/api';
+import {createToast} from "mosha-vue-toastify";
 
 export const useBetStore = defineStore('bet', () => {
     const bet = ref<FightBetI>();
@@ -21,40 +22,19 @@ export const useBetStore = defineStore('bet', () => {
         };
     }
 
-    async function betWallet(payload: { fight: string; betOn: string; amount: number }) {
+    async function createBetWallet(payload: CreateBetI) {
         try {
-            const res = await betService._betWallet(payload);
-            return res;
-        } catch (error) {
-            throw error;
+            return await betService._betWallet(payload);
+        } catch (error: any) {
+            createToast(error.response.data, { position: 'bottom-right', type: 'danger' });
         }
     }
 
-    async function betDirect(payload: { fight: string; betOn: string; amount: number }) {
+    async function createBetDirect(payload: CreateBetI) {
         try {
-            const res = await betService._betDirect(payload);
-            return res;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    // async function setCurrentBet(bet: CurrentBetI[]) {
-    //     try {
-    //         const res = setCurrentBetToLocalStorage(bet);
-    //         currentBet.value = bet;
-    //         return res;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // }
-
-    async function createBet(payload: FightBetI) {
-        try {
-            const res = await betService._createBet(payload);
-            bets.value.push(res);
-        } catch (error) {
-            throw error;
+            return await betService._betDirect(payload);
+        } catch (error: any) {
+            createToast(error.response.data, { position: 'bottom-right', type: 'danger' });
         }
     }
 
@@ -76,5 +56,5 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    return { currentBet, $resetCurrentBet, betWallet, betDirect, createBet, getBet, getBets, bet, bets };
+    return { currentBet, $resetCurrentBet, createBetWallet, createBetDirect, getBet, getBets, bet, bets };
 });

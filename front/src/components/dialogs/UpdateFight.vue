@@ -8,7 +8,7 @@
 
         <v-card class="text-center">
             <v-card-title class="font-bold p-10">
-                Update a figth
+                Update a fight
             </v-card-title>
             <div class="w-full flex px-10">
                 <v-form class="flex flex-col w-full" v-model="valid" ref="form">
@@ -32,7 +32,7 @@ import { Icon } from '@iconify/vue';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { useFightStore } from '@/stores/fight';
-import { UpdateFight } from '@/interfaces/figth';
+import { UpdateFight } from '@/interfaces/fight';
 import { useFighterStore } from '@/stores/fighter';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';

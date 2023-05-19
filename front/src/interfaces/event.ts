@@ -1,5 +1,5 @@
 import { ITicket, ITicketCategory } from "./ticket";
-import { IFight } from "./figth";
+import { IFight } from "./fight";
 
 export interface IEvent {
     id: string
