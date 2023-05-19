@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { eventService, ticketService } from "../service/api";
-import { ref, computed } from "vue"
-import {IEvent} from "@/interfaces/event";
+import { ref, computed, ComputedRef } from "vue"
+import { IEvent } from "@/interfaces/event";
 
 export const useEventStore = defineStore('event', () => {
     const event = ref<IEvent>();
@@ -11,6 +11,13 @@ export const useEventStore = defineStore('event', () => {
         return events.value.filter(e => new Date(e.timeStart) > new Date()).sort(function (a: IEvent, b: IEvent) {
             return new Date(a.timeStart) - new Date(b.timeStart);
         })
+    });
+
+    const fightDESC = computed(() => {
+        return event.value?.fights.sort(function (a, b) {
+            // @ts-ignore
+            return new Date(a.fightDate) - new Date(b.fightDate);
+        });
     });
 
     const fights = computed(() => {
@@ -80,5 +87,5 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    return { createEvent, getEvent, getEventAdmin, getEvents, getEventsAdmin, updateEvent, deleteEvent, events, event, fights, incomingEvents }
+    return { createEvent, getEvent, getEventAdmin, getEvents, getEventsAdmin, updateEvent, deleteEvent, events, event, fights, incomingEvents, fightDESC }
 });
