@@ -25,12 +25,11 @@ class UserRegisterSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['createUserWallet', EventPriorities::POST_VALIDATE],
-            KernelEvents::VIEW => ['createUserCart', EventPriorities::POST_VALIDATE],
+            KernelEvents::VIEW => ['createUserWalletAndCart', EventPriorities::POST_VALIDATE],
         ];
     }
 
-    public function createUserWallet(ViewEvent $event)
+    public function createUserWalletAndCart(ViewEvent $event)
     {
         $user = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
@@ -46,17 +45,6 @@ class UserRegisterSubscriber implements EventSubscriberInterface
 
         $this->entityManager->persist($wallet);
         $this->entityManager->flush();
-    }
-
-    public function createUserCart(ViewEvent $event)
-    {
-        $user = $event->getControllerResult();
-        $method = $event->getRequest()->getMethod();
-
-        if (!$user instanceof User || Request::METHOD_POST !== $method) {
-            return;
-            //throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
-        }
 
         $cart = new Cart();
         $cart->setUser($user);

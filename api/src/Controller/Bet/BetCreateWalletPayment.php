@@ -28,7 +28,7 @@ class BetCreateWalletPayment extends AbstractController
     ) {
     }
 
-    public function __invoke(Request $request, Bet $bet): Bet | Response
+    public function __invoke(Request $request, Bet $bet): WalletTransaction | Response
     {
         if ($_SERVER['REQUEST_TIME'] > $bet->getFight()->getEvent()->getTimeEnd()->getTimestamp()) {
             return new Response('the event already finished, you cannot bet anymore', 400);
@@ -66,6 +66,6 @@ class BetCreateWalletPayment extends AbstractController
 
         $this->entityManager->persist($bet);
         $this->entityManager->flush();
-        return $bet;
+        return $walletTransaction;
     }
 }

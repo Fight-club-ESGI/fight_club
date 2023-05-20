@@ -8,14 +8,16 @@ import { useTicketStore } from '@/stores/tickets';
 import { useEventStore } from '@/stores/event';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router'
-
+import {useUserStore} from "@/stores/user";
 
 const route = useRoute();
 const ticketStore = useTicketStore();
 const eventStore = useEventStore();
+const userStore = useUserStore();
 const { getTicketCategories, getTicketsEvent } = ticketStore;
-const { getEvent } = eventStore;
+const { getEvent, getEventAdmin } = eventStore;
 const { event } = storeToRefs(eventStore);
+const { isAdmin } = storeToRefs(userStore);
 const item = ref();
 const tab = ref<String>('');
 
@@ -37,7 +39,11 @@ const items = [
 
 onMounted(async () => {
     try {
-        await getEvent(eventId.value)
+        if (isAdmin) {
+            await getEventAdmin(eventId.value)
+        } else {
+            await getEvent(eventId.value)
+        }
         await getTicketCategories();
         await getTicketsEvent(eventId.value);
     } catch (error) {

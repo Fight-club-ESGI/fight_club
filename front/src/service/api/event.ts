@@ -4,19 +4,18 @@ import type { CreateEvent, IEvent } from "@/interfaces/event";
 const namespace = '/events';
 
 class Event {
-
-    async _getEvents(order: string = 'desc', page: number = 1): Promise<IEvent[]> {
+    async _getEvents(datePeriod: string, order: string = 'desc', page: number = 1): Promise<IEvent[]> {
         try {
-            const res = await clientWithoutAuth.get(`${namespace}?order[timeStart]=${order}&page=${page}`);
+            const res = await clientWithoutAuth.get(`${namespace}?order[timeStart]=${order}&page=${page}&timeEnd[${datePeriod}]=now`);
             return res.data;
         } catch (error) {
             throw error;
         }
     }
 
-    async _getAdminEvents(order: string = 'desc', page: number = 1): Promise<IEvent[]> {
+    async _getAdminEvents(datePeriod: string, order: string = 'desc', page: number = 1): Promise<IEvent[]> {
         try {
-            const res = await client.get(`${namespace}/admin?order[timeStart]=${order}&page=${page}`);
+            const res = await client.get(`${namespace}/admin?order[timeStart]=${order}&page=${page}&timeEnd[${datePeriod}]=now`);
             return res.data;
         } catch (error) {
             throw error;
@@ -27,6 +26,16 @@ class Event {
         try {
             const uri = `${namespace}/${id}`;
             const res = await clientWithoutAuth.get(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async _getEventAdmin(id: string): Promise<IEvent> {
+        try {
+            const uri = `${namespace}/${id}`;
+            const res = await client.get(uri);
             return res.data;
         } catch (error) {
             throw error;

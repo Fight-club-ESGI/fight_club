@@ -66,8 +66,8 @@
                             <p class="font-bold">Estimation gain :</p>
                             <p class="text-center text-2xl font-bold my-6">
                                 {{
-                                    bet.betOn === '/fighters/' + fight.fighterA.id ? fight.odds.fighterAOdds * bet.amount - bet.amount :
-                                    bet.betOn === '/fighters/' + fight.fighterB.id ? fight.odds.fighterBOdds * bet.amount - bet.amount :
+                                    bet.betOn === '/fighters/' + fight.fighterA.id ? (fight.odds.fighterAOdds * bet.amount - bet.amount).toFixed(2) :
+                                    bet.betOn === '/fighters/' + fight.fighterB.id ? (fight.odds.fighterBOdds * bet.amount - bet.amount).toFixed(2) :
                                             0
                                 }} €
                             </p>
@@ -76,7 +76,7 @@
                                       type="number" min="1" placeholder="1" label="Amount" />
                         <div class="flex">
                             <v-btn class="normal-case rounded-none" color="primary" @click="payWallet()">Pay with wallet</v-btn>
-                            <v-btn class="normal-case rounded-none" color="secondary" @click="payDirect()">Pay with direct</v-btn>
+                            <v-btn class="normal-case rounded-none" color="secondary" @click="payDirect()">Pay with Stripe</v-btn>
                         </div>
                     </div>
                     <v-card
@@ -125,6 +125,7 @@ import { useBetStore } from "@/stores/bet";
 import {IFight} from "@/interfaces/fight";
 import {CreateBetI} from "@/interfaces/bet";
 import { Icon } from '@iconify/vue';
+import {useRouter} from "vue-router";
 
 const props = defineProps({
     fight: {type: Object as PropType<IFight>, required: true},
@@ -140,6 +141,8 @@ const image = ref();
 
 const error = ref(false);
 
+const router = useRouter();
+
 let bet = reactive<CreateBetI>({
     fight: '/fights/' +props.fight.id,
     betOn: '',
@@ -152,17 +155,23 @@ const rules = {
 
 const payWallet = async () => {
     if (checkForm()) {
-        createBetWallet(bet)
+        const res = await createBetWallet(bet)
+        await router.push({ name: 'checkout-confirmation', query: { transaction_id: res.id }})
         dialog.value = false;
         resetBet()
     }
 }
 
 const payDirect = async () => {
-    if (checkForm()){
-        createBetDirect(bet)
-        dialog.value = false;
-        resetBet()
+    try {
+        if (checkForm()){
+            window.location.href = await createBetDirect(bet)
+            //createToast('Deposit success', { position: 'bottom-right', type: 'success' });
+            //dialog.value = false;
+            //resetBet()
+        }
+    } catch (e) {
+        createToast('Error during deposit', { position: 'bottom-right', type: 'danger' });
     }
 }
 

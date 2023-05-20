@@ -28,6 +28,15 @@
                                 day: '2-digit',
                             })
                         }}
+                        -
+                        {{
+                            new Date(event.timeEnd).toLocaleString('en-GB', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: '2-digit',
+                            })
+                        }}
+
                     </div>
                     <div class="flex items-center gap-2 bg-neutral-200 text-neutral-700 p-2 rounded font-bold">
                         <v-icon icon="mdi-account-multiple"></v-icon>
@@ -52,7 +61,7 @@
                 <div class="text-2xl font-bold py-3 underline ">Planning</div>
                 <v-card
                     v-for="fight in event.fights"
-                    class="flex h-52 text-white"
+                    class="flex h-52 text-white mb-4"
                 >
                     <!-- todo: Click pour plus d'infos, ouverture d'une modale -->
                     <div class="h-52 w-80 bg-cover bg-center"
@@ -152,20 +161,27 @@ import { useTicketStore } from '@/stores/tickets';
 import TicketList from '@/components/ticket/TicketList.vue';
 import {Icon} from "@iconify/vue";
 import CreateBetOnFight from "@/components/dialogs/CreateBetOnFight.vue";
+import {useUserStore} from "@/stores/user";
 
 const route = useRoute();
 
 const eventStore = useEventStore();
 const ticketStore = useTicketStore();
-const { getEvent } = eventStore;
+const userStore = useUserStore();
+const { getEvent,getEventAdmin } = eventStore;
 const { getTicketsEvent } = ticketStore;
 const { event } = storeToRefs(eventStore);
+const { isAdmin } = storeToRefs(userStore);
 
 const eventId = computed(() => route.params.id.toString());
 
 onMounted(async () => {
     try {
-        await getEvent(eventId.value);
+        if (isAdmin) {
+            await getEventAdmin(eventId.value)
+        } else {
+            await getEvent(eventId.value)
+        }
         await getTicketsEvent(eventId.value);
     } catch (error) {
         console.error(error)

@@ -45,7 +45,7 @@ class BetCreateDirectPayment  extends AbstractController
 
         $checkout_session = $this->checkoutService->checkout(
             $user,
-            $bet->getAmount(),
+            $bet->getAmount() * 100,
             WalletTransactionTypeEnum::BET,
         );
 

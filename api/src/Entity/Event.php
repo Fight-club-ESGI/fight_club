@@ -13,7 +13,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\Event\CreateEvent;
-use App\Controller\Event\GetCollectionEvent;
 use App\Controller\Event\UpdateEvent;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
@@ -68,7 +67,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[ApiFilter(
-    DateFilter::class, properties: ['createdAt']
+    DateFilter::class, properties: ['timeEnd']
 )]
 // ?order[timeStart]
 /*#[ApiFilter(
