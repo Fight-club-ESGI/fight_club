@@ -5,9 +5,9 @@ const namespace = '/fighters';
 
 class Fighter {
 
-    async _getFighters(): Promise<IFighter[]> {
+    async _getFighters(page: number = 1): Promise<IFighter[]> {
         try {
-            const res = await clientWithoutAuth.get(namespace);
+            const res = await clientWithoutAuth.get(`${namespace}?page=${page}`);
             return res.data;
         } catch (error) {
             throw error;

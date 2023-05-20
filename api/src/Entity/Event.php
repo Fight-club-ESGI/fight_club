@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Elasticsearch\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -12,6 +13,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\Event\CreateEvent;
+use App\Controller\Event\GetCollectionEvent;
 use App\Controller\Event\UpdateEvent;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
@@ -27,11 +29,16 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-#[ApiFilter(DateFilter::class, properties: ['startTime' => 'ASC'])]
 #[ApiResource(
     operations: [
         new GetCollection(
             normalizationContext: ['groups' => ['tickets:get', 'events:get']],
+        ),
+        new GetCollection(
+            uriTemplate: "events/admin",
+            normalizationContext: ['groups' => ['tickets:get', 'events:get']],
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: "You must be connected"
         ),
         new Get(
             normalizationContext: ['groups' => ['events:get', 'fights:get', 'fighter:get']],
@@ -60,6 +67,19 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
     ]
 )]
+#[ApiFilter(
+    DateFilter::class, properties: ['createdAt']
+)]
+// ?order[timeStart]
+/*#[ApiFilter(
+    OrderFilter::class, properties: ['timeStart' => 'DESC']
+)]
+*/
+// ?order[timeStart]=desc
+#[ApiFilter(
+    OrderFilter::class, properties: ['timeStart'], arguments: ['orderParameterName' => 'order']
+)]
+#[ApiFilter(BooleanFilter::class, properties: ['isAvailableGenericallyInMyCountry'])]
 #[Vich\Uploadable]
 class Event
 {

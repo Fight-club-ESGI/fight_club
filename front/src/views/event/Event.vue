@@ -22,13 +22,17 @@ const route = useRoute();
 const userStore = useUserStore();
 const { isAdmin, isVIP } = storeToRefs(userStore);
 const eventStore = useEventStore();
-const { getEvents } = eventStore;
+const { getEvents, getEventsAdmin } = eventStore;
 const { events } = storeToRefs(eventStore);
 const vipEvents = ref<boolean>(false)
 
 onMounted(async () => {
     try {
-        await getEvents();
+        if (isAdmin) {
+            await getEventsAdmin()
+        } else {
+            await getEvents()
+        }
     } catch (error) { }
 });
 

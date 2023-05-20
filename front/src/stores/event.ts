@@ -53,6 +53,15 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
+    async function getEventsAdmin() {
+        try {
+            const res = await eventService._getAdminEvents();
+            events.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async function deleteEvent(id: string) {
         try {
             await eventService._deleteEvent(id);
@@ -62,5 +71,5 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    return { createEvent, getEvent, getEvents, updateEvent, deleteEvent, events, event, fights, incomingEvents }
+    return { createEvent, getEvent, getEvents, getEventsAdmin, updateEvent, deleteEvent, events, event, fights, incomingEvents }
 });
