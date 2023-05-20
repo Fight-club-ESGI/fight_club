@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { CreateFighter, IFighter } from "@/interfaces/fighter";
 import { ref, computed, ComputedRef, Ref } from "vue";
 import { fighterService } from "../service/api/index";
+import { IFight } from "@/interfaces/figth";
 
 export const useFighterStore = defineStore('fighter', () => {
 
@@ -21,6 +22,27 @@ export const useFighterStore = defineStore('fighter', () => {
         search: '',
         gender: [],
     });
+
+    const fighterHistoryMatches: ComputedRef<IFight[]> = computed(() => {
+        return fighter.value?.fights.reduce((acc, sum) => {
+            if (sum.winnerValidation) acc.push(sum);
+            return acc;
+        }, []).sort(function (a: IFight, b: IFight) {
+            // @ts-ignore
+            return new Date(b.fightDate) - new Date(a.fightDate);
+        });
+    });
+
+    const fighterWL: ComputedRef<{ win: number, lose: number }> = computed(() => {
+        return fighter.value?.fights.reduce((acc, sum) => {
+            if (typeof sum.winner === 'string') {
+                acc['win'] ? acc['win'] += 1 : acc['win'] = 1;
+            } else {
+                acc['lose'] ? acc['lose'] += 1 : acc['lose'] = 1;
+            }
+            return acc;
+        }, {});
+    })
 
     const filteredFighters: ComputedRef<IFighter[]> = computed(() => {
         let res = fighters.value;
@@ -109,5 +131,5 @@ export const useFighterStore = defineStore('fighter', () => {
         }
     }
 
-    return { fighter, fighters, filteredFighters, filter, getFighter, getFighters, updateFighter, createFighter, deleteFighter, updateFilter }
+    return { fighter, fighters, filteredFighters, filter, getFighter, getFighters, fighterHistoryMatches, fighterWL, updateFighter, createFighter, deleteFighter, updateFilter }
 });

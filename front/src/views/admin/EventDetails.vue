@@ -3,7 +3,7 @@ import CreateTickets from '@/components/dialogs/CreateTicketsEvent.vue';
 import fights from '@/components/admin/fight/fights.vue';
 import TicketList from '@/components/admin/tickets/TicketList.vue';
 import TicketEventEditing from '@/components/admin/tickets/TicketEventEditing.vue';
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed, ref, reactive } from 'vue';
 import { useTicketStore } from '@/stores/tickets';
 import { useEventStore } from '@/stores/event';
 import { storeToRefs } from 'pinia';
@@ -23,7 +23,7 @@ const tab = ref<String>('');
 
 const eventId = computed(() => route.params.id.toString());
 
-const items = [
+const items = computed(() => [
     {
         title: 'Home',
         to: { name: 'home' }
@@ -33,9 +33,9 @@ const items = [
         to: { name: 'event-admin' }
     },
     {
-        title: 'Event details'
+        title: event.value?.name
     }
-];
+]);
 
 onMounted(async () => {
     try {
@@ -59,14 +59,20 @@ onMounted(async () => {
         <v-breadcrumbs :items="items"></v-breadcrumbs>
         <div class="px-5">
             <v-tabs v-model="tab" align-tabs="center">
-                <v-tab value="one" color="primary">Ticket event</v-tab>
+                <v-tab value="one" color="primary">Fights</v-tab>
                 <v-tab value="two" color="primary">
-                    Fights
+                    Tickets event
                 </v-tab>
 
             </v-tabs>
             <v-window v-model="tab">
                 <v-window-item value="one">
+                    <div class="pa-5">
+                        <fights></fights>
+                    </div>
+                </v-window-item>
+
+                <v-window-item value="two">
                     <div v-if="event" class="pa-5">
                         <create-tickets v-if="new Date(event.timeStart) > new Date()"></create-tickets>
                         <div v-else class="text-lightgray font-bold">
@@ -77,12 +83,6 @@ onMounted(async () => {
                                 :readOnly="!(new Date(event.timeStart) > new Date())"></ticket-list>
                             <ticket-event-editing :selectedItem="item" class="w-1/2"></ticket-event-editing>
                         </div>
-                    </div>
-                </v-window-item>
-
-                <v-window-item value="two">
-                    <div class="pa-5">
-                        <fights></fights>
                     </div>
                 </v-window-item>
             </v-window>

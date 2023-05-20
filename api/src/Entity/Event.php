@@ -103,6 +103,7 @@ class Event
         'tickets:get',
         'tickets:post',
         'events:get',
+        'fights:get',
         'event:ticket:get',
         'admin:patch',
     ])]

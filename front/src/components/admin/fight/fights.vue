@@ -8,7 +8,7 @@ import { storeToRefs } from 'pinia';
 const fightStore = useFightStore();
 const { createFight, getFights } = fightStore;
 const eventStore = useEventStore();
-const { fights, event } = storeToRefs(eventStore);
+const { fights, event, fightDESC } = storeToRefs(eventStore);
 
 onMounted(async () => {
     try {
@@ -26,8 +26,8 @@ onMounted(async () => {
         <div v-else class="text-lightgray font-bold">
             <i>The start date of the event has passed, fights are in readonly mode</i>
         </div>
-        <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            <div v-for="fight of fights">
+        <div class="pt-2 flex flex-col gap-y-3">
+            <div v-for="fight of fightDESC">
                 <fight :fight="fight" :readOnly="!(new Date(event.timeStart) > new Date())"></fight>
             </div>
         </div>
