@@ -4,8 +4,13 @@ import { PropType, computed } from 'vue';
 import { Icon } from "@iconify/vue/dist/iconify.js";
 import { useFightStore } from '@/stores/fight';
 import { createToast } from 'mosha-vue-toastify';
+import { useEventStore } from '@/stores/event';
+import { useRoute } from 'vue-router';
+import { ComputedRef } from 'vue';
 const fightStore = useFightStore();
-const { removeFight, selectWinner } = fightStore
+const eventStore = useEventStore();
+const { getEvent } = eventStore;
+const { removeFight, selectWinner, getFights } = fightStore
 
 const props = defineProps({
     fight: {
@@ -18,6 +23,10 @@ const props = defineProps({
     }
 });
 
+const route = useRoute();
+const eventId: ComputedRef<string> = computed(() => {
+    return route.params.id.toString()
+})
 const passedFightDate = computed(() => {
     return new Date().getTime() > new Date(props.fight.fightDate).getTime();
 });
@@ -32,13 +41,26 @@ const fullNameFighterB = computed(() => {
 
 const setWinner = async (fighterId: string) => {
     try {
-        if (passedFightDate) {
-            await selectWinner({ fightId: props.fight.id, winnerId: fighterId })
+        if (passedFightDate.value && !hasWinner.value) {
+            await selectWinner({ fightId: props.fight.id, winnerId: fighterId });
+            await getEvent(eventId.value);
         }
     } catch (error) {
         createToast('error while selecting winner', { position: 'bottom-right', type: 'danger' })
     }
 }
+
+const hasWinner = computed(() => {
+    return props.fight.hasOwnProperty('winner');
+});
+
+const winner = computed(() => {
+    return props.fight.winner.id;
+});
+
+const loser = computed(() => {
+    return props.fight.loser.id;
+});
 
 const remove = async (id: string) => {
     try {
@@ -60,9 +82,12 @@ const remove = async (id: string) => {
                     class="flex flex-column h-full w-full bg-gradient-to-l from-neutral-100 to-transparent items-center p-10" />
             </div>
             <div class="flex flex-column flex-grow-1 text-center bg-neutral-100 p-2  text-neutral-700">
-                <div v-if="passedFightDate">
+                <div v-if="passedFightDate && !hasWinner">
                     <div>Passed date</div>
                     <div>Select a winner</div>
+                </div>
+                <div v-else-if="passedFightDate && hasWinner">
+                    <div>Passed date</div>
                 </div>
                 <div v-else class="font-bold">
                     {{
@@ -79,8 +104,8 @@ const remove = async (id: string) => {
                 <div class="flex h-full items-center">
                     <div @click="setWinner(fight.fighterA.id)"
                         class="group relative flex flex-col flex-grow-1 text-2xl w-1/2">
-                        <div
-                            :class="'flex flex-col gap-y-5' + (passedFightDate ? ' z-10 cursor-pointer hover:opacity-20' : ' ')">
+                        <div :class="'flex flex-col gap-y-5' + (passedFightDate && !hasWinner ? ' z-10 cursor-pointer hover:opacity-20' : ' ')
+                            + (hasWinner ? winner === fight.fighterA.id ? ' bg-green-200' : ' bg-red-200' : ' ')">
                             <p>
                                 {{ fight.fighterA.firstname }} {{ fight.fighterA.lastname }}
                             </p>
@@ -102,7 +127,7 @@ const remove = async (id: string) => {
                                 </div>
                             </div>
                         </div>
-                        <div v-if="passedFightDate"
+                        <div v-if="passedFightDate && !hasWinner"
                             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
                             WINNER
                         </div>
@@ -110,8 +135,8 @@ const remove = async (id: string) => {
                     <v-divider :thickness="2" color="secondary" class="border-neutral-700" vertical />
                     <div @click="setWinner(fight.fighterB.id)"
                         class="group relative flex flex-col flex-grow-1 text-2xl w-1/2 ">
-                        <div
-                            :class="'flex flex-col gap-y-5' + (passedFightDate ? ' z-10 cursor-pointer hover:opacity-20' : ' ')">
+                        <div :class="'flex flex-col gap-y-5' + (passedFightDate && !hasWinner ? ' z-10 cursor-pointer hover:opacity-20' : ' ')
+                            + (hasWinner ? winner === fight.fighterB.id ? ' bg-green-200' : ' bg-red-200' : ' ')">
                             <p>
                                 {{ fight.fighterB.firstname }} {{ fight.fighterB.lastname }}
                             </p>
@@ -133,7 +158,7 @@ const remove = async (id: string) => {
                                 </div>
                             </div>
                         </div>
-                        <div v-if="passedFightDate"
+                        <div v-if="passedFightDate && !hasWinner"
                             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
                             WINNER
                         </div>
