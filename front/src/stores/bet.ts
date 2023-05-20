@@ -32,7 +32,8 @@ export const useBetStore = defineStore('bet', () => {
 
     async function createBetDirect(payload: CreateBetI) {
         try {
-            return await betService._betDirect(payload);
+            const res = await betService._betDirect(payload);
+            return res
         } catch (error: any) {
             createToast(error.response.data, { position: 'bottom-right', type: 'danger' });
         }

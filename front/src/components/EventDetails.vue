@@ -52,7 +52,7 @@
                 <div class="text-2xl font-bold py-3 underline ">Planning</div>
                 <v-card
                     v-for="fight in event.fights"
-                    class="flex h-52 text-white"
+                    class="flex h-52 text-white mb-4"
                 >
                     <!-- todo: Click pour plus d'infos, ouverture d'une modale -->
                     <div class="h-52 w-80 bg-cover bg-center"

@@ -7,7 +7,7 @@ import { useEventStore } from "./event";
 export const useFightStore = defineStore('fight', () => {
 
     const eventStore = useEventStore();
-    const { getEvent } = eventStore;
+    const { getEvent, getEventAdmin } = eventStore;
     const { event } = storeToRefs(eventStore);
     const fight = ref<IFight>();
     const fights = ref<IFight[]>([]);
@@ -35,7 +35,7 @@ export const useFightStore = defineStore('fight', () => {
     async function createFight(payload: CreateFight): Promise<IFight> {
         try {
             const res = await fightService._createFight(payload);
-            await getEvent(payload.event);
+            await getEventAdmin(payload.event);
             fights.value.push(res);
             return res;
         } catch (error) {
@@ -66,7 +66,7 @@ export const useFightStore = defineStore('fight', () => {
             const res = await fightService._removeFight(id);
             fights.value = await fightService._getFights();
             // @ts-ignore
-            await getEvent(event.value?.id);
+            await getEventAdmin(event.value?.id);
             return res;
         } catch (error) {
             throw error;
@@ -78,7 +78,7 @@ export const useFightStore = defineStore('fight', () => {
             const res = await fightService._updateFight(payload);
             fights.value = await fightService._getFights();
             // @ts-ignore
-            await getEvent(event.value?.id);
+            await getEventAdmin(event.value?.id);
             return res;
         } catch (error) {
             throw error;

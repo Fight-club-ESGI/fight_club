@@ -1,5 +1,10 @@
 <template>
-    Incoming Fight
+    <div>
+        Events
+        <div>
+            Fights
+        </div>
+    </div>
 </template>
 
 <script>
