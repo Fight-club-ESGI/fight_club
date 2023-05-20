@@ -33,6 +33,16 @@ class Event {
         }
     }
 
+    async _getEventAdmin(id: string): Promise<IEvent> {
+        try {
+            const uri = `${namespace}/${id}`;
+            const res = await client.get(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async _createEvent(payload: FormData): Promise<IEvent> {
         try {
             const res = await clientFormData.post(namespace, payload);

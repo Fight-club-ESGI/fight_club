@@ -152,20 +152,27 @@ import { useTicketStore } from '@/stores/tickets';
 import TicketList from '@/components/ticket/TicketList.vue';
 import {Icon} from "@iconify/vue";
 import CreateBetOnFight from "@/components/dialogs/CreateBetOnFight.vue";
+import {useUserStore} from "@/stores/user";
 
 const route = useRoute();
 
 const eventStore = useEventStore();
 const ticketStore = useTicketStore();
-const { getEvent } = eventStore;
+const userStore = useUserStore();
+const { getEvent,getEventAdmin } = eventStore;
 const { getTicketsEvent } = ticketStore;
 const { event } = storeToRefs(eventStore);
+const { isAdmin } = storeToRefs(userStore);
 
 const eventId = computed(() => route.params.id.toString());
 
 onMounted(async () => {
     try {
-        await getEvent(eventId.value);
+        if (isAdmin) {
+            await getEventAdmin(eventId.value)
+        } else {
+            await getEvent(eventId.value)
+        }
         await getTicketsEvent(eventId.value);
     } catch (error) {
         console.error(error)
