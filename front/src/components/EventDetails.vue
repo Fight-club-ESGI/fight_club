@@ -28,6 +28,15 @@
                                 day: '2-digit',
                             })
                         }}
+                        -
+                        {{
+                            new Date(event.timeEnd).toLocaleString('en-GB', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: '2-digit',
+                            })
+                        }}
+
                     </div>
                     <div class="flex items-center gap-2 bg-neutral-200 text-neutral-700 p-2 rounded font-bold">
                         <v-icon icon="mdi-account-multiple"></v-icon>

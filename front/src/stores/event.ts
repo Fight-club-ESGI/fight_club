@@ -53,18 +53,18 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    async function getEvents() {
+    async function getEvents(datePeriod) {
         try {
-            const res = await eventService._getEvents();
+            const res = await eventService._getEvents(datePeriod);
             events.value = res;
         } catch (error) {
             throw error;
         }
     }
 
-    async function getEventsAdmin() {
+    async function getEventsAdmin(datePeriod) {
         try {
-            const res = await eventService._getAdminEvents();
+            const res = await eventService._getAdminEvents(datePeriod);
             events.value = res;
         } catch (error) {
             throw error;

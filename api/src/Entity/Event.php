@@ -67,7 +67,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[ApiFilter(
-    DateFilter::class, properties: ['createdAt']
+    DateFilter::class, properties: ['timeEnd']
 )]
 // ?order[timeStart]
 /*#[ApiFilter(
