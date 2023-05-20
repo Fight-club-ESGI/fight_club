@@ -104,13 +104,16 @@ const remove = async (id: string) => {
                 <div class="flex h-full items-center">
                     <div @click="setWinner(fight.fighterA.id)"
                         class="group relative flex flex-col flex-grow-1 text-2xl w-1/2">
-                        <div :class="'flex flex-col gap-y-5' + (passedFightDate && !hasWinner ? ' z-10 cursor-pointer hover:opacity-20' : ' ')
-                            + (hasWinner ? winner === fight.fighterA.id ? ' bg-green-200' : ' bg-red-200' : ' ')">
+                        <div
+                            :class="'flex flex-col gap-y-5' + (passedFightDate && !hasWinner ? ' z-10 cursor-pointer hover:opacity-20' : ' ')">
                             <p>
                                 {{ fight.fighterA.firstname }} {{ fight.fighterA.lastname }}
                             </p>
-                            <p>
-                                {{ fight.odds.fighterAOdds }}
+                            <p v-if="hasWinner && winner === fight.fighterA.id" class="text-green-400 font-bold text-lg">
+                                WINNER
+                            </p>
+                            <p v-else class="text-red-400 font-bold text-lg">
+                                LOSER
                             </p>
                             <div class="flex text-white gap-x-2 mx-auto">
                                 <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
@@ -135,13 +138,16 @@ const remove = async (id: string) => {
                     <v-divider :thickness="2" color="secondary" class="border-neutral-700" vertical />
                     <div @click="setWinner(fight.fighterB.id)"
                         class="group relative flex flex-col flex-grow-1 text-2xl w-1/2 ">
-                        <div :class="'flex flex-col gap-y-5' + (passedFightDate && !hasWinner ? ' z-10 cursor-pointer hover:opacity-20' : ' ')
-                            + (hasWinner ? winner === fight.fighterB.id ? ' bg-green-200' : ' bg-red-200' : ' ')">
+                        <div
+                            :class="'flex flex-col gap-y-5' + (passedFightDate && !hasWinner ? ' z-10 cursor-pointer hover:opacity-20' : ' ')">
                             <p>
                                 {{ fight.fighterB.firstname }} {{ fight.fighterB.lastname }}
                             </p>
-                            <p>
-                                {{ fight.odds.fighterBOdds }}
+                            <p v-if="hasWinner && winner === fight.fighterB.id" class="text-green-400 font-bold text-lg">
+                                WINNER
+                            </p>
+                            <p v-else class="text-red-400 font-bold text-lg">
+                                LOSER
                             </p>
                             <div class="flex text-white gap-x-2 mx-auto">
                                 <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
