@@ -24,7 +24,8 @@ onMounted(async () => {
     <div v-if="event">
         <create-fight v-if="new Date(event.timeStart) > new Date()"></create-fight>
         <div v-else class="text-lightgray font-bold">
-            <i>The start date of the event has passed, fights are in readonly mode</i>
+            <i>The start date of the event has passed, fights are in readonly mode, you can still set the winner of a
+                fight</i>
         </div>
         <div class="pt-2 flex flex-col gap-y-3">
             <div v-for="fight of fightDESC">

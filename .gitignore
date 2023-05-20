@@ -1,5 +1,5 @@
-*.env
-# *.env.production
+**/.env
+**/.env.production
 /helm/api-platform/charts/*
 !/helm/api-platform/charts/.gitignore
 

@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
     return {
         server: {
-            host: env.BASE_URL,
+            host: env.BASE_URL_FRONT,
             port: parseInt(env.VITE_PORT),
         },
         plugins: [
