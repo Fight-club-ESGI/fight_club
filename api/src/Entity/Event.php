@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -12,6 +13,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\Event\CreateEvent;
+use App\Controller\Event\GetCollectionEvent;
 use App\Controller\Event\UpdateEvent;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
@@ -31,6 +33,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     operations: [
         new GetCollection(
             normalizationContext: ['groups' => ['tickets:get', 'events:get']],
+        ),
+        new GetCollection(
+            uriTemplate: "events/admin",
+            normalizationContext: ['groups' => ['tickets:get', 'events:get']],
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: "You must be connected"
         ),
         new Get(
             normalizationContext: ['groups' => ['events:get', 'fights:get', 'fighter:get']],
@@ -63,13 +71,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     DateFilter::class, properties: ['createdAt']
 )]
 // ?order[timeStart]
-#[ApiFilter(
+/*#[ApiFilter(
     OrderFilter::class, properties: ['timeStart' => 'DESC']
 )]
+*/
 // ?order[timeStart]=desc
 #[ApiFilter(
     OrderFilter::class, properties: ['timeStart'], arguments: ['orderParameterName' => 'order']
 )]
+#[ApiFilter(BooleanFilter::class, properties: ['isAvailableGenericallyInMyCountry'])]
 #[Vich\Uploadable]
 class Event
 {

@@ -14,6 +14,15 @@ class Event {
         }
     }
 
+    async _getAdminEvents(order: string = 'desc', page: number = 1): Promise<IEvent[]> {
+        try {
+            const res = await client.get(`${namespace}/admin?order[timeStart]=${order}&page=${page}`);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async _getEvent(id: string): Promise<IEvent> {
         try {
             const uri = `${namespace}/${id}`;
