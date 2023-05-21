@@ -3,12 +3,15 @@
 namespace App\Service\Checkout;
 
 use App\Entity\Order;
+use App\Entity\Ticket;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Entity\WalletTransaction;
 use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
 use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 
@@ -152,5 +155,53 @@ class CheckoutService
     public function getWalletTransaction(): WalletTransaction
     {
         return $this->walletTransaction;
+    }
+
+    public function generateTickets($order, $cartItems)
+    {
+        $tickets = [];
+        $refundTickets = [];
+
+        $this->entityManager->getConnection()->beginTransaction();
+
+        try {
+
+            foreach ($cartItems as $cartItem) {
+                $remainingQuantity = $cartItem->getQuantity();
+                $ticketEventId = $cartItem->getTicketEvent()->getId();
+
+                while ($remainingQuantity > 0) {
+                    $ticketEvent = $this->entityManager->find(TicketEvent::class, $ticketEventId, LockMode::PESSIMISTIC_WRITE);
+
+                    if ($ticketEvent->getMaxQuantity() > $ticketEvent->getTickets()->count()) {
+                        $ticket = (new Ticket())
+                            ->setTicketEvent($cartItem->getTicketEvent())
+                            ->setOrder($order);
+
+                        $this->entityManager->persist($ticket);
+                        $this->entityManager->flush();
+                        $tickets[] = $ticket;
+                        $remainingQuantity--;
+                    } else {
+                        break;
+                    }
+                }
+
+                if ($remainingQuantity > 0) {
+                    $refundTickets[] = [
+                        'ticketEvent' => $cartItem->getTicketEvent(),
+                        'quantity' => $remainingQuantity,
+                    ];
+                }
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+
+            return [$tickets, $refundTickets];
+        } catch (Exception $e) {
+            $this->entityManager->rollback();
+            throw $e;
+        }
     }
 }
