@@ -2,33 +2,23 @@
 
 namespace App\Controller\Cart;
 
+use ApiPlatform\OpenApi\Model\Response;
 use App\Entity\Cart;
 use App\Entity\CartItem;
-use App\Entity\Order;
-use App\Entity\Ticket;
-use App\Entity\TicketEvent;
-use App\Entity\Wallet;
-use App\Entity\WalletTransaction;
-use App\Enum\Order\OrderStatusEnum;
-use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
-use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use App\Repository\CartRepository;
 use App\Service\Checkout\CheckoutService;
-use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\BrowserKit\Request;
 
 #[AsController]
 class CartCheckout extends AbstractController
 {
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CheckoutService $checkoutService,
-        private readonly Security $security,
+        private readonly CartRepository $cartRepository,
     ) {
     }
 
@@ -37,24 +27,13 @@ class CartCheckout extends AbstractController
         $params = json_decode($request->getContent());
         $type = $params->type;
 
-        in_array($type, ['wallet', 'stripe']) || throw $this->createNotFoundException('Type not found');
-
         if (!$cart instanceof Cart) {
             throw $this->createNotFoundException('Cart not found');
         }
 
-        $totalPrice = $cart->getCartItems()->reduce(fn (int $carry, CartItem $item) => $carry + ($item->getTicketEvent()->getPrice() * $item->getQuantity()), 0);
-
-        switch ($type) {
-            case 'wallet':
-                $this->payWithWallet($cart, $totalPrice);
-                break;
-            case 'stripe':
-                $this->payWithStripe($cart, $totalPrice);
-                break;
-        }
-
         return $cart;
+
+        in_array($type, ['wallet', 'stripe']) || throw $this->createNotFoundException('Type not found');
     }
 
     private function payWithWallet(Cart $cart, int $totalPrice): void
