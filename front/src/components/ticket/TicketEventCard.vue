@@ -4,7 +4,7 @@ import { useCartStore } from '@/stores/cart';
 import { useUserStore } from '@/stores/user';
 import { createToast } from 'mosha-vue-toastify';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { PropType } from 'vue';
 
 const cartStore = useCartStore()
@@ -22,7 +22,6 @@ const props = defineProps({
 })
 
 const cartQuantity = computed(() => {
-
     let cartQuantity = cart.value?.cartItems.reduce((acc, item) => {
         if (item.ticketEvent && item.ticketEvent.id == props.ticketEvent.id) {
             return acc + item.quantity;
@@ -31,26 +30,24 @@ const cartQuantity = computed(() => {
     }, 0) || 0;
 
     return cartQuantity;
-
 });
 
 const canAddToCart = computed(() => {
-
-    if (maxCanAddToCart.value < quantity.value)
+    if (maxCanAddToCart.value < quantity.value || maxCanAddToCart.value <= 0)
         return false;
 
     return true;
-
 });
 
 const maxCanAddToCart = computed(() => {
+    let max = props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity.value;
 
-    return props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity.value;
+    checkNumber();
 
+    return max > 0 ? max : 0;
 });
 
 const addCart = async (ticketEvent: string) => {
-
     if (!canAddToCart.value) {
         createToast('Not enough tickets available', {
             type: 'danger',
@@ -77,7 +74,17 @@ const addCart = async (ticketEvent: string) => {
 }
 
 const checkNumber = () => {
-    quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value)));
+    quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value))) || 1;
+}
+
+const increment = () => {
+    quantity.value++;
+    checkNumber();
+}
+
+const decrement = () => {
+    quantity.value--;
+    checkNumber();
 }
 </script>
 
@@ -99,15 +106,17 @@ const checkNumber = () => {
             <div v-else>
                 <span class="font-bold">Available : </span>
                 <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} / {{
-                    props.ticketEvent.maxQuantity
-                }} <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span></span>
+                    props.ticketEvent.maxQuantity }}
+                    <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span>
+                </span>
             </div>
         </v-card-text>
         <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
-            <v-card-actions>
-                <v-text-field v-model.number="quantity" placeholder="Quantity" @input="checkNumber" type="number" min="1"
-                    max="10" step="1" density="compact"></v-text-field>
-                <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" :disabled="!canAddToCart" class="ml-auto"
+            <v-card-actions class="d-flex items-center justify-center">
+                <v-text-field v-model.number="quantity" append-icon="mdi-plus" @click:append="increment"
+                    prepend-icon="mdi-minus" @click:prepend="decrement" @input="checkNumber" min="1" step="1"
+                    density="compact" hide-details class="max-w-34 text-center" type="number"></v-text-field>
+                <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" :disabled="!canAddToCart" class="ml-5"
                     variant="tonal">Add to
                     cart</v-btn>
             </v-card-actions>

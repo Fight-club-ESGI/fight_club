@@ -99,7 +99,7 @@ class CheckoutService
         }
     }
 
-    public function payment(WalletTransaction $walletTransaction): void
+    public function paymentWallet(WalletTransaction $walletTransaction): void
     {
         $wallet = $walletTransaction->getWallet();
 
