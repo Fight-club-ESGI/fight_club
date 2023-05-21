@@ -50,6 +50,14 @@ jobs:
         run: |
             cd front/
             npm ci
+
+      - name: Navigate to front folder and create .env.production file
+        run: |
+            cd front/
+            echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> .env.production
+            echo "BASE_URL_FRONT=${{ secrets.BASE_URL_FRONT }}" >> .env.production
+            echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env.production
+
       - name: Pull Vercel Environment Information
         run: |
             cd front/

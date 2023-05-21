@@ -57,7 +57,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             name: 'fight_winner'
         ),
         new GetCollection(
-            normalizationContext: ["groups" => ['fights:get']],
+            normalizationContext: ["groups" => ['fights:get', 'fighter:get']],
             name: "get_fights"
         ),
         new Get(
@@ -79,6 +79,7 @@ class Fight
     #[Groups([
         'fights:get',
         'fights:post',
+        'fighter:get',
         'admin:get',
         'admin:post',
     ])]
@@ -115,6 +116,7 @@ class Fight
     #[Groups([
         'fights:get',
         'admin:get',
+        'fighter:get',
         'admin:post',
     ])]
     #[MaxDepth(1)]
@@ -124,6 +126,7 @@ class Fight
     #[Groups([
         'fights:get',
         'admin:get',
+        'fighter:get',
         'admin:post'
     ])]
     #[MaxDepth(1)]
@@ -132,6 +135,7 @@ class Fight
     #[ORM\Column(options: ['default' => false])]
     #[Groups([
         'fights:get',
+        'fighter:get',
         'admin:get'
     ])]
     private ?bool $winnerValidation = false;
@@ -171,13 +175,18 @@ class Fight
     #[Groups([
         'fights:get',
         'fights:post',
+        'fighter:get',
         'admin:get'
     ])]
     private ?\DateTimeInterface $fightDate = null;
 
+    #[ORM\ManyToMany(targetEntity: Fighter::class, mappedBy: 'fights')]
+    private Collection $fighters;
+
     public function __construct()
     {
         $this->bets = new ArrayCollection();
+        $this->fighters = new ArrayCollection();
     }
 
     public function getEvent(): ?Event
@@ -319,6 +328,32 @@ class Fight
     public function setFightDate(\DateTimeInterface $fightDate): self
     {
         $this->fightDate = $fightDate;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fighter>
+     */
+    public function getFighters(): Collection
+    {
+        return $this->fighters;
+    }
+
+    public function addFighter(Fighter $fighter): self
+    {
+        if (!$this->fighters->contains($fighter)) {
+            $this->fighters->add($fighter);
+            $fighter->addFight($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFighter(Fighter $fighter): self
+    {
+        if ($this->fighters->removeElement($fighter)) {
+            $fighter->removeFight($this);
+        }
 
         return $this;
     }

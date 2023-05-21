@@ -3,8 +3,8 @@
         <v-form v-if="user" v-model="valid" ref="form">
             <v-text-field v-model="user.username" :rules="[rules.required]" placeholder="username" label="username" />
             <v-text-field v-model="user.email" disabled label="email" />
-            <div class="w-full">
-                <v-btn class="w-1/3 mx-auto" color="primary" @click="validate()">Confirm</v-btn>
+            <div class="flex justify-end">
+                <v-btn class="bg-red-100" color="primary" variant="tonal" @click="validate()">Confirm</v-btn>
             </div>
         </v-form>
         <div v-else>

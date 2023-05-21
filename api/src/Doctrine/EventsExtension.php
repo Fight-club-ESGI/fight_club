@@ -39,6 +39,12 @@ final class EventsExtension implements QueryCollectionExtensionInterface, QueryI
                 $queryBuilder->andWhere(sprintf('%s.display = :display', $rootAlias));
                 $queryBuilder->setParameter('display', true);
             }
+
+            if (!$this->security->isGranted("ROLE_ADMIN") || !$this->security->isGranted("ROLE_VIP") || !$this->security->isGranted("ROLE_VVIP")){
+                $rootAlias = $queryBuilder->getRootAliases()[0];
+                $queryBuilder->andWhere(sprintf('%s.vip = :vip', $rootAlias));
+                $queryBuilder->setParameter('vip', false);
+            }
         }
     }
 }

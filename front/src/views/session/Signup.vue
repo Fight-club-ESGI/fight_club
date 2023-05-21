@@ -16,8 +16,12 @@
 
         <v-btn block color="primary" @click="validate"> Validate </v-btn>
         <v-divider class="my-3"></v-divider>
-        <div class="text-center"><router-link :to="{ name: 'login' }" class="custom-link">Already registered?</router-link>
+        <div class="flex justify-center items-center gap-x-2"><router-link :to="{ name: 'login' }"
+                class="custom-link">Already registered?</router-link>
+            <v-btn color="primary" variant="text" :to="{ name: 'home' }">back home </v-btn>
         </div>
+
+
     </v-form>
 </template>
 

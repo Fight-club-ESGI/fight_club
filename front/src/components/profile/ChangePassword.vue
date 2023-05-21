@@ -8,8 +8,8 @@
             <v-text-field v-model="confirmPassword" :rules="[rules.required, rules.minLength, rules.samePassword]"
                 type="password" placeholder="Confirm Password" label="Confirm Password" />
         </v-form>
-        <div class="w-full">
-            <v-btn class="w-1/3 mx-3 bg-red-100" color="primary" @click="validate()">Confirm</v-btn>
+        <div class="flex justify-end">
+            <v-btn class="bg-red-100" color="primary" variant="tonal" @click="validate()">Confirm</v-btn>
         </div>
     </div>
 </template>
@@ -46,6 +46,7 @@ export default defineComponent({
                     oldPassword.value = "";
                     newPassword.value = "";
                     confirmPassword.value = "";
+                    form.value.reset();
                 }
             } catch (err) {
                 createToast("Error while updating password, please try again", { type: 'danger', position: 'bottom-right' });

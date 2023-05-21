@@ -10,12 +10,14 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\Fighter\CreateFighter;
+use App\Controller\Fighter\GetFighter;
 use App\Controller\Fighter\UpdateFighter;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Entity\Trait\VichUploadTrait;
 use App\Enum\Fight\FighterGenderEnum;
 use App\Repository\FighterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,11 +29,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         new GetCollection(
-            normalizationContext: ["groups" => ['fighter:get']],
+            normalizationContext: ["groups" => ['fighter:get', 'fights:get']],
             name: "get_fighters",
         ),
         new Get(
-            normalizationContext: ["groups" => ['fighter:get']],
+            controller: GetFighter::class,
+            normalizationContext: ["groups" => ['fighter:get', 'fights:get']],
         ),
         new Post(
             controller: CreateFighter::class,
@@ -147,18 +150,33 @@ class Fighter
 
     #[ORM\OneToMany(mappedBy: 'fighterA', targetEntity: Fight::class)]
     #[Groups([
-        'admin:get'
+        'admin:get',
+        'fighter:get'
     ])]
-
-    #[MaxDepth(2)]
+    #[MaxDepth(1)]
     private Collection $fightsA;
 
     #[ORM\OneToMany(mappedBy: 'fighterB', targetEntity: Fight::class)]
     #[Groups([
-        'admin:get'
+        'admin:get',
+        'fighter:get'
     ])]
-    #[MaxDepth(2)]
+    #[MaxDepth(1)]
     private Collection $fightsB;
+
+    #[ORM\ManyToMany(targetEntity: Fight::class, inversedBy: 'fighters')]
+    #[MaxDepth(3)]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+        'fighter:get',
+    ])]
+    private Collection $fights;
+
+    public function __construct()
+    {
+        $this->fights = new ArrayCollection();
+    }
 
     public function getFirstname(): ?string
     {
@@ -256,12 +274,18 @@ class Fighter
         return $this;
     }
 
+    /**
+     * @return Collection<int, Fight>
+     */
+    public function getFights(): Collection
+    {
+        return $this->fights;
+    }
 
     public function addFight(Fight $fight): self
     {
         if (!$this->fights->contains($fight)) {
             $this->fights->add($fight);
-            $fight->setFighterA($this);
         }
 
         return $this;
@@ -269,12 +293,7 @@ class Fighter
 
     public function removeFight(Fight $fight): self
     {
-        if ($this->fights->removeElement($fight)) {
-            // set the owning side to null (unless already changed)
-            if ($fight->getFighterA() === $this) {
-                $fight->setFighterA(null);
-            }
-        }
+        $this->fights->removeElement($fight);
 
         return $this;
     }

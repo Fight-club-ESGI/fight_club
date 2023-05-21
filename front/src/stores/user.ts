@@ -112,7 +112,7 @@ export const useUserStore = defineStore('user', () => {
     async function logout() {
         try {
             user.value = undefined;
-            router.push({ name: 'login' });
+            router.push({ name: 'home' });
             token.value = "";
             refreshToken.value = "";
         } catch (error) {

@@ -1,3 +1,5 @@
+import { IFight } from "./figth"
+
 export interface IFighter {
     id: string
     firstname: string
@@ -7,6 +9,7 @@ export interface IFighter {
     nationality: string
     gender: string
     birthdate: string
+    fights: IFight[]
     imageFile: File | null
     imageName: string
     imageSize: string

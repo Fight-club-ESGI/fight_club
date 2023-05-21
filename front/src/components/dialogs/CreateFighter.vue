@@ -2,7 +2,8 @@
     <div>
         <v-dialog v-model="dialog" class="w-2/3">
             <template v-slot:activator="{ props }">
-                <v-card v-bind="props" class="flex cursor-pointer h-92 w-full relative bg-neutral-600 text-white items-center">
+                <v-card v-bind="props"
+                    class="flex cursor-pointer h-92 w-full relative bg-neutral-600 text-white items-center">
                     <p class="text-center w-full text-2xl font-weight-bold">
                         Register a fighter
                     </p>
@@ -16,30 +17,31 @@
                     <v-form v-model="valid" ref="form" class="flex flex-col w-full">
                         <div>
                             <v-file-input type="file" accept="image/*" v-model="file" label="File input"
-                                          @change="uploadFile" />
+                                @change="uploadFile" />
                             <v-text-field v-model="fighter.firstname" :rules="[rules.required]" placeholder="Firstname"
-                                          label="Firstname" />
+                                label="Firstname" />
 
                             <v-text-field v-model="fighter.lastname" :rules="[rules.required]" placeholder="Lastname"
-                                          label="Lastname" />
+                                label="Lastname" />
 
-                            <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date" label="Birthday" />
+                            <v-text-field v-model="fighter.birthdate" :rules="[rules.required]" type="date"
+                                label="Birthday" />
 
                             <v-autocomplete v-model="fighter.nationality" :items="nationalityJson" :rules="[rules.required]"
-                                            label="Nationality" placeholder="Nationality" color="secondary" style="max-height: 450px" />
+                                label="Nationality" placeholder="Nationality" color="secondary" style="max-height: 450px" />
 
-                            <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1" color="primary"
-                                      track-color="secondary" thumb-label="always">
+                            <v-slider v-model="fighter.height" label="Height (cm)" min="70" max="230" :step="1"
+                                color="primary" track-color="secondary" thumb-label="always">
                                 <template v-slot:thumb-label="{ modelValue }">
                                     {{ modelValue }}
                                 </template>
                             </v-slider>
 
                             <v-select v-model="fighter.gender" :rules="[rules.required]" label="Gender" placeholder="Gender"
-                                      :items="['male', 'female']" color="secondary" />
+                                :items="['male', 'female']" color="secondary" />
 
                             <v-text-field v-model.number="fighter.weight" :rules="[rules.weight]" type="number" max="400"
-                                          min="52" label="Weight">
+                                min="52" label="Weight">
                                 <template v-slot:details>
                                     <div v-if="division">
                                         Category:
@@ -50,12 +52,7 @@
                         </div>
                     </v-form>
                     <div class="flex w-full">
-                        <fighter
-                            class="w-92 mx-auto text-left"
-                            :fighter="fighter"
-                            :admin="admin"
-                            :preview="true"
-                        />
+                        <fighter class="w-92 mx-auto text-left" :fighter="fighter" :admin="admin" :preview="true" />
                     </div>
                 </div>
                 <v-card-actions>
@@ -69,7 +66,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {defineComponent, ref, computed, reactive, PropType, watch} from 'vue';
+import { defineComponent, ref, computed, reactive, PropType, watch } from 'vue';
 import nationalityJson from '@/data/nationality.json';
 import { createToast } from 'mosha-vue-toastify';
 import { CreateFighter, IFighter } from '@/interfaces/fighter';
@@ -77,7 +74,7 @@ import { useFighterStore } from '@/stores/fighter';
 import Fighter from '@/components/Fighter/Fighter.vue';
 
 const props = defineProps({
-    admin: {type: Boolean, required: true}
+    admin: { type: Boolean, required: true }
 })
 
 const fighterStore = useFighterStore();
@@ -230,7 +227,7 @@ const submitFighter = async () => {
             await createFighter(formData);
         }
     } catch (error: any) {
-        createToast(error, { position: 'bottom-right', type: 'danger' });
+        createToast('Error while creating the fighter !', { position: 'bottom-right', type: 'danger' });
     }
     dialog.value = false;
 };

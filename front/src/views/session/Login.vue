@@ -12,7 +12,10 @@
             <v-spacer />
             <div class="text-center"><router-link :to="{ name: 'register' }" class="custom-link">Not registered
                     yet?</router-link></div>
+
         </div>
+        <v-btn color="primary" variant="text" :to="{ name: 'home' }">back home </v-btn>
+
     </v-form>
 </template>
 
