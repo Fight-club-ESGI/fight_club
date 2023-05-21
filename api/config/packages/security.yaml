@@ -49,6 +49,7 @@ security:
         - { path: ^/reset_password, roles: PUBLIC_ACCESS }
         - { path: ^/check_token_validity, roles: PUBLIC_ACCESS }
         - { path: ^/validate_reset_password, roles: PUBLIC_ACCESS }
+        - { path: ^/events, roles: PUBLIC_ACCESS }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_SUPER_VIP

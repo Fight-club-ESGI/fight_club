@@ -1,5 +1,5 @@
 <template>
-    <v-form class="w-full px-12 xl:w-2/3 mx-auto" ref="form" v-model="valid" lazy-validation>
+    <v-form class="w-full justify-end px-12 xl:w-2/3 mx-auto" ref="form" v-model="valid">
         <p class="text-center font-weight-bold">Reset password</p>
         <v-text-field v-model="email" :rules="emailRules" label="E-mail" required class="my-4"></v-text-field>
         <v-btn block color="primary" @click="validate"> Change your password </v-btn>
@@ -9,6 +9,7 @@
             <v-spacer />
             <div class="text-center"><router-link :to="{ name: 'register' }">Not registered yet?</router-link></div>
         </div>
+        <v-btn color="primary" variant="text" :to="{ name: 'home' }">back home </v-btn>
     </v-form>
 </template>
 
@@ -31,6 +32,7 @@ async function validate() {
     if (valid) {
         try {
             await resetPassword({ email: email.value });
+            await form.value.reset();
             createToast('Check your email to reset your password', { type: "success", position: "bottom-right" });
         } catch (err) {
             console.error(err)

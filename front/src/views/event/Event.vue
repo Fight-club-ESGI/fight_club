@@ -51,7 +51,7 @@ const loader = ref(true)
 
 onMounted(async () => {
     try {
-        if (isAdmin) {
+        if (isAdmin.value) {
             await getEventsAdmin('after').then(() => {
                 loader.value = false
             })
@@ -74,7 +74,7 @@ watch(tab, async (value, oldValue, onCleanup) => {
             break;
     }
 
-    if (isAdmin) {
+    if (isAdmin.value) {
         await getEventsAdmin(datePeriod.value ?? "after").then(() => {
             loader.value = false
         })

@@ -1,36 +1,23 @@
 <template>
-    <div class="h-full">
-        <v-list class="sticky top-[64px] h-full rounded-xl">
-            <v-list-item @click="clearAll()" prepend-icon="mdi-close">
-                <v-list-item-action class="font-bold">Clear all</v-list-item-action>
+    <v-list class="sticky top-[64px] h-full rounded-xl">
+        <v-list-item @click="clearAll()" prepend-icon="mdi-close">
+            <v-list-item-action class="font-bold">Clear all</v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+            <v-text-field v-model="filters.search" placeholder="Search ..." prepend-icon="mdi-magnify" density="compact"
+                hide-details />
+        </v-list-item>
+        <v-list-group value="Gender">
+            <template v-slot:activator="{ props }">
+                <v-list-item v-bind="props" prepend-icon="mdi-gender-male-female" title="Gender"></v-list-item>
+            </template>
+
+            <v-list-item v-for="(gender, i) of filters.gender" :key="i" :value="gender">
+                <v-checkbox v-model="gender.value" :label="gender.name" density="compact" hide-details color="primary" />
             </v-list-item>
-            <v-list-item>
-                <v-text-field v-model="filters.search" placeholder="Search ..." prepend-icon="mdi-magnify" density="compact"
-                    hide-details />
-            </v-list-item>
-            <v-list-group value="Gender">
-                <template v-slot:activator="{ props }">
-                    <v-list-item v-bind="props" prepend-icon="mdi-gender-male-female" title="Gender"></v-list-item>
-                </template>
+        </v-list-group>
 
-                <v-list-item v-for="(gender, i) of filters.gender" :key="i" :value="gender">
-                    <v-checkbox v-model="gender.value" :label="gender.name" density="compact" hide-details
-                        color="primary" />
-                </v-list-item>
-            </v-list-group>
-
-            <v-list-group value="Division">
-                <template v-slot:activator="{ props }">
-                    <v-list-item v-bind="props" prepend-icon="mdi-weight" title="Division"></v-list-item>
-                </template>
-
-                <v-list-item v-for="(division, i) in filters.divisionClass" :key="i" :value="division">
-                    <v-checkbox v-model="division.value" :label="division.name" density="compact" hide-details
-                        :color="division.color" />
-                </v-list-item>
-            </v-list-group>
-
-            <!-- <v-list-group value="Height">
+        <!-- <v-list-group value="Height">
                 <template v-slot:activator="{ props }">
                     <v-list-item
                         v-bind="props"
@@ -49,12 +36,11 @@
                     </template>
                 </v-list-item>
             </v-list-group> -->
-            <v-list-item>
-                <v-autocomplete v-model="filters.nationality" :items="nationalityJson" prepend-icon="mdi-flag" clearable
-                    placeholder="Nationality" density="compact" hide-details />
-            </v-list-item>
-        </v-list>
-    </div>
+        <v-list-item>
+            <v-autocomplete v-model="filters.nationality" :items="nationalityJson" prepend-icon="mdi-flag" clearable
+                placeholder="Nationality" density="compact" hide-details />
+        </v-list-item>
+    </v-list>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, watch, onMounted, toRefs } from 'vue';

@@ -10,7 +10,7 @@
                 <h2 class="text-4xl font-bold mx-auto">{{ event.name }}</h2>
                 <div class="w-1/2 overflow-auto">
                     <p class="p-4 break-words text-center">
-                        {{ event.description }}eazeazeazeazeazeazeazezeaazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazekkkkkkkkkkkkkkkkkkkkazeazeazeaeazeazzeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeaz
+                        {{ event.description }}
                     </p>
                 </div>
                 <div class="flex gap-3">
@@ -117,7 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-2">
+                        <div v-if="isConnected" class="mt-2">
                             <create-bet-on-fight :fight="fight" />
                         </div>
                     </div>
@@ -146,14 +146,13 @@ import CreateBetOnFight from "@/components/dialogs/CreateBetOnFight.vue";
 import { useUserStore } from "@/stores/user";
 
 const route = useRoute();
-
 const eventStore = useEventStore();
 const ticketStore = useTicketStore();
 const userStore = useUserStore();
 const { getEvent, getEventAdmin } = eventStore;
 const { getTicketsEvent } = ticketStore;
 const { event } = storeToRefs(eventStore);
-const { isAdmin } = storeToRefs(userStore);
+const { isAdmin, isConnected } = storeToRefs(userStore);
 
 const eventId = computed(() => route.params.id.toString());
 
