@@ -6,12 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-<<<<<<< HEAD
 use App\Controller\Cart\CartCheckoutStripe;
 use App\Controller\Cart\CartCheckoutWallet;
-=======
-use App\Controller\Cart\CartCheckout;
->>>>>>> 535601e (Fix merge issues)
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\CartRepository;
@@ -45,7 +41,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             name: 'self_cart'
         ),
         new Post(
-<<<<<<< HEAD
             uriTemplate: '/carts/{id}/checkout/stripe',
             controller: CartCheckoutStripe::class,
             read: false,
@@ -56,10 +51,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             controller: CartCheckoutWallet::class,
             read: false,
             name: 'cart_checkout_wallet',
-=======
-            uriTemplate: '/carts/{cart}/checkout',
-            controller: CartCheckout::class,
->>>>>>> 535601e (Fix merge issues)
         )
     ]
 )]
