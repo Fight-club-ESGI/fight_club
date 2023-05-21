@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\Cart\CartCheckoutStripeConfirmation;
+use App\Controller\Wallet\WalletCartCheckoutConfirmation;
 use App\Controller\Wallet\WalletDepositCheckoutConfirmation;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -21,6 +23,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Table(name: '`wallet_transaction`')]
 #[ApiResource(
     operations: [
+        new Get(
+            uriTemplate: "/wallet_transactions/{id}/stripe/confirmation",
+            controller: WalletCartCheckoutConfirmation::class,
+            normalizationContext: ['groups' => ['wallet:transaction:get']],
+            security: "is_granted('ROLE_USER')",
+            name: "wallet_transaction_stripe_confirmation"
+        ),
         new Get(
             uriTemplate: "/wallet_transactions/{id}/confirmation",
             controller: WalletDepositCheckoutConfirmation::class,

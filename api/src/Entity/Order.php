@@ -87,9 +87,13 @@ class Order
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?WalletTransaction $walletTransaction = null;
 
+    #[ORM\OneToMany(mappedBy: '_order', targetEntity: PendingTicket::class)]
+    private Collection $pendingTickets;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->pendingTickets = new ArrayCollection();
     }
 
     public function getUser(): ?User
@@ -166,6 +170,36 @@ class Order
     public function setWalletTransaction(?WalletTransaction $walletTransaction): self
     {
         $this->walletTransaction = $walletTransaction;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PendingTicket>
+     */
+    public function getPendingTickets(): Collection
+    {
+        return $this->pendingTickets;
+    }
+
+    public function addPendingTicket(PendingTicket $pendingTicket): self
+    {
+        if (!$this->pendingTickets->contains($pendingTicket)) {
+            $this->pendingTickets->add($pendingTicket);
+            $pendingTicket->setOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removePendingTicket(PendingTicket $pendingTicket): self
+    {
+        if ($this->pendingTickets->removeElement($pendingTicket)) {
+            // set the owning side to null (unless already changed)
+            if ($pendingTicket->getOrder() === $this) {
+                $pendingTicket->setOrder(null);
+            }
+        }
 
         return $this;
     }
