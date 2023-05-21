@@ -6,7 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use App\Controller\Cart\CartCheckout;
+use App\Controller\Cart\CartCheckoutStripe;
+use App\Controller\Cart\CartCheckoutWallet;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\CartRepository;
@@ -40,8 +41,14 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             name: 'self_cart'
         ),
         new Post(
-            uriTemplate: '/carts/{id}/checkout',
-            controller: CartCheckout::class,
+            uriTemplate: '/carts/{id}/checkout/stripe',
+            controller: CartCheckoutStripe::class,
+            read: false,
+            name: 'cart_checkout',
+        ),
+        new Post(
+            uriTemplate: '/carts/{id}/checkout/wallet',
+            controller: CartCheckoutWallet::class,
             read: false,
             name: 'cart_checkout',
         )
