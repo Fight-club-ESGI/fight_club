@@ -27,6 +27,14 @@ class WalletWithdraw extends AbstractController
         $data = json_decode($request->getContent(), true);
         $amount = $data['amount'];
 
+        if ($amount < 1000) {
+            return new Response(
+                "Amount must be superior or equal at 10€",
+                400,
+                ["Content-Type" => "application/json"]
+            );
+        }
+
         $user = $this->security->getUser();
         $wallet = $user->getWallet();
 

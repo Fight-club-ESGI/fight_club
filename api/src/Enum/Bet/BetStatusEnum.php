@@ -6,7 +6,6 @@ enum BetStatusEnum: string
 {
     case PENDING = 'pending';
     case LOSE = 'lose';
-    case DRAW = 'draw';
     case WIN = 'win';
     case REJECTED = 'rejected';
 }

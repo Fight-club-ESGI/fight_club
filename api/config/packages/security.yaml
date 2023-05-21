@@ -51,8 +51,8 @@ security:
         - { path: ^/validate_reset_password, roles: PUBLIC_ACCESS }
 
     role_hierarchy:
-        ROLE_ADMIN: ROLE_SUPER_VIP
-        ROLE_SUPER_VIP: ROLE_VIP
+        ROLE_ADMIN: ROLE_VVIP
+        ROLE_VVIP: ROLE_VIP
         ROLE_VIP: ROLE_USER
 
 when@test:

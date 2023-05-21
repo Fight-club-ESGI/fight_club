@@ -7,33 +7,33 @@ export const useWalletTransactionStore = defineStore('wallet_transaction', () =>
 
     const walletTransaction = ref<WalletTransactionInterface>(
         {
-            id: null,
-            amount: null,
-            status: null,
-            wallet: null,
-            type: null,
-            stripe_ref: null,
-            createdAt: null,
-            updatedAt: null
+            id: '',
+            amount: 0,
+            status: '',
+            wallet: '',
+            type: '',
+            stripe_ref: '',
+            createdAt: '',
+            updatedAt: ''
         }
     );
 
     const walletTransactionHistory = ref<Array<WalletTransactionInterface>>([
         {
-            id: null,
-            amount: null,
-            status: null,
-            wallet: null,
-            type: null,
-            stripe_ref: null,
-            createdAt: null,
-            updatedAt: null
+            id: '',
+            amount: 0,
+            status: '',
+            wallet: '',
+            type: '',
+            stripe_ref: '',
+            createdAt: '',
+            updatedAt: ''
         }
     ]);
 
-    async function getWalletTransactionHistory() {
+    async function getWalletTransactionHistory(order: string = 'desc') {
         try {
-            walletTransactionHistory.value = await walletTransactionService._walletHistory();
+            walletTransactionHistory.value = await walletTransactionService._walletHistory(order);
         } catch (error) {
             throw error;
         }

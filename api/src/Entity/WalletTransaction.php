@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -28,14 +30,18 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['wallet:transaction:get_collection']],
-            security: "is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_ADMIN')",
         ),
         new GetCollection(
             uriTemplate: "/wallet_transaction",
+            paginationMaximumItemsPerPage: 10,
             security: "is_granted('ROLE_USER')",
             name: "self_wallet_transaction"
         ),
     ]
+)]
+#[ApiFilter(
+    OrderFilter::class, properties: ['createdAt'], arguments: ['orderParameterName' => 'order']
 )]
 class WalletTransaction
 {

@@ -21,7 +21,7 @@ export interface CurrentBetI {
 export interface IBet {
     id: string,
     fight: IFight,
-    bet_on: IFighter,
+    betOn: IFighter,
     bettor: IUser,
     walletTransaction: WalletTransactionInterface,
     amount: number,

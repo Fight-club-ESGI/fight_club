@@ -7,10 +7,10 @@ export const useWalletStore = defineStore('wallet', () => {
 
     const wallet = ref<WalletInterface>(
         {
-            id: null,
-            amount: null,
-            createdAt: null,
-            updatedAt: null
+            id: '',
+            amount: 0,
+            createdAt: '',
+            updatedAt: ''
         }
     );
 

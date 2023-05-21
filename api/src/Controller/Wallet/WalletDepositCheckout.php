@@ -26,6 +26,13 @@ class WalletDepositCheckout extends AbstractController
         $data = json_decode($request->getContent(), true);
         $amount = $data['amount'] * 100;
 
+        if ($amount < 500) {
+            return new Response(
+                "Amount must be superior or equal at 5€",
+                400,
+                ["Content-Type" => "application/json"]
+            );
+        }
         $checkout_session = $this->checkout->checkout(
             $this->userRepository->find($this->security->getUser()->getId()),
             $amount,

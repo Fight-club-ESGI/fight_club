@@ -89,7 +89,7 @@ export default [
         meta: { requiresAuth: true, requiresAdmin: false },
     },
     {
-        path: '/bets',
+        path: '/my-bets',
         component: UserBetsHistory,
         name: 'user-bets-history',
         meta: { requiresAuth: true, requiresAdmin: false },

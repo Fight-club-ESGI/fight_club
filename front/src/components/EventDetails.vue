@@ -13,7 +13,7 @@
                 </div>
                 <h2 class="text-4xl font-bold mx-auto">{{ event.name }}</h2>
                 <div class="w-1/2 overflow-auto">
-                    <p class="p-4 break-words text-center">{{ event.description }}eazeazeazeazeazeazeazezeaazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazekkkkkkkkkkkkkkkkkkkkazeazeazeaeazeazzeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeaz</p>
+                    <p class="p-4 break-words text-center">{{ event.description }}</p>
                 </div>
                 <div class="flex gap-3">
                     <div class="flex items-center gap-2 bg-neutral-200 text-neutral-700 p-2 rounded font-bold">
@@ -63,7 +63,6 @@
                     v-for="fight in event.fights"
                     class="flex h-52 text-white mb-4"
                 >
-                    <!-- todo: Click pour plus d'infos, ouverture d'une modale -->
                     <div class="h-52 w-80 bg-cover bg-center"
                          :style="fight.fighterA.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
                     >
@@ -76,8 +75,8 @@
                                     year: 'numeric',
                                     month: 'long',
                                     day: '2-digit',
-                                    hours: '2-digit',
-                                    minutes: '2-digit',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
                                 })
                             }}
                         </div>

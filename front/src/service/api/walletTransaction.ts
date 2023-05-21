@@ -3,9 +3,9 @@ const namespace = "wallet_transactions"
 
 class Wallet {
 
-    async _walletHistory() {
+    async _walletHistory(order: string = 'desc') {
         try {
-            const uri = `wallet_transaction`;
+            const uri = `wallet_transaction?order[createdAt]=${order}`;
             const res = await client.get(uri);
             return res.data;
         } catch (error) {
