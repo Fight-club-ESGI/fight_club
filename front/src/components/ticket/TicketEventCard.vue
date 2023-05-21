@@ -37,6 +37,13 @@ const canAddToCart = computed(() => {
         return false;
 
     return true;
+
+});
+
+const maxCanAddToCart = computed(() => {
+
+    return props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity.value;
+
 });
 
 const maxCanAddToCart = computed(() => {
@@ -82,17 +89,7 @@ const addCart = async (ticketEvent: string) => {
 }
 
 const checkNumber = () => {
-    quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value))) || 1;
-}
-
-const increment = () => {
-    quantity.value++;
-    checkNumber();
-}
-
-const decrement = () => {
-    quantity.value--;
-    checkNumber();
+    quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value)));
 }
 </script>
 
@@ -114,9 +111,8 @@ const decrement = () => {
             <div v-else>
                 <span class="font-bold">Available : </span>
                 <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} / {{
-                    props.ticketEvent.maxQuantity }}
-                    <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span>
-                </span>
+                    props.ticketEvent.maxQuantity
+                }} <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span></span>
             </div>
         </v-card-text>
         <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
