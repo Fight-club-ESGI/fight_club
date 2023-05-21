@@ -1,6 +1,5 @@
 <template>
     <div>
-<<<<<<< HEAD
         <div class="flex flex-col md:flex-row item-center md:items-start justify-center h-full gap-10 p-5">
             <div class="flex flex-col h-full min-w-1/2 bg-gray-100 p-10 rounded-md shadow">
                 <h1 class="font-bold text-2xl my-3">Your cart</h1>
@@ -16,38 +15,6 @@
                         <span class="text-sm text-gray-500"> {{
                             item.ticketEvent.ticketCategory.name }}
                             ({{ item.ticketEvent.price }}€)</span>
-=======
-        <v-breadcrumbs :items="items"></v-breadcrumbs>
-        <div class="flex h-full space-x-5 p-5 justify-center">
-            <div class="flex flex-col h-full min-w-2/4 rounded">
-                <div class="flex font-bold text-2xl h-1/12 items-center">Your cart</div>
-                <div class="h-11/12">
-                    <div class="text-center bg-neutral-100 p-10 rounded">
-                        <div v-if="cartTotalItems === 0">
-                            <div class="font-bold text-3xl p-6">Your cart is empty</div>
-                        </div>
-                        <div v-for="item in cartItems" :key="item.id" class="flex space-x-5 justify-between items-center">
-                            <div class="font-extrabold">
-                                {{ item.ticketEvent.event.name }}
-                                <span class="text-sm text-gray-400"> | {{
-                                    item.ticketEvent.ticketCategory.name }}
-                                    ({{
-                                        item.ticketEvent.price }}€)</span>
-                            </div>
-                            <!-- Quantity input number -->
-
-                            <div class="flex gap-x-7 justify-self-end">
-                                <v-text-field type="number" v-model="item.quantity" @input="updateItem(item)" min="1"
-                                    append-icon="mdi-plus" @click:append="increment(item)" prepend-icon="mdi-minus"
-                                    @click:prepend="decrement(item)" outlined density="compact" class="w-40"
-                                    hide-details></v-text-field>
-
-                                <v-btn class="rounded" @click="removeItem(item)">
-                                    <v-icon>mdi-delete</v-icon>
-                                </v-btn>
-                            </div>
-                        </div>
->>>>>>> dd22191 (Implement Stripe)
                     </div>
                     <div class="flex items-center justify-end space-x-3">
                         <v-text-field type="number" v-model="item.quantity" @input="updateItem(item)" min="1"
@@ -55,45 +22,7 @@
                             @click:prepend="decrement(item)" outlined density="compact" class="w-40"
                             hide-details></v-text-field>
 
-<<<<<<< HEAD
                         <v-icon @click="removeItem(item)" class="text-red-500">mdi-delete</v-icon>
-=======
-                    <div class="flex space-x-4">
-                        <div class="w-1/2">
-                            <div class="flex flex-col p-5">
-                                <div class="flex flex-row justify-between">
-                                    <div class="font-bold text-xl">Total items</div>
-                                    <div class="font-bold text-xl">{{ cartTotalItems }}</div>
-                                </div>
-                                <div class="flex flex-row justify-between">
-                                    <div class="font-bold text-xl">Total price</div>
-                                    <div class="font-bold text-xl">{{ cartTotalPrice.toFixed(2) }}€</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-1/2">
-                            <v-menu open-on-hover>
-                                <template v-slot:activator="{ props }">
-                                    <v-btn color="primary" v-bind="props" class="" variant="tonal">
-                                        Pay
-                                    </v-btn>
-                                </template>
-
-                                <div class="bg-white rounded-lg elevation-2 mt-2">
-                                    <ul class="py-2 px-2 text-lightgray text-small font-normal cursor-pointer">
-                                        <li @click="check_out('stripe')"
-                                            class="p-2 flex items-center hover:bg-slate-100 gap-x-2">
-                                            with Stripe
-                                        </li>
-                                        <li @click="check_out('wallet')"
-                                            class="p-2 flex items-center hover:bg-slate-100 gap-x-2">
-                                            with my Wallet
-                                        </li>
-                                    </ul>
-                                </div>
-                            </v-menu>
-                        </div>
->>>>>>> 535601e (Fix merge issues)
                     </div>
                 </div>
             </div>
@@ -140,15 +69,7 @@ import { storeToRefs } from 'pinia';
 
 const cartStore = useCartStore();
 const { cartTotalItems, cartItems, cartTotalPrice } = storeToRefs(cartStore);
-<<<<<<< HEAD
-<<<<<<< HEAD
 const { getCart, removeFromCart, updateCartItem, checkout, clearCart } = cartStore;
-=======
-const { getCart, removeFromCart, updateCartItem, checkout } = cartStore;
->>>>>>> 535601e (Fix merge issues)
-=======
-const { getCart, removeFromCart, updateCartItem, checkout, clearCart } = cartStore;
->>>>>>> dd22191 (Implement Stripe)
 
 let timeout: ReturnType<typeof setTimeout> | null
 
@@ -202,16 +123,8 @@ const check_out = async (type: string) => {
             type: 'success',
             position: 'bottom-right'
         });
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         await clearCart();
-=======
->>>>>>> 535601e (Fix merge issues)
-=======
-
-        await clearCart();
->>>>>>> dd22191 (Implement Stripe)
     }
     catch {
         createToast('Error while checking out', {
