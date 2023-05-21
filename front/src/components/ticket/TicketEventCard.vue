@@ -37,6 +37,13 @@ const canAddToCart = computed(() => {
         return false;
 
     return true;
+
+});
+
+const maxCanAddToCart = computed(() => {
+
+    return props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length - cartQuantity.value;
+
 });
 
 const maxCanAddToCart = computed(() => {
