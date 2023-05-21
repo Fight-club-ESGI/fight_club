@@ -7,6 +7,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
+use App\Entity\Bet;
 use App\Entity\Cart;
 use App\Entity\User;
 use App\Entity\Wallet;
@@ -63,6 +64,10 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
                 $queryBuilder->andWhere(sprintf('%s.id = :id', $rootAlias));
                 $queryBuilder->setParameter('id', $user->getCart()->getId());
                 break;
+            case Bet::class:
+                $rootAlias = $queryBuilder->getRootAliases()[0];
+                $queryBuilder->andWhere(sprintf('%s.bettor = :bettor', $rootAlias));
+                $queryBuilder->setParameter('bettor', $user->getId());
             default:
         }
     }

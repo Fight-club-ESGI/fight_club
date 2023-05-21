@@ -60,7 +60,7 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    async function getEvents(datePeriod) {
+    async function getEvents(datePeriod: string = 'after') {
         try {
             const res = await eventService._getEvents(datePeriod);
             events.value = res;
@@ -69,7 +69,7 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    async function getEventsAdmin(datePeriod) {
+    async function getEventsAdmin(datePeriod: string = 'after') {
         try {
             const res = await eventService._getAdminEvents(datePeriod);
             events.value = res;

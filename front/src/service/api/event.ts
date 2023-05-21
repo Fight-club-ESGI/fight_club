@@ -4,7 +4,7 @@ import type { CreateEvent, IEvent } from "@/interfaces/event";
 const namespace = '/events';
 
 class Event {
-    async _getEvents(datePeriod: string, order: string = 'desc', page: number = 1): Promise<IEvent[]> {
+    async _getEvents(datePeriod: string = 'after', order: string = 'desc', page: number = 1): Promise<IEvent[]> {
         try {
             const res = await clientWithoutAuth.get(`${namespace}?order[timeStart]=${order}&page=${page}&timeEnd[${datePeriod}]=now`);
             return res.data;
@@ -13,7 +13,7 @@ class Event {
         }
     }
 
-    async _getAdminEvents(datePeriod: string, order: string = 'desc', page: number = 1): Promise<IEvent[]> {
+    async _getAdminEvents(datePeriod: string = 'after', order: string = 'desc', page: number = 1): Promise<IEvent[]> {
         try {
             const res = await client.get(`${namespace}/admin?order[timeStart]=${order}&page=${page}&timeEnd[${datePeriod}]=now`);
             return res.data;

@@ -1,5 +1,5 @@
 import { IFight, CreateFight, UpdateFight } from "@/interfaces/fight";
-import { client } from "..";
+import {client, clientWithoutAuth} from "..";
 
 const namespace = '/fights';
 
@@ -17,7 +17,7 @@ class Fight {
 
     async _getFights(): Promise<IFight[]> {
         try {
-            const res = await client.get(namespace);
+            const res = await clientWithoutAuth.get(namespace);
             return res.data;
         } catch (error) {
             throw error;
