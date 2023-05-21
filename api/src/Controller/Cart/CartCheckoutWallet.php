@@ -33,7 +33,7 @@ class CartCheckoutWallet extends AbstractController
     ) {
     }
 
-    public function __invoke(Request $request, Cart $cart): Response
+    public function __invoke(Cart $cart): Response
     {
         if (!$cart instanceof Cart) {
             throw $this->createNotFoundException('Cart not found');

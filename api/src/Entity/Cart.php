@@ -44,13 +44,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             uriTemplate: '/carts/{id}/checkout/stripe',
             controller: CartCheckoutStripe::class,
             read: false,
-            name: 'cart_checkout',
+            name: 'cart_checkout_stripe',
         ),
         new Post(
             uriTemplate: '/carts/{id}/checkout/wallet',
             controller: CartCheckoutWallet::class,
             read: false,
-            name: 'cart_checkout',
+            name: 'cart_checkout_wallet',
         )
     ]
 )]
