@@ -69,7 +69,7 @@ import { storeToRefs } from 'pinia';
 
 const cartStore = useCartStore();
 const { cartTotalItems, cartItems, cartTotalPrice } = storeToRefs(cartStore);
-const { getCart, removeFromCart, updateCartItem, checkout } = cartStore;
+const { getCart, removeFromCart, updateCartItem, checkout, clearCart } = cartStore;
 
 let timeout: ReturnType<typeof setTimeout> | null
 
@@ -123,6 +123,8 @@ const check_out = async (type: string) => {
             type: 'success',
             position: 'bottom-right'
         });
+
+        await clearCart();
     }
     catch {
         createToast('Error while checking out', {
