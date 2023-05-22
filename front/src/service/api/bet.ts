@@ -1,6 +1,6 @@
 import { client } from "../index";
 import type { FightBetI } from "@/interfaces/bet";
-import {CreateBetI, IBet} from "@/interfaces/bet";
+import { CreateBetI, IBet } from "@/interfaces/bet";
 
 const namespace = '/bets';
 
@@ -45,7 +45,7 @@ class Bet {
         }
     }
 
-    async _getUserBets(status: string = "all", order: string = "desc"): Promise<IBet[]>{
+    async _getUserBets(status: string = "all", order: string = "desc"): Promise<IBet[]> {
         try {
             if (status === "all") {
                 const uri = `bet?order[createdAt]=${order}`
@@ -63,7 +63,7 @@ class Bet {
         }
     }
 
-    async _getBets(): Promise<IBet[]>{
+    async _getBets(): Promise<IBet[]> {
         try {
             const uri = `${namespace}?order[createdAt]=desc`
             const res = await client.get(uri);

@@ -3,7 +3,8 @@
         <v-dialog class="w-2/3" v-model="dialog">
             <template v-slot:activator="{ props }">
                 <div class="flex w-full">
-                    <v-card v-bind="props" class="flex cursor-pointer w-30 relative bg-neutral-600 text-white items-center mx-auto rounded-sm">
+                    <v-card v-bind="props"
+                        class="flex cursor-pointer w-30 relative bg-neutral-600 text-white items-center mx-auto rounded-sm">
                         <p class="text-center w-full font-weight-bold">
                             Bets
                         </p>
@@ -15,23 +16,19 @@
                     Bet on the fight
                 </v-card-title>
                 <div class="w-full flex">
-                    <v-card
-                        @click="() => {
-                            bet.betOn = '/fighters/' + fight.fighterA.id
-                        }"
-                        class="w-full h-92 w-92 flex-col bg-neutral-800 text-white"
-                        :class="bet.betOn === '/fighters/' + fight.fighterA.id ? 'border-4' : ''"
-                    >
+                    <v-card @click="() => {
+                        bet.betOn = '/fighters/' + fight.fighterA.id
+                    }" class="w-full h-92 w-92 flex-col bg-neutral-800 text-white"
+                        :class="bet.betOn === '/fighters/' + fight.fighterA.id ? 'border-4' : ''">
                         <div :style="fight.fighterA.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
-                             class="h-1/2 bg-cover bg-center">
+                            class="h-1/2 bg-cover bg-center">
                             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
                         </div>
                         <div class="flex items-center pa-5">
-                            <div class="text-2xl font-bold truncate">{{ fight.fighterA.firstname }} {{ fight.fighterA.lastname }}</div>
-                            <Icon
-                                class="text-2xl ml-2"
-                                :icon="fight.fighterA.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'"
-                            />
+                            <div class="text-2xl font-bold truncate">{{ fight.fighterA.firstname }}
+                                {{ fight.fighterA.lastname }}</div>
+                            <Icon class="text-2xl ml-2"
+                                :icon="fight.fighterA.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'" />
                         </div>
                         <div class="text-2xl bg-neutral-800">
                             {{ fight.odds.fighterAOdds }}
@@ -68,32 +65,31 @@
                                 {{
                                     bet.betOn === '/fighters/' + fight.fighterA.id ? (fight.odds.fighterAOdds * bet.amount - bet.amount).toFixed(2) :
                                     bet.betOn === '/fighters/' + fight.fighterB.id ? (fight.odds.fighterBOdds * bet.amount - bet.amount).toFixed(2) :
-                                            0
+                                        0
                                 }} €
                             </p>
                         </div>
-                        <v-text-field v-model.number="bet.amount" :rules="[rules.required]"
-                                      type="number" min="1" placeholder="1" label="Amount" />
+                        <v-text-field v-model.number="bet.amount" :rules="[rules.required]" type="number" min="1"
+                            placeholder="1" label="Amount" />
                         <div class="flex">
-                            <v-btn class="normal-case rounded-none" color="primary" @click="payWallet()">Pay with wallet</v-btn>
-                            <v-btn class="normal-case rounded-none" color="secondary" @click="payDirect()">Pay with Stripe</v-btn>
+                            <v-btn class="normal-case rounded-none" color="primary" @click="payWallet()">Pay with
+                                wallet</v-btn>
+                            <v-btn class="normal-case rounded-none" color="secondary" @click="payDirect()">Pay with
+                                Stripe</v-btn>
                         </div>
                     </div>
-                    <v-card
-                        @click="() => bet.betOn = '/fighters/' + fight.fighterB.id"
+                    <v-card @click="() => bet.betOn = '/fighters/' + fight.fighterB.id"
                         class="w-full h-92 w-92 flex-col bg-neutral-800 text-white"
-                        :class="bet.betOn === '/fighters/' +  fight.fighterB.id ? 'border-4' : ''"
-                    >
+                        :class="bet.betOn === '/fighters/' + fight.fighterB.id ? 'border-4' : ''">
                         <div :style="fight.fighterB.imageName ? `background-image: url('${fight.fighterB.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
-                             class="h-1/2 bg-cover bg-center">
+                            class="h-1/2 bg-cover bg-center">
                             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
                         </div>
                         <div class="flex items-center pa-5">
-                            <div class="text-2xl font-bold truncate">{{ fight.fighterB.firstname }} {{ fight.fighterB.lastname }}</div>
-                            <Icon
-                                class="text-2xl ml-2"
-                                :icon="fight.fighterB.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'"
-                            />
+                            <div class="text-2xl font-bold truncate">{{ fight.fighterB.firstname }}
+                                {{ fight.fighterB.lastname }}</div>
+                            <Icon class="text-2xl ml-2"
+                                :icon="fight.fighterB.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'" />
                         </div>
                         <div class="text-2xl bg-neutral-800">
                             {{ fight.odds.fighterBOdds }}
@@ -119,16 +115,16 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {ref, reactive, defineProps, watch, PropType} from 'vue';
+import { ref, reactive, defineProps, watch, PropType } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { useBetStore } from "@/stores/bet";
-import {IFight} from "@/interfaces/fight";
-import {CreateBetI} from "@/interfaces/bet";
+import { IFight } from "@/interfaces/fight";
+import { CreateBetI } from "@/interfaces/bet";
 import { Icon } from '@iconify/vue';
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
-    fight: {type: Object as PropType<IFight>, required: true},
+    fight: { type: Object as PropType<IFight>, required: true },
 });
 
 const { createBetWallet, createBetDirect } = useBetStore();
@@ -144,7 +140,7 @@ const error = ref(false);
 const router = useRouter();
 
 let bet = reactive<CreateBetI>({
-    fight: '/fights/' +props.fight.id,
+    fight: '/fights/' + props.fight.id,
     betOn: '',
     amount: 0,
 });
@@ -156,7 +152,7 @@ const rules = {
 const payWallet = async () => {
     if (checkForm()) {
         const res = await createBetWallet(bet)
-        await router.push({ name: 'checkout-confirmation', query: { transaction_id: res.id }})
+        await router.push({ name: 'checkout-confirmation', query: { transaction_id: res.id } })
         dialog.value = false;
         resetBet()
     }
@@ -164,7 +160,7 @@ const payWallet = async () => {
 
 const payDirect = async () => {
     try {
-        if (checkForm()){
+        if (checkForm()) {
             window.location.href = await createBetDirect(bet)
             //createToast('Deposit success', { position: 'bottom-right', type: 'success' });
             //dialog.value = false;
