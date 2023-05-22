@@ -190,7 +190,8 @@ jobs:
                     node-version: 18
 
             -   name: Get tag name
-                uses: olegtarasov/get-tag@v2
+                uses: olegtarasov/get-tag@v2.1.2
+                id: tagName
 
             -   name: Install doctl
                 uses: digitalocean/action-doctl@v2
