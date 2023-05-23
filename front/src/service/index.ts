@@ -32,13 +32,11 @@ const clientWithoutAuth: AxiosInstance = axios.create(config.value);
 
 client.interceptors.request.use(function (config: any) {
     config.headers.Authorization = `Bearer ${token.value ? token.value : ''}`;
-    config.headers["Access-Control-Allow-Origin"] = '*';
     return config;
 });
 
 clientFormData.interceptors.request.use(function (config: any) {
     config.headers.Authorization = `Bearer ${token.value ? token.value : ''}`;
-    config.headers["Access-Control-Allow-Origin"] = '*';
     return config;
 });
 
