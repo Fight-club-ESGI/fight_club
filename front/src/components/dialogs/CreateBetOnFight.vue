@@ -1,11 +1,11 @@
 <template>
     <div>
-        <v-dialog class="w-2/3" v-model="dialog">
+        <v-dialog class="w-full sm:w-9/12 md:w-2/3" v-model="dialog" data-testid="dialog-bet">
             <template v-slot:activator="{ props }">
-                <div class="flex w-full">
+                <div class="flex w-full justify-center">
                     <v-card v-bind="props"
-                        class="flex cursor-pointer w-30 relative bg-neutral-600 text-white items-center mx-auto rounded-sm">
-                        <p class="text-center w-full font-weight-bold">
+                        class="flex cursor-pointer bg-neutral-600 text-white items-center rounded-sm px-4 py-2">
+                        <p class="text-center w-full font-weight-bold" data-testid="create-bet-button">
                             Bets
                         </p>
                     </v-card>
@@ -18,7 +18,7 @@
                 <div class="w-full flex">
                     <v-card @click="() => {
                         bet.betOn = '/fighters/' + fight.fighterA.id
-                    }" class="w-full h-92 w-92 flex-col bg-neutral-800 text-white"
+                    }" class="w-full h-92 w-92 flex-col bg-neutral-800 text-white fighter-a"
                         :class="bet.betOn === '/fighters/' + fight.fighterA.id ? 'border-4' : ''">
                         <div :style="fight.fighterA.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
                             class="h-1/2 bg-cover bg-center">
@@ -26,7 +26,8 @@
                         </div>
                         <div class="flex items-center pa-5">
                             <div class="text-2xl font-bold truncate">{{ fight.fighterA.firstname }}
-                                {{ fight.fighterA.lastname }}</div>
+                                {{ fight.fighterA.lastname }}
+                            </div>
                             <Icon class="text-2xl ml-2"
                                 :icon="fight.fighterA.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'" />
                         </div>
@@ -70,16 +71,17 @@
                             </p>
                         </div>
                         <v-text-field v-model.number="bet.amount" :rules="[rules.required]" type="number" min="1"
-                            placeholder="1" label="Amount" />
+                            placeholder="1" label="Amount" id="bet-amount-input" />
                         <div class="flex">
                             <v-btn class="normal-case rounded-none" color="primary" @click="payWallet()">Pay with
                                 wallet</v-btn>
-                            <v-btn class="normal-case rounded-none" color="secondary" @click="payDirect()">Pay with
+                            <v-btn class="normal-case rounded-none" color="secondary" @click="payDirect()"
+                                data-testid="pay-with-stripe-button">Pay with
                                 Stripe</v-btn>
                         </div>
                     </div>
                     <v-card @click="() => bet.betOn = '/fighters/' + fight.fighterB.id"
-                        class="w-full h-92 w-92 flex-col bg-neutral-800 text-white"
+                        class="w-full h-92 w-92 flex-col bg-neutral-800 text-white fighter-b"
                         :class="bet.betOn === '/fighters/' + fight.fighterB.id ? 'border-4' : ''">
                         <div :style="fight.fighterB.imageName ? `background-image: url('${fight.fighterB.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
                             class="h-1/2 bg-cover bg-center">
@@ -87,7 +89,8 @@
                         </div>
                         <div class="flex items-center pa-5">
                             <div class="text-2xl font-bold truncate">{{ fight.fighterB.firstname }}
-                                {{ fight.fighterB.lastname }}</div>
+                                {{ fight.fighterB.lastname }}
+                            </div>
                             <Icon class="text-2xl ml-2"
                                 :icon="fight.fighterB.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'" />
                         </div>

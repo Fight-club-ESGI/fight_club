@@ -51,8 +51,8 @@
             <ticket-list display="grid" @selected-item="($event) => item = $event"></ticket-list>
             <div class="flex flex-col gap-y-4">
                 <div class="text-2xl font-bold py-3 underline ">Planning</div>
-                <v-card v-for="fight in event.fights" class="flex h-52 text-white">
-                    <div class="h-52 w-80 bg-cover bg-center"
+                <v-card v-for="fight in event.fights" class="flex text-white">
+                    <div class="w-80 bg-cover bg-center"
                         :style="fight.fighterA.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`">
                         <div
                             class="flex flex-column h-full w-full bg-gradient-to-l from-neutral-100 to-transparent items-center p-10" />
@@ -120,7 +120,7 @@
                             <create-bet-on-fight :fight="fight" />
                         </div>
                     </div>
-                    <div class="bg-red-100 h-52 w-80 bg-cover bg-center"
+                    <div class="bg-red-100 w-80 bg-cover bg-center"
                         :style="fight.fighterB.imageName ? `background-image: url('${fight.fighterB.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`">
                         <div
                             class="flex flex-column h-full w-full bg-gradient-to-r from-neutral-100 to-transparent items-center p-10 text-white" />
