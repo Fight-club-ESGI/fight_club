@@ -145,6 +145,7 @@ jobs:
 #                run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
 
     deploy-backend:
+        #needs: build
         name: Deploy Backend
         runs-on: ubuntu-latest
 
@@ -199,3 +200,5 @@ jobs:
 
             -   name: Provision droplet and deploy container
                 run: doctl compute droplet create droplet-fight-club-1 --image docker-18-04 --size s-1vcpu-1gb --region fra1 --user-data-file deploy.sh --wait
+
+    SERVER_NAME=api-fightclub.antoinelin.me APP_SECRET=ChangeMe POSTGRES_PASSWORD=ChangeMe CADDY_MERCURE_JWT_SECRET=ChangeMe docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
