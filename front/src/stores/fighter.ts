@@ -123,8 +123,7 @@ export const useFighterStore = defineStore('fighter', () => {
     async function deleteFighter(id: string) {
         try {
             const res = await fighterService._deleteFighter(id);
-            const fighterToRemove = fighters.value.findIndex(fighter => fighter.id === id);
-            fighters.value.splice(fighterToRemove, 1);
+            await getFighters();
             return res;
         } catch (error) {
             throw error;

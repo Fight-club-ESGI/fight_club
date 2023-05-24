@@ -4,7 +4,7 @@
         <div class="px-2 sm:px-10 flex gap-x-2">
             <fighter-filter class="w-80" />
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 <create-fighter class="flex justify-start pb-2" :admin="isAdmin" />
                 <fighter v-for="fighter in filteredFighters" class="w-full" :fighter="fighter" :admin="isAdmin" />
             </div>
