@@ -20,7 +20,7 @@ final class Version20230524195412 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE fighter ADD is_active BOOLEAN NOT NULL');
+        $this->addSql('ALTER TABLE fighter ADD is_active BOOLEAN NOT NULL DEFAULT FALSE');
     }
 
     public function down(Schema $schema): void
