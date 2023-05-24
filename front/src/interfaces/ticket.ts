@@ -19,6 +19,7 @@ interface ITicketCategory {
     tickets: ITicket[]
     createdAt: string
     updatedAt: string
+    isActive: boolean
 }
 
 interface ICreateTicketCategory {

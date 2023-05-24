@@ -13,6 +13,10 @@ export const useTicketStore = defineStore('ticket', () => {
     const ticketsNumber = computed(() => tickets.value.length);
     const availableTickets = computed(() => ticketsEvent.value.filter((ticketEvent: ITicketEvent) => ticketEvent.tickets.length < ticketEvent.maxQuantity));
 
+    const activeTickets = computed(() => {
+        return ticketsEvent.value.filter(ti => ti.isActive);
+    });
+
     async function getTickets(eventId: string) {
         try {
             const res = await ticketService._getTickets(eventId);
@@ -69,5 +73,5 @@ export const useTicketStore = defineStore('ticket', () => {
         }
     }
 
-    return { tickets, ticketCategories, ticketsEvent, getTickets, updateTicketEvent, createTicket, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
+    return { tickets, ticketCategories, ticketsEvent, getTickets, updateTicketEvent, createTicket, activeTickets, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
 });

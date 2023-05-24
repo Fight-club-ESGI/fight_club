@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia';
 import { useTicketStore } from '@/stores/tickets';
 import { PropType } from 'vue';
 const ticketStore = useTicketStore()
-const { ticketsEvent } = storeToRefs(ticketStore);
+const { activeTickets } = storeToRefs(ticketStore);
 
 const emit = defineEmits(['selectedItem']);
 
@@ -29,9 +29,9 @@ const ticketCategoryColor = (name: string) => {
 </script>
 
 <template>
-    <v-list v-if="ticketsEvent.length > 0" density="compact" :disabled="readOnly" :lines="false"
+    <v-list v-if="activeTickets.length > 0" density="compact" :disabled="readOnly" :lines="false"
         class="max-h-96 overflow-auto" @click:select="readOnly ? '' : emit('selectedItem', $event)">
-        <v-list-item v-for="ticketEvent of ticketsEvent" :value="ticketEvent">
+        <v-list-item v-for="ticketEvent of activeTickets" :value="ticketEvent">
 
             <template v-slot:append>
                 <v-chip :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{ ticketEvent.ticketCategory.name

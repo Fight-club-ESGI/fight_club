@@ -1,7 +1,7 @@
 <template>
     <div class="grid h-screen place-items-center bg-neutral-800 text-white">
         <div class="flex-column items-center">
-            <v-img src="../src/assets/invalidToken.svg" :width="353" aspect-ratio="16/9" class="mx-auto"></v-img>
+            <v-img :src="invalidToken" :width="353" aspect-ratio="16/9" class="mx-auto"></v-img>
             <!-- <div
                 class="h-1/2 w-1/2 flex items-center bg-no-repeat bg-cover bg-right opacity-75"
                 style="background-image: url('../src/assets/invalidToken.svg');"
@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import invalidToken from "../assets/invalidToken.svg";
 
 export default defineComponent({
 
