@@ -96,12 +96,10 @@ watch(dialog, (open: boolean) => {
 })
 
 const resetForm = () => {
-    fight = {
-        event: '',
-        fighterA: '',
-        fighterB: '',
-        fightDate: ''
-    }
+    fight.event = '';
+    fight.fighterA = '';
+    fight.fighterB = '';
+    fight.fightDate = '';
     dialog.value = false;
 }
 
