@@ -1,4 +1,4 @@
-import {client, clientFormData, clientWithoutAuth} from "..";
+import { client, clientFormData, clientWithoutAuth } from "..";
 import { CreateFighter, IFighter } from "@/interfaces/fighter";
 
 const namespace = '/fighters';
@@ -7,7 +7,7 @@ class Fighter {
 
     async _getFighters(page: number = 1): Promise<IFighter[]> {
         try {
-            const res = await clientWithoutAuth.get(`${namespace}?page=${page}`);
+            const res = await clientWithoutAuth.get(`${namespace}?page=${page}&isActive=true`);
             return res.data;
         } catch (error) {
             throw error;

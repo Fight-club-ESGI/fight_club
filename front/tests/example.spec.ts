@@ -1,7 +1,25 @@
 import { test, expect } from '@playwright/test';
 
 test('has title', async ({ page }) => {
+    // await page.goto("https://fightclub-antoinepollet.vercel.app/");
+
     await page.goto("https://fightclub-antoinepollet.vercel.app/");
+    await page.evaluate(() => window.localStorage.clear());
+
+    // await page.getByText('Sign in').click()
+
+    // await page.fill('#signin-email', 'pollet.antoine.alexis@gmail.com');
+    // await page.getByLabel('Password').fill('password');
+    // await page.click('[data-testid="signin-button"]');
+
+    // // Wait for navigation or any asynchronous actions to complete
+    // await page.reload()
+
+    // // Assert that the user is redirected to the home page
+    // await page.getByText('Bets').click()
+    // await page.getByRole('button', { name: 'bets' }).click()
+
+    // await expect(page.getByTestId('dialog-bet')).toBeVisible();
 
     // Expect a title "to contain" a substring.
     await expect(page).toHaveTitle(/Thunderous Knockout Fighting/);

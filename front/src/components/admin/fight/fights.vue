@@ -33,4 +33,7 @@ onMounted(async () => {
             </div>
         </div>
     </div>
+    <div v-else>
+        No event found
+    </div>
 </template>

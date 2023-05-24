@@ -64,11 +64,9 @@ const rules = {
 };
 
 const resetForm = () => {
-    category = {
-        name: '',
-        minWeight: 0,
-        maxWeight: 0
-    }
+    category.name = '';
+    category.minWeight = 0;
+    category.maxWeight = 0;
     dialog.value = false;
 }
 const submit = async () => {

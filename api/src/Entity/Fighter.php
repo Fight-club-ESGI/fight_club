@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -10,6 +12,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\Fighter\CreateFighter;
+use App\Controller\Fighter\DeleteFighter;
 use App\Controller\Fighter\GetFighter;
 use App\Controller\Fighter\UpdateFighter;
 use App\Entity\Trait\EntityIdTrait;
@@ -51,9 +54,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             deserialize: false
         ),
         new Delete(
+            controller: DeleteFighter::class,
             security: "is_granted('ROLE_ADMIN')"
         )
     ]
+)]
+#[ApiFilter(
+    SearchFilter::class, properties: ['isActive' => 'exact']
 )]
 #[Vich\Uploadable]
 class Fighter
@@ -172,6 +179,14 @@ class Fighter
         'fighter:get',
     ])]
     private Collection $fights;
+
+    #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'admin:post',
+        'fighter:get',
+    ])]
+    private ?bool $isActive = true;
 
     public function __construct()
     {
@@ -294,6 +309,18 @@ class Fighter
     public function removeFight(Fight $fight): self
     {
         $this->fights->removeElement($fight);
+
+        return $this;
+    }
+
+    public function isIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

@@ -2,6 +2,8 @@ name: Playwright Tests and Vercel Production Deployment
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  BASE_URL_FRONT: ${{ secrets.BASE_URL_FRONT }}
+  VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
 on:
   push:
     branches: [dev, master]
@@ -38,7 +40,7 @@ jobs:
 
   Deploy-Production:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/dev') || (github.event_name == 'pull_request' && github.event.action == 'closed')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -54,8 +56,8 @@ jobs:
       - name: Navigate to front folder and create .env.production file
         run: |
             cd front/
-            echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> .env.production
-            echo "BASE_URL_FRONT=${{ secrets.BASE_URL_FRONT }}" >> .env.production
+            echo "VITE_BACKEND_URL=$VITE_BACKEND_URL" >> .env.production
+            echo "BASE_URL_FRONT=$BASE_URL_FRONT" >> .env.production
             echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env.production
 
       - name: Pull Vercel Environment Information

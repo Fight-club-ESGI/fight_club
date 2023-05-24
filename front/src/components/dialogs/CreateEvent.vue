@@ -56,7 +56,7 @@ import { useEventStore } from '@/stores/event';
 import Event from '../Event.vue';
 
 const props = defineProps({
-    admin: {type: Boolean, required: true}
+    admin: { type: Boolean, required: true }
 });
 
 const eventStore = useEventStore();
@@ -121,21 +121,19 @@ const submit = async () => {
 };
 
 const resetForm = () => {
-    event = {
-        name: '',
-        location: '',
-        description: '',
-        category: '',
-        capacity: 0,
-        locationLink: '',
-        timeStart: '',
-        timeEnd: '',
-        vip: false,
-        imageFile: '',
-        imageName: '',
-        imageSize: '',
-        display: false,
-    }
+    event.name = '';
+    event.location = '';
+    event.description = '';
+    event.category = '';
+    event.capacity = 0;
+    event.locationLink = '';
+    event.timeStart = '';
+    event.timeEnd = '';
+    event.vip = false;
+    event.imageFile = '';
+    event.imageName = '';
+    event.imageSize = '';
+    event.display = false;
     dialog.value = false;
 }
 
