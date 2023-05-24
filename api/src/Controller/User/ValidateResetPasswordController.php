@@ -41,7 +41,7 @@ class ValidateResetPasswordController extends AbstractController
         }
 
         $tokenDateValidity = new Carbon($user->getTokenDate());
-        $tokenDateValidity->addSeconds(60);
+        $tokenDateValidity->addMinutes(30);
         $tokenValidity = $tokenDateValidity->greaterThan(Carbon::now());
 
         if (!$tokenValidity) {
