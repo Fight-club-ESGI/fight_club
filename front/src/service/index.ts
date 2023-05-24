@@ -34,7 +34,7 @@ client.interceptors.request.use(function (config: any) {
 });
 
 clientFormData.interceptors.request.use(function (config: any) {
-    config.headers.Authorization = `Bearer ${token.value ? token.value : ''}`;
+    config.headers.Authorization = `Bearer ${token.value ? token.value : ''}`
     return config;
 });
 
