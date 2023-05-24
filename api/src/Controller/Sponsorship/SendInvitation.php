@@ -49,7 +49,7 @@ class SendInvitation extends AbstractController
                     ->html(
                         '<p>Hi ' . $sponsored->getEmail() . ',</p>
                     <p>An admin invited you to become VIP</p>
-                    <p><a href="http://localhost:5173/become-vip/?token='.$token.'">Become VIP</a></p>
+                    <p><a href="https://fightclub-antoinepollet.vercel.app/become-vip/?token='.$token.'">Become VIP</a></p>
                     <br />
                     <p>Thanks,</p>
                     <p>Thunderous Knockout Fighting</p>'
@@ -91,7 +91,7 @@ class SendInvitation extends AbstractController
                     '<p>Hi ' . $user->getEmail() . ',</p>
                     <p>An admin invited you to the platform and to become VIP</p>
                     <p>Use this password to login to your account : '. $generatedPassword .'</p>
-                    <p><a href="http://localhost:5173">Click this link to access our platform</a></p>
+                    <p><a href="https://fightclub-antoinepollet.vercel.app/">Click this link to access our platform</a></p>
                     <br />
                     <p>Thanks,</p>
                     <p>Thunderous Knockout Fighting</p>'

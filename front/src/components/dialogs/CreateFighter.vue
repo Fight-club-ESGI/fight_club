@@ -194,18 +194,16 @@ const rules = {
 };
 
 const resetForm = () => {
-    fighter = {
-        gender: '',
-        firstname: '',
-        lastname: '',
-        birthdate: '',
-        height: 70,
-        weight: 70,
-        nationality: '',
-        imageFile: '',
-        imageName: '',
-        imageSize: '',
-    }
+    fighter.gender = '';
+    fighter.firstname = '';
+    fighter.lastname = '';
+    fighter.birthdate = '';
+    fighter.height = 70;
+    fighter.weight = 70;
+    fighter.nationality = '';
+    fighter.imageFile = '';
+    fighter.imageName = '';
+    fighter.imageSize = '';
     dialog.value = false;
 }
 
