@@ -109,12 +109,14 @@ const remove = async (id: string) => {
                             <p>
                                 {{ fight.fighterA.firstname }} {{ fight.fighterA.lastname }}
                             </p>
-                            <p v-if="hasWinner && winner === fight.fighterA.id" class="text-green-400 font-bold text-lg">
-                                WINNER
-                            </p>
-                            <p v-else class="text-red-400 font-bold text-lg">
-                                LOSER
-                            </p>
+                            <template v-if="hasWinner">
+                                <p v-if="winner === fight.fighterA.id" class="text-green-400 font-bold text-lg">
+                                    WINNER
+                                </p>
+                                <p v-else class="text-red-400 font-bold text-lg">
+                                    LOSER
+                                </p>
+                            </template>
                             <div class="flex text-white gap-x-2 mx-auto">
                                 <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
                                     <Icon icon="material-symbols:flag" />
@@ -143,12 +145,14 @@ const remove = async (id: string) => {
                             <p>
                                 {{ fight.fighterB.firstname }} {{ fight.fighterB.lastname }}
                             </p>
-                            <p v-if="hasWinner && winner === fight.fighterB.id" class="text-green-400 font-bold text-lg">
-                                WINNER
-                            </p>
-                            <p v-else class="text-red-400 font-bold text-lg">
-                                LOSER
-                            </p>
+                            <template v-if="hasWinner">
+                                <p v-if="winner === fight.fighterB.id" class="text-green-400 font-bold text-lg">
+                                    WINNER
+                                </p>
+                                <p v-else class="text-red-400 font-bold text-lg">
+                                    LOSER
+                                </p>
+                            </template>
                             <div class="flex text-white gap-x-2 mx-auto">
                                 <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
                                     <Icon icon="material-symbols:flag" />

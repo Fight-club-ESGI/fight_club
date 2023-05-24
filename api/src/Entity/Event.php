@@ -31,7 +31,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['tickets:get', 'events:get']],
+            normalizationContext: ['groups' => ['tickets:get', 'events:get', 'fights:get', 'fighter:get']],
         ),
         new GetCollection(
             uriTemplate: "events/admin",

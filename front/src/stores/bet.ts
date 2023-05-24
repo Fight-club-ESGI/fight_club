@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import {FightBetI, CurrentBetI, CreateBetI, IBet} from '@/interfaces/bet';
+import { FightBetI, CurrentBetI, CreateBetI, IBet } from '@/interfaces/bet';
 import { ref } from 'vue';
 import { betService } from '../service/api';
-import {createToast} from "mosha-vue-toastify";
+import { createToast } from "mosha-vue-toastify";
 
 export const useBetStore = defineStore('bet', () => {
     const bet = ref<IBet>();
@@ -26,7 +26,7 @@ export const useBetStore = defineStore('bet', () => {
         try {
             return await betService._betWallet(payload);
         } catch (error: any) {
-            createToast(error.response.data, { position: 'bottom-right', type: 'danger' });
+            throw error;
         }
     }
 
@@ -35,7 +35,7 @@ export const useBetStore = defineStore('bet', () => {
             const res = await betService._betDirect(payload);
             return res
         } catch (error: any) {
-            createToast(error.response.data, { position: 'bottom-right', type: 'danger' });
+            throw error;
         }
     }
 

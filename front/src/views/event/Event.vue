@@ -11,12 +11,12 @@
                 <div v-if="loader" class="flex items-center">
                     <v-progress-circular indeterminate class="mx-auto m-20" size="120"></v-progress-circular>
                 </div>
-                <div v-else>
-                    <div v-if="events.length > 0"
-                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
-                        <create-event v-if="isAdmin && route.path.includes('admin')" class="pb-4" :admin="isAdmin" />
+                <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+                    <create-event v-if="isAdmin && route.path.includes('admin')" class="pb-4" :admin="isAdmin" />
+
+                    <template v-if="events.length > 0">
                         <event v-for="event in filteredVipEvents" :key="event.id" :event="event" :admin="isAdmin" />
-                    </div>
+                    </template>
                     <div v-else class="flex items-center text-center">
                         <p class="w-full text-2xl m-4">
                             No events available
