@@ -1,0 +1,204 @@
+name: CI/CD for API Platform and VueJS
+
+on:
+    push:
+        branches:
+            - main
+            - feat/ci_cd
+        tags:
+            - stage-*
+
+
+jobs:
+#    build:
+#        runs-on: ubuntu-latest
+#
+#        steps:
+#            -   name: Checkout code
+#                uses: actions/checkout@v3
+#
+#            -   name: Create Env file
+#                run: |
+#                    echo "VITE_PORT=\"${{secrets.VITE_PORT}}\"" >> ./api/.env
+#                    echo "APP_ENV=\"${{secrets.APP_ENV}}\"" >> ./api/.env
+#                    echo "APP_SECRET=\"${{secrets.APP_SECRET}}\"" >> ./api/.env
+#                    echo "BASE_URL=\"${{secrets.BASE_URL}}\"" >> ./front/.env
+#                    echo "CORS_ALLOW_ORIGIN=\"${{secrets.CORS_ALLOW_ORIGIN}}\"" >> ./api/.env
+#                    echo "DATABASE_URL=\"${{secrets.DATABASE_URL}}\"" >> ./api/.env
+#                    echo "JWT_PASSPHRASE=\"${{secrets.JWT_PASSPHRASE}}\"" >> ./api/.env
+#                    echo "JWT_PUBLIC_KEY=\"${{secrets.JWT_PUBLIC_KEY}}\"" >> ./api/.env
+#                    echo "JWT_SECRET_KEY=\"${{secrets.JWT_SECRET_KEY}}\"" >> ./api/.env
+#                    echo "MAILER_DSN=\"${{secrets.MAILER_DSN}}\"" >> ./api/.env
+#                    echo "MAILER_FROM=\"${{secrets.MAILER_FROM}}\"" >> ./api/.env
+#                    echo "MAILER_PASSWORD=\"${{secrets.MAILER_PASSWORD}}\"" >> ./api/.env
+#                    echo "MAILER_PORT=\"${{secrets.MAILER_PORT}}\"" >> ./api/.env
+#                    echo "MAILER_SERVER=\"${{secrets.MAILER_SERVER}}\"" >> ./api/.env
+#                    echo "MERCURE_JWT_SECRET=\"${{secrets.MERCURE_JWT_SECRET}}\"" >> ./api/.env
+#                    echo "MERCURE_PUBLIC_URL=\"${{secrets.MERCURE_PUBLIC_URL}}\"" >> ./api/.env
+#                    echo "MERCURE_URL=\"${{secrets.MERCURE_URL}}\"" >> ./api/.env
+#                    echo "TRUSTED_HOSTS=\"${{secrets.TRUSTED_HOSTS}}\"" >> ./api/.env
+#                    echo "TRUSTED_PROXIES=\"${{secrets.TRUSTED_PROXIES}}\"" >> ./api/.env
+#                    echo "SERVER_NAME=\"${{secrets.SERVER_NAME}}\"" >> ./api/.env
+#                    echo "POSTGRES_DB=${{secrets.POSTGRES_DB}}" >> ./api/.env
+#                    echo "POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> ./api/.env
+#                    echo "POSTGRES_USER=${{secrets.POSTGRES_USER}}" >> ./api/.env
+#                    echo "STRIPE_KEY=${{secrets.STRIPE_KEY}}" >> ./api/.env
+#                    echo "CADDY_MERCURE_JWT_SECRET=${{secrets.CADDY_MERCURE_JWT_SECRET}}" >> ./api/.env
+#                    echo "VITE_BACKEND_URL=\"${{secrets.VITE_BACKEND_URL}}\"" >> ./front/.env
+#                    echo "BASE_URL=\"${{secrets.BASE_URL}}\"" >> ./front/.env
+#                    echo "VITE_PORT=\"${{secrets.VITE_PORT}}\"" >> ./front/.env
+#
+#            -   name: Set up Node.js
+#                uses: actions/setup-node@v3
+#                with:
+#                    node-version: 18
+#
+#            -   name: Build Backend
+#                working-directory: api/
+#                run: |
+#                    docker-compose build --no-cache
+#
+#            -   name: Start Backend
+#                run: |
+#                    docker-compose up -d
+#
+#            -   name: Login to Docker Hub
+#                uses: docker/login-action@v2
+#                with:
+#                    username: ${{ secrets.DOCKERHUB_USERNAME }}
+#                    password: ${{ secrets.DOCKERHUB_TOKEN }}
+#
+#            -   name: Push to Docker Hub
+#                uses: docker/build-push-action@v4
+#                with:
+#                    context: api
+#                    push: true
+#                    tags: tufeng/fight_club:latest
+#
+#    tests:
+#        name: Tests
+#        runs-on: ubuntu-latest
+#        steps:
+#            -   name: Checkout
+#                uses: actions/checkout@v3
+#            -   name: Create Env file
+#                run: |
+#                    echo "VITE_PORT=\"${{secrets.VITE_PORT}}\"" >> ./api/.env
+#                    echo "APP_ENV=\"${{secrets.APP_ENV}}\"" >> ./api/.env
+#                    echo "APP_SECRET=\"${{secrets.APP_SECRET}}\"" >> ./api/.env
+#                    echo "BASE_URL=\"${{secrets.BASE_URL}}\"" >> ./front/.env
+#                    echo "CORS_ALLOW_ORIGIN=\"${{secrets.CORS_ALLOW_ORIGIN}}\"" >> ./api/.env
+#                    echo "DATABASE_URL=\"${{secrets.DATABASE_URL}}\"" >> ./api/.env
+#                    echo "JWT_PASSPHRASE=\"${{secrets.JWT_PASSPHRASE}}\"" >> ./api/.env
+#                    echo "JWT_PUBLIC_KEY=\"${{secrets.JWT_PUBLIC_KEY}}\"" >> ./api/.env
+#                    echo "JWT_SECRET_KEY=\"${{secrets.JWT_SECRET_KEY}}\"" >> ./api/.env
+#                    echo "MAILER_DSN=\"${{secrets.MAILER_DSN}}\"" >> ./api/.env
+#                    echo "MAILER_FROM=\"${{secrets.MAILER_FROM}}\"" >> ./api/.env
+#                    echo "MAILER_PASSWORD=\"${{secrets.MAILER_PASSWORD}}\"" >> ./api/.env
+#                    echo "MAILER_PORT=\"${{secrets.MAILER_PORT}}\"" >> ./api/.env
+#                    echo "MAILER_SERVER=\"${{secrets.MAILER_SERVER}}\"" >> ./api/.env
+#                    echo "MERCURE_JWT_SECRET=\"${{secrets.MERCURE_JWT_SECRET}}\"" >> ./api/.env
+#                    echo "MERCURE_PUBLIC_URL=\"${{secrets.MERCURE_PUBLIC_URL}}\"" >> ./api/.env
+#                    echo "MERCURE_URL=\"${{secrets.MERCURE_URL}}\"" >> ./api/.env
+#                    echo "TRUSTED_HOSTS=\"${{secrets.TRUSTED_HOSTS}}\"" >> ./api/.env
+#                    echo "TRUSTED_PROXIES=\"${{secrets.TRUSTED_PROXIES}}\"" >> ./api/.env
+#                    echo "SERVER_NAME=\"${{secrets.SERVER_NAME}}\"" >> ./api/.env
+#                    echo "POSTGRES_DB=${{secrets.POSTGRES_DB}}" >> ./api/.env
+#                    echo "POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> ./api/.env
+#                    echo "POSTGRES_USER=${{secrets.POSTGRES_USER}}" >> ./api/.env
+#                    echo "STRIPE_KEY=${{secrets.STRIPE_KEY}}" >> ./api/.env
+#                    echo "CADDY_MERCURE_JWT_SECRET=${{secrets.CADDY_MERCURE_JWT_SECRET}}" >> ./api/.env
+#                    echo "VITE_BACKEND_URL=\"${{secrets.VITE_BACKEND_URL}}\"" >> ./front/.env
+#                    echo "BASE_URL=\"${{secrets.BASE_URL}}\"" >> ./front/.env
+#                    echo "VITE_PORT=\"${{secrets.VITE_PORT}}\"" >> ./front/.env
+#            -   name: Pull images
+#                run: docker compose pull --ignore-pull-failures || true
+#            -   name: Start services
+#                run: docker compose up --build -d
+#            -   name: Wait for services
+#                run: |
+#                    while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
+#                      case $status in
+#                        starting) sleep 1;;
+#                        healthy) exit 0;;
+#                        unhealthy)
+#                          docker compose ps
+#                          docker compose logs
+#                          exit 1
+#                        ;;
+#                      esac
+#                    done
+#                    exit 1
+#            -   name: Check HTTP reachability
+#                run: curl -v -o /dev/null http://localhost
+#            -   name: Check API reachability
+#                run: curl -vk -o /dev/null https://localhost
+#            #- name: Check PWA reachability
+#            #  run: "curl -vk -o /dev/null -H 'Accept: text/html' https://localhost"
+#            -   name: Create test database
+#                run: |
+#                    docker compose exec -T php bin/console -e test doctrine:database:create
+#                    docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+#            -   name: PHPUnit
+#                run: docker compose exec -T php bin/phpunit
+#            -   name: Doctrine Schema Validator
+#                run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
+
+    deploy-backend:
+        #needs: build
+        name: Deploy Backend
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v3
+
+            -   name: Create Env file
+                run: |
+                    echo "VITE_PORT=\"${{secrets.VITE_PORT}}\"" >> ./api/.env
+                    echo "APP_ENV=\"${{secrets.APP_ENV}}\"" >> ./api/.env
+                    echo "APP_SECRET=\"${{secrets.APP_SECRET}}\"" >> ./api/.env
+                    echo "BASE_URL=\"${{secrets.BASE_URL}}\"" >> ./front/.env
+                    echo "CORS_ALLOW_ORIGIN=\"${{secrets.CORS_ALLOW_ORIGIN}}\"" >> ./api/.env
+                    echo "DATABASE_URL=\"${{secrets.DATABASE_URL}}\"" >> ./api/.env
+                    echo "JWT_PASSPHRASE=\"${{secrets.JWT_PASSPHRASE}}\"" >> ./api/.env
+                    echo "JWT_PUBLIC_KEY=\"${{secrets.JWT_PUBLIC_KEY}}\"" >> ./api/.env
+                    echo "JWT_SECRET_KEY=\"${{secrets.JWT_SECRET_KEY}}\"" >> ./api/.env
+                    echo "MAILER_DSN=\"${{secrets.MAILER_DSN}}\"" >> ./api/.env
+                    echo "MAILER_FROM=\"${{secrets.MAILER_FROM}}\"" >> ./api/.env
+                    echo "MAILER_PASSWORD=\"${{secrets.MAILER_PASSWORD}}\"" >> ./api/.env
+                    echo "MAILER_PORT=\"${{secrets.MAILER_PORT}}\"" >> ./api/.env
+                    echo "MAILER_SERVER=\"${{secrets.MAILER_SERVER}}\"" >> ./api/.env
+                    echo "MERCURE_JWT_SECRET=\"${{secrets.MERCURE_JWT_SECRET}}\"" >> ./api/.env
+                    echo "MERCURE_PUBLIC_URL=\"${{secrets.MERCURE_PUBLIC_URL}}\"" >> ./api/.env
+                    echo "MERCURE_URL=\"${{secrets.MERCURE_URL}}\"" >> ./api/.env
+                    echo "TRUSTED_HOSTS=\"${{secrets.TRUSTED_HOSTS}}\"" >> ./api/.env
+                    echo "TRUSTED_PROXIES=\"${{secrets.TRUSTED_PROXIES}}\"" >> ./api/.env
+                    echo "SERVER_NAME=\"${{secrets.SERVER_NAME}}\"" >> ./api/.env
+                    echo "POSTGRES_DB=${{secrets.POSTGRES_DB}}" >> ./api/.env
+                    echo "POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> ./api/.env
+                    echo "POSTGRES_USER=${{secrets.POSTGRES_USER}}" >> ./api/.env
+                    echo "STRIPE_KEY=${{secrets.STRIPE_KEY}}" >> ./api/.env
+                    echo "CADDY_MERCURE_JWT_SECRET=${{secrets.CADDY_MERCURE_JWT_SECRET}}" >> ./api/.env
+                    echo "VITE_BACKEND_URL=\"${{secrets.VITE_BACKEND_URL}}\"" >> ./front/.env
+                    echo "BASE_URL=\"${{secrets.BASE_URL}}\"" >> ./front/.env
+                    echo "VITE_PORT=\"${{secrets.VITE_PORT}}\"" >> ./front/.env
+
+            -   name: Set up Node.js
+                uses: actions/setup-node@v3
+                with:
+                    node-version: 18
+
+            -   name: Get tag name
+                uses: olegtarasov/get-tag@v2.1.2
+                id: tagName
+
+            -   name: Install doctl
+                uses: digitalocean/action-doctl@v2
+                with:
+                    token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+            -   name: Provision droplet and deploy container
+                run: doctl compute droplet create droplet-fight-club-1 --image docker-18-04 --size s-1vcpu-1gb --region fra1 --user-data-file deploy.sh --wait
+
+    SERVER_NAME=api-fightclub.antoinelin.me APP_SECRET=ChangeMe POSTGRES_PASSWORD=ChangeMe CADDY_MERCURE_JWT_SECRET=ChangeMe docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
