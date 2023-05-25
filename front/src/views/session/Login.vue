@@ -4,7 +4,7 @@
         <v-text-field v-model="email" :rules="emailRules" autocomplete="email" label="E-mail" required class="my-4"
             id="signin-email" />
         <v-text-field v-model="password" label="Password" autocomplete="current-password" type="password" required
-            data-testid="signin-password" class="mt-4"></v-text-field>
+            id="signin-password" class="mt-4"></v-text-field>
         <v-btn block color="primary" @click="validate" data-testid="signin-button">Login</v-btn>
         <v-divider class="my-3"></v-divider>
         <div class="flex text-caption mb-4">
@@ -15,7 +15,7 @@
                     yet?</router-link></div>
 
         </div>
-        <v-btn color="primary" variant="text" :to="{ name: 'home' }">back home </v-btn>
+        <v-btn color="primary" variant="text" @click="router.push({ name: 'home' })">back home </v-btn>
 
     </v-form>
 </template>

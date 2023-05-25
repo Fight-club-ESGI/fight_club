@@ -45,7 +45,7 @@
 
                     <v-menu open-on-hover>
                         <template v-slot:activator="{ props }">
-                            <v-btn color="primary" v-bind="props" class="">
+                            <v-btn color="primary" v-bind="props" id="user-profile">
                                 {{ user.email }}
                             </v-btn>
                         </template>

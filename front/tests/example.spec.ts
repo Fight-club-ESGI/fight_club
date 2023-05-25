@@ -3,34 +3,36 @@ import { test, expect } from '@playwright/test';
 test('has title', async ({ page }) => {
     // await page.goto("https://fightclub-antoinepollet.vercel.app/");
 
-    await page.goto("https://fightclub-antoinepollet.vercel.app/");
+    // await page.goto("http://localhost:5173/session/login");
     await page.evaluate(() => window.localStorage.clear());
 
-    // await page.getByText('Sign in').click()
+    // const email = await page.getByLabel('E-mail');
+    // await email.fill('pollet.antoine.alexis@gmail.com');
+    // const emailValue = await page.inputValue('input#signin-email')
 
-    // await page.fill('#signin-email', 'pollet.antoine.alexis@gmail.com');
-    // await page.getByLabel('Password').fill('password');
-    // await page.click('[data-testid="signin-button"]');
+    // await expect(emailValue).toBe('pollet.antoine.alexis@gmail.com');
 
-    // // Wait for navigation or any asynchronous actions to complete
-    // await page.reload()
+    // const password = await page.getByLabel('Password');
+    // await password.fill('password');
+    // const passwordValue = await page.inputValue('input#signin-password');
 
-    // // Assert that the user is redirected to the home page
-    // await page.getByText('Bets').click()
+    // await expect(passwordValue).toBe('password');
+
+    // await page.getByTestId('signin-button').click();
+
+    // await page.waitForURL('http://localhost:5173/');
+    // // Alternatively, you can wait until the page reaches a state where all cookies are set.
+    // await expect(page.getByText('pollet.antoine.alexis@gmail.com')).toBeVisible();
+
+    // Wait for navigation or any asynchronous actions to complete
+    // Assert that the user is redirected to the home page
+    // await page.click('[data-testid="bets-link"]');
+    // await page.getByText('pollet.antoine.alexis@gmail.com').hover();
+    // await page.getByText('Wallet').click();
+    // await page.getByRole('link', { name: 'Events' }).click()
     // await page.getByRole('button', { name: 'bets' }).click()
 
     // await expect(page.getByTestId('dialog-bet')).toBeVisible();
-
     // Expect a title "to contain" a substring.
     await expect(page).toHaveTitle(/Thunderous Knockout Fighting/);
-});
-
-test('get started link', async ({ page }) => {
-    await page.goto('https://playwright.dev/');
-
-    // Click the get started link.
-    await page.getByRole('link', { name: 'Get started' }).click();
-
-    // Expects the URL to contain intro.
-    await expect(page).toHaveURL(/.*intro/);
 });
