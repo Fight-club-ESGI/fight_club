@@ -81,7 +81,7 @@ export const useEventStore = defineStore('event', () => {
     async function deleteEvent(id: string) {
         try {
             await eventService._deleteEvent(id);
-            events.value.splice(events.value.findIndex(e => e.id === id), 1);
+            await getEventsAdmin();
         } catch (error) {
             throw error;
         }

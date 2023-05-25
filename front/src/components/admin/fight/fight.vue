@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CreateBetOnFight from '@/components/dialogs/CreateBetOnFight.vue';
 import { IFight } from '@/interfaces/fight';
 import { PropType, computed } from 'vue';
 import { Icon } from "@iconify/vue/dist/iconify.js";
