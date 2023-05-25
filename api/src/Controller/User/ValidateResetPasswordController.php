@@ -32,7 +32,9 @@ class ValidateResetPasswordController extends AbstractController
         $password = json_decode($this->requestStack->getCurrentRequest()->getContent())->password;
 
         /** @var User $user */
-        if (!$user = $this->managerRegistry->getRepository(User::class)->findOneBy(['token' => $token])) {
+        $user = $this->managerRegistry->getRepository(User::class)->findOneBy(['token' => $token]);
+
+        if (!$user) {
             throw $this->createNotFoundException();
         }
 

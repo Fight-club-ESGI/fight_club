@@ -96,7 +96,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             uriTemplate: '/change_password',
             controller: ChangePassword::class,
             security: "is_granted('ROLE_USER')",
-            name: 'validate-reset-password',
+            name: 'change-password',
         )
     ]
 )]
