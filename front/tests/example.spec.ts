@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 test('has title', async ({ page }) => {
-    // await page.goto("https://fightclub-antoinepollet.vercel.app/");
+    await page.goto("https://fightclub-antoinepollet.vercel.app/");
 
     // await page.goto("http://localhost:5173/session/login");
-    await page.evaluate(() => window.localStorage.clear());
+    // await page.evaluate(() => window.localStorage.clear());
 
     // const email = await page.getByLabel('E-mail');
     // await email.fill('pollet.antoine.alexis@gmail.com');
