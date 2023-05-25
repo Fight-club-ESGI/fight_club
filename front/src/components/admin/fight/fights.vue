@@ -28,8 +28,8 @@ onMounted(async () => {
                 fight</i>
         </div>
         <div class="pt-2 flex flex-col gap-y-3">
-            <div v-for="fight of fightDESC">
-                <fight :fight="fight" :readOnly="!(new Date(event.timeStart) > new Date())"></fight>
+            <div v-for="fightD of fightDESC">
+                <fight :fight="fightD" :readOnly="!(new Date(event.timeStart) > new Date())"></fight>
             </div>
         </div>
     </div>

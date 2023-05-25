@@ -8,9 +8,11 @@ use App\Repository\FighterRepository;
 use App\Repository\FightRepository;
 use App\Repository\UserRepository;
 use App\Service\Checkout\CheckoutService;
+use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -32,6 +34,10 @@ class FightChooseWinner extends AbstractController
 
         if($fight->isWinnerValidation()) {
             return new Response('Winner as already be validated', 400, ["Content-Type" => "application:json"]);
+        }
+        
+        if(new Carbon($fight->getFightDate()) > Carbon::now()) {
+            return new Response('Fight can only be validated after the fight date', 400, ["Content-Type" => "application:json"]);
         }
 
         if (($fight->getWinner()->getId() === $fight->getFighterA()->getId()) || ($fight->getWinner()->getId() === $fight->getFighterB()->getId())) {

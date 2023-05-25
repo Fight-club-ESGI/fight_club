@@ -8,10 +8,14 @@ import { createToast } from 'mosha-vue-toastify';
 import { useEventStore } from '@/stores/event';
 import { useRoute } from 'vue-router';
 import { ComputedRef } from 'vue';
+import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia';
+const userStore = useUserStore();
 const fightStore = useFightStore();
 const eventStore = useEventStore();
 const { getEvent } = eventStore;
-const { removeFight, selectWinner, getFights } = fightStore
+const { removeFight, selectWinner, getFights } = fightStore;
+const { isAdmin, isConnected } = storeToRefs(userStore);
 
 const props = defineProps({
     fight: {
@@ -47,7 +51,7 @@ const setWinner = async (fighterId: string) => {
             await getEvent(eventId.value);
         }
     } catch (error) {
-        createToast('error while selecting winner', { position: 'bottom-right', type: 'danger' })
+        createToast(error?.response?.data ? error?.response?.data : 'Error while setting winner', { position: 'bottom-right', type: 'danger' })
     }
 }
 
@@ -175,7 +179,7 @@ const remove = async (id: string) => {
                         </div>
                     </div>
                 </div>
-                <div class="mt-2">
+                <div v-if="isConnected" class="mt-2">
                     <create-bet-on-fight :fight="fight" />
                 </div>
             </div>
