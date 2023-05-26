@@ -50,7 +50,9 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     ]
 )]
 #[ApiFilter(
-    OrderFilter::class, properties: ['createdAt'], arguments: ['orderParameterName' => 'order']
+    OrderFilter::class,
+    properties: ['createdAt'],
+    arguments: ['orderParameterName' => 'order']
 )]
 class WalletTransaction
 {
@@ -110,6 +112,9 @@ class WalletTransaction
 
     #[ORM\OneToOne(mappedBy: 'order', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups([
+        'wallet:transaction:get'
+    ])]
     private ?Order $order = null;
 
     public function getWallet(): ?Wallet

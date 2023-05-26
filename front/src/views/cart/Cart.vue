@@ -66,10 +66,12 @@ import { CartItemInterface } from '@/interfaces/responseAPI';
 import { useCartStore } from '@/stores/cart';
 import { createToast } from 'mosha-vue-toastify';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
 const cartStore = useCartStore();
 const { cartTotalItems, cartItems, cartTotalPrice } = storeToRefs(cartStore);
 const { getCart, removeFromCart, updateCartItem, checkout, clearCart } = cartStore;
+const router = useRouter();
 
 let timeout: ReturnType<typeof setTimeout> | null
 
@@ -117,14 +119,16 @@ const updateItem = async (item: CartItemInterface) => {
 
 const check_out = async (type: string) => {
     try {
-        await checkout(type);
+        const res = await checkout(type);
+        window.location.href = res
+
+        await clearCart();
 
         createToast('Checkout successful', {
             type: 'success',
             position: 'bottom-right'
         });
 
-        await clearCart();
     }
     catch {
         createToast('Error while checking out', {

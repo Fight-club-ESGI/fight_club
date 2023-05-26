@@ -23,6 +23,17 @@ class Wallet {
             throw error;
         }
     }
+
+    async _cart_confirmation(transaction_id: string) {
+        try {
+            const uri = `/${namespace}/${transaction_id}/stripe/confirmation`
+            const res = await client.get(uri);
+
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const walletTransactionService = new Wallet();

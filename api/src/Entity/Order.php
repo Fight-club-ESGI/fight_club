@@ -75,6 +75,7 @@ class Order
     #[Groups([
         'admin:get'
     ])]
+    #[MaxDepth(1)]
     private Collection $tickets;
 
     #[ORM\Column]
@@ -85,13 +86,22 @@ class Order
     private ?float $price = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[MaxDepth(1)]
     private ?WalletTransaction $walletTransaction = null;
 
     #[ORM\OneToMany(mappedBy: '_order', targetEntity: PendingTicket::class)]
+    #[MaxDepth(1)]
     private Collection $pendingTickets;
+
+    #[ORM\Column(length: 255)]
+    #[Groups([
+        'order:get'
+    ])]
+    private ?string $reference = null;
 
     public function __construct()
     {
+        $this->setReference();
         $this->tickets = new ArrayCollection();
         $this->pendingTickets = new ArrayCollection();
     }
@@ -199,6 +209,22 @@ class Order
             if ($pendingTicket->getOrder() === $this) {
                 $pendingTicket->setOrder(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string|null $reference = null): self
+    {
+        if (is_null($this->reference) && is_null($reference)) {
+            $this->reference = sprintf('T-%s-%s', date('Ymd'), strtoupper(bin2hex(random_bytes(3))));
+        } else {
+            $this->reference = $reference;
         }
 
         return $this;

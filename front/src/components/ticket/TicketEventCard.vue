@@ -133,7 +133,7 @@ const decrement = () => {
 </script>
 
 <template>
-    <v-card :disabled="new Date() > new Date(ticketEvent.event.timeEnd)">
+    <v-card :disabled="new Date() > new Date(ticketEvent.event.timeStart)">
         <v-card-title>
             <span class="font-bold">Ticket category: </span>
             <span>{{ props.ticketEvent.ticketCategory.name }}</span>
@@ -160,7 +160,7 @@ const decrement = () => {
 >>>>>>> d1f5c63 (Front safety limit)
             </div>
         </v-card-text>
-        <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
+        <div v-if="new Date() <= new Date(ticketEvent.event.timeStart) && isConnected">
             <v-card-actions class="d-flex items-center justify-center">
                 <v-text-field v-model.number="quantity" append-icon="mdi-plus" @click:append="increment"
                     prepend-icon="mdi-minus" @click:prepend="decrement" @input="checkNumber" min="1" step="1"

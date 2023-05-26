@@ -93,7 +93,7 @@ class Cart {
         try {
             const cart = await this._getCart();
             const uri = `${cartURL}/${cart.id}/checkout/${type}`;
-            const res = await client.post(uri);
+            const res = await client.post(uri, {});
             return res.data;
         } catch (error) {
             throw error;

@@ -9,6 +9,7 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\Bet;
 use App\Entity\Cart;
+use App\Entity\Ticket;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Entity\WalletTransaction;
@@ -68,7 +69,14 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
                 $rootAlias = $queryBuilder->getRootAliases()[0];
                 $queryBuilder->andWhere(sprintf('%s.bettor = :bettor', $rootAlias));
                 $queryBuilder->setParameter('bettor', $user->getId());
+                break;
+            case Ticket::class:
+                $rootAlias = $queryBuilder->getRootAliases()[0];
+                $queryBuilder->andWhere((sprintf('%s._order._user = :id', $rootAlias)));
+                $queryBuilder->setParameter('id', $user->getId());
+                break;
             default:
+                break;
         }
     }
 }

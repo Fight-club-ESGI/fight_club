@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Controller\Ticket\GetTicketByUser;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TicketRepository;
@@ -31,6 +32,12 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => ['tickets:get']],
             denormalizationContext: ['groups' => ['tickets:post']],
             read: true
+        ),
+        new GetCollection(
+            uriTemplate: '/my-tickets',
+            controller: GetTicketByUser::class,
+            normalizationContext: ['groups' => ['tickets:get']],
+            read: false,
         )
     ]
 )]

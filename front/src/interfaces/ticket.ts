@@ -6,6 +6,20 @@ interface ITicket {
     ticketCategory: ITicketCategory
 }
 
+interface IMyTicket {
+    id: string
+    reference: string
+    event: string
+    category: string
+    price: number
+    created_at: string
+}
+
+interface IOrder {
+    id: string
+    tickets: IMyTicket[]
+}
+
 interface ICreateTicket {
     price: number
     availability: boolean,
@@ -33,4 +47,4 @@ interface ICreateTicketEvent {
     ticketCategory: string
 }
 
-export type { ITicket, ICreateTicket, ITicketCategory, ICreateTicketCategory, ICreateTicketEvent }
+export type { ITicket, IMyTicket, IOrder, ICreateTicket, ITicketCategory, ICreateTicketCategory, ICreateTicketEvent }

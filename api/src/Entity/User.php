@@ -174,9 +174,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'admin:get',
         'user:self:get'
     ])]
+    #[MaxDepth(1)]
     private ?Cart $cart = null;
 
     #[ORM\OneToMany(mappedBy: '_user', targetEntity: Order::class)]
+    #[MaxDepth(1)]
     private Collection $orders;
 
     public function __construct()

@@ -2,6 +2,10 @@
     <v-card class="py-2 px-4">
         <v-row no-gutters justify="space-between">
             <v-col cols="12">
+                <template v-slot:append>
+                    <v-chip :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{ ticketEvent.ticketCategory.name
+                    }}</v-chip>
+                </template>
                 <div class="my-2 font-weight-bold text-xl">
                     {{ ticket.eventTitle }}
                 </div>
@@ -23,6 +27,20 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon';
 import { formatNumber } from '@/service/helpers';
+
+const ticketCategoryColor = (name: string) => {
+
+    const colors: { [key: string]: string } = {
+        "GOLD": "amber-darken-3",
+        "SILVER": "blue-grey-lighten-1",
+        "VIP": "light-blue-darken-2",
+        "V_VIP": "light-blue-darken-4",
+        "PEUPLE": "grey-darken-1"
+    }
+
+    return colors[name];
+}
+
 defineProps({
     ticket: {
         type: Object,
@@ -31,6 +49,7 @@ defineProps({
         },
     },
 });
+
 </script>
 
 <style scoped>
@@ -47,4 +66,5 @@ defineProps({
 .custom-result {
     background: rgb(var(--v-theme-lightgray));
     border-radius: 5px;
-}</style>
+}
+</style>

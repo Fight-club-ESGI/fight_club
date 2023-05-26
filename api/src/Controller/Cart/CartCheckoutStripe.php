@@ -40,7 +40,13 @@ class CartCheckoutStripe extends AbstractController
             throw $this->createNotFoundException('Cart not found');
         }
 
-        $totalPrice = $cart->getCartItems()->reduce(fn (int $carry, CartItem $item) => $carry + ($item->getTicketEvent()->getPrice() * $item->getQuantity()), 0);
+        $cart->getCartItems()->map(function (CartItem $item) {
+            if ($item->getTicketEvent()->getEvent()->getTimeStart() < new \DateTimeImmutable()) {
+                $this->entityManager->remove($item);
+            }
+        });
+
+        $totalPrice = $cart->getCartItems()->reduce(fn (int $carry, CartItem $item) => $carry + ($item->getTicketEvent()->getPrice() * $item->getQuantity()), 0) * 100;
 
         $user = $this->security->getUser();
 
@@ -68,7 +74,7 @@ class CartCheckoutStripe extends AbstractController
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
-        $checkout = $this->checkoutService->checkout($user, $totalPrice, WalletTransactionTypeEnum::STRIPE_PAYMENT, [], 1, true, $order);
+        $checkout = $this->checkoutService->checkout($user, $totalPrice, WalletTransactionTypeEnum::STRIPE_PAYMENT, [], 1, "/checkout/cart/confirmation", $order);
 
         return new Response($checkout->url, 200, ["Content-Type" => "application/json"]);
     }

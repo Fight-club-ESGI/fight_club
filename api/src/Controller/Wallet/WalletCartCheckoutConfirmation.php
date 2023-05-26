@@ -28,12 +28,15 @@ class WalletCartCheckoutConfirmation extends AbstractController
     {
         $user = $this->security->getUser();
 
-        $this->checkoutService->confirmation($wallet_transaction);
+        // if ($wallet_transaction->getStatus() !== WalletTransactionStatusEnum::PENDING) {
+        //     throw $this->createNotFoundException('Wallet transaction not found');
+        // }
+        $order = $wallet_transaction->getOrder();
+
+        $this->checkoutService->cartConfirmation($wallet_transaction);
 
         if ($wallet_transaction->getStatus() === WalletTransactionStatusEnum::ACCEPTED) {
-            $order = $wallet_transaction->getOrder();
             [$createdTickets, $refundTickets] = $this->checkoutService->generateTickets($order, $order->getPendingTickets());
-
             if (count($refundTickets) > 0) {
                 $refundPrice = array_reduce($refundTickets, fn (int $carry, $item) => $carry + $item['ticketEvent']->getPrice() * $item['quantity'], 0);
 

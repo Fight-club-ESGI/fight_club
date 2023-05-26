@@ -39,7 +39,13 @@ class CartCheckoutWallet extends AbstractController
             throw $this->createNotFoundException('Cart not found');
         }
 
-        $totalPrice = $cart->getCartItems()->reduce(fn (int $carry, CartItem $item) => $carry + ($item->getTicketEvent()->getPrice() * $item->getQuantity()), 0);
+        $cart->getCartItems()->map(function (CartItem $item) {
+            if ($item->getTicketEvent()->getEvent()->getTimeStart() < new \DateTimeImmutable()) {
+                $this->entityManager->remove($item);
+            }
+        });
+
+        $totalPrice = $cart->getCartItems()->reduce(fn (int $carry, CartItem $item) => $carry + ($item->getTicketEvent()->getPrice() * $item->getQuantity()), 0) * 100;
         $user = $this->security->getUser();
 
         if (!$user) {
@@ -52,7 +58,7 @@ class CartCheckoutWallet extends AbstractController
             throw $this->createNotFoundException('Wallet not found');
         }
 
-        if ($wallet->getAmount() < $totalPrice) {
+        if ($wallet->getAmount() * 100 < $totalPrice) {
             throw $this->createNotFoundException('Not enough money');
         }
 
@@ -83,13 +89,6 @@ class CartCheckoutWallet extends AbstractController
 
         $this->entityManager->flush();
 
-        return $this->json([
-            'success' => true,
-            'message' => 'Checkout success',
-            'data' => [
-                'order' => $order,
-                'tickets' => $createdTickets,
-            ],
-        ]);
+        return new Response("/tickets", 200, ["Content-Type" => "application/json"]);
     }
 }
