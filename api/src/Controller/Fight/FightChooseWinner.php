@@ -35,7 +35,7 @@ class FightChooseWinner extends AbstractController
         if($fight->isWinnerValidation()) {
             return new Response('Winner as already be validated', 400, ["Content-Type" => "application:json"]);
         }
-        
+
         if(new Carbon($fight->getFightDate()) > Carbon::now()) {
             return new Response('Fight can only be validated after the fight date', 400, ["Content-Type" => "application:json"]);
         }
@@ -57,6 +57,6 @@ class FightChooseWinner extends AbstractController
         $this->entityManager->persist($fight);
         $this->entityManager->flush();
 
-        return new Response('', 200, ["Content-Type" => "application/json"]);
+        return new Response('Winner has been set', 200, ["Content-Type" => "application/json"]);
     }
 }

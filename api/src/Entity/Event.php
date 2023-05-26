@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\Event\CreateEvent;
+use App\Controller\Event\GetEvent;
 use App\Controller\Event\UpdateEvent;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
@@ -41,7 +42,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             securityMessage: "You must be connected"
         ),
         new Get(
+            controller: GetEvent::class,
             normalizationContext: ['groups' => ['events:get', 'fights:get', 'fighter:get']],
+            name: "get_event"
         ),
         new Get(
             uriTemplate: 'events/{id}/ticket_event',

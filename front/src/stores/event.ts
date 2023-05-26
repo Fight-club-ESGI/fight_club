@@ -46,6 +46,7 @@ export const useEventStore = defineStore('event', () => {
         try {
             const res = await eventService._getEvent(id);
             event.value = res;
+            return res;
         } catch (error) {
             throw error;
         }
