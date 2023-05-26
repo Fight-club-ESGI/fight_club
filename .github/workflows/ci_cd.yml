@@ -140,6 +140,7 @@ jobs:
                     docker compose exec -T php bin/console -e test doctrine:database:create
                     docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
             -   name: Newman apk
+                run: apk add npm
             -   name: Newman install
                 run: npm install -g newman
             -   name: jwt key
