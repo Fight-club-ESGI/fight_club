@@ -31,6 +31,10 @@ class CheckoutService
         $this->walletTransaction = $this->recordWalletTransaction($user->getWallet(), $amount, WalletTransactionStatusEnum::PENDING, $type);
         $this->walletTransaction->setOrder($order);
 
+        if ($order) {
+            $this->walletTransaction->setOrder($order);
+        }
+
         #todo change url
         $params['line_items'] = [];
         $params['line_items'][0]['price_data']['currency'] = 'eur';

@@ -23,9 +23,12 @@ const props = defineProps({
 
 const cartQuantity = computed(() => {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> d1f5c63 (Front safety limit)
+=======
+>>>>>>> 7dbc5801f54095b0acbde600abbdc64a554bd730
     let cartQuantity = cart.value?.cartItems.reduce((acc, item) => {
         if (item.ticketEvent && item.ticketEvent.id == props.ticketEvent.id) {
             return acc + item.quantity;
@@ -35,10 +38,14 @@ const cartQuantity = computed(() => {
 
     return cartQuantity;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7dbc5801f54095b0acbde600abbdc64a554bd730
 });
 
 const canAddToCart = computed(() => {
     if (maxCanAddToCart.value < quantity.value || maxCanAddToCart.value <= 0)
+<<<<<<< HEAD
 =======
 
 });
@@ -73,6 +80,11 @@ const maxCanAddToCart = computed(() => {
     checkNumber();
 
     return max > 0 ? max : 0;
+=======
+        return false;
+
+    return true;
+>>>>>>> 7dbc5801f54095b0acbde600abbdc64a554bd730
 });
 
 const maxCanAddToCart = computed(() => {
@@ -85,9 +97,12 @@ const maxCanAddToCart = computed(() => {
 
 const addCart = async (ticketEvent: string) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> d1f5c63 (Front safety limit)
+=======
+>>>>>>> 7dbc5801f54095b0acbde600abbdc64a554bd730
     if (!canAddToCart.value) {
         createToast('Not enough tickets available', {
             type: 'danger',
@@ -115,6 +130,9 @@ const addCart = async (ticketEvent: string) => {
 
 const checkNumber = () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7dbc5801f54095b0acbde600abbdc64a554bd730
     quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value))) || 1;
 }
 
@@ -126,9 +144,12 @@ const increment = () => {
 const decrement = () => {
     quantity.value--;
     checkNumber();
+<<<<<<< HEAD
 =======
     quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value)));
 >>>>>>> d1f5c63 (Front safety limit)
+=======
+>>>>>>> 7dbc5801f54095b0acbde600abbdc64a554bd730
 }
 </script>
 
@@ -150,17 +171,25 @@ const decrement = () => {
             <div v-else>
                 <span class="font-bold">Available : </span>
                 <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} / {{
-<<<<<<< HEAD
-                    props.ticketEvent.maxQuantity }}
-                    <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span>
+                                    <<<<<<< HEAD <<<<<<< HEAD props.ticketEvent.maxQuantity }} <span v-if="cartQuantity > 0">( {{
+                                            cartQuantity }} in your cart )
                 </span>
-=======
-                    props.ticketEvent.maxQuantity
+                </span>
+                =======
+                props.ticketEvent.maxQuantity
                 }} <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span></span>
->>>>>>> d1f5c63 (Front safety limit)
+                >>>>>>> d1f5c63 (Front safety limit)
             </div>
         </v-card-text>
         <div v-if="new Date() <= new Date(ticketEvent.event.timeStart) && isConnected">
+            =======
+            props.ticketEvent.maxQuantity }}
+            <span v-if="cartQuantity > 0">( {{ cartQuantity }} in your cart )</span>
+            </span>
+        </div>
+        </v-card-text>
+        <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
+            >>>>>>> 7dbc5801f54095b0acbde600abbdc64a554bd730
             <v-card-actions class="d-flex items-center justify-center">
                 <v-text-field v-model.number="quantity" append-icon="mdi-plus" @click:append="increment"
                     prepend-icon="mdi-minus" @click:prepend="decrement" @input="checkNumber" min="1" step="1"
