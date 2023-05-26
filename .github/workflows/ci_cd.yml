@@ -144,7 +144,9 @@ jobs:
             -   name: Newman install
                 run: npm install -g newman
             -   name: jwt key
-                run: docker compose exec -T php mv ./config/jwt/private_test.pem ./config/jwt/private.pem && docker compose exec -T php  ./config/jwt/public_test.pem ./config/jwt/public.pem
+                run: docker compose exec -T php mv ./config/jwt/private_test.pem ./config/jwt/private.pem && docker compose exec -T php mv ./config/jwt/public_test.pem ./config/jwt/public.pem
+            -   name: generate users
+                run: docker compose php bin/console test:generate-users
             -   name: Newman test
                 run: newman run ./api/postman/postman_collection.json -e ./api/postman/postman_environment.json
             -   name: Doctrine Schema Validator
