@@ -352,7 +352,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/fight_categories",
+					"raw": "{{url}}/fight_categories",
 					"protocol": "https",
 					"host": [
 						"localhost"
