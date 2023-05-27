@@ -73,7 +73,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test_admin@test.com\",\n    \"password\": \"password\" \n}",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"password\" \n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -675,7 +675,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_admin_test_1}}",
 							"type": "string"
 						}
 					]
