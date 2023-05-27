@@ -5,7 +5,7 @@ on:
         branches:
             - main
             - dev
-            - feature/test-deploy
+            - feature/test_deploy
         tags:
             - stage-*
 
