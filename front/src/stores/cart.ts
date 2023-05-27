@@ -26,7 +26,27 @@ export const useCartStore = defineStore('cart', () => {
         try {
             const res = await cartService._getCart();
             cart.value = res;
+
+            cart.value.cartItems.forEach((item: CartItemInterface) => {
+                if (item.ticketEvent.event.timeStart > new Date().toISOString()) {
+                    removeFromCart(item);
+                }
+            });
+
             return res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function removeFromCart(payload: CartItemInterface) {
+        try {
+            await cartService._removeFromCart(payload);
+            cart.value?.cartItems.forEach((item: CartItemInterface, index: number) => {
+                if (item.ticketEvent.id === payload.ticketEvent.id) {
+                    cart.value?.cartItems.splice(index, 1);
+                }
+            });
         } catch (error) {
             throw error;
         }
@@ -63,22 +83,29 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
-    async function removeFromCart(payload: CartItemInterface) {
-        try {
-            cart.value = await cartService._removeFromCart(payload);
-        } catch (error) {
-            throw error;
-        }
-    }
-
     async function clearCart() {
         try {
-            const res = await cartService._clearCart();
+            const res = await cartService._getCart();
             cart.value = res;
+
+            cart.value.cartItems.forEach(async (item: CartItemInterface) => {
+                await cartService._removeFromCart(item);
+            });
         } catch (error) {
             throw error;
         }
     }
 
-    return { cart, cartItems, cartTotalItems, cartTotalPrice, getCart, addToCart, updateCartItem, removeFromCart, clearCart };
+    async function checkout(type: string) {
+        try {
+            const res = await cartService._checkout(type);
+            return res
+
+            //cart.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    return { cart, cartItems, cartTotalItems, cartTotalPrice, getCart, addToCart, updateCartItem, removeFromCart, clearCart, checkout };
 });

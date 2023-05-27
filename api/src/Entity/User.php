@@ -162,14 +162,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[MaxDepth(1)]
     private ?Sponsorship $sponsorshipsAsSponsored;
 
-    #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
-    #[Groups([
-        'admin:get',
-        'user:self:get'
-    ])]
-    #[MaxDepth(1)]
-    private ?Order $orders = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([
         'admin:get',
@@ -178,12 +170,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $VIPToken = null;
 
     #[ORM\OneToOne(mappedBy: '_user', cascade: ['persist', 'remove'])]
+    #[Groups([
+        'admin:get',
+        'user:self:get'
+    ])]
+    #[MaxDepth(1)]
     private ?Cart $cart = null;
+
+    #[ORM\OneToMany(mappedBy: '_user', targetEntity: Order::class)]
+    #[MaxDepth(1)]
+    private Collection $orders;
 
     public function __construct()
     {
         $this->sponsorshipsAsSponsor = new ArrayCollection();
         //$this->fights = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -340,23 +342,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getOrders(): ?Order
-    {
-        return $this->orders;
-    }
-
-    public function setOrders(Order $orders): self
-    {
-        // set the owning side of the relation if necessary
-        if ($orders->getCustomer() !== $this) {
-            $orders->setCustomer($this);
-        }
-
-        $this->orders = $orders;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Fight>
      */
@@ -408,6 +393,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->cart = $cart;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -5,6 +5,9 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\Cart\CartCheckoutStripe;
+use App\Controller\Cart\CartCheckoutWallet;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\CartRepository;
@@ -18,18 +21,36 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new Patch(
+            inputFormats: [
+                'multipart' => ['multipart/form-data'],
+                'json' => ['application/json']
+            ],
             denormalizationContext: ['groups' => ['cart:patch']],
-            security: 'is_granted("ROLE_USER") and object.getUser() == user'
+            security: 'is_granted("ROLE_USER") and object.getUser() === user'
         ),
         new Get(
             normalizationContext: ['groups' => ['cart:get']],
-            security: 'is_granted("ROLE_USER") and object.getUser() == user'
+            security: 'is_granted("ROLE_USER") and object.getUser() === user'
         ),
         new Get(
             uriTemplate: '/my-cart',
             normalizationContext: ['groups' => ['cart:get']],
+            security: 'is_granted("ROLE_USER") and object.getUser() === user',
             securityMessage: 'You need to be connected',
+            read: true,
             name: 'self_cart'
+        ),
+        new Post(
+            uriTemplate: '/carts/{id}/checkout/stripe',
+            controller: CartCheckoutStripe::class,
+            read: false,
+            name: 'cart_checkout_stripe',
+        ),
+        new Post(
+            uriTemplate: '/carts/{id}/checkout/wallet',
+            controller: CartCheckoutWallet::class,
+            read: false,
+            name: 'cart_checkout_wallet',
         )
     ]
 )]

@@ -29,17 +29,22 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import tickets from '@/mocks/tickets.json';
 import TicketHistoryCard from '@/components/TicketHistoryCard.vue';
+import { useTicketStore } from '@/stores/tickets';
+import { storeToRefs } from 'pinia';
+
+const ticketStore = useTicketStore();
+const { myTickets } = storeToRefs(ticketStore);
+const { getTickets } = ticketStore;
 
 const tab = ref();
 
 const upcomingEvents = computed(() => {
-    const filteredTickets = tickets.filter((e) => e.status === 'upcoming');
+    const filteredTickets = myTickets.filter((e) => e.status === 'upcoming');
     return filteredTickets.sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
 });
 const passedEvents = computed(() => {
-    const filteredTickets = tickets.filter((e) => e.status === 'passed');
+    const filteredTickets = myTickets.filter((e) => e.status === 'passed');
     return filteredTickets.sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
 });
 

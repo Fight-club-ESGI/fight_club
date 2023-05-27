@@ -76,6 +76,16 @@ class Ticket {
             throw error;
         }
     }
+
+    async _getMyTickets() {
+        try {
+            const uri = `/my-tickets`;
+            const res = await client.get(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const ticketService = new Ticket();

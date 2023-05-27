@@ -25,22 +25,21 @@
                 <div class="flex text-2xl h-1/12 font-bold items-center">Transaction history</div>
                 <div class="w-full h-11/12 overflow-auto rounded bg-neutral-100">
                     <div>
-                        <div class="flex p-2 space-x-5 items-center" v-for="(transaction, index) in walletTransactionHistory"
-                             :key="transaction.id">
-                            {{index}}
+                        <div class="flex p-2 space-x-5 items-center"
+                            v-for="(transaction, index) in walletTransactionHistory" :key="transaction.id">
                             <div class="w-40 font-bold text-center">
                                 {{ transaction.type }}
                             </div>
                             <div class="flex bg-neutral-200 p-3 rounded-lg w-full items-center">
-                            <span class="">
-                                {{ transaction.amount / 100 }} €
-                            </span>
+                                <span class="">
+                                    {{ transaction.amount / 100 }} €
+                                </span>
                                 <v-spacer />
                                 <span class="px-4 font-bold w-32 text-right">
-                                {{ transaction.status }}
-                            </span>
+                                    {{ transaction.status }}
+                                </span>
                                 <v-btn v-if="transaction.status === 'pending'" icon height="30" width="30" color="secondary"
-                                       class="rounded mr-3" @click="transactionConfirmation(transaction.id)">
+                                    class="rounded mr-3" @click="transactionConfirmation(transaction.id)">
                                     <Icon height="25" icon="material-symbols:refresh" />
                                 </v-btn>
                                 <Icon height="25" :icon="transactionStatusIcon(transaction.status)" />

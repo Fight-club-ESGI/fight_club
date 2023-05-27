@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Controller\Ticket\GetTicketByUser;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TicketRepository;
@@ -31,6 +32,12 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => ['tickets:get']],
             denormalizationContext: ['groups' => ['tickets:post']],
             read: true
+        ),
+        new GetCollection(
+            uriTemplate: '/my-tickets',
+            controller: GetTicketByUser::class,
+            normalizationContext: ['groups' => ['tickets:get']],
+            read: false,
         )
     ]
 )]
@@ -66,7 +73,8 @@ class Ticket
     ])]
     private ?string $reference = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->setReference();
     }
 
@@ -102,7 +110,7 @@ class Ticket
     public function setReference(string|null $reference = null): self
     {
         if (is_null($this->reference) && is_null($reference)) {
-            $this->reference = sprintf('T-%s-%s', date('Ymd'), bin2hex(random_bytes(3)));
+            $this->reference = sprintf('T-%s-%s', date('Ymd'), strtoupper(bin2hex(random_bytes(3))));
         } else {
             $this->reference = $reference;
         }

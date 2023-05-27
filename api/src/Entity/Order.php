@@ -59,15 +59,9 @@ class Order
     use EntityIdTrait;
     use TimestampableTrait;
 
-    #[ORM\OneToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups([
-        'admin:get',
-        'admin:post',
-        'order:post'
-    ])]
-    #[MaxDepth(1)]
-    private ?User $customer = null;
+    private ?User $_user = null;
 
     #[ORM\Column(length: 255)]
     #[Groups([
@@ -77,24 +71,11 @@ class Order
     ])]
     private ?OrderStatusEnum $status = OrderStatusEnum::PENDING;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([
-        'admin:get',
-        'admin:post'
-    ])]
-    private ?OrderPaymentTypeEnum $paymentType = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([
-        'admin:get',
-        'admin:post'
-    ])]
-    private ?string $stripe = null;
-
     #[ORM\OneToMany(mappedBy: '_order', targetEntity: Ticket::class)]
     #[Groups([
         'admin:get'
     ])]
+    #[MaxDepth(1)]
     private Collection $tickets;
 
     #[ORM\Column]
@@ -104,19 +85,35 @@ class Order
     ])]
     private ?float $price = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[MaxDepth(1)]
+    private ?WalletTransaction $walletTransaction = null;
+
+    #[ORM\OneToMany(mappedBy: '_order', targetEntity: PendingTicket::class)]
+    #[MaxDepth(1)]
+    private Collection $pendingTickets;
+
+    #[ORM\Column(length: 255)]
+    #[Groups([
+        'order:get'
+    ])]
+    private ?string $reference = null;
+
     public function __construct()
     {
+        $this->setReference();
         $this->tickets = new ArrayCollection();
+        $this->pendingTickets = new ArrayCollection();
     }
 
-    public function getCustomer(): ?User
+    public function getUser(): ?User
     {
-        return $this->customer;
+        return $this->_user;
     }
 
-    public function setCustomer(User $customer): self
+    public function setUser(?User $_user): self
     {
-        $this->customer = $customer;
+        $this->_user = $_user;
 
         return $this;
     }
@@ -129,30 +126,6 @@ class Order
     public function setStatus(OrderStatusEnum $status): self
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getPaymentType(): ?OrderPaymentTypeEnum
-    {
-        return $this->paymentType;
-    }
-
-    public function setPaymentType(OrderPaymentTypeEnum $paymentType): self
-    {
-        $this->paymentType = $paymentType;
-
-        return $this;
-    }
-
-    public function getStripe(): ?string
-    {
-        return $this->stripe;
-    }
-
-    public function setStripe(?string $stripe): self
-    {
-        $this->stripe = $stripe;
 
         return $this;
     }
@@ -195,6 +168,64 @@ class Order
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getWalletTransaction(): ?WalletTransaction
+    {
+        return $this->walletTransaction;
+    }
+
+    public function setWalletTransaction(?WalletTransaction $walletTransaction): self
+    {
+        $this->walletTransaction = $walletTransaction;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PendingTicket>
+     */
+    public function getPendingTickets(): Collection
+    {
+        return $this->pendingTickets;
+    }
+
+    public function addPendingTicket(PendingTicket $pendingTicket): self
+    {
+        if (!$this->pendingTickets->contains($pendingTicket)) {
+            $this->pendingTickets->add($pendingTicket);
+            $pendingTicket->setOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removePendingTicket(PendingTicket $pendingTicket): self
+    {
+        if ($this->pendingTickets->removeElement($pendingTicket)) {
+            // set the owning side to null (unless already changed)
+            if ($pendingTicket->getOrder() === $this) {
+                $pendingTicket->setOrder(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string|null $reference = null): self
+    {
+        if (is_null($this->reference) && is_null($reference)) {
+            $this->reference = sprintf('T-%s-%s', date('Ymd'), strtoupper(bin2hex(random_bytes(3))));
+        } else {
+            $this->reference = $reference;
+        }
 
         return $this;
     }

@@ -3,6 +3,7 @@ import AdminView from "@/views/admin/AdminView.vue"
 import BecomeVIP from "@/views/sponsor/BecomeVIP.vue";
 import Cart from "@/views/cart/Cart.vue";
 import CheckoutConfirmation from "@/views/checkout/Confirmation.vue";
+import CheckoutCartConfirmation from "@/views/checkout/CartConfirmation.vue";
 import Deposit from "@/views/user/Deposit.vue"
 import Event from "@/views/event/Event.vue"
 import EventDetails from "@/views/event/EventDetails.vue"
@@ -116,6 +117,12 @@ export default [
         path: '/checkout/confirmation',
         name: 'checkout-confirmation',
         component: CheckoutConfirmation,
+        meta: { requiresAuth: true, requiresAdmin: false }
+    },
+    {
+        path: '/checkout/cart/confirmation',
+        name: 'checkout-cart-confirmation',
+        component: CheckoutCartConfirmation,
         meta: { requiresAuth: true, requiresAdmin: false }
     },
     {

@@ -28,6 +28,7 @@ export interface ITicketEvent {
     maxQuantity: number
     id: string
     tickets: ITicket[]
+    isActive: boolean
 }
 
 export interface UpdateTicketEvent {

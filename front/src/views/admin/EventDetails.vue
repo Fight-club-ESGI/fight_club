@@ -8,7 +8,7 @@ import { useTicketStore } from '@/stores/tickets';
 import { useEventStore } from '@/stores/event';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router'
-import {useUserStore} from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 
 const route = useRoute();
 const ticketStore = useTicketStore();

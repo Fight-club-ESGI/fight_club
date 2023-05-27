@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\Cart\CartCheckoutStripeConfirmation;
+use App\Controller\Wallet\WalletCartCheckoutConfirmation;
 use App\Controller\Wallet\WalletDepositCheckoutConfirmation;
 use App\Entity\Trait\EntityIdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -21,6 +23,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Table(name: '`wallet_transaction`')]
 #[ApiResource(
     operations: [
+        new Get(
+            uriTemplate: "/wallet_transactions/{id}/stripe/confirmation",
+            controller: WalletCartCheckoutConfirmation::class,
+            normalizationContext: ['groups' => ['wallet:transaction:get']],
+            security: "is_granted('ROLE_USER')",
+            name: "wallet_transaction_stripe_confirmation"
+        ),
         new Get(
             uriTemplate: "/wallet_transactions/{id}/confirmation",
             controller: WalletDepositCheckoutConfirmation::class,
@@ -41,7 +50,9 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     ]
 )]
 #[ApiFilter(
-    OrderFilter::class, properties: ['createdAt'], arguments: ['orderParameterName' => 'order']
+    OrderFilter::class,
+    properties: ['createdAt'],
+    arguments: ['orderParameterName' => 'order']
 )]
 class WalletTransaction
 {
@@ -98,6 +109,13 @@ class WalletTransaction
     #[ORM\OneToOne(mappedBy: 'wallet_transaction', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Bet $bet = null;
+
+    #[ORM\OneToOne(mappedBy: 'order', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups([
+        'wallet:transaction:get'
+    ])]
+    private ?Order $order = null;
 
     public function getWallet(): ?Wallet
     {
@@ -189,6 +207,22 @@ class WalletTransaction
         }
 
         $this->bet = $bet;
+
+        return $this;
+    }
+
+    public function getOrder(): ?Order
+    {
+        return $this->order;
+    }
+
+    public function setOrder(Order $order): self
+    {
+        if ($order->getWalletTransaction() !== $this) {
+            $order->setWalletTransaction($this);
+        }
+
+        $this->order = $order;
 
         return $this;
     }

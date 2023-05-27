@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { ticketService } from "../service/api/index";
-import { ITicket, ITicketCategory, ICreateTicket, ICreateTicketEvent } from "@/interfaces/ticket";
+import { ITicket, ITicketCategory, ICreateTicket, ICreateTicketEvent, IOrder } from "@/interfaces/ticket";
 import { ITicketEvent, UpdateTicketEvent } from "@/interfaces/event";
 
 export const useTicketStore = defineStore('ticket', () => {
@@ -9,6 +9,8 @@ export const useTicketStore = defineStore('ticket', () => {
     const tickets = ref<ITicket[]>([]);
     const ticketsEvent = ref<ITicketEvent[]>([]);
     const ticketCategories = ref<ITicketCategory[]>([]);
+
+    const myTickets = ref<IOrder[]>([]);
 
     const ticketsNumber = computed(() => tickets.value.length);
     const availableTickets = computed(() => ticketsEvent.value.filter((ticketEvent: ITicketEvent) => ticketEvent.tickets.length < ticketEvent.maxQuantity));
@@ -20,7 +22,7 @@ export const useTicketStore = defineStore('ticket', () => {
     async function getTickets(eventId: string) {
         try {
             const res = await ticketService._getTickets(eventId);
-            tickets.value = res;
+            myTickets.value = res;
         } catch (err) {
             throw err;
         }
@@ -73,5 +75,5 @@ export const useTicketStore = defineStore('ticket', () => {
         }
     }
 
-    return { tickets, ticketCategories, ticketsEvent, getTickets, updateTicketEvent, createTicket, activeTickets, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
+    return { tickets, myTickets, activeTickets, ticketCategories, ticketsEvent, getTickets, updateTicketEvent, createTicket, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
 });
