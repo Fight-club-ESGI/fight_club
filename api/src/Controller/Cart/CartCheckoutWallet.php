@@ -48,6 +48,11 @@ class CartCheckoutWallet extends AbstractController
         $totalPrice = $cart->getCartItems()->reduce(fn (int $carry, CartItem $item) => $carry + ($item->getTicketEvent()->getPrice() * $item->getQuantity()), 0) * 100;
         $user = $this->security->getUser();
 
+
+        if ($totalPrice === 0) {
+            return new Response("/cart", 200, ["Content-Type" => "application/json"]);
+        }
+
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }

@@ -1,3 +1,5 @@
+import { IFight } from "./fight"
+
 interface ITicket {
     id: string
     price: number
@@ -9,15 +11,28 @@ interface ITicket {
 interface IMyTicket {
     id: string
     reference: string
-    event: string
+    event: ITicketEvent
     category: string
     price: number
-    created_at: string
+    order: ITicketOrder
+    createdAt: string
 }
 
-interface IOrder {
+interface ITicketOrder {
     id: string
-    tickets: IMyTicket[]
+    reference: string
+    customer: string
+    createdAt: string
+}
+
+interface ITicketEvent {
+    id: string
+    name: string
+    timeStart: string
+    timeEnd: string
+    location: string
+    description: string
+    fights: IFight[]
 }
 
 interface ICreateTicket {
@@ -47,4 +62,4 @@ interface ICreateTicketEvent {
     ticketCategory: string
 }
 
-export type { ITicket, IMyTicket, IOrder, ICreateTicket, ITicketCategory, ICreateTicketCategory, ICreateTicketEvent }
+export type { ITicket, IMyTicket, ICreateTicket, ITicketCategory, ICreateTicketCategory, ICreateTicketEvent }

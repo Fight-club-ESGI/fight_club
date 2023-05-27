@@ -19,9 +19,9 @@ export const useTicketStore = defineStore('ticket', () => {
         return ticketsEvent.value.filter(ti => ti.isActive);
     });
 
-    async function getTickets(eventId: string) {
+    async function getTickets() {
         try {
-            const res = await ticketService._getTickets(eventId);
+            const res = await ticketService._getMyTickets();
             myTickets.value = res;
         } catch (err) {
             throw err;

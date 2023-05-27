@@ -101,6 +101,12 @@ export default [
         name: 'user-tickets-history',
         meta: { requiresAuth: true, requiresAdmin: false },
     },
+    // {
+    //     path: '/tickets/:id/print',
+    //     component: TicketPrint,
+    //     name: 'ticket-print',
+    //     meta: { requiresAuth: true, requiresAdmin: false },
+    // },
     {
         path: '/wallet',
         component: Wallet,

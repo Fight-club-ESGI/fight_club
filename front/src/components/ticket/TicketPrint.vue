@@ -4,11 +4,6 @@
             <h2 class="text-4xl font-bold">{{ ticket.event.name }}
                 <v-chip :color="ticketCategoryColor(ticket.category)">{{ ticket.category }}</v-chip>
             </h2>
-            <div>
-                <v-btn color="white" class="bg-white" icon @click="printTicket">
-                    <Icon height="24" icon="solar:printer-bold-duotone" />
-                </v-btn>
-            </div>
         </div>
 
         <div class="flex items-center justify-between mb-5">
@@ -110,13 +105,11 @@ import { DateTime } from 'luxon';
 import { formatNumber } from '@/service/helpers';
 import { IMyTicket } from '@/interfaces/ticket';
 import { Icon } from "@iconify/vue";
-import { PropType } from 'vue';
+import { PropType, onMounted } from 'vue';
 import { computed } from 'vue';
 import QrcodeVue from 'qrcode.vue';
-import router from '@/router';
 
 const ticketCategoryColor = (name: string) => {
-
     const colors: { [key: string]: string } = {
         "GOLD": "amber-darken-3",
         "SILVER": "blue-grey-lighten-1",
@@ -149,9 +142,9 @@ const orderedFights = computed(() => {
     });
 });
 
-const printTicket = () => {
-    router.push({ name: 'ticket-print', params: { id: props.ticket.id } });
-};
+onMounted(() => {
+    console.log(props.ticket);
+});
 
 </script>
 
