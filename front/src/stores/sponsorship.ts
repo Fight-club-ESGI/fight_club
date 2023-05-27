@@ -18,6 +18,7 @@ export const useSponsorshipStore = defineStore('sponsorship', () => {
     async function sendSponsoLink(payload: { sponsorId: string, sponsored: string }) {
         try {
             const res = await sponsorshipService._sendSponsoLink(payload);
+            return res;
         } catch (error) {
             throw error;
         }

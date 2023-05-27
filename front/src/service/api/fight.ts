@@ -1,5 +1,5 @@
 import { IFight, CreateFight, UpdateFight } from "@/interfaces/fight";
-import {client, clientWithoutAuth} from "..";
+import { client, clientWithoutAuth } from "..";
 
 const namespace = '/fights';
 
@@ -39,10 +39,10 @@ class Fight {
         }
     }
 
-    async _validateFight(fightId: string): Promise<string> {
+    async _validateFight(payload: { winnerId: string, fightId: string }): Promise<string> {
         try {
-            const uri = `${namespace}/${fightId}/validation`;
-            const res = await client.post(uri, {});
+            const uri = `${namespace}/${payload.fightId}/validation`;
+            const res = await client.post(uri, { winner_id: payload.winnerId });
             return res.data;
         } catch (error) {
             throw error;

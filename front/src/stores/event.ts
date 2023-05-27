@@ -46,6 +46,7 @@ export const useEventStore = defineStore('event', () => {
         try {
             const res = await eventService._getEvent(id);
             event.value = res;
+            return res;
         } catch (error) {
             throw error;
         }
@@ -81,7 +82,7 @@ export const useEventStore = defineStore('event', () => {
     async function deleteEvent(id: string) {
         try {
             await eventService._deleteEvent(id);
-            events.value.splice(events.value.findIndex(e => e.id === id), 1);
+            await getEventsAdmin();
         } catch (error) {
             throw error;
         }

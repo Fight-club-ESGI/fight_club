@@ -49,7 +49,7 @@
             <div class="flex flex-col gap-y-2">
                 <div v-for="matches in fighterHistoryMatches" :key="matches.id"
                     @click="router.push({ name: 'event-details', params: { id: matches.event.id } })"
-                    :class="'cursor-pointer border rounded flex pa-4 ' + (matches.winner === matches.fighterA ? ' bg-gradient-to-r from-emerald-200 via-transparent to-red-200' : ' bg-gradient-to-r from-red-200 via-transparent to-emerald-200')">
+                    :class="'cursor-pointer border rounded flex pa-4 ' + (typeof matches.winner === 'string' ? ' bg-gradient-to-r from-emerald-200 via-transparent to-red-200' : ' bg-gradient-to-r from-red-200 via-transparent to-emerald-200')">
                     <div class="flex justify-center flex-1">
                         <template v-if="typeof matches.fighterA === 'string'">
                             <span>{{ fighter.firstname + ' ' + fighter.lastname }}</span>
@@ -108,7 +108,8 @@ const age = computed(() => {
     var ageDifMs = Date.now() - new Date(fighter.value?.birthdate).getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
     return Math.abs(ageDate.getUTCFullYear() - 1970);
-})
+});
+
 const fullName = computed(() => fighter.value?.firstname + ' ' + fighter.value?.lastname);
 
 const items = computed(() => [

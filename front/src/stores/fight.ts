@@ -43,9 +43,9 @@ export const useFightStore = defineStore('fight', () => {
         }
     }
 
-    async function validateFight(fightId: string): Promise<string> {
+    async function validateFight(payload: { winnerId: string, fightId: string }): Promise<string> {
         try {
-            const res = await fightService._validateFight(fightId);
+            const res = await fightService._validateFight(payload);
             return res;
         } catch (error) {
             throw error;

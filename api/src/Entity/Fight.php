@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new Post(
-            uriTemplate: 'fights',
+            uriTemplate: '/fights',
             controller: PostFight::class,
             normalizationContext: ["groups" => ['fights:get', 'fighter:get']],
             denormalizationContext: ["groups" => ['fights:post']],

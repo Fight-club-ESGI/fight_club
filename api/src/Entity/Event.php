@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -13,6 +14,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\Event\CreateEvent;
+use App\Controller\Event\GetEvent;
 use App\Controller\Event\UpdateEvent;
 use App\Controller\Ticket\GetTicketEventByEventId;
 use App\Entity\Trait\EntityIdTrait;
@@ -40,7 +42,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             securityMessage: "You must be connected"
         ),
         new Get(
+            controller: GetEvent::class,
             normalizationContext: ['groups' => ['events:get', 'fights:get', 'fighter:get']],
+            name: "get_event"
         ),
         new Get(
             uriTemplate: 'events/{id}/ticket_event',
@@ -79,6 +83,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     OrderFilter::class, properties: ['timeStart'], arguments: ['orderParameterName' => 'order']
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['isAvailableGenericallyInMyCountry'])]
+#[ApiFilter(
+    SearchFilter::class, properties: ['isActive' => 'exact']
+)]
 #[Vich\Uploadable]
 class Event
 {
@@ -206,6 +213,16 @@ class Event
         'event:ticket:get',
     ])]
     private ?bool $display = false;
+
+    #[ORM\Column]
+    #[Groups([
+        'admin:get',
+        'tickets:get',
+        'ticket:category:post',
+        'events:get',
+        'event:ticket:get',
+    ])]
+    private ?bool $isActive = true;
 
     public function __construct()
     {
@@ -390,6 +407,18 @@ class Event
     public function setDisplay(bool $display): self
     {
         $this->display = $display;
+
+        return $this;
+    }
+
+    public function isIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

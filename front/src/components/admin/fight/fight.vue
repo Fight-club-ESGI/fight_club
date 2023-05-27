@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CreateBetOnFight from '@/components/dialogs/CreateBetOnFight.vue';
 import { IFight } from '@/interfaces/fight';
 import { PropType, computed } from 'vue';
 import { Icon } from "@iconify/vue/dist/iconify.js";
@@ -7,10 +8,15 @@ import { createToast } from 'mosha-vue-toastify';
 import { useEventStore } from '@/stores/event';
 import { useRoute } from 'vue-router';
 import { ComputedRef } from 'vue';
+import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia';
+import { cp } from 'fs';
+const userStore = useUserStore();
 const fightStore = useFightStore();
 const eventStore = useEventStore();
-const { getEvent } = eventStore;
-const { removeFight, selectWinner, getFights } = fightStore
+const { getEventAdmin } = eventStore;
+const { removeFight, selectWinner, getFights, validateFight } = fightStore;
+const { isAdmin, isConnected, user } = storeToRefs(userStore);
 
 const props = defineProps({
     fight: {
@@ -43,16 +49,33 @@ const setWinner = async (fighterId: string) => {
     try {
         if (passedFightDate.value && !hasWinner.value) {
             await selectWinner({ fightId: props.fight.id, winnerId: fighterId });
-            await getEvent(eventId.value);
+            await getEventAdmin(eventId.value);
         }
     } catch (error) {
-        createToast('error while selecting winner', { position: 'bottom-right', type: 'danger' })
+        createToast(error?.response?.data ? error?.response?.data : 'Error while setting winner', { position: 'bottom-right', type: 'danger' })
+    }
+}
+
+const validateWinner = async (winnerId: string) => {
+    try {
+        await validateFight({ winnerId, fightId: props.fight.id });
+        await getEventAdmin(eventId.value);
+    } catch (error) {
+        createToast(error.response?.data, { position: 'bottom-right', type: 'info' })
     }
 }
 
 const hasWinner = computed(() => {
     return props.fight.hasOwnProperty('winner');
 });
+
+const hasBeenValidatedByOneAdmin = computed(() => {
+    return props.fight.winnerValidation === false && props.fight?.adminValidatorA?.id === user.value.id
+});
+
+const validatedByBothAdmin = computed(() => {
+    return props.fight.winnerValidation;
+})
 
 const winner = computed(() => {
     return props.fight.winner.id;
@@ -74,9 +97,9 @@ const remove = async (id: string) => {
 
 <template>
     <div class="gap-y-4">
-        <v-card class="flex h-52 text-white">
+        <v-card class="flex text-white">
             <!-- todo: Click pour plus d'infos, ouverture d'une modale -->
-            <div class="h-52 w-80 bg-cover bg-center"
+            <div class="w-80 bg-cover bg-center"
                 :style="fight.fighterA.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`">
                 <div
                     class="flex flex-column h-full w-full bg-gradient-to-l from-neutral-100 to-transparent items-center p-10" />
@@ -110,9 +133,17 @@ const remove = async (id: string) => {
                                 {{ fight.fighterA.firstname }} {{ fight.fighterA.lastname }}
                             </p>
                             <template v-if="hasWinner">
-                                <p v-if="winner === fight.fighterA.id" class="text-green-400 font-bold text-lg">
-                                    WINNER
-                                </p>
+                                <div v-if="winner === fight.fighterA.id">
+                                    <p class="text-green-400 font-bold text-lg">
+                                        WINNER
+                                    </p>
+                                    <p class="text-sm"><i v-if="hasBeenValidatedByOneAdmin">You
+                                            already validated this fight<br>Waiting for another admin validation</i></p>
+                                    <p v-if="validatedByBothAdmin" class="text-sm">Fight validated by admins</p>
+                                    <v-btn v-if="!hasBeenValidatedByOneAdmin && !validatedByBothAdmin" variant="tonal"
+                                        size="small" @click="validateWinner(fight.fighterA.id)">Validate</v-btn>
+                                </div>
+
                                 <p v-else class="text-red-400 font-bold text-lg">
                                     LOSER
                                 </p>
@@ -146,9 +177,16 @@ const remove = async (id: string) => {
                                 {{ fight.fighterB.firstname }} {{ fight.fighterB.lastname }}
                             </p>
                             <template v-if="hasWinner">
-                                <p v-if="winner === fight.fighterB.id" class="text-green-400 font-bold text-lg">
-                                    WINNER
-                                </p>
+                                <div v-if="winner === fight.fighterB.id">
+                                    <p class="text-green-400 font-bold text-lg">
+                                        WINNER
+                                    </p>
+                                    <p class="text-sm"><i v-if="hasBeenValidatedByOneAdmin">You
+                                            already validated this fight <br>Waiting for another admin validation</i></p>
+                                    <p v-if="validatedByBothAdmin" class="text-sm">Fight validated by admins</p>
+                                    <v-btn v-if="!hasBeenValidatedByOneAdmin && !validatedByBothAdmin" variant="tonal"
+                                        size="small" @click="validateWinner(fight.fighterB.id)">Validate</v-btn>
+                                </div>
                                 <p v-else class="text-red-400 font-bold text-lg">
                                     LOSER
                                 </p>
@@ -174,11 +212,11 @@ const remove = async (id: string) => {
                         </div>
                     </div>
                 </div>
-                <div class="mt-2">
+                <div v-if="isConnected && new Date(fight.fightDate) > new Date()" class="mt-2">
                     <create-bet-on-fight :fight="fight" />
                 </div>
             </div>
-            <div class="bg-red-100 h-52 w-80 bg-cover bg-center"
+            <div class="bg-red-100 w-80 bg-cover bg-center"
                 :style="fight.fighterB.imageName ? `background-image: url('${fight.fighterB.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`">
                 <div
                     class="flex flex-column h-full w-full bg-gradient-to-r from-neutral-100 to-transparent items-center p-10 text-white" />

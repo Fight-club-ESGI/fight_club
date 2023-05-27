@@ -116,7 +116,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="isConnected" class="mt-2">
+                        <div v-if="isConnected && new Date(fight.fightDate) > new Date()" class="mt-2">
                             <create-bet-on-fight :fight="fight" />
                         </div>
                     </div>

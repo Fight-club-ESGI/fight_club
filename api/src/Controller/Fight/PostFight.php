@@ -62,12 +62,12 @@ class PostFight extends AbstractController
         $fight->setFighterA($fighterA);
         $fight->setFighterB($fighterB);
 
-        // $fighterA->addFight($fight);
-        // $fighterB->addFight($fight);
+        $fighterA->addFight($fight);
+        $fighterB->addFight($fight);
 
         $this->entityManager->persist($fight);
-        // $this->entityManager->persist($fighterA);
-        // $this->entityManager->persist($fighterB);
+        $this->entityManager->persist($fighterA);
+        $this->entityManager->persist($fighterB);
 
         $this->entityManager->flush();
 

@@ -63,7 +63,7 @@ class Event {
 
     async _deleteEvent(id: string): Promise<void> {
         try {
-            const uri = `${namespace}/${id}`;
+            const uri = `${namespace}/${id}?isActive=true`;
             const res = await client.delete(uri);
             return res.data;
         } catch (error) {

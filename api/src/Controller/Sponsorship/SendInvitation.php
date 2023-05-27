@@ -4,6 +4,7 @@ namespace App\Controller\Sponsorship;
 
 use App\Entity\Sponsorship;
 use App\Entity\User;
+use App\Repository\SponsorshipRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,6 +24,7 @@ class SendInvitation extends AbstractController
         private readonly EntityManagerInterface $entityManager,
         private readonly MailerInterface $mailer,
         private readonly UserRepository $userRepository,
+        private readonly SponsorshipRepository $sponsorshipRepository,
         private readonly RequestStack $requestStack,
         private readonly Security $security,
         private readonly UserPasswordHasherInterface $passwordHasher) {
@@ -36,6 +38,10 @@ class SendInvitation extends AbstractController
         $sponsor = $this->userRepository->find($sponsorId);
         $currentUser = $this->userRepository->find($this->security->getUser()->getId());
         $sponsored = $this->userRepository->findOneBy(['email' => $sponsoredMail]);
+
+        if ($this->sponsorshipRepository->findOneBy(['sponsored' => $sponsored->getId()])) {
+            return new Response("Invitation already sent", 200);
+        }
 
         if($sponsored) {
             $token = bin2hex(random_bytes(32));
@@ -66,7 +72,7 @@ class SendInvitation extends AbstractController
                 $this->entityManager->persist($sponsorship);
                 $this->entityManager->flush();
 
-                return new Response(null, 200, ["Content-Type" => "application/json"]);
+                return new Response("Invitation sent", 200, ["Content-Type" => "application/json"]);
 
             } else {
                 return new Response("Failed to send mail, please try again", 400);
@@ -108,7 +114,7 @@ class SendInvitation extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->persist($sponsorship);
             $this->entityManager->flush();
-            return new Response(null, 200, ["Content-Type" => "application/json"]);
+            return new Response("Invitation sent", 200, ["Content-Type" => "application/json"]);
         }
     }
 }

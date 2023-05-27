@@ -58,9 +58,9 @@ const submit = async (event: any) => {
                 sponsoredEmail: email.value,
             };
             loading.value = true;
-            await sendSponsoLink(payload);
+            const res = await sendSponsoLink(payload);
             loading.value = false;
-            createToast('Sponsorship link sent', { type: 'success', position: 'bottom-right' });
+            createToast(res, { type: 'success', position: 'bottom-right' });
         } catch {
             createToast('Error while sending sponsorship link', { type: 'danger', position: 'bottom-right' });
         }
