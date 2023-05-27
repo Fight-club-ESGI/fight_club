@@ -353,9 +353,8 @@
 				},
 				"url": {
 					"raw": "{{url}}/fight_categories",
-					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
 					"path": [
 						"fight_categories"
