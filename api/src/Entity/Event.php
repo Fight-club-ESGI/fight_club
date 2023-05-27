@@ -186,14 +186,6 @@ class Event
     ])]
     private ?bool $vip = false;
 
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
-    #[MaxDepth(1)]
-    #[Groups([
-        'admin:get',
-        'tickets:get',
-    ])]
-    private Collection $tickets;
-
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Fight::class, orphanRemoval: true)]
     #[Groups([
         'admin:get',

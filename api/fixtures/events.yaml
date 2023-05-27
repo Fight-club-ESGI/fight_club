@@ -1,0 +1,10 @@
+App\Entity\Event:
+    event_{1..100}:
+        name: <sentence(3)>
+        location: <streetAddress()>
+        time_start: <dateTimeBetween('+1 week', '+2 week')>
+        time_end: <dateTimeBetween('+3 week', '+4 week')>
+        description: <paragraph(2)>
+        capacity: <randomNumber(4, false)>
+        vip: <boolval(1)>
+        display: <boolval(1)>
