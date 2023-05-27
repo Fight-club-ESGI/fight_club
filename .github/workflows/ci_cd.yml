@@ -212,4 +212,3 @@ jobs:
                         docker compose down
                         git pull
                         SERVER_NAME=${{secrets.HOST_URL}} APP_SECRET=${{secrets.APP_SECRET}} POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} CADDY_MERCURE_JWT_SECRET=${{secrets.CADDY_MERCURE_JWT_SECRET}} docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
-                        mkdir test
