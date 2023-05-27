@@ -153,7 +153,9 @@ jobs:
                 run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
 
     deploy-backend:
-        #needs: build
+        needs:
+            - build
+            - tests
         name: Deploy Backend
         runs-on: ubuntu-latest
 
