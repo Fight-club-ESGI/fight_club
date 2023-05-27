@@ -188,6 +188,7 @@ jobs:
                     echo "POSTGRES_USER=${{secrets.POSTGRES_USER}}" >> ./api/.env
                     echo "STRIPE_KEY=${{secrets.STRIPE_KEY}}" >> ./api/.env
                     echo "CADDY_MERCURE_JWT_SECRET=${{secrets.CADDY_MERCURE_JWT_SECRET}}" >> ./api/.env
+                    echo "JWT_TOKEN_TTL=5000" >> ./api/.env
                     echo "VITE_BACKEND_URL=\"${{secrets.VITE_BACKEND_URL}}\"" >> ./front/.env
                     echo "BASE_URL=\"${{secrets.BASE_URL}}\"" >> ./front/.env
                     echo "VITE_PORT=\"${{secrets.VITE_PORT}}\"" >> ./front/.env
@@ -197,14 +198,16 @@ jobs:
                 with:
                     node-version: 18
 
-            -   name: Get tag name
-                uses: olegtarasov/get-tag@v2.1.2
-                id: tagName
-
-            -   name: Install doctl
-                uses: digitalocean/action-doctl@v2
+            -   name: executing remote ssh commands using password
+                uses: appleboy/ssh-action@v0.1.10
                 with:
-                    token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-            -   name: Provision droplet and deploy container
-                run: doctl compute droplet create droplet-fight-club-1 --image docker-18-04 --size s-1vcpu-1gb --region fra1 --user-data-file deploy.sh --wait
+                    host: ${{ secrets.HOST }}
+                    username: ${{ secrets.USERNAME }}
+                    password: ${{ secrets.PASSWORD }}
+                    port: ${{ secrets.PORT }}
+                    script: |
+                        ls
+                        cd ./${{ secrets.PROJECT_PATH }}
+                        docker compose down
+                        git pull
+                        SERVER_NAME=${{secrets.HOST_URL}} APP_SECRET=${{secrets.APP_SECRET}} POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} CADDY_MERCURE_JWT_SECRET=${{secrets.CADDY_MERCURE_JWT_SECRET}} docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
