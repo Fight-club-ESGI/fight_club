@@ -58,7 +58,7 @@
 							"pm.environment.set(\"token\", pm.response.json().token)",
 							"",
 							"pm.test('Status test', function() {",
-							"    pm.response.to.have.status(201);",
+							"    pm.response.to.have.status(200);",
 							"})"
 						],
 						"type": "text/javascript"
@@ -102,7 +102,7 @@
 							"pm.environment.set(\"token_user_test_1\", pm.response.json().token)",
 							"",
 							"pm.test('Status test', function() {",
-							"    pm.response.to.have.status(201);",
+							"    pm.response.to.have.status(200);",
 							"})"
 						],
 						"type": "text/javascript"
@@ -146,7 +146,7 @@
 							"pm.environment.set(\"token_user_test_2\", pm.response.json().token)",
 							"",
 							"pm.test('Status test', function() {",
-							"    pm.response.to.have.status(201);",
+							"    pm.response.to.have.status(200);",
 							"})"
 						],
 						"type": "text/javascript"
@@ -190,7 +190,7 @@
 							"pm.environment.set(\"token_user_test_3\", pm.response.json().token)",
 							"",
 							"pm.test('Status test', function() {",
-							"    pm.response.to.have.status(201);",
+							"    pm.response.to.have.status(200);",
 							"})"
 						],
 						"type": "text/javascript"
@@ -234,7 +234,7 @@
 							"pm.environment.set(\"token_admin_test_1\", pm.response.json().token)",
 							"",
 							"pm.test('Status test', function() {",
-							"    pm.response.to.have.status(201);",
+							"    pm.response.to.have.status(200);",
 							"})"
 						],
 						"type": "text/javascript"
@@ -278,7 +278,7 @@
 							"pm.environment.set(\"token_admin_test_2\", pm.response.json().token)",
 							"",
 							"pm.test('Status test', function() {",
-							"    pm.response.to.have.status(201);",
+							"    pm.response.to.have.status(200);",
 							"})"
 						],
 						"type": "text/javascript"
@@ -385,8 +385,8 @@
 					"script": {
 						"exec": [
 							"var moment = require('moment');",
-							"pm.environment.set(\"isoStart\", `${moment().add(1, 'days').format()}Z`);",
-							"pm.environment.set(\"isoEnd\", `${moment().add(5, 'days').format()}Z`);"
+							"pm.variables.set('isoStart', `${moment().add(1, 'days').format()}Z`);",
+							"pm.variables.set('isoEnd', `${moment().add(5, 'days').format()}Z`);"
 						],
 						"type": "text/javascript"
 					}
@@ -425,12 +425,12 @@
 						},
 						{
 							"key": "timeStart",
-							"value": "{{date",
+							"value": "{{isoStart}}",
 							"type": "text"
 						},
 						{
 							"key": "timeEnd",
-							"value": "{{$isoTimestamp}}",
+							"value": "{{isoEnd}}",
 							"type": "text"
 						},
 						{
@@ -603,7 +603,43 @@
 				"header": [],
 				"body": {
 					"mode": "formdata",
-					"formdata": []
+					"formdata": [
+						{
+							"key": "firstname",
+							"value": "{{$randomFirstName}}",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "{{$randomLastName}}",
+							"type": "text"
+						},
+						{
+							"key": "birthdate",
+							"value": "{{$isoTimestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "height",
+							"value": "{{randomHeight}}",
+							"type": "text"
+						},
+						{
+							"key": "weight",
+							"value": "{{randomWeight}}",
+							"type": "text"
+						},
+						{
+							"key": "nationality",
+							"value": "{{$randomCountryCode}}",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "{{randomGender}}",
+							"type": "text"
+						}
+					]
 				},
 				"url": {
 					"raw": "{{url}}/fighters",
@@ -851,7 +887,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"winner_id\": {{fighter_b_id}}\n}",
+					"raw": "{\n    \"winner_id\": \"{{fighter_b_id}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -859,13 +895,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/fights/{{fighter_a_id}}/winner",
+					"raw": "{{url}}/fights/{{fight_id}}/winner",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"fights",
-						"{{fighter_a_id}}",
+						"{{fight_id}}",
 						"winner"
 					]
 				}
