@@ -85,7 +85,7 @@ class Order
     ])]
     private ?float $price = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'order', cascade: ['persist', 'remove'])]
     #[MaxDepth(1)]
     private ?WalletTransaction $walletTransaction = null;
 

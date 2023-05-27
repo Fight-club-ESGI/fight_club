@@ -110,7 +110,7 @@ class WalletTransaction
     #[ORM\JoinColumn(nullable: true)]
     private ?Bet $bet = null;
 
-    #[ORM\OneToOne(mappedBy: 'order', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'walletTransaction', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     #[Groups([
         'wallet:transaction:get'
