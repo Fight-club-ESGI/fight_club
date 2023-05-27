@@ -42,7 +42,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             securityMessage: "You must be connected"
         ),
         new Get(
-            controller: GetEvent::class,
             normalizationContext: ['groups' => ['events:get', 'fights:get', 'fighter:get']],
             name: "get_event"
         ),
