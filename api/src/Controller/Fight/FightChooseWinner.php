@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Controller\Fight;
+
+use App\Entity\Fight;
+use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
+use App\Repository\FighterRepository;
+use App\Repository\FightRepository;
+use App\Repository\UserRepository;
+use App\Service\Checkout\CheckoutService;
+use Carbon\Carbon;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
+
+#[AsController]
+class FightChooseWinner extends AbstractController
+{
+
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly FighterRepository $fighterRepository
+    ) {
+    }
+
+    public function __invoke(Request $request, Fight $fight): Response
+    {
+        $parameters = json_decode($request->getContent(), true);
+        $fight->setWinner($this->fighterRepository->find($parameters['winner_id']));
+
+        if($fight->isWinnerValidation()) {
+            return new Response('Winner as already be validated', 400, ["Content-Type" => "application:json"]);
+        }
+
+        if(new Carbon($fight->getFightDate()) > Carbon::now()) {
+            return new Response('Fight can only be validated after the fight date', 400, ["Content-Type" => "application:json"]);
+        }
+
+        if (($fight->getWinner()->getId() === $fight->getFighterA()->getId()) || ($fight->getWinner()->getId() === $fight->getFighterB()->getId())) {
+            if ($fight->getWinner() === $fight->getLoser()) {
+                return new Response('Winner and Loser cannot be the same person');
+            }
+        } else {
+            return new Response('Winner and Loser must belong to the same fight');
+        }
+
+        if ($fight->getWinner() === $fight->getFighterA()) {
+            $fight->setLoser($fight->getFighterB());
+        } else {
+            $fight->setLoser($fight->getFighterA());
+        }
+
+        $this->entityManager->persist($fight);
+        $this->entityManager->flush();
+
+        return new Response('Winner has been set', 200, ["Content-Type" => "application/json"]);
+    }
+}

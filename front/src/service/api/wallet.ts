@@ -3,9 +3,9 @@ const namespace = "wallet"
 
 class Wallet {
 
-    async _walletHistory() {
+    async _getWallet() {
         try {
-            const uri = `wallet_transactions`;
+            const uri = `${namespace}`;
             const res = await client.get(uri);
             return res.data;
         } catch (error) {
@@ -33,7 +33,7 @@ class Wallet {
                 {
                     amount: parseFloat(amount)
                 }
-                );
+            );
             return res.data;
         } catch (error) {
             throw error;

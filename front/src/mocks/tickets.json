@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "status": "upcoming",
+        "purchaseDate": "2023-02-02T20:48:58.103Z",
+        "eventDate": "2023-02-02T20:48:58.103Z",
+        "category": "carré or",
+        "price": 10.3,
+        "eventTitle": "Mike Tyson VS Evander Holyfield",
+        "location": "Las Vegas",
+        "placeSeat": "N22",
+        "ref": "FQM9HH"
+    },
+    {
+        "id": 3,
+        "status": "passed",
+        "purchaseDate": "2022-01-02T20:48:58.103Z",
+        "eventDate": "2022-02-02T20:48:58.103Z",
+        "category": "carré or",
+        "price": 10.3,
+        "eventTitle": "Mike Tyson VS Evander Holyfield",
+        "location": "Las Vegas",
+        "placeSeat": "N22",
+        "ref": "FQM9HH"
+    },
+    {
+        "id": 2,
+        "status": "passed",
+        "purchaseDate": "2023-02-02T20:48:58.103Z",
+        "eventDate": "2023-02-02T20:48:58.103Z",
+        "category": "carré or",
+        "price": 10.3,
+        "eventTitle": "Mike Tyson VS Evander Holyfield",
+        "location": "Las Vegas",
+        "placeSeat": "N22",
+        "ref": "FQM9HH"
+    },
+    {
+        "id": 4,
+        "status": "passed",
+        "purchaseDate": "2021-02-02T20:48:58.103Z",
+        "eventDate": "2021-02-02T20:48:58.103Z",
+        "category": "carré or",
+        "price": 10.3,
+        "eventTitle": "Mike Tyson VS Evander Holyfield",
+        "location": "Las Vegas",
+        "placeSeat": "N22",
+        "ref": "FQM9HH"
+    },
+    {
+        "id": 5,
+        "status": "upcoming",
+        "purchaseDate": "2022-02-02T20:48:58.103Z",
+        "eventDate": "2022-02-02T20:48:58.103Z",
+        "category": "carré or",
+        "price": 10.3,
+        "eventTitle": "Mike Tyson VS Evander Holyfield",
+        "location": "Las Vegas",
+        "placeSeat": "N22",
+        "ref": "FQM9HH"
+    },
+    {
+        "id": 6,
+        "status": "upcoming",
+        "purchaseDate": "2021-02-02T20:48:58.103Z",
+        "eventDate": "2021-02-02T20:48:58.103Z",
+        "category": "carré or",
+        "price": 10.3,
+        "eventTitle": "Mike Tyson VS Evander Holyfield",
+        "location": "Las Vegas",
+        "placeSeat": "N22",
+        "ref": "FQM9HH"
+    }
+]

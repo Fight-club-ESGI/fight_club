@@ -1,46 +1,47 @@
 <template>
-  <v-container>
-    <div class="flex grid grid-cols-4 gap-4">
-      <div class="col-span-1">
-        <create-fighter class="flex justify-start pb-2" />
-        <fighter-filter @filterUpdated="filterFighter($event)" class="sticky top-[64px]" />
-      </div>
-      <div v-if="fighters" class="col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" no-gutters>
-          <div v-for="fighter in fighters" :key="fighter.id">
-              <fighter :fighter="fighter" />
-          </div>
-      </div>
+    <div>
+        <v-breadcrumbs :items="items"></v-breadcrumbs>
+        <div class="px-2 sm:px-10 flex gap-x-2">
+            <fighter-filter class="w-80" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <create-fighter class="flex justify-start pb-2" :admin="isAdmin" />
+                <fighter v-for="fighter in filteredFighters" class="w-full" :fighter="fighter" :admin="isAdmin" />
+            </div>
+
+        </div>
     </div>
-  </v-container>
 </template>
-<script lang="ts">
-import { defineComponent, onMounted } from 'vue';
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
 import Fighter from '@/components/Fighter/Fighter.vue';
 import CreateFighter from '@/components/dialogs/CreateFighter.vue';
 import { useFighterStore } from '@/stores/fighter';
 import { storeToRefs } from 'pinia';
 import FighterFilter from '@/components/Fighter/FighterFilter.vue';
+import { useUserStore } from '@/stores/user';
 
-export default defineComponent({
-  components: { Fighter, CreateFighter, FighterFilter },
-  setup() {
-    const fighterStore = useFighterStore();
-    const { getFighters } = fighterStore;
-    const { fighters } = storeToRefs(fighterStore);
+const fighterStore = useFighterStore();
+const userStore = useUserStore();
+const { getFighters } = fighterStore;
+const { fighters, filteredFighters } = storeToRefs(fighterStore);
+const { isAdmin } = storeToRefs(userStore);
 
-    onMounted(async () => {
-      try {
+const tab = ref();
+
+onMounted(async () => {
+    try {
         await getFighters();
-      } catch (error) {
-        
-      }
-    });
-
-    const filterFighter = (filter: any) => {
-
-    }
-
-    return { fighters, filterFighter }
-  }
+    } catch (error) { }
 });
+
+const items = [
+    {
+        title: 'Home',
+        to: { name: 'home' }
+    },
+    {
+        title: 'Fighters',
+    }
+];
 </script>

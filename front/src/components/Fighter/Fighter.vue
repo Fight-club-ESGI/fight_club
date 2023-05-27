@@ -1,46 +1,86 @@
 <template>
-  <div @click="goToFighterDetails()" class="border rounded-md cursor-pointer">
-    <v-img
-      :src="`https://picsum.photos/id/${Math.round(Math.random() * 300)}/200/150`"
-      height="200"
-      :contain="false"
-      class="rounded-t-md"
-    />
-    <div class="pa-3">
-      <h3>Name: {{ fighterName }}</h3>
-      <div>Nationality: {{ fighter.nationality }}</div>
-      <div>Weight: {{ fighter.weight }}kg</div>
-      <div>Height: {{ fighter.height }}cm</div>
-    </div>
-  </div>
+    <v-card
+        @click="goToFighterDetails()"
+        class="cursor-pointer h-92 relative bg-neutral-800 text-white"
+    >
+        <div :style="fighter.imageName ? `background-image: url('${fighter.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
+             class="h-1/2 bg-cover bg-center">
+            <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
+        </div>
+        <div class="pa-5 h-1/2 flex flex-column relative overflow-auto">
+            <v-menu v-if="admin && pathIncludeAdmin && !preview" >
+                <template v-slot:activator="{ props }">
+                    <v-btn class="absolute right-4 p-1 rounded" color="transparent" v-bind="props" icon="mdi-dots-horizontal"
+                           size="x-medium" />
+                </template>
+                <v-list class="p-0 text-center">
+                    <v-list-item value="update-event">
+                        <update-fighter :fighter="fighter" :admin="admin"/>
+                    </v-list-item>
+                    <v-list-item value="delete-fighter" class="bg-secondary" @click="deleteF(fighter.id)">Delete</v-list-item>
+                </v-list>
+            </v-menu>
+            <div class="flex items-center">
+                <div class="text-2xl font-bold w-2/3 truncate">{{ fighterName }}</div>
+                <Icon
+                    class="text-2xl ml-2"
+                    :icon="fighter.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'"
+                />
+            </div>
+            <div class="mt-auto flex flex-column gap-y-1">
+                <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-lg">
+                    <Icon icon="material-symbols:flag" />
+                    <p class="text-sm font-bold">{{ fighter.nationality }}</p>
+                </div>
+                <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-lg">
+                    <Icon icon="material-symbols:weight" />
+                    <p class="text-sm font-bold">{{ fighter.weight }} kg</p>
+                </div>
+                <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-lg">
+                    <Icon icon="mdi:human-male-height-variant" />
+                    <p class="text-sm font-bold">{{ fighter.height }} cm</p>
+                </div>
+            </div>
+        </div>
+    </v-card>
 </template>
-<script lang="ts">
-import { defineComponent, toRefs, PropType, computed  } from 'vue';
-import CreateFighter from '@/components/dialogs/CreateFighter.vue';
-import { FighterI } from '@/interfaces/payload';
-import { useRouter } from 'vue-router';
+<script lang="ts" setup>
+import UpdateFighter from '../dialogs/UpdateFighter.vue';
+import { Icon } from '@iconify/vue';
+import {toRefs, PropType, computed, ref} from 'vue';
+import { IFighter } from '@/interfaces/fighter';
+import {useRoute, useRouter} from 'vue-router';
+import { useFighterStore } from '@/stores/fighter';
 
-export default defineComponent({
-  components: { CreateFighter },
-  props: {
-    fighter: {
-      type: Object as PropType<FighterI>,
-      default: () => {}
-    }
-  },
-  setup(props) {
-    const { fighter } = toRefs(props);
-    const router = useRouter();
+const props = defineProps({
+    fighter: { type: Object as PropType<IFighter>, required: true },
+    admin: { type: Boolean, default: false },
+    preview: { type: Boolean, default: false },
+})
 
-    const fighterName = computed(() => {
-      return `${fighter.value.firstname} ${fighter.value.lastname}`;
-    });
+const { fighter } = toRefs(props);
+const router = useRouter();
+const route = useRoute()
 
-    const goToFighterDetails = () => {
-      router.push({ name: 'fighter-details', params: { id:  fighter.value.id }});
-    }
+const fighterStore = useFighterStore();
+const { deleteFighter } = fighterStore;
 
-    return { fighter, fighterName, goToFighterDetails }
-  }
+const pathIncludeAdmin = ref(route.path.includes('admin'))
+
+const fighterName = computed(() => {
+    return `${fighter.value.firstname} ${fighter.value.lastname}`;
 });
+
+const goToFighterDetails = () => {
+    router.push({ name: 'fighter-details', params: { id: fighter.value.id } });
+};
+
+const deleteF = async (fighterId: string) => {
+    try {
+        await deleteFighter(fighterId);
+    } catch (error) {
+        console.error(error)
+    }
+};
+
 </script>

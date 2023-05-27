@@ -1,0 +1,1181 @@
+{
+	"info": {
+		"_postman_id": "d0307bb1-7450-4de2-b217-84de016fc313",
+		"name": "TEST API FIGHT CLUB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11035009",
+		"_collection_link": "https://orange-equinox-786021.postman.co/workspace/Team-Workspace~be1b0a28-4f65-4b45-825d-832d8fd98c5f/collection/11035009-d0307bb1-7450-4de2-b217-84de016fc313?action=share&creator=11035009&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Should create a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"email\", pm.response.json().email)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"password\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should generate token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"token\", pm.response.json().token)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"password\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/authentication_token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authentication_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should generate token for user test 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"token_user_test_1\", pm.response.json().token)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"0_test_user@test.com\",\n    \"password\": \"password\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/authentication_token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authentication_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should generate token for user test 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"token_user_test_2\", pm.response.json().token)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"1_test_user@test.com\",\n    \"password\": \"password\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/authentication_token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authentication_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should generate token for user test 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"token_user_test_3\", pm.response.json().token)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"2_test_user@test.com\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/authentication_token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authentication_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should generate token for admin test 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"token_admin_test_1\", pm.response.json().token)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"0_test_admin@test.com\",\n    \"password\": \"password\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/authentication_token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authentication_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should generate token for admin test 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"token_admin_test_2\", pm.response.json().token)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"1_test_admin@test.com\",\n    \"password\": \"password\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/authentication_token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authentication_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should generate a fight category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"fight_category_id\", pm.response.json().id)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"boxe\",\n    \"weightCategory\": [\"60.4\", \"65\"]\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/fight_categories",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"fight_categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should create event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"event_id\", pm.response.json().id)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var moment = require('moment');",
+							"pm.variables.set('isoStart', `${moment().add(1, 'days').format()}Z`);",
+							"pm.variables.set('isoEnd', `${moment().add(5, 'days').format()}Z`);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{$randomWord}}",
+							"type": "text"
+						},
+						{
+							"key": "location",
+							"value": "{{$randomStreetAddress}}",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "{{$randomLoremParagraph}}",
+							"type": "text"
+						},
+						{
+							"key": "timeStart",
+							"value": "{{isoStart}}",
+							"type": "text"
+						},
+						{
+							"key": "timeEnd",
+							"value": "{{isoEnd}}",
+							"type": "text"
+						},
+						{
+							"key": "capacity",
+							"value": "{{$randomInt}}",
+							"type": "text"
+						},
+						{
+							"key": "vip",
+							"value": "{{$randomBoolean}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/events",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should create fighter A",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"fighter_a_id\", pm.response.json().id)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const randomGender = Math.random() % 2 ? \"male\" : \"female\"",
+							"pm.variables.set('randomGender', randomGender)",
+							"",
+							"const randomWeight = (Math.random() % 70 + 40).ceil(0)",
+							"pm.variables.set('randomWeight', randomWeight)",
+							"",
+							"const randomHeight = (Math.random() % 100 + 100).ceil(0)",
+							"pm.variables.set('randomHeight', randomHeight)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "firstname",
+							"value": "{{$randomFirstName}}",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "{{$randomLastName}}",
+							"type": "text"
+						},
+						{
+							"key": "birthdate",
+							"value": "{{$isoTimestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "height",
+							"value": "{{randomHeight}}",
+							"type": "text"
+						},
+						{
+							"key": "weight",
+							"value": "{{randomWeight}}",
+							"type": "text"
+						},
+						{
+							"key": "nationality",
+							"value": "{{$randomCountryCode}}",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "{{randomGender}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/fighters",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"fighters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should create fighter B",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"fighter_b_id\", pm.response.json().id)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const randomGender = Math.random() % 2 ? \"male\" : \"female\"",
+							"pm.variables.set('randomGender', randomGender)",
+							"",
+							"const randomWeight = (Math.random() % 70 + 40).ceil(0)",
+							"pm.variables.set('randomWeight', randomWeight)",
+							"",
+							"const randomHeight = (Math.random() % 100 + 100).ceil(0)",
+							"pm.variables.set('randomHeight', randomHeight)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "firstname",
+							"value": "{{$randomFirstName}}",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "{{$randomLastName}}",
+							"type": "text"
+						},
+						{
+							"key": "birthdate",
+							"value": "{{$isoTimestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "height",
+							"value": "{{randomHeight}}",
+							"type": "text"
+						},
+						{
+							"key": "weight",
+							"value": "{{randomWeight}}",
+							"type": "text"
+						},
+						{
+							"key": "nationality",
+							"value": "{{$randomCountryCode}}",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "{{randomGender}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/fighters",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"fighters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should create a fight",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"fight_id\", pm.response.json().id)",
+							"",
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"event\": \"/events/{{event_id}}\",\n    \"fighterA\": \"/fighters/{{fighter_a_id}}\",\n    \"fighterB\": \"/fighters/{{fighter_b_id}}\",\n    \"fightDate\": \"{{$isoTimestamp}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/fights",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"fights"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should create a bet user 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fight\": \"/fights/{{fight_id}}\",\n    \"betOn\": \"/fighters/{{fighter_a_id}}\",\n    \"amount\": 50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/bets/payment/wallet",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"bets",
+						"payment",
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should create a bet user 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_test_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fight\": \"/fights/{{fight_id}}\",\n    \"betOn\": \"/fighters/{{fighter_a_id}}\",\n    \"amount\": 50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/bets/payment/wallet",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"bets",
+						"payment",
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should create a bet user 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_test_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fight\": \"/fights/{{fight_id}}\",\n    \"betOn\": \"/fighters/{{fighter_b_id}}\",\n    \"amount\": 50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/bets/payment/wallet",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"bets",
+						"payment",
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should choose fight winner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"winner_id\": \"{{fighter_b_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/fights/{{fight_id}}/winner",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"fights",
+						"{{fight_id}}",
+						"winner"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should validate fight admin 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/fights/{{fight_id}}/validation",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"fights",
+						"{{fight_id}}",
+						"validation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should validate fight admin 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin_test_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/fights/{{fight_id}}/validation",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"fights",
+						"{{fight_id}}",
+						"validation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should check user 1 wallet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Wallet amount lower than 20000', function() {",
+							"    pm.expect(pm.response.json().amount).to.lessThan(20000)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_test_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{$randomWords}}\",\n    \"location\": \"Paris\",\n    \"startTimestamp\": \"2022-03-12T14:34:57.571Z\",\n    \"endTimestamp\": \"2023-04-12T14:34:57.571Z\",\n    \"description\": \"{{$randomLoremParagraph}}\",\n    \"capacity\": 40,\n    \"vip\": false\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/wallet",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should check user 2 wallet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Wallet amount lower than 20000', function() {",
+							"    pm.expect(pm.response.json().amount).to.lessThan(20000)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_test_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{$randomWords}}\",\n    \"location\": \"Paris\",\n    \"startTimestamp\": \"2022-03-12T14:34:57.571Z\",\n    \"endTimestamp\": \"2023-04-12T14:34:57.571Z\",\n    \"description\": \"{{$randomLoremParagraph}}\",\n    \"capacity\": 40,\n    \"vip\": false\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/wallet",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Should check user 3 wallet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status test', function() {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Wallet amount greater than 20000', function() {",
+							"    pm.expect(pm.response.json().amount).to.greaterThan(20000)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_test_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{$randomWords}}\",\n    \"location\": \"Paris\",\n    \"startTimestamp\": \"2022-03-12T14:34:57.571Z\",\n    \"endTimestamp\": \"2023-04-12T14:34:57.571Z\",\n    \"description\": \"{{$randomLoremParagraph}}\",\n    \"capacity\": 40,\n    \"vip\": false\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/wallet",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

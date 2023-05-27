@@ -1,0 +1,20 @@
+App\Entity\User:
+    user_{1..100}:
+        email: <current()>\@example.org
+        password: 'password'
+    user_admin:
+        email: 'admin@admin.com'
+        password: 'password'
+        roles: ['ROLE_ADMIN']
+    user_vip:
+        email: 'vip@vip.com'
+        password: 'password'
+        roles: [ 'ROLE_VIP' ]
+    user_vvip:
+        email: 'vvip@vvip.com'
+        password: 'password'
+        roles: [ 'ROLE_VVIP' ]
+    user_user:
+        email: 'user@user.com'
+        password: 'password'
+        roles: [ 'ROLE_USER' ]

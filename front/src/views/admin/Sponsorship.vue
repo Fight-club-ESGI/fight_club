@@ -1,12 +1,19 @@
 <template>
-  <div>
-    <Sponsorship></Sponsorship>
-  </div>
+    <div>
+        <v-breadcrumbs :items="items"></v-breadcrumbs>
+        <Sponsorship></Sponsorship>
+    </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Sponsorship from '../../components/Sponsorship.vue';
-export default defineComponent({
-  components: { Sponsorship }
-});
+<script lang="ts" setup>
+import Sponsorship from '@/components/Sponsorship.vue';
+
+const items = [
+    {
+        title: 'Home',
+        to: { name: 'home' }
+    },
+    {
+        title: 'Sponsorship'
+    }
+];
 </script>

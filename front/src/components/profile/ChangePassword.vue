@@ -1,43 +1,22 @@
 <template>
-    <v-row no-gutters justify="center">
-        <v-col cols="10" md="6" lg="5">
-            <v-card class="pa-5 mt-12">
-                <h1 class="text-2xl font-bold pb-5">Change Password</h1>
-                <v-form v-model="valid" ref="form">
-                    <v-text-field
-                        v-model="oldPassword"
-                        :rules="[rules.required]"
-                        prepend-icon="mdi-lock-outline"
-                        type="password"
-                        placeholder="Old Password"
-                        label="Old Password"
-                    />
-                    <v-text-field
-                        v-model="newPassword"
-                        :rules="[rules.required, rules.minLength]"
-                        prepend-icon="mdi-lock-outline"
-                        type="password"
-                        placeholder="New Password"
-                        label="New Password"
-                    />
-                    <v-text-field
-                        v-model="confirmPassword"
-                        :rules="[rules.required, rules.minLength, rules.samePassword]"
-                        prepend-icon="mdi-lock-outline"
-                        type="password"
-                        placeholder="Confirm Password"
-                        label="Confirm Password"
-                    />
-                    <v-btn block color="primary" @click="validate">Confirm</v-btn>
-                </v-form>
-            </v-card>
-        </v-col>
-    </v-row>
+    <div class="p-5">
+        <v-form v-model="valid" ref="form">
+            <v-text-field v-model="oldPassword" :rules="[rules.required]" type="password" placeholder="Old Password"
+                label="Old Password" />
+            <v-text-field v-model="newPassword" :rules="[rules.required, rules.minLength]" type="password"
+                placeholder="New Password" label="New Password" />
+            <v-text-field v-model="confirmPassword" :rules="[rules.required, rules.minLength, rules.samePassword]"
+                type="password" placeholder="Confirm Password" label="Confirm Password" />
+        </v-form>
+        <div class="flex justify-end">
+            <v-btn class="bg-red-100" color="primary" variant="tonal" @click="validate()">Confirm</v-btn>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useUserStore } from '../../stores/user';
+import { useUserStore } from '@/stores/user';
 import { createToast } from 'mosha-vue-toastify';
 
 export default defineComponent({
@@ -62,11 +41,15 @@ export default defineComponent({
             try {
                 const { valid } = await form.value.validate();
                 if (valid) {
-                    await changePassword();
+                    await changePassword({ password: oldPassword.value, newPassword: newPassword.value });
                     createToast('Password changed', { type: 'success', position: 'bottom-right' });
+                    oldPassword.value = "";
+                    newPassword.value = "";
+                    confirmPassword.value = "";
+                    form.value.reset();
                 }
-            } catch (error) {
-                createToast('Passwords incorrect', { type: 'danger', position: 'bottom-right' });
+            } catch (err) {
+                createToast("Error while updating password, please try again", { type: 'danger', position: 'bottom-right' });
             }
         };
 

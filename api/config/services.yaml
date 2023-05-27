@@ -4,9 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    app.images: /uploads/images/images
-    app.user.avatar_images: /uploads/images/users/avatars
-    app.fighter.avatar_images: /uploads/images/fighter/avatars
+    app.images: /uploads/images
 
 services:
     # default configuration for services in *this* file
@@ -34,15 +32,25 @@ services:
         bind:
             $processor: '@ApiPlatform\Doctrine\Common\State\PersistProcessor'
 
-    App\Serializer\UserContextBuilder:
+    App\Serializer\RoleContextBuilder:
         decorates: 'api_platform.serializer.context_builder'
-        arguments: [ '@App\Serializer\UserContextBuilder.inner' ]
+        arguments: [ '@App\Serializer\RoleContextBuilder.inner' ]
         autoconfigure: false
-    
-    App\Serializer\AdditionalContextBuilder:
-        decorates: 'api_platform.serializer.context_builder'
-        arguments: [ '@App\Serializer\AdditionalContextBuilder.inner' ]
-        autoconfigure: false
-    #App\EventSubscriber\UserSignupSubscriber:
-    #    tags:
-     #       - { name: kernel.event_subscriber }
+        
+    App\EventSubscriber\User\UserRegisterSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+
+    App\EventListener\PatchMultipartFormDataListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    App\Doctrine\CurrentUserExtension:
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }
+
+    App\Doctrine\EventsExtension:
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }

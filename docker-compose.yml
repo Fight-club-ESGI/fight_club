@@ -61,21 +61,6 @@ services:
         published: ${HTTP3_PORT:-443}
         protocol: udp
 
-  front:
-    build:
-      context: ./front
-      dockerfile: Dockerfile
-    env_file: 
-      - ./front/.env
-    restart: always
-    user: "node"
-    stdin_open: true
-    tty: true
-    ports:
-      - ${VITE_PORT:-5173}:${VITE_PORT:-5173}
-    volumes:
-      - ./front:/usr/src/app
-
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
@@ -92,14 +77,9 @@ services:
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
 
 volumes:
   php_socket:
   caddy_data:
   caddy_config:
-###> doctrine/doctrine-bundle ###
   db_data:
-###< doctrine/doctrine-bundle ###
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###

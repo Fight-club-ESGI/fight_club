@@ -16,7 +16,7 @@
 }
 
 .router-link-active {
-  @apply text-contrast font-semibold;
+  @apply font-medium text-primary border-b border-primary;
 }
 
 body {
@@ -25,4 +25,11 @@ body {
 
 img {
   object-fit: fill !important;
+}
+
+.custom-bg-success {
+  background: rgb(var(--v-theme-success));
+}
+.custom-bg-primary {
+  background: rgb(var(--v-theme-primary));
 }

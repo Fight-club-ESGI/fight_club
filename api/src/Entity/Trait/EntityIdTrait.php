@@ -2,9 +2,9 @@
 
 namespace App\Entity\Trait;
 
+use ApiPlatform\Metadata\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints\Uuid;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 
 trait EntityIdTrait

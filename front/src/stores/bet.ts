@@ -1,41 +1,45 @@
-import { defineStore } from "pinia";
-import { FightBetI } from "../interfaces/payload";
-import { ref } from "vue";
-import { betService } from "../service/api";
+import { defineStore } from 'pinia';
+import { FightBetI, CurrentBetI, CreateBetI, IBet } from '@/interfaces/bet';
+import { ref } from 'vue';
+import { betService } from '../service/api';
+import { createToast } from "mosha-vue-toastify";
 
 export const useBetStore = defineStore('bet', () => {
+    const bet = ref<IBet>();
+    const bets = ref<IBet[]>([]);
 
-    const bet = ref<FightBetI>();
-    const bets = ref<FightBetI[]>([]);
+    const currentBet = ref<CurrentBetI>({
+        id: '',
+        bets: [],
+        amount: 0,
+    });
 
-    async function betWallet(payload: { fight: string, betOn: string, amount: number }) {
+    function $resetCurrentBet() {
+        currentBet.value = {
+            id: '',
+            bets: [],
+            amount: 0,
+        };
+    }
+
+    async function createBetWallet(payload: CreateBetI) {
         try {
-            const res = await betService._betWallet(payload);
-            return res;
-        } catch (error) {
+            return await betService._betWallet(payload);
+        } catch (error: any) {
             throw error;
         }
     }
 
-    async function betDirect(payload: { fight: string, betOn: string, amount: number }) {
+    async function createBetDirect(payload: CreateBetI) {
         try {
             const res = await betService._betDirect(payload);
-            return res;
-        } catch (error) {
+            return res
+        } catch (error: any) {
             throw error;
         }
     }
 
-    async function createBet(payload: FightBetI) {
-        try {
-            const res = await betService._createBet(payload);
-            bets.value.push(res);
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async function getBet(payload: { id: string, betId: string }) {
+    async function getBet(payload: { id: string; betId: string }) {
         try {
             const res = await betService._getBet(payload);
             bet.value = res;
@@ -44,14 +48,23 @@ export const useBetStore = defineStore('bet', () => {
         }
     }
 
-    async function getBets(id: string) {
+    async function getBets() {
         try {
-            const res = await betService._getEventBets(id);
+            const res = await betService._getBets();
             bets.value = res;
         } catch (error) {
             throw error;
         }
     }
 
-    return { betWallet, betDirect, createBet, getBet, getBets, bet, bets }
+    async function getUserBets(status: string = "all", order: string = "desc") {
+        try {
+            const res = await betService._getUserBets(status, order);
+            bets.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    return { currentBet, getUserBets, $resetCurrentBet, createBetWallet, createBetDirect, getBet, getBets, bet, bets };
 });

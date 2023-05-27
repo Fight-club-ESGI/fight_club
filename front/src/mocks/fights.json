@@ -1,46 +1,292 @@
 [
     {
-        "opponent": {
-            "id": "1ed9c2fa-2g30-6d52-b747-055ea6027fd3",
-            "firstname": "Benhir",
-            "lastname": "Jasmin"
+        "id": "1",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
         },
-        "status": "loose",
-        "reason": "KO",
-        "round": "4",
-        "category": "Lightweight"
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
     },
     {
-        "opponent": {
-            "id": "1ed9c2fa-2g30-6d52-b747-055ea6027fd3",
-            "firstname": "Benhir",
-            "lastname": "Jasmin"
+        "id": "2",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
         },
-        "status": "win",
-        "reason": "KO",
-        "round": "4",
-        "category": "Lightweight"
-    },    
-    {
-        "opponent": {
-            "id": "1ed9c2fa-2g30-6d52-b747-055ea6027fd3",
-            "firstname": "Benhir",
-            "lastname": "Jasmin"
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
         },
-        "status": "loose",
-        "reason": "KO",
-        "round": "4",
-        "category": "Lightweight"
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
     },
     {
-        "opponent": {
-            "id": "1ed9c2fa-2g30-6d52-b747-055ea6027fd3",
-            "firstname": "Benhir",
-            "lastname": "Jasmin"
+        "id": "3",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
         },
-        "status": "win",
-        "reason": "KO",
-        "round": "4",
-        "category": "Lightweight"
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
+    },
+    {
+        "id": "4",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
+        },
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
+    },
+    {
+        "id": "5",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
+        },
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
+    },
+    {
+        "id": "6",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
+        },
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
+    },
+    {
+        "id": "7",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
+        },
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
+    },
+    {
+        "id": "8",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
+        },
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
+    },
+    {
+        "id": "9",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
+        },
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
+    },
+    {
+        "id": "10",
+        "fighterA": {
+            "id": "fighter1",
+            "firstname": "Mike",
+            "lastname": "Tyson",
+            "height": 180,
+            "weight": 95,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "10/10/1975"
+        },
+        "fighterB": {
+            "id": "fighter2",
+            "firstname": "James",
+            "lastname": "Harden",
+            "height": 200,
+            "weight": 94,
+            "nationality": "american",
+            "gender": "male",
+            "birthdate": "05/05/1975"
+        },
+        "ratingFighterA": 1.2,
+        "ratingFighterB": 8,
+        "ratingNullMatch": 22,
+        "startTimestamp": "2023-02-02T20:48:58.103Z",
+        "endTimestamp": "2023-02-02T20:48:58.103Z",
+        "eventId": "string"
     }
 ]

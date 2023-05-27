@@ -1,41 +1,42 @@
-import { client } from "..";
-import { FighterI } from "../../interfaces/payload";
+import { client, clientFormData, clientWithoutAuth } from "..";
+import { CreateFighter, IFighter } from "@/interfaces/fighter";
 
 const namespace = '/fighters';
 
 class Fighter {
-    
-    async _getFighters(): Promise<FighterI[]> {
+
+    async _getFighters(page: number = 1): Promise<IFighter[]> {
         try {
-            const res = await client.get(namespace);
+            const res = await clientWithoutAuth.get(`${namespace}?page=${page}&isActive=true`);
             return res.data;
         } catch (error) {
             throw error;
         }
     }
 
-    async _getFighter(id: string): Promise<FighterI> {
+    async _getFighter(id: string): Promise<IFighter> {
         try {
             const uri = `${namespace}/${id}`;
-            const res = await client.get(uri);
+            const res = await clientWithoutAuth.get(uri);
             return res.data;
         } catch (error) {
             throw error;
         }
     }
 
-    async _createFighter(payload: FighterI): Promise<FighterI> {
+    async _createFighter(payload: FormData): Promise<IFighter> {
         try {
-            const res = await client.post(namespace, payload);
+            const res = await clientFormData.post(namespace, payload);
             return res.data;
         } catch (error) {
             throw error;
         }
     }
 
-    async _upadateFighter(payload: FighterI): Promise<FighterI> {
+    async _upadateFighter(payload: FormData, id: string): Promise<IFighter> {
         try {
-            const res = await client.put(namespace, payload);
+            const uri = `${namespace}/${id}`;
+            const res = await clientFormData.patch(uri, payload);
             return res.data;
         } catch (error) {
             throw error;

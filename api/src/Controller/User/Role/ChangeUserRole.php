@@ -4,7 +4,6 @@ namespace App\Controller\User\Role;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Nette\Utils\Json;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,9 +44,8 @@ class ChangeUserRole
 
     private function checkRole(string $role): string
     {
-        $admin_allowed_roles = ['ROLE_SUPER_VIP', 'ROLE_VIP', 'ROLE_USER'];
-        $super_admin_allowed_roles = [...$admin_allowed_roles ,'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
+        $admin_allowed_roles = ['ROLE_VVIP', 'ROLE_VIP', 'ROLE_USER', 'ROLE_ADMIN'];
 
-        return (in_array($role, $admin_allowed_roles) && $this->security->isGranted('ROLE_ADMIN')) || (in_array($role, $super_admin_allowed_roles) && $this->security->isGranted('ROLE_SUPER_ADMIN'));
+        return (in_array($role, $admin_allowed_roles) && $this->security->isGranted('ROLE_ADMIN'));
     }
 }
