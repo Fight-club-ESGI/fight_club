@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Serializer;
 
 use ApiPlatform\Serializer\SerializerContextBuilderInterface;
 use App\Entity\Event;
+use App\Entity\Ticket;
 use App\Entity\TicketCategory;
 use App\Entity\WalletTransaction;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,8 +16,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
     public function __construct(
         private readonly SerializerContextBuilderInterface $decorated,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
-    )
-    {
+    ) {
     }
 
     public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array
@@ -28,7 +29,7 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
 
 
             if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                switch($resourceClass) {
+                switch ($resourceClass) {
                     case Event::class:
                     case User::class:
                     case TicketCategory::class:
@@ -37,13 +38,9 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
                         $context['groups'][] = $this->adminRequestMethodGroup($request->getMethod(), $normalization);
                 }
             } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
-
             } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {
-
             } else if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-
             } else {
-
             }
 
             $context['groups'][] = $this->additionalRequestMethodGroup($request->getMethod(), $normalization);
@@ -56,8 +53,9 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
         return $context;
     }
 
-    function adminRequestMethodGroup($method, $normalization) {
-        if($normalization) {
+    function adminRequestMethodGroup($method, $normalization)
+    {
+        if ($normalization) {
             return 'admin:get';
         } else {
 
@@ -69,8 +67,9 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
         }
     }
 
-    function additionalRequestMethodGroup($method, $normalization) {
-        if($normalization) {
+    function additionalRequestMethodGroup($method, $normalization)
+    {
+        if ($normalization) {
             return 'additional:get';
         } else {
             return match ($method) {
@@ -81,8 +80,9 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
         }
     }
 
-    function selfRequestMethodGroup($method, $normalization) {
-        if($normalization) {
+    function selfRequestMethodGroup($method, $normalization)
+    {
+        if ($normalization) {
             return 'user:self:get';
         } else {
             return match ($method) {
