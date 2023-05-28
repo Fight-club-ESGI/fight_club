@@ -25,7 +25,6 @@ export const useFighterStore = defineStore('fighter', () => {
 
     const fighterHistoryMatches: ComputedRef<IFight[]> = computed(() => {
         return fighter.value?.fights.reduce((acc, sum) => {
-            console.log(sum)
             if (sum.winnerValidation) acc.push(sum);
             return acc;
         }, []).sort(function (a: IFight, b: IFight) {
@@ -36,10 +35,12 @@ export const useFighterStore = defineStore('fighter', () => {
 
     const fighterWL: ComputedRef<{ win: number, lose: number }> = computed(() => {
         return fighter.value?.fights.reduce((acc, sum) => {
-            if (typeof sum.winner === 'string') {
-                acc['win'] ? acc['win'] += 1 : acc['win'] = 1;
-            } else {
-                acc['lose'] ? acc['lose'] += 1 : acc['lose'] = 1;
+            if (sum.winnerValidation) {
+                if (typeof sum.winner === 'string') {
+                    acc['win'] ? acc['win'] += 1 : acc['win'] = 1;
+                } else {
+                    acc['lose'] ? acc['lose'] += 1 : acc['lose'] = 1;
+                }
             }
             return acc;
         }, {});
