@@ -8,6 +8,7 @@ use App\Entity\TicketEvent;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Entity\WalletTransaction;
+use App\Enum\Order\OrderStatusEnum;
 use App\Enum\WalletTransaction\WalletTransactionStatusEnum;
 use App\Enum\WalletTransaction\WalletTransactionTypeEnum;
 use Doctrine\DBAL\LockMode;
@@ -106,8 +107,10 @@ class CheckoutService
 
             switch ($walletTransaction->getStatus()) {
                 case WalletTransactionStatusEnum::PENDING:
-                    if ($transaction->payment_status === 'paid')
+                    if ($transaction->payment_status === 'paid') {
                         $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+                        $walletTransaction->getOrder()->setStatus(OrderStatusEnum::SUCCESS);
+                    }
                     $this->entityManager->persist($walletTransaction);
                     $this->entityManager->flush();
                     break;

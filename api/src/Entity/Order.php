@@ -222,7 +222,7 @@ class Order
     public function setReference(string|null $reference = null): self
     {
         if (is_null($this->reference) && is_null($reference)) {
-            $this->reference = sprintf('T-%s-%s', date('Ymd'), strtoupper(bin2hex(random_bytes(3))));
+            $this->reference = sprintf('O-%s', strtoupper(bin2hex(random_bytes(8))));
         } else {
             $this->reference = $reference;
         }

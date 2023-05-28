@@ -120,7 +120,6 @@ const updateItem = async (item: CartItemInterface) => {
 const check_out = async (type: string) => {
     try {
         const res = await checkout(type);
-        window.location.href = res
 
         await clearCart();
 
@@ -129,6 +128,7 @@ const check_out = async (type: string) => {
             position: 'bottom-right'
         });
 
+        window.location.href = res
     }
     catch {
         createToast('Error while checking out', {

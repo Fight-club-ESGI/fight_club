@@ -50,6 +50,10 @@ class CartCheckoutStripe extends AbstractController
 
         $user = $this->security->getUser();
 
+        if ($totalPrice === 0) {
+            return new Response("/cart", 200, ["Content-Type" => "application/json"]);
+        }
+
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }
