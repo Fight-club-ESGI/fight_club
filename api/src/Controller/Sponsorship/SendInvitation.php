@@ -58,7 +58,7 @@ class SendInvitation extends AbstractController
                     ->html(
                         '<p>Hi ' . $sponsored->getEmail() . ',</p>
                     <p>An admin invited you to become VIP</p>
-                    <p><a href="http://localhost:5173/become-vip/?token='.$token.'">Become VIP</a></p>
+                    <p><a href="https://fightclub-antoinepollet.vercel.app/become-vip/?token='.$token.'">Become VIP</a></p>
                     <br />
                     <p>Thanks,</p>
                     <p>Thunderous Knockout Fighting</p>'
