@@ -75,7 +75,7 @@
                                     {{ fight.fighterA.firstname }} {{ fight.fighterA.lastname }}
                                 </p>
                                 <p>
-                                    {{ fight.odds.fighterAOdds }}
+                                    {{ fight.odds.fighterAOdds.toFixed(2) }}
                                 </p>
                                 <div class="flex text-white gap-x-2 mx-auto">
                                     <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
@@ -98,7 +98,7 @@
                                     {{ fight.fighterB.firstname }} {{ fight.fighterB.lastname }}
                                 </p>
                                 <p>
-                                    {{ fight.odds.fighterBOdds }}
+                                    {{ fight.odds.fighterBOdds.toFixed(2) }}
                                 </p>
                                 <div class="flex text-white gap-x-2 mx-auto">
                                     <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">

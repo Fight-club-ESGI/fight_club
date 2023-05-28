@@ -32,7 +32,7 @@
                                 :icon="fight.fighterA.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'" />
                         </div>
                         <div class="text-2xl bg-neutral-800">
-                            {{ fight.odds.fighterAOdds }}
+                            {{ fight.odds.fighterAOdds.toFixed(2) }}
                         </div>
                         <div class="mt-auto flex gap-x-1 pa-5 text-black">
                             <div class="flex align-center gap-2 bg-neutral-200 p-2 rounded-lg">
@@ -95,7 +95,7 @@
                                 :icon="fight.fighterB.gender === 'male' ? 'mdi:gender-male' : 'mdi:gender-female'" />
                         </div>
                         <div class="text-2xl bg-neutral-800">
-                            {{ fight.odds.fighterBOdds }}
+                            {{ fight.odds.fighterBOdds.toFixed(2) }}
                         </div>
                         <div class="mt-auto flex gap-x-1 pa-5 text-black">
                             <div class="flex align-center gap-2 bg-neutral-200 p-2 rounded-lg">

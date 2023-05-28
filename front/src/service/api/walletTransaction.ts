@@ -24,6 +24,17 @@ class Wallet {
         }
     }
 
+    async _bet_confirmation(transaction_id: string) {
+        try {
+            const uri = `/${namespace}/${transaction_id}/bet/confirmation`
+            const res = await client.get(uri);
+
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async _cart_confirmation(transaction_id: string) {
         try {
             const uri = `/${namespace}/${transaction_id}/stripe/confirmation`

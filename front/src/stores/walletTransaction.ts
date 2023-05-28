@@ -63,6 +63,14 @@ export const useWalletTransactionStore = defineStore('wallet_transaction', () =>
         }
     }
 
+    async function transactionBetConfirmation(transaction_id: string) {
+        try {
+            walletTransaction.value = await walletTransactionService._bet_confirmation(transaction_id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async function transactionCartConfirmation(transaction_id: string) {
         try {
             walletTransaction.value = await walletTransactionService._cart_confirmation(transaction_id);
@@ -71,5 +79,5 @@ export const useWalletTransactionStore = defineStore('wallet_transaction', () =>
         }
     }
 
-    return { walletTransaction, walletTransactionHistory, getWalletTransactionHistory, transactionConfirmation, transactionCartConfirmation }
+    return { walletTransaction, walletTransactionHistory, getWalletTransactionHistory, transactionConfirmation, transactionBetConfirmation, transactionCartConfirmation }
 });
