@@ -87,9 +87,37 @@ class CheckoutService
                 case WalletTransactionStatusEnum::PENDING:
                     if ($transaction->payment_status === 'paid') {
                         $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
-                        $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + floatval($transaction->amount_total / 100));
+                        $walletTransaction->getWallet()->setAmount($walletTransaction->getWallet()->getAmount() + floatval($transaction->amount_total));
                     } else {
                         $walletTransaction->setStatus(WalletTransactionStatusEnum::REJECTED);
+                    }
+
+                    $this->entityManager->persist($walletTransaction);
+                    $this->entityManager->flush();
+                    break;
+                case WalletTransactionStatusEnum::REJECTED:
+                case WalletTransactionStatusEnum::ACCEPTED:
+                case WalletTransactionStatusEnum::CANCELLED:
+                    break;
+            }
+        }
+    }
+
+    public function betConfirmation(WalletTransaction $walletTransaction): void
+    {
+        if ($walletTransaction->getStripeRef() !== null) {
+            $transaction = $this->stripe->checkout->sessions->retrieve($walletTransaction->getStripeRef(), []);
+
+            switch ($walletTransaction->getStatus()) {
+                case WalletTransactionStatusEnum::PENDING:
+                    if ($transaction->payment_status === 'paid') {
+                        $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
+                    } else {
+                        $walletTransaction->setStatus(WalletTransactionStatusEnum::REJECTED);
+                        $walletTransaction->getBet()->setAmount(0);
+                        $this->entityManager->remove($walletTransaction->getBet());
+                        $this->entityManager->persist($walletTransaction);
+                        $this->entityManager->flush();
                     }
 
                     $this->entityManager->persist($walletTransaction);

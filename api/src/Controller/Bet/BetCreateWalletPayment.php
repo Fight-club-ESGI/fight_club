@@ -36,6 +36,8 @@ class BetCreateWalletPayment extends AbstractController
             return new Response('the event already started, you cannot bet anymore', 400);
         }
 
+        $bet->setAmount($bet->getAmount() * 100);
+
         if (!($bet->getBetOn()->getId() === $bet->getFight()->getFighterB()->getId()) && !($bet->getBetOn()->getId() === $bet->getFight()->getFighterA()->getId())) {
             return new Response('user don\'t belong to this fight', 400);
         }

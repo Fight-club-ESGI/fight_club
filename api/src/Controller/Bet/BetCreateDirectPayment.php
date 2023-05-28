@@ -35,10 +35,11 @@ class BetCreateDirectPayment  extends AbstractController
             return new Response('the event already started, you cannot bet anymore', 400);
         }
 
-
         if (!($bet->getBetOn()->getId() === $bet->getFight()->getFighterB()->getId()) && !($bet->getBetOn()->getId() === $bet->getFight()->getFighterA()->getId())) {
             return new Response('user don\'t belong to this fight', 200);
         }
+
+        $bet->setAmount($bet->getAmount() * 100);
 
         $user = $this->userRepository->find($this->security->getUser()->getId());
         $bet->setBettor($user);
@@ -47,6 +48,7 @@ class BetCreateDirectPayment  extends AbstractController
             $user,
             $bet->getAmount(),
             WalletTransactionTypeEnum::BET,
+            endpoint_url: '/checkout/bet/confirmation'
         );
 
         $bet->setStatus(BetStatusEnum::PENDING);
@@ -58,6 +60,7 @@ class BetCreateDirectPayment  extends AbstractController
         $this->checkoutService->getWalletTransaction()->setBet($bet);
 
         $this->entityManager->persist($this->checkoutService->getWalletTransaction());
+        $this->entityManager->persist($bet);
         $this->entityManager->flush();
 
         return new Response($checkout_session->url, 200, ["Content-Type" => "application/json"]);

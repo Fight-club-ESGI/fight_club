@@ -65,15 +65,15 @@
             <div class="w-full text-center bg-secondary rounded">
                 <p class="p-3">Bet</p>
                 <v-divider />
-                <p class="p-3">{{ bet.amount }} €</p>
+                <p class="p-3">{{ (bet.amount / 100).toFixed(2) }} €</p>
             </div>
             <div class="w-full text-center bg-secondary rounded">
                 <p class="p-3">Possible Gain</p>
                 <v-divider />
                 <p class="p-3 font-bold text-xl">
                     {{
-                        bet.betOn.id === bet.fight.fighterA.id ? (bet.fight.odds.fighterAOdds * bet.amount - bet.amount).toFixed(2) :
-                        bet.betOn.id ===  bet.fight.fighterB.id ? (bet.fight.odds.fighterBOdds * bet.amount - bet.amount).toFixed(2) :
+                        bet.betOn.id === bet.fight.fighterA.id ? ((bet.fight.odds.fighterAOdds * bet.amount - bet.amount) / 100).toFixed(2) :
+                        bet.betOn.id ===  bet.fight.fighterB.id ? ((bet.fight.odds.fighterBOdds * bet.amount - bet.amount) / 100).toFixed(2) :
                             0
                     }} €
                 </p>

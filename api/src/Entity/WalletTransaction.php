@@ -7,7 +7,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use App\Controller\Cart\CartCheckoutStripeConfirmation;
+use App\Controller\Bet\BetCheckoutConfirmation;
 use App\Controller\Wallet\WalletCartCheckoutConfirmation;
 use App\Controller\Wallet\WalletDepositCheckoutConfirmation;
 use App\Entity\Trait\EntityIdTrait;
@@ -29,6 +29,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             normalizationContext: ['groups' => ['wallet:transaction:get']],
             security: "is_granted('ROLE_USER')",
             name: "wallet_transaction_stripe_confirmation"
+        ),
+        new Get(
+            uriTemplate: "/wallet_transactions/{id}/bet/confirmation",
+            controller: BetCheckoutConfirmation::class,
+            normalizationContext: ['groups' => ['wallet:transaction:get']],
+            security: "is_granted('ROLE_USER')",
+            name: "wallet_transaction_bet_confirmation"
         ),
         new Get(
             uriTemplate: "/wallet_transactions/{id}/confirmation",

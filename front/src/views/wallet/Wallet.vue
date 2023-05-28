@@ -6,7 +6,7 @@
                 <div class="flex font-bold text-2xl h-1/12 items-center">Your wallet funds</div>
                 <div class="h-11/12">
                     <div class="text-center bg-neutral-100 p-10 rounded">
-                        <div class="font-bold text-3xl p-6">{{ wallet.amount }} €</div>
+                        <div class="font-bold text-3xl p-6">{{ (wallet.amount / 100 ).toFixed(2) }} €</div>
                     </div>
                     <div>
                         <v-text-field type="number" v-model.number="wallet_input_amount" />
@@ -97,10 +97,12 @@ const wallet_withdraw = async () => {
     try {
         let message = await withdraw(wallet_input_amount.value);
         createToast(message, { position: 'bottom-right', type: 'success' });
-    } catch (e) {
-        createToast('Error during withdraw ', {
+        await getWalletTransactionHistory('asc');
+    } catch (e: any) {
+        await getWalletTransactionHistory('asc');
+        createToast(e.response.data, {
             position: 'bottom-right',
-            type: 'success',
+            type: 'danger',
         });
     }
 };
