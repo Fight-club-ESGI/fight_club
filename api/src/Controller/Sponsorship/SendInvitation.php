@@ -2,8 +2,10 @@
 
 namespace App\Controller\Sponsorship;
 
+use App\Entity\Cart;
 use App\Entity\Sponsorship;
 use App\Entity\User;
+use App\Entity\Wallet;
 use App\Repository\SponsorshipRepository;
 use App\Repository\UserRepository;
 use Carbon\Carbon;
@@ -39,7 +41,11 @@ class SendInvitation extends AbstractController
         $sponsor = $this->userRepository->find($sponsorId);
         $currentUser = $this->userRepository->find($this->security->getUser()->getId());
         $sponsored = $this->userRepository->findOneBy(['email' => $sponsoredMail]);
-        $sponsorEntity = $this->sponsorshipRepository->findOneBy(['sponsored' => $sponsored->getId()]);
+        $sponsorEntity = null;
+
+        if ($sponsored) {
+            $sponsorEntity = $this->sponsorshipRepository->findOneBy(['sponsored' => $sponsored->getId()]);
+        }
 
         if ($sponsorEntity && $sponsorEntity->isSponsorValidation()) {
             return new Response("This user is already a VIP member");
@@ -117,7 +123,16 @@ class SendInvitation extends AbstractController
             $sponsorship->setSponsor($sponsor);
             $sponsorship->setSponsored($user);
 
+            $cart = new Cart();
+            $cart->setUser($user);
+
+            $wallet = new Wallet();
+            $wallet->setUsers($user);
+            $wallet->setAmount(0);
+
             $this->entityManager->persist($user);
+            $this->entityManager->persist($cart);
+            $this->entityManager->persist($wallet);
             $this->entityManager->persist($sponsorship);
             $this->entityManager->flush();
             return new Response("Invitation sent", 200, ["Content-Type" => "application/json"]);
