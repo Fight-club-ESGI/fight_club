@@ -37,7 +37,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new GetCollection(
             uriTemplate: "events/admin",
-            normalizationContext: ['groups' => ['tickets:get', 'events:get']],
+            normalizationContext: ['groups' => ['tickets:get', 'events:get', 'fights:get', 'fighter:get']],
             security: "is_granted('ROLE_ADMIN')",
             securityMessage: "You must be connected"
         ),
@@ -190,6 +190,7 @@ class Event
         'admin:get',
         'events:get'
     ])]
+    #[MaxDepth(1)]
     private Collection $fights;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: TicketEvent::class)]

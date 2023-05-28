@@ -17,7 +17,7 @@
             </div>
         </div>
         <v-divider :thickness="2" class="border-opacity-100" />
-        <div v-if="event.fights.length" class="p-10">
+        <div v-if="event.fights.length > 0" class="p-10">
             <v-card v-for="fight in event.fights" class="flex text-white mb-4">
                 <div class="flex bg-cover bg-center"
                     :style="fight.fighterA?.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`">

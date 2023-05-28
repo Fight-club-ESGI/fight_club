@@ -39,6 +39,19 @@ class TicketEventRepository extends ServiceEntityRepository
         }
     }
 
+    public function getIsActiveTicketEventById(string $id): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.isActive = :val')
+            ->setParameter('val', true)
+            ->andWhere('e.event = :id')
+            ->setParameter('id', $id)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return TicketEvent[] Returns an array of TicketEvent objects
 //     */

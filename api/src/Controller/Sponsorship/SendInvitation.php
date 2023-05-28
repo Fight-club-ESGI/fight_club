@@ -6,6 +6,7 @@ use App\Entity\Sponsorship;
 use App\Entity\User;
 use App\Repository\SponsorshipRepository;
 use App\Repository\UserRepository;
+use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -38,14 +39,16 @@ class SendInvitation extends AbstractController
         $sponsor = $this->userRepository->find($sponsorId);
         $currentUser = $this->userRepository->find($this->security->getUser()->getId());
         $sponsored = $this->userRepository->findOneBy(['email' => $sponsoredMail]);
+        $sponsorEntity = $this->sponsorshipRepository->findOneBy(['sponsored' => $sponsored->getId()]);
 
-        if ($this->sponsorshipRepository->findOneBy(['sponsored' => $sponsored->getId()])) {
-            return new Response("Invitation already sent", 200);
+        if ($sponsorEntity && $sponsorEntity->isSponsorValidation()) {
+            return new Response("This user is already a VIP member");
         }
 
         if($sponsored) {
             $token = bin2hex(random_bytes(32));
             $sponsored->setVIPToken($token);
+            $this->entityManager->persist($sponsored);
 
             if ($sponsor->getId() == $currentUser->getId()) {
                 $email = (new Email())
@@ -63,13 +66,16 @@ class SendInvitation extends AbstractController
 
                 $this->mailer->send($email);
 
-                $sponsorship = New Sponsorship();
-                $sponsorship->setEmailValidation(false);
-                $sponsorship->setSponsorValidation(false);
-                $sponsorship->setSponsor($sponsor);
-                $sponsorship->setSponsored($sponsored);
+                if (!$sponsorEntity) {
+                    $sponsorship = new Sponsorship();
+                    $sponsorship->setEmailValidation(false);
+                    $sponsorship->setSponsorValidation(false);
+                    $sponsorship->setSponsor($sponsor);
+                    $sponsorship->setSponsored($sponsored);
 
-                $this->entityManager->persist($sponsorship);
+                    $this->entityManager->persist($sponsorship);
+                }
+
                 $this->entityManager->flush();
 
                 return new Response("Invitation sent", 200, ["Content-Type" => "application/json"]);

@@ -14,7 +14,7 @@
                                 :rules="[rules.required, rules.ticketPrice]" placeholder="0" label="Ticket Price" />
                         </v-row>
                         <v-row>
-                            <v-select v-model="category" item-value="name" :items="ticketCategoriesName"
+                            <v-select v-model="category" item-value="name" :items="availableTicketsEvent"
                                 :rules="[rules.required]" placeholder="Categories" label="Ticket category">
                             </v-select>
                         </v-row>
@@ -45,7 +45,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const ticketStore = useTicketStore();
-const { ticketCategories } = storeToRefs(ticketStore);
+const { ticketCategories, availableTicketsEvent } = storeToRefs(ticketStore);
 const { getTicketCategories, createTicketEvent } = ticketStore;
 
 const eventId = computed(() => route.params.id.toString());
