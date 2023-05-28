@@ -37,19 +37,20 @@ class GetTicketByUser extends AbstractController
                 'id' => $ticket->getId(),
                 'reference' => $ticket->getReference(),
                 'event' => [
+                    'id' => $event->getId(),
                     'name' => $event->getName(),
-                    'time_start' => $event->getTimeStart(),
-                    'time_end' => $event->getTimeEnd(),
+                    'timeStart' => $event->getTimeStart(),
+                    'timeEnd' => $event->getTimeEnd(),
                     'location' => $event->getLocation(),
                     'description' => $event->getDescription(),
+                    'fights' => $event->getFights(),
                 ],
-                'category' => [
-                    'name' => $ticketEvent->getTicketCategory()->getName(),
-                ],
+                'category' => $ticketEvent->getTicketCategory()->getName(),
                 'price' => $ticketEvent->getPrice(),
                 'order' => [
                     'id' => $order->getId(),
                     'reference' => $order->getReference(),
+                    'customer' => $order->getUser()->getEmail(),
                     'createdAt' => $order->getCreatedAt(),
                 ],
             ];

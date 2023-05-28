@@ -9,15 +9,13 @@
             </v-tabs>
             <v-window v-model="tab">
                 <v-window-item value="upcoming" class="pt-10">
-                    <v-row align="center" justify="center">
-                        <v-col cols="12" lg="5">
-                            <TicketHistoryCard class="my-4" v-for="ticket in upcomingEvents" :ticket="ticket" />
-                        </v-col>
-                    </v-row>
+                    <div class="flex gap-4 justify-center flex-wrap">
+                        <TicketHistoryCard class="" v-for="ticket in upcomingEvents" :ticket="ticket" />
+                    </div>
                 </v-window-item>
                 <v-window-item value="passed" class="pt-10">
                     <v-row align="center" justify="center">
-                        <v-col cols="12" lg="5">
+                        <v-col cols="6" lg="5">
                             <TicketHistoryCard class="my-4" v-for="ticket in passedEvents" :ticket="ticket" />
                         </v-col>
                     </v-row>
@@ -32,20 +30,45 @@ import { ref, computed } from 'vue';
 import TicketHistoryCard from '@/components/TicketHistoryCard.vue';
 import { useTicketStore } from '@/stores/tickets';
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+import { IMyTicket } from '@/interfaces/ticket';
 
 const ticketStore = useTicketStore();
 const { myTickets } = storeToRefs(ticketStore);
 const { getTickets } = ticketStore;
 
+onMounted(async () => {
+    try {
+        await getTickets();
+        console.log(myTickets.value)
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 const tab = ref();
 
+const ticketsByEvent = computed(() => {
+    const ticketsByEvent = new Map();
+    myTickets.value.forEach((ticket: IMyTicket) => {
+        if (ticketsByEvent.has(ticket.event.id)) {
+            ticketsByEvent.get(ticket.event.id).push(ticket);
+        } else {
+            ticketsByEvent.set(ticket.event.id, [ticket]);
+        }
+    });
+    return ticketsByEvent;
+});
+
 const upcomingEvents = computed(() => {
-    const filteredTickets = myTickets.filter((e) => e.status === 'upcoming');
-    return filteredTickets.sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
+    return myTickets.value
+        .filter((ticket: IMyTicket) => new Date(ticket.event.timeStart).getTime() >= new Date().getTime())
+        .sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
 });
 const passedEvents = computed(() => {
-    const filteredTickets = myTickets.filter((e) => e.status === 'passed');
-    return filteredTickets.sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
+    return myTickets.value
+        .filter((ticket: IMyTicket) => new Date(ticket.event.timeStart).getTime() < new Date().getTime())
+        .sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
 });
 
 const items = [
