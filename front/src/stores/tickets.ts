@@ -15,9 +15,12 @@ export const useTicketStore = defineStore('ticket', () => {
     const ticketsNumber = computed(() => tickets.value.length);
     const availableTickets = computed(() => ticketsEvent.value.filter((ticketEvent: ITicketEvent) => ticketEvent.tickets.length < ticketEvent.maxQuantity));
 
-    const activeTickets = computed(() => {
-        return ticketsEvent.value.filter(ti => ti.isActive);
+    const availableTicketsEvent = computed(() => {
+        const ticketEventCategories = ticketsEvent.value.map(tE => tE.ticketCategory.name);
+        return ["GOLD", "VIP", "V_VIP", "SILVER", "PEUPLE"].filter(c => !ticketEventCategories.includes(c));
     });
+
+    const selectedTicketEvent = ref();
 
     async function getTickets() {
         try {
@@ -68,12 +71,13 @@ export const useTicketStore = defineStore('ticket', () => {
         try {
             const res = await ticketService._updateTicketEvent(payload);
             const eventId = payload.event.split('/')[2]
-            await getTicketsEvent(eventId)
+            await getTicketsEvent(eventId);
+            selectedTicketEvent.value = null;
             return res;
         } catch (err) {
             throw err;
         }
     }
 
-    return { tickets, myTickets, activeTickets, ticketCategories, ticketsEvent, getTickets, updateTicketEvent, createTicket, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
+    return { tickets, myTickets, ticketCategories, ticketsEvent, selectedTicketEvent, getTickets, updateTicketEvent, createTicket, availableTicketsEvent, getTicketCategories, createTicketEvent, getTicketsEvent, ticketsNumber, availableTickets }
 });

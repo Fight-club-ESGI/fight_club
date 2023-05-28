@@ -2,6 +2,8 @@
 namespace App\Serializer;
 
 use ApiPlatform\Serializer\SerializerContextBuilderInterface;
+use App\Entity\Event;
+use App\Entity\TicketCategory;
 use App\Entity\WalletTransaction;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -23,14 +25,17 @@ final class RoleContextBuilder implements SerializerContextBuilderInterface
         $resourceClass = $context['resource_class'] ?? null;
 
         if ($resourceClass) {
-            switch($resourceClass) {
-                case WalletTransaction::class:
-                case User::class:
-                    break;
-            }
+
 
             if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-                $context['groups'][] = $this->adminRequestMethodGroup($request->getMethod(), $normalization);
+                switch($resourceClass) {
+                    case Event::class:
+                    case User::class:
+                    case TicketCategory::class:
+                        break;
+                    default:
+                        $context['groups'][] = $this->adminRequestMethodGroup($request->getMethod(), $normalization);
+                }
             } else if ($this->authorizationChecker->isGranted('ROLE_SUPER_VIP')) {
 
             } else if ($this->authorizationChecker->isGranted('ROLE_VIP')) {

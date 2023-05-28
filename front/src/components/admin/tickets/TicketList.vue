@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useTicketStore } from '@/stores/tickets';
-import { PropType } from 'vue';
+import { PropType, ref } from 'vue';
+import { ITicketEvent } from '@/interfaces/event';
 const ticketStore = useTicketStore()
-const { activeTickets } = storeToRefs(ticketStore);
+const { ticketsEvent, selectedTicketEvent } = storeToRefs(ticketStore);
 
 const emit = defineEmits(['selectedItem']);
 
@@ -26,25 +27,31 @@ const ticketCategoryColor = (name: string) => {
     return colors[name];
 }
 
+const setSelectedItem = (ticketEvent: ITicketEvent) => {
+    emit('selectedItem', ticketEvent);
+    selectedTicketEvent.value = ticketEvent;
+}
+
 </script>
 
 <template>
-    <v-list v-if="activeTickets.length > 0" density="compact" :disabled="readOnly" :lines="false"
-        class="max-h-96 overflow-auto" @click:select="readOnly ? '' : emit('selectedItem', $event)">
-        <v-list-item v-for="ticketEvent of activeTickets" :value="ticketEvent">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <v-card v-for="ticketEvent of ticketsEvent" :elevation="selectedTicketEvent?.id === ticketEvent.id ? 4 : 0"
+            @click="readOnly ? '' : setSelectedItem(ticketEvent)">
+            <v-card-title>
+                <span class="font-bold">Ticket category: </span>
+                <span><v-chip :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{ ticketEvent.ticketCategory.name
+                }}</v-chip></span>
+            </v-card-title>
+            <v-card-text>
+                <span class="font-bold">Max quantity: </span>
+                <span>{{ ticketEvent.maxQuantity }}</span>
+            </v-card-text>
+            <v-card-text>
+                <span class="font-bold">Price: </span>
+                <span>{{ ticketEvent.price }} €</span>
+            </v-card-text>
 
-            <template v-slot:append>
-                <v-chip :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{ ticketEvent.ticketCategory.name
-                }}</v-chip>
-            </template>
-
-            <v-list-item-title class="font-bold pl-2">
-                {{ ticketEvent.price }} €
-            </v-list-item-title>
-
-            <v-list-item-subtitle>
-                {{ ticketEvent.maxQuantity }} tickets
-            </v-list-item-subtitle>
-        </v-list-item>
-    </v-list>
+        </v-card>
+    </div>
 </template>

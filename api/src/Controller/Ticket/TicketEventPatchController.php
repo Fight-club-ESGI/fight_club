@@ -30,33 +30,39 @@ class TicketEventPatchController extends AbstractController
         }
 
         $params = json_decode($request->getContent());
-
-        if($params->price === $ticketEvent->getPrice()) //modifier la quantity ou supprimer (soft) le ticketEvent
+        // dd($params->maxQuantity);
+        if(floatval($params->price) === $ticketEvent->getPrice()) //modifier la quantity ou supprimer (soft) le ticketEvent
         {
+            //dd("price the same");
             $ticketEvent
-                ->setMaxQuantity($params->maxQuantity ?? $ticketEvent->getMaxQuantity())
+                ->setMaxQuantity($params->maxQuantity)
                 ->setIsActive($params->isActive ?? true);
 
+            $this->entityManager->persist($ticketEvent);
+            $this->entityManager->flush();
 
         }
-
         else //Modifier le prix
-        {
-            $newTicketEvent = clone $ticketEvent;
+            {
+                // dd("price not the same");
 
-            $ticketEvent->setIsActive(false);
+                $ticketEvent->setIsActive(false);
+                $this->entityManager->persist($ticketEvent);
+                $this->entityManager->flush();
 
-            $newTicketEvent
-                ->setMaxQuantity($params->maxQuantity)
-                ->setPrice($params->price);
-            $this->entityManager->persist($newTicketEvent);
+                $newTicketEvent = new TicketEvent();
+                $newTicketEvent
+                    ->setEvent($ticketEvent->getEvent())
+                    ->setTicketCategory($ticketEvent->getTicketCategory())
+                    ->setMaxQuantity($params->maxQuantity)
+                    ->setPrice($params->price)
+                    ->setIsActive(true);
 
-        }
+                $this->entityManager->persist($newTicketEvent);
+                $this->entityManager->flush();
 
-        $this->entityManager->persist($ticketEvent);
-        $this->entityManager->flush();
+            }
 
         return $newTicketEvent ?? $ticketEvent;
-
     }
 }
