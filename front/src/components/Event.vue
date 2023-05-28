@@ -10,6 +10,10 @@
                     {{ timeStart?.toLocaleDateString('en-GB', { month: 'long' }) }}
                 </p>
             </div>
+            <div v-else-if="timeStart < new Date() && timeEnd > new Date()"
+                class="flex flex-col text-center mx-auto font-bold">
+                Started
+            </div>
             <div v-else class="flex flex-col text-center mx-auto font-bold">
                 Passed
             </div>
@@ -34,10 +38,10 @@
             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
         </div>
         <div class="pa-5 h-1/2 flex flex-column relative overflow-auto">
-            <v-menu v-if="admin && pathIncludeAdmin && !preview" >
+            <v-menu v-if="admin && pathIncludeAdmin && !preview">
                 <template v-slot:activator="{ props }">
-                    <v-btn class="absolute right-4 p-1 rounded" color="transparent" v-bind="props" icon="mdi-dots-horizontal"
-                        size="x-medium" />
+                    <v-btn class="absolute right-4 p-1 rounded" color="transparent" v-bind="props"
+                        icon="mdi-dots-horizontal" size="x-medium" />
                 </template>
                 <v-list class="p-0 text-center">
                     <v-list-item value="update-event">
@@ -85,6 +89,7 @@ const eventNavigation = ref(route.path.includes('admin') ? 'event-details-admin'
 const pathIncludeAdmin = ref(route.path.includes('admin'))
 
 const timeStart = ref(new Date(props.event.timeStart))
+const timeEnd = ref(new Date(props.event.timeEnd))
 
 watch(props.event, async (newValue, oldValue) => {
     timeStart.value = new Date(props.event.timeStart)

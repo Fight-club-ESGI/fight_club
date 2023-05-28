@@ -79,9 +79,11 @@ onMounted(async () => {
                             <i>The start date of the event has passed, tickets are in readonly mode</i>
                         </div>
                         <div class="flex gap-x-2 py-2">
-                            <ticket-list class="w-1/2" @selected-item="($event) => item = $event"
+                            <ticket-list class="w-4/5" @selected-item="(ticketEvent) => item = ticketEvent"
                                 :readOnly="!(new Date(event.timeStart) > new Date())"></ticket-list>
-                            <ticket-event-editing :selectedItem="item" class="w-1/2"></ticket-event-editing>
+
+                            <ticket-event-editing :selectedItem="item" class="w-1/5"
+                                @reset-selection="item = null"></ticket-event-editing>
                         </div>
                     </div>
                 </v-window-item>
