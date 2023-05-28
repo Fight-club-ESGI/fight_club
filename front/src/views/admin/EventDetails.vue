@@ -74,7 +74,7 @@ onMounted(async () => {
 
                 <v-window-item value="two">
                     <div v-if="event" class="pa-5">
-                        <create-tickets v-if="new Date(event.timeStart) > new Date()"></create-tickets>
+                        <create-tickets v-if="new Date(event.timeStart) > new Date()" :event="event"></create-tickets>
                         <div v-else class="text-lightgray font-bold">
                             <i>The start date of the event has passed, tickets are in readonly mode</i>
                         </div>

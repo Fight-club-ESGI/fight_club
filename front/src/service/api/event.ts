@@ -51,7 +51,7 @@ class Event {
         }
     }
 
-    async _upadateEvent(payload: FormData, id: string): Promise<IEvent> {
+    async _updateEvent(payload: FormData, id: string): Promise<IEvent> {
         try {
             const uri = `${namespace}/${id}`
             const res = await clientFormData.patch(uri, payload);

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useTicketStore } from '@/stores/tickets';
-import { PropType, ref } from 'vue';
+import { PropType, computed, ref } from 'vue';
 import { ITicketEvent } from '@/interfaces/event';
+import { formatNumber } from '@/service/helpers';
+import { Icon } from '@iconify/vue';
 const ticketStore = useTicketStore()
 const { ticketsEvent, selectedTicketEvent } = storeToRefs(ticketStore);
 
@@ -32,24 +34,45 @@ const setSelectedItem = (ticketEvent: ITicketEvent) => {
     selectedTicketEvent.value = ticketEvent;
 }
 
+const getPriceUnit = (price: Number) => formatNumber(price).split(',')[0];
+
+const getPriceDecimal = (price: Number) => formatNumber(price).split(',')[1];
+
 </script>
 
 <template>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        <v-card v-for="ticketEvent of ticketsEvent" :elevation="selectedTicketEvent?.id === ticketEvent.id ? 4 : 0"
+        <v-card class="py-2 px-4" v-for="ticketEvent of ticketsEvent"
+            :elevation="selectedTicketEvent?.id === ticketEvent.id ? 4 : 0"
             @click="readOnly ? '' : setSelectedItem(ticketEvent)">
-            <v-card-title>
-                <span class="font-bold">Ticket category: </span>
-                <span><v-chip :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{ ticketEvent.ticketCategory.name
-                }}</v-chip></span>
-            </v-card-title>
+            <div class="flex justify-between items-start pb-5">
+                <h2 class="text-4xl font-bold">{{ ticketEvent.ticketCategory.name }}
+                    <v-chip :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{
+                        ticketEvent.ticketCategory.name
+                    }}</v-chip>
+                </h2>
+            </div>
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex gap-x-3">
+                    <span class="flex gap-2 items-center bg-neutral-200 text-neutral-700 p-2 rounded font-bold">
+                        <Icon height="20" icon="mdi:love-seat" />
+                        {{ ticketEvent.maxQuantity }}
+                    </span>
+                    <span class="flex gap-2 items-center bg-neutral-200 text-neutral-700 p-2 rounded font-bold">
+                        <Icon height="20" icon="mdi:cash-register" />
+                        {{ ticketEvent.tickets.length }}
+                    </span>
+                </div>
+            </div>
+            <span class="font-bold">Available: </span>
+            <span>{{ ticketEvent.maxQuantity - ticketEvent.tickets.length }}</span>
             <v-card-text>
-                <span class="font-bold">Max quantity: </span>
-                <span>{{ ticketEvent.maxQuantity }}</span>
-            </v-card-text>
-            <v-card-text>
-                <span class="font-bold">Price: </span>
-                <span>{{ ticketEvent.price }} €</span>
+                <div class="my-1 text-right font-weight-bold text-2xl self-end">
+                    {{ getPriceUnit(ticketEvent.price) }}<span class="text-grey-darken-1 text-lg">,{{
+                        getPriceDecimal(ticketEvent.price)
+                    }}</span>
+                    €
+                </div>
             </v-card-text>
 
         </v-card>
