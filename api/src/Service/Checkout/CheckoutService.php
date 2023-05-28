@@ -29,8 +29,11 @@ class CheckoutService
 
     public function checkout(User $user, float $amount, WalletTransactionTypeEnum $type, array $params = [], int $quantity = 1, string $endpoint_url = "/checkout/confirmation", ?Order $order = null): Session
     {
+        if(!$user->getWallet()) {
+            throw new Exception("Wallet not found");
+        }
+
         $this->walletTransaction = $this->recordWalletTransaction($user->getWallet(), $amount, WalletTransactionStatusEnum::PENDING, $type);
-        $this->walletTransaction->setOrder($order);
 
         if ($order) {
             $this->walletTransaction->setOrder($order);
