@@ -25,7 +25,7 @@ export const useTicketStore = defineStore('ticket', () => {
     });
 
     const maxCapacity = computed(() => {
-        return ticketsEvent.value.reduce((acc, curr) => acc + curr.maxQuantity, 0)
+        return ticketsEvent.value.reduce((acc, curr) => acc + (curr.isActive ? curr.maxQuantity : curr.tickets.length), 0)
     });
 
     const selectedTicketEvent = ref();

@@ -13,7 +13,10 @@ const emit = defineEmits(['selectedItem']);
 const props = defineProps({
     readOnly: {
         type: Boolean as PropType<boolean>
-    }
+    },
+    isActive: {
+        type: Boolean as PropType<boolean>
+    },
 });
 
 const ticketCategoryColor = (name: string) => {
@@ -34,15 +37,16 @@ const setSelectedItem = (ticketEvent: ITicketEvent) => {
     selectedTicketEvent.value = ticketEvent;
 }
 
-const getPriceUnit = (price: Number) => formatNumber(price).split(',')[0];
+const getPriceUnit = (price: number) => formatNumber(price).split(',')[0];
 
-const getPriceDecimal = (price: Number) => formatNumber(price).split(',')[1];
+const getPriceDecimal = (price: number) => formatNumber(price).split(',')[1];
 
 </script>
 
 <template>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        <v-card class="py-2 px-4" v-for="ticketEvent of ticketsEvent"
+        <v-card class="py-2 px-4"
+            v-for="ticketEvent of ticketsEvent.filter(ticketEvent => ticketEvent.isActive == isActive && (!isActive ? ticketEvent.tickets.length > 0 : true))"
             :elevation="selectedTicketEvent?.id === ticketEvent.id ? 4 : 0"
             @click="readOnly ? '' : setSelectedItem(ticketEvent)">
             <div class="flex justify-between items-start pb-5">
@@ -64,8 +68,10 @@ const getPriceDecimal = (price: Number) => formatNumber(price).split(',')[1];
                     </span>
                 </div>
             </div>
-            <span class="font-bold">Available: </span>
-            <span>{{ ticketEvent.maxQuantity - ticketEvent.tickets.length }}</span>
+            <div v-if="isActive">
+                <span class="font-bold">Available: </span>
+                <span>{{ ticketEvent.maxQuantity - ticketEvent.tickets.length }}</span>
+            </div>
             <v-card-text>
                 <div class="my-1 text-right font-weight-bold text-2xl self-end">
                     {{ getPriceUnit(ticketEvent.price) }}<span class="text-grey-darken-1 text-lg">,{{
@@ -74,7 +80,6 @@ const getPriceDecimal = (price: Number) => formatNumber(price).split(',')[1];
                     €
                 </div>
             </v-card-text>
-
         </v-card>
     </div>
 </template>

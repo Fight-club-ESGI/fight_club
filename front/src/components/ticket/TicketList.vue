@@ -3,10 +3,16 @@ import { storeToRefs } from 'pinia';
 import { useTicketStore } from '@/stores/tickets';
 import { defineProps, defineEmits } from 'vue';
 import TicketEventCard from './TicketEventCard.vue';
+import { PropType } from 'vue';
+import { IEvent } from '@/interfaces/event';
 const props = defineProps({
     display: {
         type: String,
         default: 'list'
+    },
+    event: {
+        type: Object as PropType<IEvent>,
+        required: true
     }
 })
 const ticketStore = useTicketStore()
@@ -30,7 +36,9 @@ const ticketCategoryColor = (name: string) => {
     <div v-if="props.display === 'list'">
         <v-list v-if="ticketsEvent.length > 0" density="compact" :lines="false" class="max-h-96 overflow-auto"
             @click:select="emit('selectedItem', $event)">
-            <v-list-item v-for="ticketEvent of ticketsEvent" :value="ticketEvent">
+            <v-list-item v-for="ticketEvent of ticketsEvent.filter(ticketEvent => ticketEvent.isActive)"
+                :value="ticketEvent">
+
 
                 <template v-slot:append>
                     <v-chip :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{ ticketEvent.ticketCategory.name
@@ -48,8 +56,8 @@ const ticketCategoryColor = (name: string) => {
         </v-list>
     </div>
     <div v-else class="grid grid-cols-3 gap-3">
-        <div v-for="ticketEvent of ticketsEvent" :key="ticketEvent.id">
-            <TicketEventCard :ticketEvent="ticketEvent" />
+        <div v-for="ticketEvent of ticketsEvent.filter(ticketEvent => ticketEvent.isActive)" :key="ticketEvent.id">
+            <TicketEventCard :ticketEvent="ticketEvent" :event="event" />
         </div>
     </div>
 </template>

@@ -16,7 +16,7 @@ export interface IEvent {
     imageFile: File | null
     imageName: string
     imageSize: string
-    ticketEvents: []
+    ticketEvents: ITicketEvent[]
     fights: IFight[]
     display: boolean
 }
