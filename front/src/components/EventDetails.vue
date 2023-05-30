@@ -48,7 +48,7 @@
             <v-divider />
             <h4 class="text-2xl font-bold pt-3">Tickets</h4>
             <!-- <div v-if="event.ticketEvents.length === 0">No tickets</div> -->
-            <ticket-list display="grid" @selected-item="($event) => item = $event"></ticket-list>
+            <ticket-list display="grid" :event="event" @selected-item="($event) => item = $event"></ticket-list>
             <div class="flex flex-col gap-y-4">
                 <div class="text-2xl font-bold py-3 underline ">Planning</div>
                 <v-card v-for="fight in event.fights" class="flex text-white">
