@@ -52,6 +52,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             name: 'event_tickets'
         ),
         new Post(
+            normalizationContext: ['groups' => ['events:get']],
             controller: CreateEvent::class,
             security: 'is_granted("ROLE_ADMIN")',
             deserialize: false
@@ -62,6 +63,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                 'multipart' => ['multipart/form-data'],
                 'json' => ['application/json']
             ],
+            normalizationContext: ['groups' => ['events:get']],
             controller: UpdateEvent::class,
             security: 'is_granted("ROLE_ADMIN")',
             deserialize: false,
@@ -70,20 +72,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[ApiFilter(
-    DateFilter::class, properties: ['timeEnd']
+    DateFilter::class,
+    properties: ['timeEnd']
 )]
-// ?order[timeStart]
-/*#[ApiFilter(
-    OrderFilter::class, properties: ['timeStart' => 'DESC']
-)]
-*/
-// ?order[timeStart]=desc
 #[ApiFilter(
-    OrderFilter::class, properties: ['timeStart'], arguments: ['orderParameterName' => 'order']
+    OrderFilter::class,
+    properties: ['timeStart'],
+    arguments: ['orderParameterName' => 'order']
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['isAvailableGenericallyInMyCountry'])]
 #[ApiFilter(
-    SearchFilter::class, properties: ['isActive' => 'exact']
+    SearchFilter::class,
+    properties: ['isActive' => 'exact']
 )]
 #[Vich\Uploadable]
 class Event

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { eventService, ticketService } from "../service/api";
 import { ref, computed, ComputedRef } from "vue"
-import { IEvent } from "@/interfaces/event";
+import { IEvent, UpdateEvent } from "@/interfaces/event";
 
 export const useEventStore = defineStore('event', () => {
     const event = ref<IEvent>();
@@ -33,9 +33,18 @@ export const useEventStore = defineStore('event', () => {
         }
     }
 
-    async function updateEvent(payload: FormData, id: string) {
+    async function updateEvent(id: string, payload: Partial<UpdateEvent>) {
         try {
-            const res = await eventService._upadateEvent(payload, id);
+            const formData = new FormData();
+
+            Object.entries(payload).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    if (key === 'imageFile' && (value === '' || value === 'null')) return
+                    formData.append(key, value);
+                }
+            })
+
+            const res = await eventService._updateEvent(formData, id);
             events.value.splice(events.value.findIndex(e => e.id === res.id), 1, res);
         } catch (error) {
             throw error;

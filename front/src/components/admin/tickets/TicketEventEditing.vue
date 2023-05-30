@@ -47,19 +47,27 @@ const save = async () => {
         console.error(error)
     }
 }
+
+const rules = {
+    required: (value: any) => !!value || 'Required.',
+    minCapacity: (value: any) => value >= selectedItem?.value?.tickets.length || 'Max quantity must be greater than {' + selectedItem?.value?.tickets.length
+        + '} the number of tickets sold',
+};
 </script>
 
 <template>
-    <div v-if="props.selectedItem">
-        <div class="flex flex-col gap-x-4">
-            <v-text-field type="number" variant="outlined" :min="props.selectedItem.maxQuantity" label="Max quantity"
-                v-model="tickets" density="compact" />
-            <v-text-field type="number" variant="outlined" label="Price" density="compact" v-model="ticketsPrice" />
+    <form ref="form" v-if="props.selectedItem">
+        <div class="flex flex-col gap-x-4 gap-y-4">
+            <v-text-field type="number" variant="outlined" :rules="[rules.minCapacity]"
+                :min="props.selectedItem.tickets.length" label="Max quantity" v-model="tickets" density="compact" />
+            <v-text-field type="number" variant="outlined" label="Price" step="0.01" density="compact"
+                v-model="ticketsPrice" />
         </div>
         <div class="flex justify-end">
-            <v-btn variant="text" color="primary" @click="save">Save</v-btn>
+            <v-btn variant="text" color="primary" :disabled="tickets < props.selectedItem.tickets.length"
+                @click="save">Save</v-btn>
         </div>
-    </div>
+    </form>
     <div v-else>
         <div v-if="event && new Date(event.timeStart) > new Date()">
             <i v-if="ticketsEvent.length > 0">Select a type of ticket to edit it</i>

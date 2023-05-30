@@ -11,20 +11,19 @@
             <div class="w-full flex px-10">
                 <v-form class="flex flex-col w-full" v-model="valid" ref="form">
                     <div>
-                        <v-file-input type="file" accept="image/*" v-model="file" label="File input"
-                                      @change="uploadFile" />
+                        <v-file-input type="file" accept="image/*" v-model="file" label="File input" @change="uploadFile" />
                         <v-text-field v-model="event.name" :rules="[rules.required]" placeholder="Name" label="Name" />
                         <v-text-field v-model="event.description" :rules="[rules.required]" type="text"
-                                      placeholder="Description" label="Description" />
+                            placeholder="Description" label="Description" />
                         <v-text-field v-model="event.location" :rules="[rules.required]" placeholder="Location"
-                                      label="Location" />
+                            label="Location" />
                         <v-text-field v-model.number="event.capacity" :rules="[rules.required, rules.capacity]"
-                                      type="number" placeholder="Capacity" label="Capacity" />
-                        <v-text-field v-model="event.locationLink" placeholder="Location link" label="Location link"/>
+                            type="number" placeholder="Capacity" label="Capacity" />
+                        <v-text-field v-model="event.locationLink" placeholder="Location link" label="Location link" />
                         <v-text-field v-model="event.timeStart.split('T')[0]" :rules="[rules.required]" type="date"
-                                      placeholder="Start event" label="Start event" />
+                            placeholder="Start event" label="Start event" />
                         <v-text-field v-model="event.timeEnd.split('T')[0]" :rules="[rules.required]" type="date"
-                                      placeholder="End event" label="End event" />
+                            placeholder="End event" label="End event" />
                         <div class="flex">
                             <v-checkbox v-model="event.vip" variant="primary" label="VIP" />
                             <v-checkbox v-model="event.display" variant="primary" label="Display" />
@@ -43,17 +42,17 @@
     </v-dialog>
 </template>
 <script lang="ts" setup>
-import {reactive, ref} from 'vue';
+import { reactive, ref } from 'vue';
 import { useEventStore } from '@/stores/event';
 import { PropType } from 'vue';
-import {CreateEvent, IEvent, UpdateEvent} from '@/interfaces/event';
+import { CreateEvent, IEvent, UpdateEvent } from '@/interfaces/event';
 const eventStore = useEventStore();
 const { updateEvent } = eventStore;
 import Event from '../Event.vue';
 
 const props = defineProps({
-    event: {type: Object as PropType<IEvent>, required: true},
-    admin: {type: Boolean, required: true}
+    event: { type: Object as PropType<IEvent>, required: true },
+    admin: { type: Boolean, required: true }
 });
 
 const event = reactive<UpdateEvent>({
@@ -85,20 +84,7 @@ const rules = {
 
 const saveEvent = async () => {
     try {
-        const formData = new FormData();
-        console.log(Object.keys(event))
-
-
-        Object.keys(event).forEach((key) => {
-            const value = event[key];
-
-            if (value !== undefined) {
-                if (key === 'imageFile' && (value === '' || value === 'null')) return
-                formData.append(key, value);
-            }
-        })
-
-        await updateEvent(formData, props.event.id);
+        await updateEvent(props.event.id, event);
         dialog.value = false;
     } catch (error) {
         console.error(error);

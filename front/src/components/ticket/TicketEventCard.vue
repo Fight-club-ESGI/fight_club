@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ITicketEvent } from '@/interfaces/event';
+import { IEvent, ITicketEvent } from '@/interfaces/event';
 import { useCartStore } from '@/stores/cart';
 import { useUserStore } from '@/stores/user';
 import { createToast } from 'mosha-vue-toastify';
@@ -18,7 +18,11 @@ const props = defineProps({
     ticketEvent: {
         type: Object as PropType<ITicketEvent>,
         required: true
-    }
+    },
+    event: {
+        type: Object as PropType<IEvent>,
+        required: true
+    },
 })
 
 const cartQuantity = computed(() => {
@@ -49,15 +53,15 @@ const maxCanAddToCart = computed(() => {
 });
 
 const addCart = async (ticketEvent: string) => {
-    if (!canAddToCart.value) {
-        createToast('Not enough tickets available', {
-            type: 'danger',
-            position: 'bottom-right'
-        });
-        return;
-    }
-
     try {
+        if (!canAddToCart.value) {
+            createToast('Not enough tickets available', {
+                type: 'danger',
+                position: 'bottom-right'
+            });
+            return;
+        }
+
         await addToCart({ cart: cart.value?.id, ticketEvent, quantity: quantity.value })
         createToast('Ticket added to cart', {
             type: 'success',
@@ -88,43 +92,43 @@ const decrement = () => {
     checkNumber();
     quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value)));
 }
+
+console.log(props.event)
 </script>
 
 <template>
-    <template v-if="ticketEvent.event">
-        <v-card :disabled="new Date() > new Date(ticketEvent.event.timeEnd)">
-            <v-card-title>
-                <span class="font-bold">Ticket category: </span>
-                <span>{{ props.ticketEvent.ticketCategory.name }}</span>
-            </v-card-title>
-            <v-card-text>
-                <span class="font-bold">Price: </span>
-                <span>{{ props.ticketEvent.price }} €</span>
-            </v-card-text>
-            <v-card-text>
-                <div v-if="new Date() > new Date(ticketEvent.event.timeEnd)">
-                    <span class="font-bold">Sold : </span>
-                    <span>{{ props.ticketEvent.tickets.length }} / {{ props.ticketEvent.maxQuantity }}</span>
-                </div>
-                <div v-else>
-                    <span class="font-bold">Available : </span>
-                    <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} /
-                        {{ props.ticketEvent.maxQuantity }} <span v-if="cartQuantity > 0">( {{
-                            cartQuantity }} in your cart )
-                        </span>
-                    </span>
-                </div>
-            </v-card-text>
-            <div v-if="new Date() <= new Date(ticketEvent.event.timeEnd) && isConnected">
-                <v-card-actions class="d-flex items-center justify-center">
-                    <v-text-field v-model.number="quantity" append-icon="mdi-plus" @click:append="increment"
-                        prepend-icon="mdi-minus" @click:prepend="decrement" @input="checkNumber" min="1" step="1"
-                        density="compact" hide-details class="max-w-34 text-center" type="number"></v-text-field>
-                    <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" :disabled="!canAddToCart"
-                        class="ml-5" variant="tonal">Add to
-                        cart</v-btn>
-                </v-card-actions>
+    <v-card :disabled="new Date() > new Date(props.event.timeEnd)">
+        <v-card-title>
+            <span class="font-bold">Ticket category: </span>
+            <span>{{ props.ticketEvent.ticketCategory.name }}</span>
+        </v-card-title>
+        <v-card-text>
+            <span class="font-bold">Price: </span>
+            <span>{{ props.ticketEvent.price }} €</span>
+        </v-card-text>
+        <v-card-text>
+            <div v-if="new Date() > new Date(props.event.timeEnd)">
+                <span class="font-bold">Sold : </span>
+                <span>{{ props.ticketEvent.tickets.length }} / {{ props.ticketEvent.maxQuantity }}</span>
             </div>
-        </v-card>
-    </template>
+            <div v-else>
+                <span class="font-bold">Available : </span>
+                <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} /
+                    {{ props.ticketEvent.maxQuantity }} <span v-if="cartQuantity > 0">( {{
+                        cartQuantity }} in your cart )
+                    </span>
+                </span>
+            </div>
+        </v-card-text>
+        <div v-if="new Date() <= new Date(props.event.timeEnd) && isConnected">
+            <v-card-actions class="d-flex items-center justify-center">
+                <v-text-field v-model.number="quantity" append-icon="mdi-plus" @click:append="increment"
+                    prepend-icon="mdi-minus" @click:prepend="decrement" @input="checkNumber" min="1" step="1"
+                    density="compact" hide-details class="max-w-60 text-center" type="number"></v-text-field>
+                <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" :disabled="!canAddToCart" class="ml-5"
+                    variant="tonal">Add to
+                    cart</v-btn>
+            </v-card-actions>
+        </div>
+    </v-card>
 </template>

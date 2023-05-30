@@ -22,8 +22,6 @@
                                 placeholder="Description" label="Description" />
                             <v-text-field v-model="event.location" :rules="[rules.required]" placeholder="Location"
                                 label="Location" />
-                            <v-text-field v-model.number="event.capacity" :rules="[rules.required, rules.capacity]"
-                                type="number" placeholder="Capacity" label="Capacity" />
                             <v-text-field v-model="event.locationLink" placeholder="Location link" label="Location link"
                                 hint="If no image is provided, a default template" />
                             <v-text-field v-model="event.timeStart" :rules="[rules.required, rules.date]" type="date"
