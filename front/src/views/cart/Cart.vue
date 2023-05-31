@@ -10,11 +10,11 @@
                     class="flex space-x-5 justify-between items-center border-b-2 py-4">
                     <div class="flex flex-col">
                         <span class="text-lg font-extrabold">
-                            {{ item.ticketEvent.event.name }}
+                            {{ item.ticketEvent?.event?.name }}
                         </span>
                         <span class="text-sm text-gray-500"> {{
-                            item.ticketEvent.ticketCategory.name }}
-                            ({{ item.ticketEvent.price }}€)</span>
+                            item.ticketEvent?.ticketCategory?.name }}
+                            ({{ item.ticketEvent?.price }}€)</span>
                     </div>
                     <div class="flex items-center justify-end space-x-3">
                         <v-text-field type="number" v-model="item.quantity" @input="updateItem(item)" min="1"

@@ -44,13 +44,13 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col px-32">
+        <div class="flex flex-col px-32 py-5">
             <v-divider />
-            <h4 class="text-2xl font-bold pt-3">Tickets</h4>
+            <h4 class="text-2xl font-bold py-3">Tickets</h4>
             <!-- <div v-if="event.ticketEvents.length === 0">No tickets</div> -->
             <ticket-list display="grid" :event="event" @selected-item="($event) => item = $event"></ticket-list>
-            <div class="flex flex-col gap-y-4">
-                <div class="text-2xl font-bold py-3 underline ">Planning</div>
+            <div class="flex flex-col gap-y-4 py-5">
+                <div class="text-2xl font-bold py-3">Planning</div>
                 <v-card v-for="fight in event.fights" class="flex text-white">
                     <div class="w-80 bg-cover bg-center"
                         :style="fight.fighterA.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`">
