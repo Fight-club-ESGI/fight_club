@@ -56,7 +56,8 @@ class TicketEvent
         'admin:get',
         'admin:post',
         'ticket:event:get',
-        'ticket:event:post'
+        'ticket:event:post',
+        'event:ticket:get'
     ])]
     private ?Event $event = null;
 
