@@ -55,9 +55,11 @@ const ticketCategoryColor = (name: string) => {
             </v-list-item>
         </v-list>
     </div>
-    <div v-else class="grid grid-cols-3 gap-3">
-        <div v-for="ticketEvent of ticketsEvent.filter(ticketEvent => ticketEvent.isActive)" :key="ticketEvent.id">
-            <TicketEventCard :ticketEvent="ticketEvent" :event="event" />
+    <div v-else class="flex justify-center">
+        <div class="w-full flex flex-wrap gap-5">
+            <div v-for="ticketEvent of ticketsEvent.filter(ticketEvent => ticketEvent.isActive)" :key="ticketEvent.id">
+                <TicketEventCard :ticketEvent="ticketEvent" :event="event" />
+            </div>
         </div>
     </div>
 </template>

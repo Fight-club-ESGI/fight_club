@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { IEvent, ITicketEvent } from '@/interfaces/event';
+import { ITicketEvent } from '@/interfaces/event';
+import { formatNumber } from '@/service/helpers';
 import { useCartStore } from '@/stores/cart';
 import { useUserStore } from '@/stores/user';
 import { createToast } from 'mosha-vue-toastify';
@@ -18,11 +19,7 @@ const props = defineProps({
     ticketEvent: {
         type: Object as PropType<ITicketEvent>,
         required: true
-    },
-    event: {
-        type: Object as PropType<IEvent>,
-        required: true
-    },
+    }
 })
 
 const cartQuantity = computed(() => {
@@ -53,15 +50,15 @@ const maxCanAddToCart = computed(() => {
 });
 
 const addCart = async (ticketEvent: string) => {
-    try {
-        if (!canAddToCart.value) {
-            createToast('Not enough tickets available', {
-                type: 'danger',
-                position: 'bottom-right'
-            });
-            return;
-        }
+    if (!canAddToCart.value) {
+        createToast('Not enough tickets available', {
+            type: 'danger',
+            position: 'bottom-right'
+        });
+        return;
+    }
 
+    try {
         await addToCart({ cart: cart.value?.id, ticketEvent, quantity: quantity.value })
         createToast('Ticket added to cart', {
             type: 'success',
@@ -93,42 +90,73 @@ const decrement = () => {
     quantity.value = Math.min(maxCanAddToCart.value, Math.max(1, Number(quantity.value)));
 }
 
-console.log(props.event)
+const getPriceUnit = computed(() => {
+    return formatNumber(props.ticketEvent.price).split(',')[0];
+});
+
+const getPriceDecimal = computed(() => {
+    return formatNumber(props.ticketEvent.price).split(',')[1];
+});
+
+const ticketCategoryColor = (name: string) => {
+
+    const colors: { [key: string]: string } = {
+        "GOLD": "amber-darken-3",
+        "SILVER": "blue-grey-lighten-1",
+        "VIP": "light-blue-darken-2",
+        "V_VIP": "light-blue-darken-4",
+        "PEUPLE": "grey-darken-1"
+    }
+
+    return colors[name];
+}
 </script>
 
 <template>
-    <v-card :disabled="new Date() > new Date(props.event.timeEnd)">
-        <v-card-title>
-            <span class="font-bold">Ticket category: </span>
-            <span>{{ props.ticketEvent.ticketCategory.name }}</span>
-        </v-card-title>
-        <v-card-text>
-            <span class="font-bold">Price: </span>
-            <span>{{ props.ticketEvent.price }} €</span>
-        </v-card-text>
-        <v-card-text>
-            <div v-if="new Date() > new Date(props.event.timeEnd)">
+    <div class="py-3">
+        <v-card class="py-3 px-4 w-[350px] shadow-md" v-if="ticketEvent.event">
+            <v-chip class="my-3" :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">{{
+                ticketEvent.ticketCategory.name
+            }}</v-chip>
+            <div v-if="new Date() > new Date(ticketEvent.event.timeEnd)">
                 <span class="font-bold">Sold : </span>
-                <span>{{ props.ticketEvent.tickets.length }} / {{ props.ticketEvent.maxQuantity }}</span>
+                <span v-if="props.ticketEvent.tickets.length < props.ticketEvent.maxQuantity">{{
+                    props.ticketEvent.tickets.length }} / {{ props.ticketEvent.maxQuantity }}</span>
+                <span v-else
+                    class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-red-900 dark:text-red-300 border border-red-800">SOLD
+                    OUT</span>
             </div>
             <div v-else>
                 <span class="font-bold">Available : </span>
-                <span>{{ props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} /
-                    {{ props.ticketEvent.maxQuantity }} <span v-if="cartQuantity > 0">( {{
-                        cartQuantity }} in your cart )
+                <span v-if="props.ticketEvent.tickets.length < props.ticketEvent.maxQuantity">{{
+                    props.ticketEvent.maxQuantity - props.ticketEvent.tickets.length }} /
+                    {{ props.ticketEvent.maxQuantity }} <span v-if="cartQuantity > 0">({{
+                        cartQuantity }} in your cart)
                     </span>
                 </span>
+                <span v-else
+                    class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-red-900 dark:text-red-300 border border-red-800">SOLD
+                    OUT</span>
             </div>
-        </v-card-text>
-        <div v-if="new Date() <= new Date(props.event.timeEnd) && isConnected">
-            <v-card-actions class="d-flex items-center justify-center">
-                <v-text-field v-model.number="quantity" append-icon="mdi-plus" @click:append="increment"
-                    prepend-icon="mdi-minus" @click:prepend="decrement" @input="checkNumber" min="1" step="1"
-                    density="compact" hide-details class="max-w-60 text-center" type="number"></v-text-field>
-                <v-btn color="primary" text @click="addCart(props.ticketEvent.id)" :disabled="!canAddToCart" class="ml-5"
-                    variant="tonal">Add to
-                    cart</v-btn>
-            </v-card-actions>
-        </div>
-    </v-card>
+            <v-divider class="my-3 border-black"></v-divider>
+
+            <div class="flex justify-between items-center py-5">
+
+                <div class="flex flex-col justify-start items-center gap-5"
+                    v-if="!(new Date() > new Date(ticketEvent.event.timeStart)) && isConnected">
+                    <v-text-field v-model.number="quantity" append-icon="mdi-plus" @click:append="increment"
+                        prepend-icon="mdi-minus" @click:prepend="decrement" @input="checkNumber" min="1" step="1"
+                        density="compact" hide-details class="max-w-40 text-center" type="number"></v-text-field>
+                    <v-btn text @click="addCart(props.ticketEvent.id)" :disabled="!canAddToCart" variant="tonal"
+                        :color="ticketCategoryColor(ticketEvent.ticketCategory.name)">Add
+                        to
+                        cart</v-btn>
+                </div>
+                <div class="text-right font-weight-bold text-2xl self-end">
+                    {{ getPriceUnit }}<span class="text-grey-darken-1 text-lg">,{{ getPriceDecimal }}</span>
+                    €
+                </div>
+            </div>
+        </v-card>
+    </div>
 </template>
