@@ -1,7 +1,6 @@
 <template>
     <div v-if="event" class="flex flex-column gap-x-2 pb-3 h-full">
-        <div :style="event.imageName ? `background-image: url('${event.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
-            class="h-96 bg-cover bg-center">
+        <div :style="`background-image: url('${imageUrl}')`" class="h-96 bg-cover bg-center">
             <div
                 class="flex flex-column h-full w-full bg-gradient-to-b from-neutral-800 to-transparent items-center p-10 text-white">
                 <div class="text-white">
@@ -53,7 +52,7 @@
                 <div class="text-2xl font-bold py-3">Planning</div>
                 <v-card v-for="fight in event.fights" class="flex text-white">
                     <div class="w-80 bg-cover bg-center"
-                        :style="fight.fighterA.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`">
+                        :style="`background-image: url('https://api.multiavatar.com/${fight.fighterA.firstname}${fight.fighterA.lastname}.png?apikey=XdoCH30EA6grGx')`">
                         <div
                             class="flex flex-column h-full w-full bg-gradient-to-l from-neutral-100 to-transparent items-center p-10" />
                     </div>
@@ -121,7 +120,7 @@
                         </div>
                     </div>
                     <div class="bg-red-100 w-80 bg-cover bg-center"
-                        :style="fight.fighterB.imageName ? `background-image: url('${fight.fighterB.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`">
+                        :style="`background-image: url('https://api.multiavatar.com/${fight.fighterB.firstname}${fight.fighterB.lastname}.png?apikey=XdoCH30EA6grGx')`">
                         <div
                             class="flex flex-column h-full w-full bg-gradient-to-r from-neutral-100 to-transparent items-center p-10 text-white" />
                     </div>
@@ -134,7 +133,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '@/stores/event';
@@ -154,9 +153,17 @@ const { event } = storeToRefs(eventStore);
 const { isAdmin, isConnected } = storeToRefs(userStore);
 
 const eventId = computed(() => route.params.id.toString());
+const imageUrl = ref('');
+
+const eventRandomLandscape = async () => {
+    return fetch('https://api.unsplash.com/photos/random?query=landscape&count=1&client_id=h-auINRIAez3dVEu2eNqxOUBVmLfiTKfLIw_dLN38io')
+        .then(res => res.json())
+        .then(data => imageUrl.value = data[0].urls.full);
+}
 
 onMounted(async () => {
     try {
+        await eventRandomLandscape();
         if (isAdmin) {
             await getEventAdmin(eventId.value)
         } else {

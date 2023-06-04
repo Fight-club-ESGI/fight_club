@@ -11,7 +11,7 @@
                     <div>
                         <div class="rounded-xl pa-2 elevation-2">
                             <v-img height="75" width="75"
-                                src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg"></v-img>
+                                :src="`https://api.multiavatar.com/${fighter.firstname}${fighter.lastname}.png?apikey=XdoCH30EA6grGx`"></v-img>
                         </div>
                     </div>
                     <div class="flex flex-col gap-y-4">

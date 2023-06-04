@@ -33,8 +33,7 @@
                 </div>
             </div>
         </div>
-        <div :style="event.imageName ? `background-image: url('${event.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
-            class="h-1/2 bg-cover bg-center">
+        <div :style="`background-image: url('${imageUrl}')`" class="h-1/2 bg-cover bg-center">
             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
         </div>
         <div class="pa-5 h-1/2 flex flex-column relative overflow-auto">
@@ -66,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref, watch } from "vue";
+import { PropType, ref, watch, onMounted } from "vue";
 import { useEventStore } from "@/stores/event";
 import { Icon } from "@iconify/vue";
 import { useRouter, useRoute } from 'vue-router';
@@ -90,9 +89,14 @@ const pathIncludeAdmin = ref(route.path.includes('admin'))
 
 const timeStart = ref(new Date(props.event.timeStart))
 const timeEnd = ref(new Date(props.event.timeEnd))
+const imageUrl = ref('');
 
 watch(props.event, async (newValue, oldValue) => {
     timeStart.value = new Date(props.event.timeStart)
+})
+
+onMounted(async () => {
+    await eventRandomLandscape();
 })
 
 const deleteE = async (eventId: string) => {
@@ -101,5 +105,11 @@ const deleteE = async (eventId: string) => {
     } catch (error) {
         console.error(error)
     }
+}
+
+const eventRandomLandscape = async () => {
+    return fetch('https://api.unsplash.com/photos/random?query=landscape&count=1&client_id=h-auINRIAez3dVEu2eNqxOUBVmLfiTKfLIw_dLN38io')
+        .then(res => res.json())
+        .then(data => imageUrl.value = data[0].urls.full);
 }
 </script>

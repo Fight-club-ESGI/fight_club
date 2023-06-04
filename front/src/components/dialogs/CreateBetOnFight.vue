@@ -20,7 +20,8 @@
                         bet.betOn = '/fighters/' + fight.fighterA.id
                     }" class="w-full h-92 w-92 flex-col bg-neutral-800 text-white fighter-a"
                         :class="bet.betOn === '/fighters/' + fight.fighterA.id ? 'border-4' : ''">
-                        <div :style="fight.fighterA.imageName ? `background-image: url('${fight.fighterA.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
+                        <div
+                            :style="`background-image: url('https://api.multiavatar.com/${fight.fighterA.firstname}${fight.fighterA.lastname}.png?apikey=XdoCH30EA6grGx')`">
                             class="h-1/2 bg-cover bg-center">
                             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
                         </div>
@@ -83,7 +84,8 @@
                     <v-card @click="() => bet.betOn = '/fighters/' + fight.fighterB.id"
                         class="w-full h-92 w-92 flex-col bg-neutral-800 text-white fighter-b"
                         :class="bet.betOn === '/fighters/' + fight.fighterB.id ? 'border-4' : ''">
-                        <div :style="fight.fighterB.imageName ? `background-image: url('${fight.fighterB.imageName}')` : `background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')`"
+                        <div
+                            :style="`background-image: url('https://api.multiavatar.com/${fight.fighterB.firstname}${fight.fighterB.lastname}.png?apikey=XdoCH30EA6grGx')`">
                             class="h-1/2 bg-cover bg-center">
                             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
                         </div>
