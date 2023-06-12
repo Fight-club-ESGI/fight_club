@@ -76,9 +76,10 @@
                                 <p>
                                     {{ fight.odds.fighterAOdds.toFixed(2) }}
                                 </p>
-                                <p v-if="fight.winnerValidation && fight.winner.id === fight.fighterA.id"
-                                    class="text-green-500">WINNER</p>
-                                <p v-else class="text-red-500">LOSER</p>
+                                <div v-if="fight.winnerValidation">
+                                    <p v-if="fight.winner.id === fight.fighterA.id" class="text-green-500">WINNER</p>
+                                    <p v-else class="text-red-500">LOSER</p>
+                                </div>
                                 <div class="flex text-white gap-x-2 mx-auto">
                                     <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
                                         <Icon icon="material-symbols:flag" />
@@ -102,9 +103,11 @@
                                 <p>
                                     {{ fight.odds.fighterBOdds.toFixed(2) }}
                                 </p>
-                                <p v-if="fight.winnerValidation && fight.winner.id === fight.fighterB.id"
-                                    class="text-green-500">WINNER</p>
-                                <p v-else class="text-red-500">LOSER</p>
+                                <div v-if="fight.winnerValidation">
+                                    <p v-if="fight.winnerValidation && fight.winner.id === fight.fighterB.id"
+                                        class="text-green-500">WINNER</p>
+                                    <p v-else class="text-red-500">LOSER</p>
+                                </div>
                                 <div class="flex text-white gap-x-2 mx-auto">
                                     <div class="flex align-center gap-2 bg-neutral-600 p-1 rounded-md">
                                         <Icon icon="material-symbols:flag" />
