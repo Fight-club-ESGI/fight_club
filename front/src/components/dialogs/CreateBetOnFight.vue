@@ -20,9 +20,8 @@
                         bet.betOn = '/fighters/' + fight.fighterA.id
                     }" class="w-full h-92 w-92 flex-col bg-neutral-800 text-white fighter-a"
                         :class="bet.betOn === '/fighters/' + fight.fighterA.id ? 'border-4' : ''">
-                        <div
+                        <div class="h-1/2 bg-cover bg-center"
                             :style="`background-image: url('https://api.multiavatar.com/${fight.fighterA.firstname}${fight.fighterA.lastname}.png?apikey=XdoCH30EA6grGx')`">
-                            class="h-1/2 bg-cover bg-center">
                             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
                         </div>
                         <div class="flex items-center pa-5">
@@ -84,9 +83,8 @@
                     <v-card @click="() => bet.betOn = '/fighters/' + fight.fighterB.id"
                         class="w-full h-92 w-92 flex-col bg-neutral-800 text-white fighter-b"
                         :class="bet.betOn === '/fighters/' + fight.fighterB.id ? 'border-4' : ''">
-                        <div
+                        <div class="h-1/2 bg-cover bg-center"
                             :style="`background-image: url('https://api.multiavatar.com/${fight.fighterB.firstname}${fight.fighterB.lastname}.png?apikey=XdoCH30EA6grGx')`">
-                            class="h-1/2 bg-cover bg-center">
                             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
                         </div>
                         <div class="flex items-center pa-5">
