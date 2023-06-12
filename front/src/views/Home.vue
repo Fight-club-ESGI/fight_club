@@ -28,7 +28,7 @@ const eventRandomLandscape = async () => {
 onMounted(async () => {
     try {
         await getEvents();
-        eventRandomLandscape();
+        // eventRandomLandscape();
     } catch (error) {
 
     }
@@ -58,8 +58,8 @@ onMounted(async () => {
             <v-sheet class="w-full bg-transparent">
                 <v-slide-group v-model="carouselModel" class="pa-4" center-active show-arrows>
                     <v-slide-group-item v-for="event in incomingEvents" :key="event.id" v-slot="{ isSelected, toggle }">
-                        <v-card :style="`background-image: url('${imageUrl}')`" class="relative ma-4 bg-cover bg-center"
-                            height="200" width="400"
+                        <v-card :style="`background-image: url('${event.locationLink}')`"
+                            class="relative ma-4 bg-cover bg-center" height="200" width="400"
                             @click="router.push({ name: 'event-details', params: { id: event.id } })">
                             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent"></div>
                             <div class="absolute bg-white z-10 m-5 rounded-lg h-16 w-16 flex items-center top-0">

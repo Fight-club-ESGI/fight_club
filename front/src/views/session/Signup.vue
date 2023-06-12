@@ -2,9 +2,6 @@
     <v-form class="w-full px-12 xl:w-2/3 mx-auto text-white" ref="form" v-model="valid" lazy-validation>
         <p class="text-center font-weight-bold">Register</p>
 
-        <v-text-field v-model="username" :rules="usernameRules" autocomplete="username" :counter="10" label="Username"
-            required class="my-4"></v-text-field>
-
         <v-text-field v-model="email" :rules="emailRules" label="E-mail" required class="my-4"></v-text-field>
 
         <v-text-field v-model="password" label="Password" type="password" autocomplete="current-password" required

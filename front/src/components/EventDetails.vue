@@ -1,6 +1,6 @@
 <template>
     <div v-if="event" class="flex flex-column gap-x-2 pb-3 h-full">
-        <div :style="`background-image: url('${imageUrl}')`" class="h-96 bg-cover bg-center">
+        <div :style="`background-image: url('${event.locationLink}')`" class="h-96 bg-cover bg-center">
             <div
                 class="flex flex-column h-full w-full bg-gradient-to-b from-neutral-800 to-transparent items-center p-10 text-white">
                 <div class="text-white">
@@ -163,7 +163,7 @@ const eventRandomLandscape = async () => {
 
 onMounted(async () => {
     try {
-        await eventRandomLandscape();
+        // await eventRandomLandscape();
         if (isAdmin) {
             await getEventAdmin(eventId.value)
         } else {

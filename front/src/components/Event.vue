@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div :style="`background-image: url('${imageUrl}')`" class="h-1/2 bg-cover bg-center">
+        <div :style="`background-image: url('${event.locationLink}')`" class="h-1/2 bg-cover bg-center">
             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent" />
         </div>
         <div class="pa-5 h-1/2 flex flex-column relative overflow-auto">
@@ -96,7 +96,7 @@ watch(props.event, async (newValue, oldValue) => {
 })
 
 onMounted(async () => {
-    await eventRandomLandscape();
+    // await eventRandomLandscape();
 })
 
 const deleteE = async (eventId: string) => {
