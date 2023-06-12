@@ -159,7 +159,7 @@ class CheckoutService
 
         if ($walletTransaction->getStatus() === WalletTransactionStatusEnum::PENDING) {
             $walletTransaction->setStatus(WalletTransactionStatusEnum::ACCEPTED);
-            $wallet->setAmount($wallet->getAmount() - floatval($walletTransaction->getAmount() / 100));
+            $wallet->setAmount($wallet->getAmount() - floatval($walletTransaction->getAmount()));
 
             $this->entityManager->persist($walletTransaction);
             $this->entityManager->flush();
