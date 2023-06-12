@@ -17,10 +17,18 @@ const userStore = useUserStore();
 const { isAdmin } = storeToRefs(userStore);
 const carouselModel = ref(null);
 const categoryCarouselModel = ref(null);
+const imageUrl = ref('');
+
+const eventRandomLandscape = async () => {
+    return fetch('https://api.unsplash.com/photos/random?query=landscape&count=1&client_id=h-auINRIAez3dVEu2eNqxOUBVmLfiTKfLIw_dLN38io')
+        .then(res => res.json())
+        .then(data => imageUrl.value = data[0].urls.full);
+}
 
 onMounted(async () => {
     try {
         await getEvents();
+        eventRandomLandscape();
     } catch (error) {
 
     }
@@ -50,9 +58,8 @@ onMounted(async () => {
             <v-sheet class="w-full bg-transparent">
                 <v-slide-group v-model="carouselModel" class="pa-4" center-active show-arrows>
                     <v-slide-group-item v-for="event in incomingEvents" :key="event.id" v-slot="{ isSelected, toggle }">
-                        <v-card
-                            style="background-image: url('https://images.unsplash.com/photo-1561912847-95100ed8646c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')"
-                            class="relative ma-4 bg-cover bg-center" height="200" width="400"
+                        <v-card :style="`background-image: url('${imageUrl}')`" class="relative ma-4 bg-cover bg-center"
+                            height="200" width="400"
                             @click="router.push({ name: 'event-details', params: { id: event.id } })">
                             <div class="h-full w-full bg-gradient-to-t from-neutral-800 to-transparent"></div>
                             <div class="absolute bg-white z-10 m-5 rounded-lg h-16 w-16 flex items-center top-0">
